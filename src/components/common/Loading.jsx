@@ -8,7 +8,7 @@ export default function Loading() {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center w-full h-full bg-black opacity-75">
       <div className="relative ">
-        <Loader type="Rings" color="white" width={100}  />
+        <Loader type="Rings" color="white" width={100} />
         <h3 className="my-4 text-lg text-center text-white">{t('loading')}</h3>
       </div>
     </div>
