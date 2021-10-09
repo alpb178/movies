@@ -1,0 +1,197 @@
+{
+  "account": {
+    "access": "Accede a tu cuenta",
+    "create": "Crea una cuenta",
+    "already": "¿Ya tienes una cuenta?",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "new": "¿Nuevo en Control Pack?"
+  },
+  "add": "Añadir",
+  "applications": {
+    "0": "Sin Aplicaciones",
+    "one": "Aplicaciones",
+    "other": "Aplicaciones"
+  },
+  "amount": "Importe",
+  "bills": {
+    "0": "Sin Facturas",
+    "one": "Facturas",
+    "other": "Facturas"
+  },
+  "buy": {
+    "0": "Sin Compra",
+    "one": "Compras",
+    "other": "Compras"
+  },
+  "business-name": "Razón social",
+  "cancel": "Cancelar",
+  "catalogs": {
+    "0": "Sin Catálogos",
+    "one": "Catalogos",
+    "other": "Catálogos"
+  },
+  "client": "Cliente",
+  "client-number": "Número del Cliente",
+  "contact-person": "Persona de contacto",
+  "backpackpool-gold": {
+    "0": "Backpackpool Gold",
+    "one": "Backpackpool Gold",
+    "other": "Backpackpool Gold"
+  },
+  "current-payment": {
+    "0": "Sin Corrientes de Pagos",
+    "one": "Corriente de Pago",
+    "other": "Corriente de Pagos"
+  },
+  "customer-care": {
+    "0": "Sin Atención al Cliente",
+    "one": "Atención al Cliente",
+    "other": "Atención al Cliente"
+  },
+  "customer-services": {
+    "0": "Sin Servicios Clientes",
+    "one": "Servicios Clientes",
+    "other": "Servicios Clientes"
+  },
+  "company":"Empresa",
+  "dashboard": "Dashboard",
+  "date-order": "Fecha Pedido",
+  "date-delivery": " Fecha Entrega",
+  "demo": "Demo",
+  "delete": "Eliminar",
+  "delete-filter": "Borrar Filtro",
+  "deleted": {
+    "male": "{{entity}} eliminado exitosamente.",
+    "female": "{{entity}} eliminada exitosamente."
+  },
+  "delete-message": {
+    "male": "Este {{entity}} será eliminado. Una vez confirmado no es posible revertir la operación.",
+    "female": "Esta {{entity}} será eliminada. Una vez confirmado no es posible revertir la operación."
+  },
+  "delete-title": "Eliminar {{entity}}",
+  "description": "Descripción",
+  "drop-zone-text": "Arrastre un fichero aquí o haz click para añadir una imagen",
+  "email": "Correo electrónico",
+  "error-with-status": "A {{statusCode}} error occurred on server",
+  "error-without-status": "An error occurred on the server",
+  "filter": "Filtrar",
+  "filters": "Filtros",
+  "forgot-password": "¿Olvidaste la contraseña?",
+  "go-back": "Volver",
+  "home": "Inicio",
+  "information": {
+    "0": "Sin Información",
+    "one": "Información",
+    "other": "Información"
+  },
+  "information-product": {
+    "0": "Sin Información del Producto",
+    "one": "Información del Producto",
+    "other": "Información Productos"
+  },
+  "invalid-credentials": "Credenciales no válidas.",
+  "issue":"Asunto",
+  "loading": "Cargando...",
+  "message": {
+    "user-delete": "Desea Eliminar el Usuario",
+    "message":"Mensaje",
+    "message-customer-care": "He leído y acepto la cláusula de Protección de Datos."
+  },
+  "municipality": "Municipio",
+  "name": "Nombre",
+  "surname": "Apellidos",
+  "none": "Ninguno",
+  "no-name": "No existe nombre en {{lang}}",
+  "no-order": "Nº Order",
+  "new": "Nuevo",
+  "next": "Siguiente",
+  "no-match-found": "No se encontraron resultados",
+  "observations": "Observaciones",
+  "offers": {
+    "0": "Sin ofertas",
+    "one": "Oferta",
+    "other": "Ofertas"
+  },
+  "orders": {
+    "0": "Sin Pedidos",
+    "one": "Pedidos",
+    "other": "Pedidos"
+  },
+  "new-order": {
+    "0": "Sin Información",
+    "one": "Nuevo Pedido",
+    "other": "Nuevos Pedidos"
+  },
+  "organization": "Organización",
+  "password": "Contraseña",
+  "payments": {
+    "0": "Aún no existen pagos",
+    "one": "Pago",
+    "other": "Pagos"
+  },
+  "phone": "Teléfono",
+  "previous": "Anterior",
+  "profile": "Perfil",
+  "ppu": {
+    "0": "PPU",
+    "one": "PPU",
+    "other": "PPU"
+  },
+  "population":"Población",
+  "rappel": {
+    "0": "Rappel",
+    "one": "Rappel",
+    "other": "Rappel"
+  },
+  "repeat-password": "Repetir contraseña",
+  "reports": {
+    "0": "Sin reportes",
+    "one": "Reporte",
+    "other": "Reportes"
+  },
+  "required": {
+    "username": "El nombre de usuario es requerido",
+    "password": "La contraseña es requerida",
+    "name": "El nombre es requerido",
+    "surname": "Los Apellidos son requeridos",
+    "email": "El correo electrónico es requerido",
+    "phone": "El número de telefóno es requerido"
+  },
+  "results": "resultados",
+  "revenues": {
+    "0": "Sin ingresos",
+    "one": "Ingreso",
+    "other": "Ingresos"
+  },
+  "sales-history": {
+    "0": "Sin Información",
+    "one": "Historial de Ventas",
+    "other": "Historial de Ventas"
+  },
+  "send":"Enviar",
+  "role": "Rol",
+  "roles": "Roles",
+  "role-admin": "Admin",
+  "role-user": "Usuario",
+  "remember-me": "Recuérdame",
+  "save": "Guardar",
+  "saved": {
+    "male": "{{entity}} guardado exitosamente.",
+    "female": "{{entity}} guardada exitosamente."
+  },
+  "search": "Buscar",
+  "select": "Seleccione",
+  "settings": "Ajustes",
+  "showing": "Mostrando {{range}} de {{total}} resultados",
+  "status": "Estado",
+  "type": "Tipo",
+  "update": "Editar",
+  "username": "Nombre de usuario",
+  "users": {
+    "0": "Sin usuarios",
+    "one": "Usuario",
+    "other": "Usuarios"
+  },
+  "voucher": "Justificante"
+}

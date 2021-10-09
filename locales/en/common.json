@@ -1,0 +1,199 @@
+{
+  "account": {
+    "access": "Access with your account",
+    "create": "Create an account",
+    "login": "Login",
+    "logout": "Logout",
+    "new": "¿New to Control Pack?"
+  },
+  "add": "Add",
+  "applications": {
+    "0": "No Applications",
+    "one": "Applications",
+    "other": "Applications"
+  },
+  "bills": {
+    "0": "No Bills",
+    "one": "Bills",
+    "other": "Bills"
+  },
+  "buy": {
+    "0": "No Buys",
+    "one": "Buys",
+    "other": "Buys"
+  },
+  "amount":"Amount",
+  "business-name": "Business name",
+  "cancel": "Cancel",
+  "catalogs": {
+    "0": "No Catalogs",
+    "one": "Catalogs",
+    "other": "Catalogs"
+  },
+  "client":"Client",
+  "client-number":"Client Number",
+  "certificate": {
+    "0": "No Certificate 347",
+    "one": "Certificate 347",
+    "other": "Certificate 347"
+  },
+  "certificate-iso": {
+    "0": "No Certificate ISOS",
+    "one": "Certificate ISO",
+    "other": "Certificate ISO"
+  },
+ 
+  "backpackpool-gold": {
+    "0": "Backpackpool Gold",
+    "one": "Backpackpool Gold",
+    "other": "Backpackpool Gold"
+
+  }, 
+  "current-payment": {
+    "0": "No Current Payment",
+    "one": "Current Payment",
+    "other": "Current Payment"
+  }, 
+  "customer-care": {
+    "0": "No Customer Care",
+    "one": "Customer Care",
+    "other": "Customer Care"
+  },
+  "customer-services": {
+    "0": "No Customer Services",
+    "one": "Customer Services",
+    "other": "Customer Services"
+  },
+  "contact-person": "Contact person",
+  "company":"Company",
+  "dashboard": "Dashboard",
+  "demo": "Demo",
+  "date-order":" Date Order",
+  "date-delivery":" Date Delivery",
+  "delete": "Delete",
+  "delete-filter": "Clear Filter",
+  "deleted": {
+    "male": "{{entity}} deleted successfully.",
+    "female": "{{entity}} deleted successfully."
+  },
+  "delete-message": {
+    "male": "Este {{entity}} será eliminado. Una vez confirmado no es posible revertir la operación.",
+    "female": "Esta {{entity}} será eliminada. Una vez confirmado no es posible revertir la operación."
+  },
+  "delete-title": "Delete {entity}",
+  "description": "Description",
+  "drop-zone-text": "Drag and drop an image file here or click",
+  "email": "Email",
+  "error-with-status": "A {{statusCode}} error occurred on server",
+  "error-without-status": "An error occurred on the server",
+  "filter": "Filter",
+  "filters": "Filters",
+  "forgot-password": "Forgot Password?",
+  "go-back": "Back",
+  "home": "Home",
+  "information": {
+    "0": "No Information",
+    "one": "Information",
+    "other": "Information"
+  },
+  "information-product": {
+    "0": "No Information del Product",
+    "one": "Information del Product",
+    "other": "Information Product"
+  },
+  "issue":"Issue",
+  "loading": "Loading...",
+  "message": {
+    "user-delete": "You want to Delete the User",
+    "message":"Message",
+    "message-customer-care": "I have read and accept the Data Protection clause."
+  },
+  "municipality": "Municipality",
+  "name": "Name",
+  "surname":"Surname",
+  "none": "None",
+  "no-name": "No name for {lang}",
+  "no-order":"Nº Order",
+  "new": "New",
+  "new-order": {
+    "0": "No New Order",
+    "one": "New Order",
+    "other": "New Order"
+  },
+  "next": "Next",
+  "no-match-found": "No matches found",
+  "observations": "Observations",
+  "offers": {
+    "0": "No offers",
+    "one": "Offer",
+    "other": "Offers"
+  },
+  "orders": {
+    "0": "No orders",
+    "one": "Order",
+    "other": "Orders"
+  },
+  "organization": "Organization",
+  "password": "Password",
+  "phone": "Phone",
+  "previous": "Previous",
+  "ppu": {
+    "0": "PPU",
+    "one": "PPU",
+    "other": "PPU"
+  },
+  "population":"Population",
+  "rappel": {
+    "0": "Rappel",
+    "one": "Rappel",
+    "other": "Rappel"
+  },
+  "reports": {
+    "0": "No reports",
+    "one": "Report",
+    "other": "Reports"
+  },
+  "required": {
+    "username": "Username is required",
+    "password": "Password is required",
+    "name":"Name is required",
+    "surname":"Surname is required",
+    "email":"Email is required",
+    "phone":"Phone is required"
+  },
+  "remember-me": "Remember me",
+  "results": "results",
+  "role": "Role",
+  "rols":"Role",
+  "save": "Save",
+  "saved": {
+    "male": "{{entity}} saved successfully.",
+    "female": "{{entity}} saved successfully."
+  },
+  "record": {
+    "0": "No Record",
+    "one": "Record",
+    "other": "Record"
+  },
+  "sales-history": {
+    "0": "No Sales History",
+    "one": "Sales History",
+    "other": "Sales History"
+  },
+  "send":"Send",
+  "search": "Search",
+  "select": "Select",
+  "settings": "Settings",
+  "showing": "Showing",
+  "status":"Status",
+  "type":"Type",
+  "trade-name": "Trade name",
+  "update": "Update",
+  "username": "Username",
+  "users": {
+    "0": "No users",
+    "one": "User",
+    "other": "Users"
+  },
+  "voucher":"Voucher"
+}
