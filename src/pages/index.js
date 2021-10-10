@@ -29,7 +29,6 @@ export async function getServerSideProps({ req, res }) {
     const currDate = new Date().getTime();
     const duration = exp * 1000;
     if (currDate < duration) {
-      console.log(userData)
       destination = getHomePageFromUser(userData);
     }
   }

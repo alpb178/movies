@@ -25,10 +25,9 @@ export default function useAuth({
 
   const canAccess = useMemo(() => {
     let flag = false;
-    console.log('asd', roles.length > 0, user, roles.length > 0 && user?.isLoggedIn);
+
     if (roles.length > 0 && user?.isLoggedIn) {
       flag = user?.auth.split(',').some((role) => roles.includes(role));
-      console.log('flag', flag);
     }
     return flag;
   }, [user, roles]);

@@ -6,7 +6,7 @@ import 'simplebar/dist/simplebar.min.css';
 
 const Sidebar = () => (
   <div className="hidden md:flex md:flex-shrink-0">
-    <div className="flex flex-col w-72">
+    <div className="flex flex-col w-64 xl:w-72">
       <div className="flex items-center flex-shrink-0 h-16 px-4 bg-gray-900">
         <img className="w-56 h-10" src="/logo/backpackpool-min.svg" alt="Backpackpool" />
       </div>

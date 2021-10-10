@@ -2,7 +2,7 @@ import { fromJS, Map, List } from 'immutable';
 import * as actionConstants from '../actions/actionConstants';
 
 const initialState = fromJS({
-  user: Map(),
+  payment: Map(),
   data: List(),
   filters: List(),
   loading: false,
@@ -10,21 +10,21 @@ const initialState = fromJS({
   error: {}
 });
 
-const userReducer = (state = initialState, action) => {
+const paymentReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionConstants.START_USER_ACTION:
+    case actionConstants.START_PAYMENT_ACTION:
       return state.withMutations((mutableState) => {
         mutableState.set('loading', true);
       });
-    case actionConstants.CREATE_USER_SUCCESS:
+    case actionConstants.CREATE_PAYMENT_SUCCESS:
       return state.withMutations((mutableState) => {
         mutableState.set('loading', false);
       });
-    case actionConstants.UPDATE_USER_SUCCESS:
+    case actionConstants.UPDATE_PAYMENT_SUCCESS:
       return state.withMutations((mutableState) => {
         mutableState.set('loading', false);
       });
-    case actionConstants.GET_USERS_SUCCESS:
+    case actionConstants.GET_PAYMENTS_SUCCESS:
       return state.withMutations((mutableState) => {
         mutableState
           .set('data', fromJS(action.data))
@@ -32,19 +32,19 @@ const userReducer = (state = initialState, action) => {
           .set('total', action.total)
           .set('loading', false);
       });
-    case actionConstants.SELECT_USER:
+    case actionConstants.SELECT_PAYMENT:
       return state.withMutations((mutableState) => {
-        mutableState.set('user', fromJS(action.data)).set('loading', false);
+        mutableState.set('payment', fromJS(action.data)).set('loading', false);
       });
-    case actionConstants.DELETE_USER_SUCCESS:
+    case actionConstants.DELETE_PAYMENT_SUCCESS:
       return state.withMutations((mutableState) => {
         const dataFiltered = mutableState
           .get('data')
-          .filter((user) => user.get('login') !== action.login);
-        mutableState.set('data', dataFiltered).set('loading', false);
+          .filter((activity) => activity.get('paymentname') !== action.paymentnmae);
+        mutableState.set('data', dataFiltered).set('data', Map()).set('loading', false);
       });
 
-    case actionConstants.FAILED_USER_ACTION:
+    case actionConstants.FAILED_PAYMENT_ACTION:
       return state.withMutations((mutableState) => {
         mutableState.set('error', action.error).set('loading', false);
       });
@@ -53,4 +53,4 @@ const userReducer = (state = initialState, action) => {
   }
 };
 
-export default userReducer;
+export default paymentReducer;

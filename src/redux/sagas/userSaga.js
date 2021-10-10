@@ -73,13 +73,9 @@ function* deleteUser(params) {
   try {
     const response = yield apiFetcher(`${API_USERS_URL}/${username}`, { method: DELETE });
     const { data } = response;
-    yield put({ type: actionConstants.DELETE_USERS_SUCCESS, data });
+    yield put({ type: actionConstants.DELETE_USER_SUCCESS, data, login: username });
   } catch (error) {
-    console.log(error);
-    yield all([
-      put({ type: actionConstants.FAILED_USER_ACTION, error }),
-      put({ type: actionConstants.ADD_NOTIFICATION, notification: error })
-    ]);
+    yield all(put({ type: actionConstants.FAILED_USER_ACTION, error }));
   }
 }
 

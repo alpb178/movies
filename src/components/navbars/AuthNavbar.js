@@ -10,7 +10,6 @@ export default function Navbar() {
   const { lang: language } = useTranslation('common');
 
   const handleLanguageChanged = (value) => {
-    console.log(value);
     setLanguage(value);
   };
 

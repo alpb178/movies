@@ -187,7 +187,7 @@
   "status": "Estado",
   "type": "Tipo",
   "update": "Editar",
-  "username": "Nombre de usuario",
+  "username": "Usuario",
   "users": {
     "0": "Sin usuarios",
     "one": "Usuario",

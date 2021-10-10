@@ -3,6 +3,7 @@
  */
 import { combineReducers } from 'redux-immutable';
 import demoReducer from './reducers/demoReducer';
+import paymentReducer from './reducers/paymentReducer';
 import rolReducer from './reducers/rolReducers';
 import userReducer from './reducers/userReducer';
 
@@ -12,6 +13,7 @@ import userReducer from './reducers/userReducer';
 export default function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
     demo: demoReducer,
+    payment: paymentReducer,
     user: userReducer,
     rol: rolReducer,
     ...injectedReducers

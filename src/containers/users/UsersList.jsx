@@ -10,6 +10,8 @@ import UserFilter from 'containers/users/UserFilter';
 import { getUsers, selectUser, deleteUser } from 'redux/actions';
 import { USER_DETAIL_PAGE, USER_ADD, USER_EDIT } from 'lib/constants';
 import Loading from 'components/common/Loading';
+import EmptyState from 'components/common/EmptyState';
+import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 
 const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
   const { t } = useTranslation('common');
@@ -17,6 +19,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
   const [openFilters, setOpenFilters] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
   const [filterValues, setFilterValues] = useState({
     username: '',
@@ -33,11 +36,11 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
 
   const handleDelete = (event, row) => {
     event.stopPropagation();
-    const answer = window.confirm(t('message.user-delete') + ' ' + row.original.username);
-    if (answer) {
-      onDeleteUser(row.original.username);
-      onGetUsers();
-    }
+    setDeleteConfirmation({ open: true, id: row.original.login });
+  };
+
+  const onDeleteConfirmation = () => {
+    onDeleteUser(deleteConfirmation.id);
   };
 
   const handleEdit = (event, row) => {
@@ -194,7 +197,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
           className="p-2 px-6 py-2 ml-4 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => handleAdd()}
         >
-          {t('add')} {t('users', { count: 1 })}
+          {t('add')} {t('users', { count: 1 }).toLowerCase()}
         </button>
       </>
     )
@@ -204,7 +207,15 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     <>
       {loading && <Loading />}
 
-      {data ? <DataTable {...options} /> : <div>Aún no existen datos</div>}
+      {data ? <DataTable {...options} /> : <EmptyState text={t('users', { count: 0 })} />}
+
+      <DeleteConfirmationDialog
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('users', { count: 1 }).toLowerCase() })}
+        content={t('delete-message.male', { entity: t('users', { count: 1 }).toLowerCase() })}
+      />
     </>
   );
 };

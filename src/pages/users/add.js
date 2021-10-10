@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { USERS_PAGE } from 'lib/constants';
+import { ADMIN_ROLE, USERS_PAGE } from 'lib/constants';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import useTranslation from 'next-translate/useTranslation';
 import { getRoles, createUser } from 'redux/actions';
@@ -61,13 +61,13 @@ const UsersAdd = ({ data, onGetRoles, onCreateUser }) => {
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
       {({ errors, touched }) => (
         <Form>
-          <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+          <div className="overflow-hidden bg-white">
             <div className="px-4 py-5 sm:px-6">
               <h3 className="text-lg font-medium leading-6 text-gray-900">
                 {t('users', { count: 1 })}
               </h3>
             </div>
-            <div className="px-4 py-5 border-t border-gray-200 sm:px-6">
+            <div className="px-4 py-5 sm:px-6">
               <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                 <div className="sm:col-span-1">
                   <dt className="text-sm font-medium text-gray-500">{t('name')}</dt>
@@ -162,11 +162,11 @@ const UsersAdd = ({ data, onGetRoles, onCreateUser }) => {
                       className="block border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
                       name="roles"
                     >
-                      {data?.toJS().map((rol) => (
+                      {/* {data?.toJS().map((rol) => (
                         <option key={rol.name} value={rol.name}>
                           {rol.name}
                         </option>
-                      ))}
+                      ))} */}
                     </Field>
                   </dd>
                 </div>
@@ -201,30 +201,11 @@ const UsersAdd = ({ data, onGetRoles, onCreateUser }) => {
                       <p className="mt-2 text-sm text-red-600">{errors.password}</p>
                     ) : null}
                   </div>
-
-                  <div className="flex flex-col w-full">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                      {t('repeat-password')}
-                    </label>
-                    <div className="relative mt-1 rounded-md">
-                      <Field
-                        type={showPassword ? 'text' : 'password'}
-                        id="repeat-password"
-                        name="repeat-password"
-                        className={`block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
-                          errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                        }`}
-                      />
-                    </div>
-                    {errors.password && touched.password ? (
-                      <p className="mt-2 text-sm text-red-600">{errors.password}</p>
-                    ) : null}
-                  </div>
                 </div>
                 <div className="sm:col-span-2">
                   <button
                     type="submit"
-                    className="float-center px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
+                    className="px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md float-center bg-primary-500 hover:bg-primary-300"
                   >
                     {loading ? '...' : t('add')}
                   </button>
@@ -259,5 +240,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 UsersAdd.layout = Admin;
+UsersAdd.roles = [ADMIN_ROLE];
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersAdd);

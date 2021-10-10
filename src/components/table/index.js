@@ -45,7 +45,7 @@ const DataTable = ({ columns, data, handleRowClick, onFilter, actions }) => {
                 {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}
-                    className="px-6 py-4 text-gray-800 whitespace-nowrap"
+                    className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap xl:text-base"
                   >
                     {cell.render('Cell')}
                   </td>

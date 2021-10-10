@@ -6,21 +6,23 @@ import { connect } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
 import DataTable from 'components/table';
-import UserFilter from 'containers/users/UserFilter';
-import { getPayments, selectUser, deleteUser } from 'redux/actions';
-import { USER_DETAIL_PAGE, USER_ADD, USER_EDIT } from 'lib/constants';
+import PaymentFilter from 'containers/payments/PaymentsFilter';
+import { getPayments, selectPayment, deletePayment } from 'redux/actions';
+import { PAYMENT_DETAIL_PAGE, PAYMENT_ADD, PAYMENT_EDIT } from 'lib/constants';
 import Loading from 'components/common/Loading';
 import EmptyState from '../../components/common/EmptyState';
+import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
 
-const PaymentsList = ({ data, loading, onGetPayments, onSelectUser, onDeleteUser }) => {
+const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeletePayment }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
   const [openFilters, setOpenFilters] = useState(false);
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
 
   const [filterValues, setFilterValues] = useState({
-    username: '',
+    paymentname: '',
     surname: '',
     name: '',
     phone: '',
@@ -33,24 +35,23 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectUser, onDeleteUser
   }, []);
 
   const handleDelete = (event, row) => {
-    event.stopPropagation();
-    const answer = window.confirm(t('message.user-delete') + ' ' + row.original.username);
+    event.preventDefault();
+    const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
     if (answer) {
-      onDeleteUser(row.original.username);
-      onGetPayments();
+      onDeletePayment(row.original.paymentname);
     }
   };
 
   const handleEdit = (event, row) => {
     event.stopPropagation();
     const value = row.original.email;
-    const path = USER_EDIT(value);
-    onSelectUser(row.original);
+    const path = PAYMENT_EDIT(value);
+    onSelectPayment(row.original);
     router.push(path);
   };
 
   const handleAdd = () => {
-    router.push(USER_ADD);
+    router.push(PAYMENT_ADD);
   };
 
   const renderRoles = (roles) => (
@@ -75,7 +76,7 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectUser, onDeleteUser
 
   const columns = React.useMemo(() => [
     {
-      Header: t('username'),
+      Header: t('paymentname'),
       accessor: 'login'
     },
     {
@@ -118,7 +119,7 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectUser, onDeleteUser
               className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
               type="button"
               id="buttonDelete"
-              onClick={(event) => handleDelete(event, row)}
+              onClick={() => setOpenDeleteConfirmation(true)}
             >
               <TrashIcon className="w-6 h-6" />
             </button>
@@ -167,14 +168,14 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectUser, onDeleteUser
     data: data?.toJS(),
     handleRowClick: (row) => {
       const value = row.original.email;
-      const path = USER_DETAIL_PAGE(value);
-      onSelectUser(row.original);
+      const path = PAYMENT_DETAIL_PAGE(value);
+      onSelectPayment(row.original);
       router.push(path);
     },
     onFilter: (
       <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
         <div className="mb-4">
-          <UserFilter open={openFilters} onSubmit={handleFilters} />
+          <PaymentFilter open={openFilters} onSubmit={handleFilters} />
         </div>
         <div className="flex">
           <FilterCriteria />
@@ -203,6 +204,13 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectUser, onDeleteUser
       ) : (
         <EmptyState text={t('payments', { count: 0 })} />
       )}
+
+      <DeleteConfirmationDialog
+        open={openDeleteConfirmation}
+        onOpen={setOpenDeleteConfirmation}
+        title={t('delete', { entity: 'user' })}
+        content={t('asd')}
+      />
     </>
   );
 };
@@ -212,23 +220,23 @@ PaymentsList.propTypes = {
   data: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   onGetPayments: PropTypes.func.isRequired,
-  onSelectUser: PropTypes.func.isRequired,
-  onDeleteUser: PropTypes.func.isRequired
+  onSelectPayment: PropTypes.func.isRequired,
+  onDeletePayment: PropTypes.func.isRequired
 };
 
-const userReducer = 'user';
+const paymentReducer = 'payment';
 
 const mapStateToProps = (state) => ({
-  loading: state.getIn([userReducer, 'loading']),
-  data: state.getIn([userReducer, 'data']),
-  filters: state.getIn([userReducer, 'filters']),
-  total: state.getIn([userReducer, 'total'])
+  loading: state.getIn([paymentReducer, 'loading']),
+  data: state.getIn([paymentReducer, 'data']),
+  filters: state.getIn([paymentReducer, 'filters']),
+  total: state.getIn([paymentReducer, 'total'])
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onGetPayments: () => dispatch(getPayments()),
-  onSelectUser: (user) => dispatch(selectUser(user)),
-  onDeleteUser: (username) => dispatch(deleteUser(username))
+  onSelectPayment: (payment) => dispatch(selectPayment(payment)),
+  onDeletePayment: (paymentname) => dispatch(deletePayment(paymentname))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PaymentsList);
