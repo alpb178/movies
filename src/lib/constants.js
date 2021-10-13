@@ -1,3 +1,5 @@
+export const APP_NAME = 'Backpackpool';
+
 export const TOKEN_KEY = 'id_token';
 export const API_REFRESH_TOKEN_URL = '/token'; // Refresh token action
 export const API_LOGIN_URL = '/authenticate'; // Login endpoint

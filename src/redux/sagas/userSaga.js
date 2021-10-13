@@ -12,10 +12,7 @@ function* fetchUsers(params) {
     const { data } = response;
     yield put({ type: actionConstants.GET_USERS_SUCCESS, data });
   } catch (error) {
-    yield all([
-      put({ type: actionConstants.FAILED_USER_ACTION, error }),
-      put({ type: actionConstants.ADD_NOTIFICATION, notification: error })
-    ]);
+    yield put({ type: actionConstants.FAILED_USER_ACTION, error });
   }
 }
 
@@ -27,10 +24,7 @@ function* registerUser(params) {
     yield apiFetcher(API_USERS_URL, { data: userData, method: POST });
     yield put({ type: actionConstants.CREATE_USER_SUCCESS });
   } catch (error) {
-    yield all([
-      put({ type: actionConstants.FAILED_USER_ACTION, error }),
-      put({ type: actionConstants.ADD_NOTIFICATION, notification: error })
-    ]);
+    yield put({ type: actionConstants.FAILED_USER_ACTION, error });
   }
 }
 

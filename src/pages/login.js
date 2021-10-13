@@ -18,7 +18,11 @@ const Login = () => {
       <div className="relative w-full min-w-0 break-words">
         <div className="flex flex-col items-center justify-center">
           <a href="/" className="px-4">
-            <img className="w-full h-auto mb-8" src="logo/backpackpool.svg" alt="Logo" />
+            <img
+              className="w-20 h-auto mb-8"
+              src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+              alt="Logo"
+            />
           </a>
         </div>
 

@@ -18,7 +18,11 @@ const Register = () => {
           <div className="flex flex-col items-center justify-center">
             <Link href="/">
               <a className="px-4">
-                <img className="w-full h-auto mb-8" src="logo/backpackpool.svg" alt="Logo" />
+                <img
+                  className="w-full h-auto mb-8"
+                  src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                  alt="Logo"
+                />
               </a>
             </Link>
           </div>
