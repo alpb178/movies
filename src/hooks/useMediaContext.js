@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import tailwindConfig from 'tailwind.config.js';
+import tailwindConfig from '../../tailwind.config.js';
 import resolveConfig from 'tailwindcss/resolveConfig';
 const { theme } = resolveConfig(tailwindConfig);
 
@@ -11,7 +11,7 @@ function useMediaContext() {
   // const isMd = useMediaQuery(`(min-width: ${theme.screens.md})`)
 
   useEffect(() => {
-    const isLg = () => window.matchMedia(`(min-width: ${theme.screens.lg})`).matches;
+    const isLg = () => window.matchMedia(`(min-width: ${theme.screens.xl})`).matches;
     if (!mounted) {
       setIsSmall(!isLg());
     }

@@ -73,8 +73,11 @@
   "description": "Descripción",
   "drop-zone-text": "Arrastre un fichero aquí o haz click para añadir una imagen",
   "email": "Correo electrónico",
-  "error-with-status": "A {{statusCode}} error occurred on server",
-  "error-without-status": "An error occurred on the server",
+  "error": {
+    "400": "Parámetros no válidos.",
+    "401": "Nombre de usuario o contraseña incorrectos.",
+    "500": "Error de servidor desconocido"
+  },
   "filter": "Filtrar",
   "filters": "Filtros",
   "forgot-password": "¿Olvidaste la contraseña?",

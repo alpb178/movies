@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
 import { HiX as XIcon } from 'react-icons/hi';
+import { APP_NAME } from 'lib/constants';
 import NavigationMenu from './NavigationMenu';
 
 const MobileSidebar = ({ open, onOpen }) => (
@@ -56,8 +57,13 @@ const MobileSidebar = ({ open, onOpen }) => (
               </span>
             </div>
           </Transition.Child>
-          <div className="flex items-center flex-shrink-0 px-4 bg-gray-900">
-            <img className="w-auto my-4" src="/logo/backpackpool.svg" alt="Workflow" />
+          <div className="flex items-center flex-shrink-0 h-16 px-4 space-x-4 bg-gray-900">
+            <img
+              className="h-10 w-max"
+              src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+              alt="Backpackpool"
+            />
+            <span className="text-xl font-medium text-white">{APP_NAME}</span>
           </div>
           <div className="flex-1 h-0 mt-5 overflow-y-auto">
             <nav className="px-2 space-y-1">

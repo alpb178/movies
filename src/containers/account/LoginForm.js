@@ -27,21 +27,26 @@ const LoginForm = () => {
       setLoading(true);
       await loginUser.mutateAsync(values);
     } catch (error) {
-      let _messageErrors;
+      let _messageErrors = '';
       if (error.response) {
-        const { data } = error.response;
-        switch (data.code) {
+        const { status } = error.response;
+        switch (status) {
           case 400:
-            _messageErrors = Object.values(data.errors);
+            _messageErrors = t('error.400');
             break;
           case 401:
-            _messageErrors = t(data.message.replace(/ /g, '-').toLowerCase().slice(0, -1));
+            _messageErrors = t('error.401');
             break;
           case 500:
-            _messageErrors = data.message;
+            _messageErrors = t('error.500');
+            break;
+          default:
+            _messageErrors = error.toString();
+            break;
         }
       }
-      toast.error(_messageErrors);
+
+      toast.error(_messageErrors, { variant: 'error' });
     } finally {
       setLoading(false);
     }

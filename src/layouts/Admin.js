@@ -10,6 +10,7 @@ import {
 import useAuth from 'hooks/auth/useAuth';
 import useTranslation from 'next-translate/useTranslation';
 import router from 'next/router';
+import useMediaContext from 'hooks/useMediaContext';
 
 const MobileSidebar = dynamic(() => import('components/sidebar/MobileSidebar'), {
   ssr: false
@@ -26,7 +27,7 @@ const Admin = ({ children, roles }) => {
   const { user, canAccess, logoutUser } = useAuth({
     roles
   });
-
+  const { isSmall } = useMediaContext();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { t } = useTranslation('common');
   const userNavigation = [
@@ -42,15 +43,13 @@ const Admin = ({ children, roles }) => {
 
   return canAccess ? (
     <div className="flex h-screen overflow-hidden bg-gray-100">
-      <MobileSidebar open={sidebarOpen} onOpen={setSidebarOpen} />
-
-      <Sidebar />
+      {isSmall ? <MobileSidebar open={sidebarOpen} onOpen={setSidebarOpen} /> : <Sidebar />}
 
       <div className="flex flex-col flex-1 w-0 overflow-hidden">
         <div className="relative z-10 flex flex-shrink-0 h-16 bg-white border-b">
           <button
             type="button"
-            className="px-4 text-gray-500 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+            className="px-4 text-gray-500 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 xl:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>
