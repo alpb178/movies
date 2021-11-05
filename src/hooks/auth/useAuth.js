@@ -27,7 +27,7 @@ export default function useAuth({
     let flag = false;
 
     if (roles.length > 0 && user?.isLoggedIn) {
-      flag = user?.auth.split(',').some((role) => roles.includes(role));
+      flag = user?.auth?.split(',').some((role) => roles.includes(role));
     }
     return flag;
   }, [user, roles]);
@@ -53,7 +53,7 @@ export default function useAuth({
     // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
     if (!redirectTo || !user) return;
 
-    if (roles.length > 0 && !roles.some((role) => user?.auth.split(',')?.includes(role))) {
+    if (roles.length > 0 && !roles.some((role) => user?.auth?.split(',')?.includes(role))) {
       router.replace(redirectIfNotAccess);
     }
 

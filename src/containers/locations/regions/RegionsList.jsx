@@ -1,20 +1,23 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
-import PaymentFilter from 'containers/payments/PaymentsFilter';
-import { getPayments, selectPayment, deletePayment } from 'redux/actions';
-import { PAYMENT_DETAIL_PAGE, PAYMENT_ADD, PAYMENT_EDIT } from 'lib/constants';
-import Loading from 'components/common/Loading';
-import EmptyState from '../../components/common/EmptyState';
-import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
+import Loading from '@/components/common/Loading';
+import EmptyState from '@/components/common/EmptyState';
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
+import PaymentFilter from '@/containers/regions/RegionsFilter';
+import useRegions from '@/hooks/region/useRegions';
+import { PAYMENT_EDIT, REGION_DETAILS_PAGE } from '@/lib/constants';
+import { format } from 'date-fns';
+import { enGB, es } from 'date-fns/locale';
 
-const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeletePayment }) => {
-  const { t } = useTranslation('common');
+const locales = { es, en: enGB };
+
+const RegionsList = ({ loading, onDeletePayment }) => {
+  const { t, lang } = useTranslation('common');
   const router = useRouter();
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
@@ -30,16 +33,19 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
     roles: ''
   });
 
-  useEffect(() => {
-    onGetPayments();
+  const params = useMemo(() => {
+    return {};
   }, []);
 
-  const handleDelete = (event, row) => {
-    event.preventDefault();
-    const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
-    if (answer) {
-      onDeletePayment(row.original.paymentname);
+  const { data: regions } = useRegions({
+    args: params,
+    options: {
+      keepPreviousData: true
     }
+  });
+
+  const locale = {
+    ...locales[lang]
   };
 
   const handleEdit = (event, row) => {
@@ -48,10 +54,6 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
     const path = PAYMENT_EDIT(value);
     onSelectPayment(row.original);
     router.push(path);
-  };
-
-  const handleAdd = () => {
-    router.push(PAYMENT_ADD);
   };
 
   const renderRoles = (roles) => (
@@ -67,65 +69,39 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
     </div>
   );
 
-  const renderStatus = (clientNumber) =>
-    clientNumber ? (
-      <CheckCircleIcon className="w-6 h-6 text-green-700" />
-    ) : (
-      <XCircleIcon className="w-6 h-6 text-red-600" />
-    );
+  const formatRegioner = (value) => <div>{value?.internalUser?.name}</div>;
+
+  const formatFlight = (value) => <div>{value.number}</div>;
+
+  const formatPlace = (value) => <div>{value.name}</div>;
+
+  const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
 
   const columns = React.useMemo(() => [
     {
-      Header: t('paymentname'),
-      accessor: 'login'
+      Header: t('regioner'),
+      accessor: 'regioner',
+      Cell: ({ value }) => formatRegioner(value)
     },
     {
-      Header: t('name'),
-      accessor: 'firstName'
+      Header: t('flights', { count: 1 }),
+      accessor: 'flight',
+      Cell: ({ value }) => formatFlight(value)
     },
     {
-      Header: t('surname'),
-      accessor: 'lastName'
+      Header: t('origin'),
+      accessor: 'origin',
+      Cell: ({ value }) => formatPlace(value)
     },
     {
-      Header: t('email'),
-      accessor: 'email'
+      Header: t('departure-at'),
+      accessor: 'departureAt',
+      Cell: ({ value }) => formatDate(value)
     },
     {
-      Header: t('status'),
-      accessor: 'activated',
-      Cell: ({ cell }) => renderStatus(cell.row.original['activated'])
-    },
-    {
-      Header: t('roles'),
-      accessor: 'authorities',
-      Cell: ({ value: roles }) => renderRoles(roles)
-    },
-    {
-      id: 'optionsPayments',
-      displayName: 'optionsPayments',
-      Cell: ({ row }) => {
-        return (
-          <div className="flex items-center space-x-4">
-            <button
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              type="button"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              type="button"
-              id="buttonDelete"
-              onClick={() => setOpenDeleteConfirmation(true)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
-        );
-      }
+      Header: t('destination'),
+      accessor: 'destination',
+      Cell: ({ value }) => formatPlace(value)
     }
   ]);
 
@@ -146,7 +122,7 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
     );
 
   const handleFilters = (values) => {
-    setFilterValues(values, onGetPayments(values));
+    setFilterValues(values, onGetRegions(values));
   };
 
   const handleClick = (event, value) => {
@@ -159,17 +135,16 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
         }),
         {}
       );
-    onGetPayments(updatedFilters);
+    onGetRegions(updatedFilters);
     setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
   };
 
   const options = {
     columns,
-    data: data?.toJS(),
+    data: regions,
     handleRowClick: (row) => {
-      const value = row.original.email;
-      const path = PAYMENT_DETAIL_PAGE(value);
-      onSelectPayment(row.original);
+      const value = row.original.id;
+      const path = REGION_DETAILS_PAGE(value);
       router.push(path);
     },
     onFilter: (
@@ -199,10 +174,18 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
     <>
       {loading && <Loading />}
 
-      {!data.isEmpty() ? (
+      {regions ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('payments', { count: 0 })} />
+        <EmptyState text={t('regions', { count: 0 })}>
+          <button
+            type="button"
+            className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
+            onClick={() => router.push('regions/create')}
+          >
+            Nueva regulación
+          </button>
+        </EmptyState>
       )}
 
       <DeleteConfirmationDialog
@@ -215,28 +198,13 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
   );
 };
 
-PaymentsList.propTypes = {
+RegionsList.propTypes = {
   row: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  onGetPayments: PropTypes.func.isRequired,
+  onGetRegions: PropTypes.func.isRequired,
   onSelectPayment: PropTypes.func.isRequired,
   onDeletePayment: PropTypes.func.isRequired
 };
 
-const paymentReducer = 'payment';
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([paymentReducer, 'loading']),
-  data: state.getIn([paymentReducer, 'data']),
-  filters: state.getIn([paymentReducer, 'filters']),
-  total: state.getIn([paymentReducer, 'total'])
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGetPayments: () => dispatch(getPayments()),
-  onSelectPayment: (payment) => dispatch(selectPayment(payment)),
-  onDeletePayment: (paymentname) => dispatch(deletePayment(paymentname))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PaymentsList);
+export default RegionsList;

@@ -1,0 +1,11 @@
+.input {
+  @apply h-14 placeholder-gray-400 text-gray-700 relative bg-white rounded-lg text-lg border border-gray-300 hover:border-gray-400 w-full pl-14;
+}
+
+.suggestionsContainer {
+  @apply shadow absolute w-full z-50 bg-white rounded-md mt-1;
+}
+
+.suggestion {
+  @apply py-2 px-6 text-lg hover:bg-gray-100 cursor-pointer;
+}

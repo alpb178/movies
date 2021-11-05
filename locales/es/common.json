@@ -8,6 +8,11 @@
     "new": "¿Nuevo en Control Pack?"
   },
   "add": "Añadir",
+  "airlines": {
+    "0": "Aún no existen aerolíneas registradas",
+    "one": "Aerolínea",
+    "other": "Aerolíneas"
+  },
   "applications": {
     "0": "Sin Aplicaciones",
     "one": "Aplicaciones",
@@ -19,42 +24,13 @@
     "one": "Facturas",
     "other": "Facturas"
   },
-  "buy": {
-    "0": "Sin Compra",
-    "one": "Compras",
-    "other": "Compras"
-  },
   "business-name": "Razón social",
   "cancel": "Cancelar",
-  "catalogs": {
-    "0": "Sin Catálogos",
-    "one": "Catalogos",
-    "other": "Catálogos"
-  },
+
   "client": "Cliente",
   "client-number": "Número del Cliente",
   "contact-person": "Persona de contacto",
-  "backpackpool-gold": {
-    "0": "Backpackpool Gold",
-    "one": "Backpackpool Gold",
-    "other": "Backpackpool Gold"
-  },
-  "current-payment": {
-    "0": "Sin Corrientes de Pagos",
-    "one": "Corriente de Pago",
-    "other": "Corriente de Pagos"
-  },
-  "customer-care": {
-    "0": "Sin Atención al Cliente",
-    "one": "Atención al Cliente",
-    "other": "Atención al Cliente"
-  },
-  "customer-services": {
-    "0": "Sin Servicios Clientes",
-    "one": "Servicios Clientes",
-    "other": "Servicios Clientes"
-  },
-  "company":"Empresa",
+  "company": "Empresa",
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
   "date-delivery": " Fecha Entrega",
@@ -80,25 +56,37 @@
   },
   "filter": "Filtrar",
   "filters": "Filtros",
+  "form": {
+    "regulation": {
+      "title": {
+        "create": "Nueva Regulación"
+      },
+      "label": {
+        "country": "País",
+        "shipment-item": "Artículo",
+        "permited-amount": "Cantidad permitida (Máx.)"
+      },
+      "placeholder": {
+        "country": "País",
+        "shipment-item": "Artículo",
+        "permited-amount": "Cantidad permitida (Máx.)"
+      }
+    }
+  },
   "forgot-password": "¿Olvidaste la contraseña?",
   "go-back": "Volver",
   "home": "Inicio",
-  "information": {
-    "0": "Sin Información",
-    "one": "Información",
-    "other": "Información"
-  },
   "information-product": {
     "0": "Sin Información del Producto",
     "one": "Información del Producto",
     "other": "Información Productos"
   },
   "invalid-credentials": "Credenciales no válidas.",
-  "issue":"Asunto",
+  "issue": "Asunto",
   "loading": "Cargando...",
   "message": {
     "user-delete": "Desea Eliminar el Usuario",
-    "message":"Mensaje",
+    "message": "Mensaje",
     "message-customer-care": "He leído y acepto la cláusula de Protección de Datos."
   },
   "municipality": "Municipio",
@@ -136,22 +124,12 @@
   "phone": "Teléfono",
   "previous": "Anterior",
   "profile": "Perfil",
-  "ppu": {
-    "0": "PPU",
-    "one": "PPU",
-    "other": "PPU"
-  },
-  "population":"Población",
-  "rappel": {
-    "0": "Rappel",
-    "one": "Rappel",
-    "other": "Rappel"
-  },
+  "population": "Población",
   "repeat-password": "Repetir contraseña",
-  "reports": {
-    "0": "Sin reportes",
-    "one": "Reporte",
-    "other": "Reportes"
+  "regulations": {
+    "0": "Aún no existen regulaciones registradas.",
+    "one": "Regulación",
+    "other": "Regulaciones"
   },
   "required": {
     "username": "El nombre de usuario es requerido",
@@ -161,20 +139,8 @@
     "email": "El correo electrónico es requerido",
     "phone": "El número de telefóno es requerido"
   },
-  "results": "resultados",
-  "revenues": {
-    "0": "Sin ingresos",
-    "one": "Ingreso",
-    "other": "Ingresos"
-  },
-  "sales-history": {
-    "0": "Sin Información",
-    "one": "Historial de Ventas",
-    "other": "Historial de Ventas"
-  },
-  "send":"Enviar",
-  "role": "Rol",
-  "roles": "Roles",
+  "send": "Enviar",
+  "roles": { "0": "Sin roles", "one": "Role", "other": "Roles" },
   "role-admin": "Admin",
   "role-user": "Usuario",
   "remember-me": "Recuérdame",
@@ -186,9 +152,19 @@
   "search": "Buscar",
   "select": "Seleccione",
   "settings": "Ajustes",
+  "shipment-items": {
+    "0": "Aún no existen artículos",
+    "one": "Artículo",
+    "other": "Artículos"
+  },
   "showing": "Mostrando {{range}} de {{total}} resultados",
   "status": "Estado",
   "type": "Tipo",
+  "travels": {
+    "0": "Aún no existen viajes registrados",
+    "one": "Viaje",
+    "other": "Viajes"
+  },
   "update": "Editar",
   "username": "Usuario",
   "users": {

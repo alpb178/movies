@@ -17,7 +17,7 @@ const NavigationMenu = () => {
 
   return navigation.map((item, idx) =>
     item?.roles.some((role) => roles?.includes(role)) ? (
-      item.submenu ? (
+      item.children ? (
         <Disclosure as="div" key={item.name} className="space-y-1">
           {({ open }) => (
             <>
@@ -50,7 +50,7 @@ const NavigationMenu = () => {
                 leaveTo="transform scale-95 opacity-0"
               >
                 <Disclosure.Panel className="space-y-1">
-                  {item.submenu?.map((item, idx) => (
+                  {item.children?.map((item, idx) => (
                     <Link key={idx} href={item.link} shallow>
                       <a
                         key={item.name}

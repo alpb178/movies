@@ -1,28 +1,27 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
 import useTranslation from 'next-translate/useTranslation';
 import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
-import UserFilter from 'containers/users/UserFilter';
-import { getUsers, selectUser, deleteUser } from 'redux/actions';
-import { USER_DETAIL_PAGE, USER_ADD, USER_EDIT } from 'lib/constants';
+import PaymentFilter from 'containers/regulations/RegulationsFilter';
+import { PAYMENT_DETAIL_PAGE, PAYMENT_ADD, PAYMENT_EDIT } from 'lib/constants';
 import Loading from 'components/common/Loading';
-import EmptyState from 'components/common/EmptyState';
-import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
+import EmptyState from '../../components/common/EmptyState';
+import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
+import useRegulations from '../../hooks/regulation/useRegulations';
 
-const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
+const RegulationsList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
   const [openFilters, setOpenFilters] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
 
   const [filterValues, setFilterValues] = useState({
-    username: '',
+    paymentname: '',
     surname: '',
     name: '',
     phone: '',
@@ -30,29 +29,35 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     roles: ''
   });
 
-  useEffect(() => {
-    onGetUsers();
+  const params = useMemo(() => {
+    return {};
   }, []);
 
-  const handleDelete = (event, row) => {
-    event.stopPropagation();
-    setDeleteConfirmation({ open: true, id: row.original.login });
-  };
+  const { data: regulations } = useRegulations({
+    args: params,
+    options: {
+      keepPreviousData: true
+    }
+  });
 
-  const onDeleteConfirmation = () => {
-    onDeleteUser(deleteConfirmation.id);
+  const handleDelete = (event, row) => {
+    event.preventDefault();
+    const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
+    if (answer) {
+      onDeletePayment(row.original.paymentname);
+    }
   };
 
   const handleEdit = (event, row) => {
     event.stopPropagation();
     const value = row.original.email;
-    const path = USER_EDIT(value);
-    onSelectUser(row.original);
+    const path = PAYMENT_EDIT(value);
+    onSelectPayment(row.original);
     router.push(path);
   };
 
   const handleAdd = () => {
-    router.push(USER_ADD);
+    router.push(PAYMENT_ADD);
   };
 
   const renderRoles = (roles) => (
@@ -77,12 +82,12 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
 
   const columns = React.useMemo(() => [
     {
-      Header: t('username'),
+      Header: t('paymentname'),
       accessor: 'login'
     },
     {
       Header: t('name'),
-      accessor: 'firstName'
+      accessor: 'maxAmount'
     },
     {
       Header: t('surname'),
@@ -103,8 +108,8 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
       Cell: ({ value: roles }) => renderRoles(roles)
     },
     {
-      id: 'optionsUsers',
-      displayName: 'optionsUsers',
+      id: 'optionsRegulations',
+      displayName: 'optionsRegulations',
       Cell: ({ row }) => {
         return (
           <div className="flex items-center space-x-4">
@@ -120,7 +125,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
               className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
               type="button"
               id="buttonDelete"
-              onClick={(event) => handleDelete(event, row)}
+              onClick={() => setOpenDeleteConfirmation(true)}
             >
               <TrashIcon className="w-6 h-6" />
             </button>
@@ -147,7 +152,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     );
 
   const handleFilters = (values) => {
-    setFilterValues(values, onGetUsers(values));
+    setFilterValues(values, onGetRegulations(values));
   };
 
   const handleClick = (event, value) => {
@@ -160,23 +165,23 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
         }),
         {}
       );
-    onGetUsers(updatedFilters);
+    onGetRegulations(updatedFilters);
     setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
   };
 
   const options = {
     columns,
-    data: data?.toJS(),
+    data: regulations,
     handleRowClick: (row) => {
       const value = row.original.email;
-      const path = USER_DETAIL_PAGE(value);
-      onSelectUser(row.original);
+      const path = PAYMENT_DETAIL_PAGE(value);
+      onSelectPayment(row.original);
       router.push(path);
     },
     onFilter: (
       <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
         <div className="mb-4">
-          <UserFilter open={openFilters} onSubmit={handleFilters} />
+          <PaymentFilter open={openFilters} onSubmit={handleFilters} />
         </div>
         <div className="flex">
           <FilterCriteria />
@@ -192,13 +197,6 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
         >
           {t('filter')}
         </button>
-        <button
-          type="button"
-          className="p-2 px-6 py-2 ml-4 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => handleAdd()}
-        >
-          {t('add')} {t('users', { count: 1 }).toLowerCase()}
-        </button>
       </>
     )
   };
@@ -207,41 +205,37 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     <>
       {loading && <Loading />}
 
-      {data ? <DataTable {...options} /> : <EmptyState text={t('users', { count: 0 })} />}
+      {regulations ? (
+        <DataTable {...options} />
+      ) : (
+        <EmptyState text={t('regulations', { count: 0 })}>
+          <button
+            type="button"
+            className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
+            onClick={() => router.push('regulations/create')}
+          >
+            Nueva regulación
+          </button>
+        </EmptyState>
+      )}
 
       <DeleteConfirmationDialog
-        open={deleteConfirmation.open}
-        onOpen={setDeleteConfirmation}
-        onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete-title', { entity: t('users', { count: 1 }).toLowerCase() })}
-        content={t('delete-message.male', { entity: t('users', { count: 1 }).toLowerCase() })}
+        open={openDeleteConfirmation}
+        onOpen={setOpenDeleteConfirmation}
+        title={t('delete', { entity: 'user' })}
+        content={t('asd')}
       />
     </>
   );
 };
 
-Users.propTypes = {
+RegulationsList.propTypes = {
   row: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  onGetUsers: PropTypes.func.isRequired,
-  onSelectUser: PropTypes.func.isRequired,
-  onDeleteUser: PropTypes.func.isRequired
+  onGetRegulations: PropTypes.func.isRequired,
+  onSelectPayment: PropTypes.func.isRequired,
+  onDeletePayment: PropTypes.func.isRequired
 };
 
-const userReducer = 'user';
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([userReducer, 'loading']),
-  data: state.getIn([userReducer, 'data']),
-  filters: state.getIn([userReducer, 'filters']),
-  total: state.getIn([userReducer, 'total'])
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGetUsers: (user) => dispatch(getUsers(user)),
-  onSelectUser: (user) => dispatch(selectUser(user)),
-  onDeleteUser: (username) => dispatch(deleteUser(username))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Users);
+export default RegulationsList;

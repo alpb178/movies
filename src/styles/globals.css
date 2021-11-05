@@ -24,3 +24,19 @@ a {
 button:focus {
   outline: 0;
 }
+
+.text-field {
+  @apply relative w-full p-3 text-lg text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg hover:border-gray-400;
+}
+
+label.text-field {
+  @apply block mb-8 text-2xl font-semibold text-gray-700 lg:text-3xl;
+}
+
+label.register-text-field {
+  @apply block mb-8 text-2xl font-semibold text-gray-700 lg:text-3xl;
+}
+
+.form-header {
+  @apply text-3xl font-semibold text-gray-700 md:text-4xl;
+}

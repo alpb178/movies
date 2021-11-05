@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const EmptyState = ({ text }) => {
+const EmptyState = ({ children, text }) => {
   return (
-    <div className="flex items-center justify-center w-full h-full p-8 text-2xl text-gray-400">
+    <div className="flex flex-col items-center justify-center w-full h-full p-8 text-2xl text-gray-400">
       {text}
+      {children}
     </div>
   );
 };
 
 EmptyState.propTypes = {
+  children: PropTypes.array,
   text: PropTypes.string
 };
 
