@@ -98,7 +98,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
       Cell: ({ cell }) => renderStatus(cell.row.original['activated'])
     },
     {
-      Header: t('roles'),
+      Header: t('roles', { count: 2 }),
       accessor: 'authorities',
       Cell: ({ value: roles }) => renderRoles(roles)
     },

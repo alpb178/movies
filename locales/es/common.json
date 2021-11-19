@@ -26,15 +26,18 @@
   },
   "business-name": "Razón social",
   "cancel": "Cancelar",
-
   "client": "Cliente",
   "client-number": "Número del Cliente",
   "contact-person": "Persona de contacto",
   "company": "Empresa",
+  "countries": {
+    "0": "Aún no existen países registrados",
+    "one": "País",
+    "other": "Países"
+  },
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
   "date-delivery": " Fecha Entrega",
-  "demo": "Demo",
   "delete": "Eliminar",
   "delete-filter": "Borrar Filtro",
   "deleted": {
@@ -84,6 +87,11 @@
   "invalid-credentials": "Credenciales no válidas.",
   "issue": "Asunto",
   "loading": "Cargando...",
+  "locations": {
+    "0": "Aún no existen localizaciones registradas.",
+    "one": "Localización",
+    "other": "Localizaciones"
+  },
   "message": {
     "user-delete": "Desea Eliminar el Usuario",
     "message": "Mensaje",
@@ -93,8 +101,6 @@
   "name": "Nombre",
   "surname": "Apellidos",
   "none": "Ninguno",
-  "no-name": "No existe nombre en {{lang}}",
-  "no-order": "Nº Order",
   "new": "Nuevo",
   "next": "Siguiente",
   "no-match-found": "No se encontraron resultados",
@@ -104,17 +110,11 @@
     "one": "Oferta",
     "other": "Ofertas"
   },
-  "orders": {
-    "0": "Sin Pedidos",
-    "one": "Pedidos",
-    "other": "Pedidos"
-  },
   "new-order": {
     "0": "Sin Información",
     "one": "Nuevo Pedido",
     "other": "Nuevos Pedidos"
   },
-  "organization": "Organización",
   "password": "Contraseña",
   "payments": {
     "0": "Aún no existen pagos",
@@ -126,6 +126,11 @@
   "profile": "Perfil",
   "population": "Población",
   "repeat-password": "Repetir contraseña",
+  "regions": {
+    "0": "Aún no existen regiones registradas.",
+    "one": "Región",
+    "other": "Regiones"
+  },
   "regulations": {
     "0": "Aún no existen regulaciones registradas.",
     "one": "Regulación",
@@ -139,7 +144,6 @@
     "email": "El correo electrónico es requerido",
     "phone": "El número de telefóno es requerido"
   },
-  "send": "Enviar",
   "roles": { "0": "Sin roles", "one": "Role", "other": "Roles" },
   "role-admin": "Admin",
   "role-user": "Usuario",
@@ -157,8 +161,13 @@
     "one": "Artículo",
     "other": "Artículos"
   },
+  "send": "Enviar",
   "showing": "Mostrando {{range}} de {{total}} resultados",
   "status": "Estado",
+  "table": {
+    "page-count": "Página {{currentPage}} de {{lastPage}}",
+    "rows-per-page": "Filas por página"
+  },
   "type": "Tipo",
   "travels": {
     "0": "Aún no existen viajes registrados",

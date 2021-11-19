@@ -9,7 +9,6 @@ const getShipmentItems = async ({ queryKey }) => {
 };
 
 const createShipmentItem = async (args) => {
-  debugger;
   const { path, data: values, method } = args;
   const { data } = await apiFetcher(path, { data: values, method });
   return data;

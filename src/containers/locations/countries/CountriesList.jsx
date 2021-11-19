@@ -1,9 +1,9 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
+import { TrashIcon, PencilIcon, XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
 import Loading from '@/components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
@@ -11,18 +11,12 @@ import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDial
 import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
 import useCountries from '@/hooks/location/country/useCountries';
 import { COUNTRIES_EDIT, LOCATION_DETAILS_PAGE } from '@/lib/constants';
-import { format } from 'date-fns';
-import { enGB, es } from 'date-fns/locale';
-
-const locales = { es, en: enGB };
 
 const CountriesList = ({ loading }) => {
-  const { t, lang } = useTranslation('common');
+  const { t } = useTranslation('common');
   const router = useRouter();
-  // const [page, setPage] = useState(0);
-  // const [size, setSize] = useState(20);
   const [openFilters, setOpenFilters] = useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
   const [filterValues, setFilterValues] = useState({
     name: '',
@@ -40,8 +34,17 @@ const CountriesList = ({ loading }) => {
     }
   });
 
-  const locale = {
-    ...locales[lang]
+  const handleAdd = () => {
+    console.log();
+  };
+
+  const handleDelete = (event, row) => {
+    event.stopPropagation();
+    setDeleteConfirmation({ open: true, id: row.original.login });
+  };
+
+  const onDeleteConfirmation = () => {
+    console.log();
   };
 
   const handleEdit = (event, row) => {
@@ -51,19 +54,6 @@ const CountriesList = ({ loading }) => {
     router.push(path);
   };
 
-  const renderRoles = (roles) => (
-    <div className="flex space-x-2">
-      {roles?.map((role) => (
-        <span
-          key={role}
-          className="inline-flex px-4 py-1 font-medium leading-5 text-green-700 rounded-full bg-green-50"
-        >
-          {t(role.replace(/_/g, '-').toLowerCase())}
-        </span>
-      ))}
-    </div>
-  );
-
   const columns = React.useMemo(() => [
     {
       Header: t('name'),
@@ -72,6 +62,32 @@ const CountriesList = ({ loading }) => {
     {
       Header: t('code'),
       accessor: 'code'
+    },
+    {
+      id: 'optionsUsers',
+      displayName: 'optionsUsers',
+      Cell: ({ row }) => {
+        return (
+          <div className="flex items-center space-x-4">
+            <button
+              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
+              type="button"
+              id="buttonEdit"
+              onClick={(event) => handleEdit(event, row)}
+            >
+              <PencilIcon className="w-6 h-6" />
+            </button>
+            <button
+              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
+              type="button"
+              id="buttonDelete"
+              onClick={(event) => handleDelete(event, row)}
+            >
+              <TrashIcon className="w-6 h-6" />
+            </button>
+          </div>
+        );
+      }
     }
   ]);
 
@@ -136,6 +152,13 @@ const CountriesList = ({ loading }) => {
         >
           {t('filter')}
         </button>
+        <button
+          type="button"
+          className="p-2 px-6 py-2 ml-4 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
+          onClick={() => handleAdd()}
+        >
+          {t('add')} {t('countries', { count: 1 }).toLowerCase()}
+        </button>
       </>
     )
   };
@@ -159,9 +182,10 @@ const CountriesList = ({ loading }) => {
       )}
 
       <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onOpen={setOpenDeleteConfirmation}
-        title={t('delete', { entity: 'user' })}
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete', { entity: 'countries' })}
         content={t('asd')}
       />
     </>
