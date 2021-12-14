@@ -3,5 +3,6 @@ module.exports = {
   defaultLocale: 'es',
   pages: {
     '*': ['common']
-  }
+  },
+  logBuild: false
 };
