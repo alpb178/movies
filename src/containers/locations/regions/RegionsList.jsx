@@ -8,11 +8,11 @@ import DataTable from '@/components/table';
 import Loading from '@/components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
-import PaymentFilter from '@/containers/regions/RegionsFilter';
 import useRegions from '@/hooks/region/useRegions';
 import { PAYMENT_EDIT, REGION_DETAILS_PAGE } from '@/lib/constants';
 import { format } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
+import RegionsFilter from './RegionsFilter';
 
 const locales = { es, en: enGB };
 
@@ -69,39 +69,14 @@ const RegionsList = ({ loading, onDeletePayment }) => {
     </div>
   );
 
-  const formatRegioner = (value) => <div>{value?.internalUser?.name}</div>;
-
-  const formatFlight = (value) => <div>{value.number}</div>;
-
-  const formatPlace = (value) => <div>{value.name}</div>;
-
-  const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
-
   const columns = React.useMemo(() => [
     {
-      Header: t('regioner'),
-      accessor: 'regioner',
-      Cell: ({ value }) => formatRegioner(value)
+      Header: t('code'),
+      accessor: 'code'
     },
     {
-      Header: t('flights', { count: 1 }),
-      accessor: 'flight',
-      Cell: ({ value }) => formatFlight(value)
-    },
-    {
-      Header: t('origin'),
-      accessor: 'origin',
-      Cell: ({ value }) => formatPlace(value)
-    },
-    {
-      Header: t('departure-at'),
-      accessor: 'departureAt',
-      Cell: ({ value }) => formatDate(value)
-    },
-    {
-      Header: t('destination'),
-      accessor: 'destination',
-      Cell: ({ value }) => formatPlace(value)
+      Header: t('name'),
+      accessor: 'name'
     }
   ]);
 
@@ -150,7 +125,7 @@ const RegionsList = ({ loading, onDeletePayment }) => {
     onFilter: (
       <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
         <div className="mb-4">
-          <PaymentFilter open={openFilters} onSubmit={handleFilters} />
+          <RegionsFilter open={openFilters} onSubmit={handleFilters} />
         </div>
         <div className="flex">
           <FilterCriteria />

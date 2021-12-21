@@ -8,8 +8,8 @@ export const API_ROLES_URL = '/roles';
 export const API_AIRLINES_URL = '/airlines';
 export const API_COUNTRIES_URL = '/countries';
 export const API_PAYMENTS_URL = '/payments';
-export const API_REGULATIONS_URL = '/regulations';
 export const API_REGIONS_URL = '/regions';
+export const API_REGULATIONS_URL = '/regulations';
 export const API_SHIPMENT_ITEMS_URL = '/shipment-items';
 export const API_TRAVELS_URL = '/travels';
 

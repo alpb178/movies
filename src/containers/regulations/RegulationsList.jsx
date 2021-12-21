@@ -3,9 +3,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
+import { TrashIcon, PencilIcon, XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
-import PaymentFilter from 'containers/regulations/RegulationsFilter';
+import RegulationsFilter from 'containers/regulations/RegulationsFilter';
 import { PAYMENT_DETAIL_PAGE, PAYMENT_ADD, PAYMENT_EDIT } from 'lib/constants';
 import Loading from 'components/common/Loading';
 import EmptyState from '../../components/common/EmptyState';
@@ -73,39 +73,20 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     </div>
   );
 
-  const renderStatus = (clientNumber) =>
-    clientNumber ? (
-      <CheckCircleIcon className="w-6 h-6 text-green-700" />
-    ) : (
-      <XCircleIcon className="w-6 h-6 text-red-600" />
-    );
-
   const columns = React.useMemo(() => [
     {
-      Header: t('paymentname'),
-      accessor: 'login'
+      Header: t('countries', { count: 1 }),
+      accessor: 'country',
+      Cell: ({ cell }) => <div>{cell.row.original.country.name}</div>
     },
     {
-      Header: t('name'),
+      Header: t('max-amount'),
       accessor: 'maxAmount'
     },
     {
-      Header: t('surname'),
-      accessor: 'lastName'
-    },
-    {
-      Header: t('email'),
-      accessor: 'email'
-    },
-    {
-      Header: t('status'),
-      accessor: 'activated',
-      Cell: ({ cell }) => renderStatus(cell.row.original['activated'])
-    },
-    {
-      Header: t('roles'),
-      accessor: 'authorities',
-      Cell: ({ value: roles }) => renderRoles(roles)
+      Header: t('shipment-items', { count: 1 }),
+      accessor: 'shipmentItem',
+      Cell: ({ cell }) => <div>{cell.row.original.shipmentItem.name}</div>
     },
     {
       id: 'optionsRegulations',
@@ -181,7 +162,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     onFilter: (
       <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
         <div className="mb-4">
-          <PaymentFilter open={openFilters} onSubmit={handleFilters} />
+          <RegulationsFilter open={openFilters} onSubmit={handleFilters} />
         </div>
         <div className="flex">
           <FilterCriteria />

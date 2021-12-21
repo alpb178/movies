@@ -5,7 +5,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { getRoles } from 'redux/actions';
 import { Formik, Field, Form } from 'formik';
 
-const TravelsFilter = ({ data, onSubmit, open }) => {
+const RegionsFilter = ({ data, onSubmit, open }) => {
   const { t } = useTranslation('common');
 
   const initialValues = {
@@ -140,4 +140,4 @@ const mapDispatchToProps = (dispatch) => ({
   onGetRoles: () => dispatch(getRoles())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TravelsFilter);
+export default connect(mapStateToProps, mapDispatchToProps)(RegionsFilter);
