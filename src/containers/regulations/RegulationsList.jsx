@@ -11,6 +11,7 @@ import Loading from 'components/common/Loading';
 import EmptyState from '../../components/common/EmptyState';
 import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
 import useRegulations from '../../hooks/regulation/useRegulations';
+import RegulationsFormDialogWrapper from '../../components/form/FormDialogWrapper';
 
 const RegulationsList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
@@ -18,6 +19,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
   const [openFilters, setOpenFilters] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
 
   const [filterValues, setFilterValues] = useState({
@@ -170,7 +172,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
       </div>
     ),
     actions: (
-      <>
+      <div className="space-x-2">
         <button
           type="button"
           className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
@@ -178,7 +180,14 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
         >
           {t('filter')}
         </button>
-      </>
+        <button
+          type="button"
+          className="px-6 py-2 font-medium bg-white border rounded-md border-primary-600 text-primary-600 w-max hover:bg-gray-100"
+          onClick={() => setOpenForm(true)}
+        >
+          {t('new', { entity: t('regulations', { count: 1 }) })}
+        </button>
+      </div>
     )
   };
 
@@ -200,6 +209,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
         </EmptyState>
       )}
 
+      <RegulationsFormDialogWrapper open={openForm} onOpen={setOpenForm} />
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}
         onOpen={setOpenDeleteConfirmation}

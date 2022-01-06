@@ -59,15 +59,27 @@
   },
   "filter": "Filtrar",
   "filters": "Filtros",
+  "flights": { "0": "Aún no existen vuelos registrados", "1": "Vuelo", "other": "Vuelos" },
   "form": {
+    "common": {
+      "label": {
+        "code": "Código",
+        "name": "Nombre"
+      }
+    },
+    "country": {
+      "title": {
+        "create": "Nuevo País"
+      }
+    },
     "regulation": {
       "title": {
         "create": "Nueva Regulación"
       },
       "label": {
         "country": "País",
-        "shipment-item": "Artículo",
-        "permited-amount": "Cantidad permitida (Máx.)"
+        "permited-amount": "Cantidad permitida (Máx.)",
+        "shipment-item": "Artículo"
       },
       "placeholder": {
         "country": "País",
@@ -92,6 +104,7 @@
     "one": "Localización",
     "other": "Localizaciones"
   },
+  "measure-unit": "Unidad de medida",
   "message": {
     "user-delete": "Desea Eliminar el Usuario",
     "message": "Mensaje",
@@ -169,6 +182,11 @@
     "rows-per-page": "Filas por página"
   },
   "type": "Tipo",
+  "travelers": {
+    "0": "Aún no existen viajeros registrados",
+    "one": "Viajero",
+    "other": "Viajeros"
+  },
   "travels": {
     "0": "Aún no existen viajes registrados",
     "one": "Viaje",

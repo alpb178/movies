@@ -10,7 +10,7 @@ import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
 import useTravels from '@/hooks/travel/useTravels';
-import { PAYMENT_DETAIL_PAGE, PAYMENT_EDIT, TRAVEL_DETAILS_PAGE } from '@/lib/constants';
+import { PAYMENT_EDIT, TRAVEL_DETAILS_PAGE } from '@/lib/constants';
 import { format } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
 
@@ -79,7 +79,7 @@ const TravelsList = ({ loading, onDeletePayment }) => {
 
   const columns = React.useMemo(() => [
     {
-      Header: t('traveler'),
+      Header: t('travelers', { count: 1 }),
       accessor: 'traveler',
       Cell: ({ value }) => formatTraveler(value)
     },

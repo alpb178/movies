@@ -99,7 +99,7 @@ const Admin = ({ children, roles }) => {
                           />
                         ) : (
                           <span className="flex items-center justify-center w-10 h-10 text-xl font-medium bg-gray-200 rounded-full">
-                            {user.sub[0].toUpperCase()}
+                            {user.email[0].toUpperCase()}
                           </span>
                         )}
                       </Menu.Button>

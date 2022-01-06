@@ -11,11 +11,14 @@ import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDial
 import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
 import useCountries from '@/hooks/location/country/useCountries';
 import { COUNTRIES_EDIT, LOCATION_DETAILS_PAGE } from '@/lib/constants';
+import CountryForm from './CountryForm';
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 
 const CountriesList = ({ loading }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [openFilters, setOpenFilters] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
   const [filterValues, setFilterValues] = useState({
@@ -155,7 +158,7 @@ const CountriesList = ({ loading }) => {
         <button
           type="button"
           className="p-2 px-6 py-2 ml-4 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => handleAdd()}
+          onClick={() => setOpenForm(true)}
         >
           {t('add')} {t('countries', { count: 1 }).toLowerCase()}
         </button>
@@ -180,6 +183,10 @@ const CountriesList = ({ loading }) => {
           </button>
         </EmptyState>
       )}
+
+      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
+        <CountryForm />
+      </FormDialogWrapper>
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}

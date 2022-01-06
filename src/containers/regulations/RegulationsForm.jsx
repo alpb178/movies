@@ -6,10 +6,11 @@ import useTranslation from 'next-translate/useTranslation';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { LocationMarkerIcon } from '@heroicons/react/outline';
-import useCountries from '@/hooks/location/useCountries';
+import useCountries from '@/hooks/location/country/useCountries';
 import AutosuggestField from '@/components/form/AutosuggestField';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import { POST } from '@/lib/constants';
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 
 const RegulationsForm = () => {
   const { t } = useTranslation('common');
@@ -46,6 +47,8 @@ const RegulationsForm = () => {
   });
 
   const onSubmit = (values) => {
+    values.shipmentItem = values.shipmentItem.id;
+
     useShipmentItems({
       args: values,
       options: {
@@ -55,7 +58,7 @@ const RegulationsForm = () => {
   };
 
   return (
-    <>
+    <FormDialogWrapper>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ errors, touched }) => (
           <Form className="m-10 space-y-6">
@@ -126,7 +129,7 @@ const RegulationsForm = () => {
           </Form>
         )}
       </Formik>
-    </>
+    </FormDialogWrapper>
   );
 };
 
