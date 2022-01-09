@@ -78,7 +78,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
   const columns = React.useMemo(() => [
     {
       Header: t('username'),
-      accessor: 'login'
+      accessor: 'username'
     },
     {
       Header: t('name'),

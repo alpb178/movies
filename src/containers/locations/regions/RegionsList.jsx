@@ -22,7 +22,6 @@ const RegionsList = ({ loading, onDeletePayment }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
   const [page, setPage] = useState(0);
-  const [page, setPage] = useState(0);
   const [sort, setSort] = useState();
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);

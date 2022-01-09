@@ -1,57 +1,30 @@
-/* eslint-disable react/display-name */
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { LocationMarkerIcon } from '@heroicons/react/outline';
-import useCountries from '@/hooks/location/useCountries';
-import AutosuggestField from '@/components/form/AutosuggestField';
-import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import { POST } from '@/lib/constants';
+import useAirlines from '@/hooks/airline/useAirlines';
 
-const RegulationsForm = () => {
+const AirlinesForm = ({ onOpen }) => {
   const { t } = useTranslation('common');
-  const router = useRouter();
 
   const initialValues = {
-    maxAmount: 0,
-    shipmentItem: {},
-    country: {}
+    name: ''
   };
 
-  const params = useMemo(() => {
-    return {};
-  }, []);
-
-  const { data: countries } = useCountries({
-    args: params,
-    options: {
-      keepPreviousData: true
-    }
-  });
-
-  const { data: shipmentItems } = useShipmentItems({
-    args: params,
-    options: {
-      keepPreviousData: true
-    }
-  });
-
   const validationSchema = Yup.object().shape({
-    maxAmount: Yup.string(),
-    shipmentItem: Yup.object().shape({ name: Yup.string() }),
-    country: Yup.object().shape({ name: Yup.string() })
+    name: Yup.string().required(t('required.name'))
   });
 
   const onSubmit = (values) => {
-    useShipmentItems({
+    useAirlines({
       args: values,
       options: {
         method: POST
       }
     });
+    onOpen(false);
   };
 
   return (
@@ -59,61 +32,20 @@ const RegulationsForm = () => {
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ errors, touched }) => (
           <Form className="m-10 space-y-6">
-            <p className="form-header">{t('form.regulation.title.create')}</p>
+            <p className="form-header">{t('form.airline.title.create')}</p>
             <div className="space-y-2">
-              <label htmlFor="country">{t('form.regulation.label.country')}</label>
-              <div className="relative w-full mx-auto">
-                <div className="absolute z-10 text-center text-gray-500">
-                  <LocationMarkerIcon className="w-6 h-6 m-4" />
-                </div>
-                <AutosuggestField
-                  id="country"
-                  name="country"
-                  options={countries ? countries : []}
-                  className={`text-field ${
-                    errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                  }`}
-                />
-                {errors.origin && touched.origin ? (
-                  <p className="mt-4 text-red-600">{errors.origin.name}</p>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="country">{t('form.regulation.label.shipment-item')}</label>
-              <div className="relative w-full mx-auto">
-                <div className="absolute z-10 text-center text-gray-500">
-                  <LocationMarkerIcon className="w-6 h-6 m-4" />
-                </div>
-                <AutosuggestField
-                  id="shipmentItem"
-                  name="shipmentItem"
-                  placeholder={t('form.publish.departure.placeholder')}
-                  options={shipmentItems ? shipmentItems : []}
-                  className={`text-field ${
-                    errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                  }`}
-                />
-                {errors.origin && touched.origin ? (
-                  <p className="mt-4 text-red-600">{errors.origin.name}</p>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="maxAmount">{t('form.regulation.label.permited-amount')}</label>
+              <label htmlFor="name">{t('form.common.label.name')}</label>
               <Field
                 type="text"
-                name="maxAmount"
-                id="maxAmount"
+                name="name"
+                id="name"
                 className={`text-field ${
-                  errors.maxAmount && touched.maxAmount ? 'border-red-400' : 'border-gray-300'
+                  errors.name && touched.name ? 'border-red-400' : 'border-gray-300'
                 }`}
-                aria-describedby="maxAmount"
+                aria-describedby="name"
               />
-              {errors.maxAmount && touched.maxAmount ? (
-                <p className="mt-2 text-sm text-red-600">{errors.maxAmount}</p>
+              {errors.name && touched.name ? (
+                <p className="mt-2 text-sm text-red-600">{errors.name}</p>
               ) : null}
             </div>
 
@@ -130,6 +62,8 @@ const RegulationsForm = () => {
   );
 };
 
-RegulationsForm.propTypes = {};
+AirlinesForm.propTypes = {
+  onOpen: PropTypes.func.isRequired
+};
 
-export default RegulationsForm;
+export default AirlinesForm;
