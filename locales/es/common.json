@@ -28,6 +28,7 @@
   "cancel": "Cancelar",
   "client": "Cliente",
   "client-number": "Número del Cliente",
+  "code": "Código",
   "contact-person": "Persona de contacto",
   "company": "Empresa",
   "countries": {
@@ -72,6 +73,11 @@
         "create": "Nuevo País"
       }
     },
+    "region": {
+      "title": {
+        "create": "Nueva Región"
+      }
+    },
     "regulation": {
       "title": {
         "create": "Nueva Regulación"
@@ -85,6 +91,14 @@
         "country": "País",
         "shipment-item": "Artículo",
         "permited-amount": "Cantidad permitida (Máx.)"
+      }
+    },
+    "shipment-item": {
+      "label": {
+        "measure-unit": "Unidad de medida"
+      },
+      "title": {
+        "create": "Nuevo Artículo"
       }
     }
   },
@@ -104,7 +118,12 @@
     "one": "Localización",
     "other": "Localizaciones"
   },
-  "measure-unit": "Unidad de medida",
+  "max-amount": "Canntidad máxima",
+  "measure-units": {
+    "0": "Aún no existen unidades de medida registradas",
+    "1": "Unidad de medida",
+    "other": "Unidades de medida"
+  },
   "message": {
     "user-delete": "Desea Eliminar el Usuario",
     "message": "Mensaje",
@@ -177,6 +196,7 @@
   "send": "Enviar",
   "showing": "Mostrando {{range}} de {{total}} resultados",
   "status": "Estado",
+  "symbol": "Símbolo",
   "table": {
     "page-count": "Página {{currentPage}} de {{lastPage}}",
     "rows-per-page": "Filas por página"

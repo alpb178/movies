@@ -1,42 +1,37 @@
 /* eslint-disable react/display-name */
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import useTranslation from 'next-translate/useTranslation';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { LocationMarkerIcon } from '@heroicons/react/outline';
-import AutosuggestField from '@/components/form/AutosuggestField';
-import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
+import useRegions from '@/hooks/location/region/useRegions';
 import { POST } from '@/lib/constants';
-import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
+import AutosuggestField from '@/components/form/AutosuggestField';
+import useCountries from '@/hooks/location/country/useCountries';
 
-const ShipmentItemsForm = ({ onOpen }) => {
+const RegionForm = ({ onOpen }) => {
   const { t } = useTranslation('common');
 
-  const initialValues = {
-    name: '',
-    measureUnit: {}
-  };
-
-  const params = useMemo(() => {
-    return {};
-  }, []);
-
-  const { data: measureUnits } = useMeasureUnits({
-    args: params,
+  const { data: countries } = useCountries({
+    args: {},
     options: {
       keepPreviousData: true
     }
   });
 
+  const initialValues = {
+    name: '',
+    code: ''
+  };
+
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(),
-    measureUnit: Yup.object().shape({ name: Yup.string() })
+    name: Yup.string(),
+    code: Yup.string()
   });
 
   const onSubmit = (values) => {
-    values.measureUnit = values.measureUnit.id;
-    useShipmentItems({
+    values.country = values.country.id;
+    useRegions({
       args: values,
       options: {
         method: POST
@@ -50,7 +45,7 @@ const ShipmentItemsForm = ({ onOpen }) => {
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ errors, touched }) => (
           <Form className="m-10 space-y-6">
-            <p className="form-header">{t('form.shipment-item.title.create')}</p>
+            <p className="form-header">{t('form.region.title.create')}</p>
             <div className="space-y-2">
               <label htmlFor="name">{t('form.common.label.name')}</label>
               <div className="relative w-full mx-auto">
@@ -68,13 +63,28 @@ const ShipmentItemsForm = ({ onOpen }) => {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="measureUnit">{t('form.shipment-item.label.measure-unit')}</label>
+              <label htmlFor="code">{t('form.common.label.code')}</label>
+              <div className="relative w-full mx-auto">
+                <Field
+                  id="code"
+                  name="code"
+                  className={`text-field ${
+                    errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
+                  }`}
+                />
+                {errors.origin && touched.origin ? (
+                  <p className="mt-4 text-red-600">{errors.origin.name}</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="country">{t('form.regulation.label.country')}</label>
               <div className="relative w-full mx-auto">
                 <AutosuggestField
-                  id="measureUnit"
-                  name="measureUnit"
-                  placeholder={t('form.publish.departure.placeholder')}
-                  options={measureUnits ? measureUnits : []}
+                  id="country"
+                  name="country"
+                  options={countries ? countries : []}
                   className={`text-field pl-none ${
                     errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
                   }`}
@@ -98,8 +108,8 @@ const ShipmentItemsForm = ({ onOpen }) => {
   );
 };
 
-ShipmentItemsForm.propTypes = {
+RegionForm.propTypes = {
   onOpen: PropTypes.func.isRequired
 };
 
-export default ShipmentItemsForm;
+export default RegionForm;

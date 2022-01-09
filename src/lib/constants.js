@@ -7,6 +7,7 @@ export const API_USERS_URL = '/admin/users'; // User endpoint
 export const API_ROLES_URL = '/roles';
 export const API_AIRLINES_URL = '/airlines';
 export const API_COUNTRIES_URL = '/countries';
+export const API_MEASURE_UNITS_URL = '/measure-units';
 export const API_PAYMENTS_URL = '/payments';
 export const API_REGIONS_URL = '/regions';
 export const API_REGULATIONS_URL = '/regulations';
@@ -19,14 +20,15 @@ export const HOME_PAGE = '/';
 export const AIRLINES_PAGE = '/airlines';
 export const COUNTRIES_PAGE = '/locations/countries';
 export const DASHBOARD_PAGE = '/dashboard';
-export const REVENUES_PAGE = '/revenues';
+export const MEASURE_UNITS_PAGE = '/measure-units';
 export const PAYMENTS_PAGE = '/payments';
 export const REGIONS_PAGE = '/locations/regions';
 export const REGULATIONS_PAGE = '/regulations';
+export const REVENUES_PAGE = '/revenues';
 export const SETTINGS_PAGE = '/settings';
+export const SHIPMENT_ITEMS_PAGE = '/shipment-items';
 export const TRAVELS_PAGE = '/travels';
 export const TRAVEL_DETAILS_PAGE = (value) => `/travels/${value}`;
-export const SHIPMENT_ITEMS_PAGE = '/shipment-items';
 
 // HTTP Methods
 export const POST = 'POST';

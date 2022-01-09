@@ -11,6 +11,8 @@ import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDial
 import PaymentFilter from '@/containers/shipment-items/ShipmentItemsFilter';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import { PAYMENT_DETAIL_PAGE, PAYMENT_ADD, PAYMENT_EDIT } from '@/lib/constants';
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
+import ShipmentItemsForm from './ShipmentItemsForm';
 
 const ShipmentItemsList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
@@ -18,15 +20,11 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
   const [openFilters, setOpenFilters] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
 
   const [filterValues, setFilterValues] = useState({
-    paymentname: '',
-    surname: '',
-    name: '',
-    phone: '',
-    email: '',
-    roles: ''
+    measureUnit: ''
   });
 
   const params = useMemo(() => {
@@ -149,7 +147,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
 
   const options = {
     columns,
-    data: shipmentItems,
+    data: shipmentItems?.rows,
     handleRowClick: (row) => {
       const value = row.original.email;
       const path = PAYMENT_DETAIL_PAGE(value);
@@ -183,19 +181,23 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
     <>
       {loading && <Loading />}
 
-      {shipmentItems ? (
+      {shipmentItems && shipmentItems.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('shipmentitems', { count: 0 })}>
+        <EmptyState text={t('shipment-items', { count: 0 })}>
           <button
             type="button"
             className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-            onClick={() => router.push('shipment-items/create')}
+            onClick={() => setOpenForm(true)}
           >
             Nuevo artículo
           </button>
         </EmptyState>
       )}
+
+      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
+        <ShipmentItemsForm />
+      </FormDialogWrapper>
 
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}

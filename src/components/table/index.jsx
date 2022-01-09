@@ -1,18 +1,23 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useTable, usePagination } from 'react-table';
+import { usePagination, useSortBy, useTable } from 'react-table';
 import { List } from 'immutable';
 import Pagination from './Pagination';
+import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/outline';
 
-const DataTable = ({ columns, data, handleRowClick, onFilter, actions }) => {
+const DataTable = ({ columns, data, setSortBy, handleRowClick, onFilter, actions }) => {
   const tableInstance = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0 }
+      initialState: { pageIndex: 0 },
+      manualSortBy: true,
+      autoResetSortBy: false,
+      autoResetPage: false
     },
+    useSortBy,
     usePagination
   );
 
@@ -21,9 +26,14 @@ const DataTable = ({ columns, data, handleRowClick, onFilter, actions }) => {
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    page // Instead of using 'rows', we'll use page which has only the rows for the active page
-    // The rest of these things are super handy, too ;)
+    page,
+    state: { pageIndex, sortBy }
   } = tableInstance;
+
+  useEffect(() => {
+    const sortStr = sortBy.map((c) => `${c.id}:${c.desc ? 'desc' : 'asc'}`).join(',');
+    setSortBy(sortStr);
+  }, [pageIndex, sortBy]);
 
   return (
     <div className="w-full bg-white border-b">
@@ -38,10 +48,32 @@ const DataTable = ({ columns, data, handleRowClick, onFilter, actions }) => {
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <th
-                  {...column.getHeaderProps()}
+                  {...column.getHeaderProps([
+                    {
+                      className: column.className,
+                      style: column.style
+                    },
+                    column.getSortByToggleProps()
+                  ])}
                   className="px-6 py-5 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
                 >
-                  {column.render('Header')}
+                  <div className="flex items-center group">
+                    {column.render('Header')}
+
+                    <span className="ml-2">
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <SortDescendingIcon className="w-5 h-5" />
+                        ) : (
+                          <SortAscendingIcon className="w-5 h-5" />
+                        )
+                      ) : column.canSort ? (
+                        <SortAscendingIcon className="w-5 h-5 transition-opacity duration-150 ease-in opacity-50 lg:opacity-0 lg:group-hover:opacity-50" />
+                      ) : (
+                        ''
+                      )}
+                    </span>
+                  </div>
                 </th>
               ))}
             </tr>
@@ -78,12 +110,14 @@ const DataTable = ({ columns, data, handleRowClick, onFilter, actions }) => {
 
 DataTable.defaultProps = {
   data: List([]),
+  setSortBy: () => {},
   handleRowClick: () => {}
 };
 
 DataTable.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.object,
+  setSortBy: PropTypes.func,
   onFilter: PropTypes.node,
   actions: PropTypes.node,
   handleRowClick: PropTypes.func

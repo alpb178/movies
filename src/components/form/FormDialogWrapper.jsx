@@ -1,7 +1,15 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
 
 const FormDialogWrapper = ({ children, open, onOpen }) => {
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, { onOpen });
+    }
+    return child;
+  });
+
   return (
     <>
       <Transition appear show={open} as={Fragment}>
@@ -39,7 +47,7 @@ const FormDialogWrapper = ({ children, open, onOpen }) => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                {children}
+                {childrenWithProps}
               </div>
             </Transition.Child>
           </div>
@@ -47,6 +55,12 @@ const FormDialogWrapper = ({ children, open, onOpen }) => {
       </Transition>
     </>
   );
+};
+
+FormDialogWrapper.propTypes = {
+  children: PropTypes.array.isRequired,
+  onOpen: PropTypes.func.isRequired,
+  open: PropTypes.bool
 };
 
 export default FormDialogWrapper;

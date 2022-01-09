@@ -1,42 +1,27 @@
 /* eslint-disable react/display-name */
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import useTranslation from 'next-translate/useTranslation';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { LocationMarkerIcon } from '@heroicons/react/outline';
-import AutosuggestField from '@/components/form/AutosuggestField';
-import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
-import { POST } from '@/lib/constants';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
+import { POST } from '@/lib/constants';
 
-const ShipmentItemsForm = ({ onOpen }) => {
+const MeasureUnitForm = ({ onOpen }) => {
   const { t } = useTranslation('common');
 
   const initialValues = {
     name: '',
-    measureUnit: {}
+    symbol: ''
   };
 
-  const params = useMemo(() => {
-    return {};
-  }, []);
-
-  const { data: measureUnits } = useMeasureUnits({
-    args: params,
-    options: {
-      keepPreviousData: true
-    }
-  });
-
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(),
-    measureUnit: Yup.object().shape({ name: Yup.string() })
+    name: Yup.string(),
+    symbol: Yup.string()
   });
 
   const onSubmit = (values) => {
-    values.measureUnit = values.measureUnit.id;
-    useShipmentItems({
+    useMeasureUnits({
       args: values,
       options: {
         method: POST
@@ -50,7 +35,7 @@ const ShipmentItemsForm = ({ onOpen }) => {
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ errors, touched }) => (
           <Form className="m-10 space-y-6">
-            <p className="form-header">{t('form.shipment-item.title.create')}</p>
+            <p className="form-header">{t('form.measure-unit.title.create')}</p>
             <div className="space-y-2">
               <label htmlFor="name">{t('form.common.label.name')}</label>
               <div className="relative w-full mx-auto">
@@ -68,14 +53,12 @@ const ShipmentItemsForm = ({ onOpen }) => {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="measureUnit">{t('form.shipment-item.label.measure-unit')}</label>
+              <label htmlFor="symbol">{t('form.common.label.symbol')}</label>
               <div className="relative w-full mx-auto">
-                <AutosuggestField
-                  id="measureUnit"
-                  name="measureUnit"
-                  placeholder={t('form.publish.departure.placeholder')}
-                  options={measureUnits ? measureUnits : []}
-                  className={`text-field pl-none ${
+                <Field
+                  id="symbol"
+                  name="symbol"
+                  className={`text-field ${
                     errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
                   }`}
                 />
@@ -98,8 +81,8 @@ const ShipmentItemsForm = ({ onOpen }) => {
   );
 };
 
-ShipmentItemsForm.propTypes = {
+MeasureUnitForm.propTypes = {
   onOpen: PropTypes.func.isRequired
 };
 
-export default ShipmentItemsForm;
+export default MeasureUnitForm;

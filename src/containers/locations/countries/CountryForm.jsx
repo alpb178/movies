@@ -1,16 +1,14 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import useCountries from '@/hooks/location/country/useCountries';
 import { POST } from '@/lib/constants';
 
-const CountryForm = () => {
+const CountryForm = ({ onOpen }) => {
   const { t } = useTranslation('common');
-  const router = useRouter();
 
   const initialValues = {
     name: '',
@@ -29,6 +27,7 @@ const CountryForm = () => {
         method: POST
       }
     });
+    onOpen(false);
   };
 
   return (
@@ -82,6 +81,8 @@ const CountryForm = () => {
   );
 };
 
-CountryForm.propTypes = {};
+CountryForm.propTypes = {
+  onOpen: PropTypes.func.isRequired
+};
 
 export default CountryForm;

@@ -1,16 +1,19 @@
 import {
   HomeIcon,
-  ArchiveIcon,
+  // ArchiveIcon,
   UserGroupIcon,
   CogIcon,
   TicketIcon,
   PaperAirplaneIcon,
-  LocationMarkerIcon
+  LocationMarkerIcon,
+  ScaleIcon,
+  ShieldCheckIcon,
+  CurrencyDollarIcon
 } from '@heroicons/react/outline';
 import {
   DASHBOARD_PAGE,
   PAYMENTS_PAGE,
-  REVENUES_PAGE,
+  // REVENUES_PAGE,
   SETTINGS_PAGE,
   REGULATIONS_PAGE,
   SHIPMENT_ITEMS_PAGE,
@@ -19,7 +22,8 @@ import {
   TRAVELS_PAGE,
   AIRLINES_PAGE,
   COUNTRIES_PAGE,
-  REGIONS_PAGE
+  REGIONS_PAGE,
+  MEASURE_UNITS_PAGE
 } from 'lib/constants';
 
 export default [
@@ -29,16 +33,17 @@ export default [
     icon: HomeIcon,
     roles: [ADMIN_ROLE]
   },
-  {
-    name: 'revenues',
-    icon: ArchiveIcon,
-    link: REVENUES_PAGE,
-    roles: [ADMIN_ROLE]
-  },
-  { name: 'payments', link: PAYMENTS_PAGE, icon: TicketIcon, roles: [ADMIN_ROLE] },
-  { name: 'regulations', link: REGULATIONS_PAGE, icon: TicketIcon, roles: [ADMIN_ROLE] },
+  // {
+  //   name: 'revenues',
+  //   icon: ArchiveIcon,
+  //   link: REVENUES_PAGE,
+  //   roles: [ADMIN_ROLE]
+  // },
+  { name: 'payments', link: PAYMENTS_PAGE, icon: CurrencyDollarIcon, roles: [ADMIN_ROLE] },
   { name: 'travels', link: TRAVELS_PAGE, icon: TicketIcon, roles: [ADMIN_ROLE] },
+  { name: 'regulations', link: REGULATIONS_PAGE, icon: ShieldCheckIcon, roles: [ADMIN_ROLE] },
   { name: 'shipment-items', link: SHIPMENT_ITEMS_PAGE, icon: TicketIcon, roles: [ADMIN_ROLE] },
+  { name: 'measure-units', link: MEASURE_UNITS_PAGE, icon: ScaleIcon, roles: [ADMIN_ROLE] },
   { name: 'airlines', link: AIRLINES_PAGE, icon: PaperAirplaneIcon, roles: [ADMIN_ROLE] },
   {
     name: 'locations',

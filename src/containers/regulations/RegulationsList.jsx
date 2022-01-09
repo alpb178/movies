@@ -6,12 +6,13 @@ import useTranslation from 'next-translate/useTranslation';
 import { TrashIcon, PencilIcon, XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
 import RegulationsFilter from 'containers/regulations/RegulationsFilter';
-import { PAYMENT_DETAIL_PAGE, PAYMENT_ADD, PAYMENT_EDIT } from 'lib/constants';
+import { PAYMENT_DETAIL_PAGE, PAYMENT_EDIT } from 'lib/constants';
 import Loading from 'components/common/Loading';
-import EmptyState from '../../components/common/EmptyState';
-import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
-import useRegulations from '../../hooks/regulation/useRegulations';
-import RegulationsFormDialogWrapper from '../../components/form/FormDialogWrapper';
+import EmptyState from '@/components/common/EmptyState';
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
+import useRegulations from '@/hooks/regulation/useRegulations';
+import RegulationsForm from './RegulationsForm';
 
 const RegulationsList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
@@ -23,12 +24,8 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
 
   const [filterValues, setFilterValues] = useState({
-    paymentname: '',
-    surname: '',
-    name: '',
-    phone: '',
-    email: '',
-    roles: ''
+    country: '',
+    shipmentItem: ''
   });
 
   const params = useMemo(() => {
@@ -58,38 +55,22 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     router.push(path);
   };
 
-  const handleAdd = () => {
-    router.push(PAYMENT_ADD);
-  };
-
-  const renderRoles = (roles) => (
-    <div className="flex space-x-2">
-      {roles?.map((role) => (
-        <span
-          key={role}
-          className="inline-flex px-4 py-1 font-medium leading-5 text-green-700 rounded-full bg-green-50"
-        >
-          {t(role.replace(/_/g, '-').toLowerCase())}
-        </span>
-      ))}
-    </div>
-  );
-
   const columns = React.useMemo(() => [
+    {
+      Header: t('shipment-items', { count: 1 }),
+      accessor: 'shipmentItem',
+      Cell: ({ row }) => row.original.shipmentItem.name
+    },
     {
       Header: t('countries', { count: 1 }),
       accessor: 'country',
-      Cell: ({ cell }) => <div>{cell.row.original.country.name}</div>
+      Cell: ({ row }) => row.original.country.name
     },
     {
       Header: t('max-amount'),
       accessor: 'maxAmount'
     },
-    {
-      Header: t('shipment-items', { count: 1 }),
-      accessor: 'shipmentItem',
-      Cell: ({ cell }) => <div>{cell.row.original.shipmentItem.name}</div>
-    },
+
     {
       id: 'optionsRegulations',
       displayName: 'optionsRegulations',
@@ -154,7 +135,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
 
   const options = {
     columns,
-    data: regulations,
+    data: regulations?.rows,
     handleRowClick: (row) => {
       const value = row.original.email;
       const path = PAYMENT_DETAIL_PAGE(value);
@@ -195,21 +176,24 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     <>
       {loading && <Loading />}
 
-      {regulations ? (
+      {regulations && regulations?.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
         <EmptyState text={t('regulations', { count: 0 })}>
           <button
             type="button"
             className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-            onClick={() => router.push('regulations/create')}
+            onClick={() => setOpenForm(true)}
           >
             Nueva regulación
           </button>
         </EmptyState>
       )}
 
-      <RegulationsFormDialogWrapper open={openForm} onOpen={setOpenForm} />
+      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
+        <RegulationsForm />
+      </FormDialogWrapper>
+
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}
         onOpen={setOpenDeleteConfirmation}

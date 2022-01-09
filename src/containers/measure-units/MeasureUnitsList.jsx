@@ -8,13 +8,12 @@ import DataTable from '@/components/table';
 import Loading from '@/components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
-import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
-import useCountries from '@/hooks/location/country/useCountries';
-import { COUNTRIES_EDIT, LOCATION_DETAILS_PAGE } from '@/lib/constants';
-import CountryForm from './CountryForm';
+import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
+import { MEASUREUNITS_EDIT, LOCATION_DETAILS_PAGE } from '@/lib/constants';
+import CountryForm from './MeasureUnitForm';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 
-const CountriesList = ({ loading }) => {
+const MeasureUnitsList = ({ loading }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [openFilters, setOpenFilters] = useState(false);
@@ -23,14 +22,14 @@ const CountriesList = ({ loading }) => {
 
   const [filterValues, setFilterValues] = useState({
     name: '',
-    code: ''
+    symbol: ''
   });
 
   const params = useMemo(() => {
     return {};
   }, []);
 
-  const { data: countries } = useCountries({
+  const { data: measureunits } = useMeasureUnits({
     args: params,
     options: {
       keepPreviousData: true
@@ -49,7 +48,7 @@ const CountriesList = ({ loading }) => {
   const handleEdit = (event, row) => {
     event.stopPropagation();
     const value = row.original.email;
-    const path = COUNTRIES_EDIT(value);
+    const path = MEASUREUNITS_EDIT(value);
     router.push(path);
   };
 
@@ -59,8 +58,8 @@ const CountriesList = ({ loading }) => {
       accessor: 'name'
     },
     {
-      Header: t('code'),
-      accessor: 'code'
+      Header: t('symbol'),
+      accessor: 'symbol'
     },
     {
       id: 'optionsUsers',
@@ -90,26 +89,6 @@ const CountriesList = ({ loading }) => {
     }
   ]);
 
-  const FilterCriteria = () =>
-    Object.keys(filterValues).map(
-      (e) =>
-        filterValues[e] !== '' && (
-          <div className="flex items-center px-4 py-1 mr-4 text-sm font-medium bg-gray-100 rounded-full w-max">
-            <span key={filterValues[e]} className="font-medium">
-              {`${t(e)}: `}
-              <span className="font-normal">{filterValues[e]}</span>
-            </span>
-            <button type="button" id={filterValues[e]} onClick={(event) => handleClick(event, e)}>
-              <XCircleIcon className="w-6 h-6 ml-2 float-center" />
-            </button>
-          </div>
-        )
-    );
-
-  const handleFilters = (values) => {
-    setFilterValues(values, onGetCountries(values));
-  };
-
   const handleClick = (event, value) => {
     const updatedFilters = Object.keys(filterValues)
       .filter((key) => value != key)
@@ -120,43 +99,26 @@ const CountriesList = ({ loading }) => {
         }),
         {}
       );
-    onGetCountries(updatedFilters);
+    onGetMeasureUnits(updatedFilters);
     setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
   };
 
   const options = {
     columns,
-    data: countries,
+    data: measureunits,
     handleRowClick: (row) => {
       const value = row.original.id;
       const path = LOCATION_DETAILS_PAGE(value);
       router.push(path);
     },
-    onFilter: (
-      <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
-        <div className="mb-4">
-          <CountriesFilter open={openFilters} onSubmit={handleFilters} />
-        </div>
-        <div className="flex">
-          <FilterCriteria />
-        </div>
-      </div>
-    ),
     actions: (
       <>
-        <button
-          type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => setOpenFilters(!openFilters)}
-        >
-          {t('filter')}
-        </button>
         <button
           type="button"
           className="p-2 px-6 py-2 ml-4 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenForm(true)}
         >
-          {t('add')} {t('countries', { count: 1 }).toLowerCase()}
+          {t('add')} {t('measure-units', { count: 1 }).toLowerCase()}
         </button>
       </>
     )
@@ -166,16 +128,16 @@ const CountriesList = ({ loading }) => {
     <>
       {loading && <Loading />}
 
-      {countries && countries.length > 0 ? (
+      {measureunits && measureunits.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('countries', { count: 0 })}>
+        <EmptyState text={t('measureunits', { count: 0 })}>
           <button
             type="button"
             className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
             onClick={() => setOpenForm(true)}
           >
-            {t('add')} {t('countries', { count: 1 }).toLowerCase()}
+            {t('add')} {t('measureunits', { count: 1 }).toLowerCase()}
           </button>
         </EmptyState>
       )}
@@ -188,20 +150,20 @@ const CountriesList = ({ loading }) => {
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete', { entity: 'countries' })}
+        title={t('delete', { entity: 'measureunits' })}
         content={t('asd')}
       />
     </>
   );
 };
 
-CountriesList.propTypes = {
+MeasureUnitsList.propTypes = {
   row: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  onGetCountries: PropTypes.func.isRequired,
-  onSelectCountries: PropTypes.func.isRequired,
-  onDeleteCountries: PropTypes.func.isRequired
+  onGetMeasureUnits: PropTypes.func.isRequired,
+  onSelectMeasureUnits: PropTypes.func.isRequired,
+  onDeleteMeasureUnits: PropTypes.func.isRequired
 };
 
-export default CountriesList;
+export default MeasureUnitsList;
