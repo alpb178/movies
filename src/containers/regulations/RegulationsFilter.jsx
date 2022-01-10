@@ -1,20 +1,32 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Menu, Transition } from '@headlessui/react';
 import useTranslation from 'next-translate/useTranslation';
-import { getRoles } from 'redux/actions';
 import { Formik, Field, Form } from 'formik';
+import AutosuggestField from '@/components/form/AutosuggestField';
+import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
+import useCountries from '@/hooks/location/country/useCountries';
 
-const RegulationsFilter = ({ data, onSubmit, open }) => {
+const RegulationsFilter = ({ filters, onSubmit, open }) => {
   const { t } = useTranslation('common');
 
   const initialValues = {
-    shipmentItem: '',
-    country: '',
-    maxAmount: ''
+    shipmentItem: filters?.shipmentItem,
+    country: filters?.country,
+    maxAmount: filters?.maxAmount
   };
 
-  useEffect(() => {}, []);
+  const { data: shipmentItems } = useShipmentItems({
+    options: {
+      keepPreviousData: true
+    }
+  });
+
+  const { data: countries } = useCountries({
+    options: {
+      keepPreviousData: true
+    }
+  });
 
   return (
     <Menu as="div">
@@ -32,40 +44,40 @@ const RegulationsFilter = ({ data, onSubmit, open }) => {
             <Menu.Items className="">
               <Formik initialValues={initialValues} onSubmit={onSubmit}>
                 <Form className="flex items-end w-full space-x-4">
-                  <div className="w-full">
-                    <label htmlFor="username" className="block font-medium text-gray-700">
-                      {t('username')}
+                  <div className="relative w-full">
+                    <label htmlFor="country" className="block font-medium text-gray-700">
+                      {t('countries', { count: 1 })}
                     </label>
-                    <Field
-                      type="text"
-                      className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                      name="username"
-                      id="username"
-                      aria-describedby="username"
+                    <AutosuggestField
+                      className="text-field"
+                      name="country"
+                      id="country"
+                      options={countries ? countries.rows : []}
+                      aria-describedby="country"
+                    />
+                  </div>
+                  <div className="relative w-full">
+                    <label htmlFor="shipmentItem" className="block font-medium text-gray-700">
+                      {t('shipment-items', { count: 1 })}
+                    </label>
+                    <AutosuggestField
+                      className="w-full"
+                      name="shipmentItem"
+                      id="shipmentItem"
+                      options={shipmentItems ? shipmentItems.rows : []}
+                      aria-describedby="shipmentItem"
                     />
                   </div>
                   <div className="w-full">
-                    <label htmlFor="name" className="block font-medium text-gray-700">
-                      {t('name')}
+                    <label htmlFor="maxAmount" className="block font-medium text-gray-700">
+                      {t('max-amount')}
                     </label>
                     <Field
                       type="text"
                       className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                      name="name"
-                      id="name"
-                      aria-describedby="name"
-                    />
-                  </div>
-                  <div className="w-full">
-                    <label htmlFor="surname" className="block font-medium text-gray-700">
-                      {t('surname')}
-                    </label>
-                    <Field
-                      type="text"
-                      className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                      name="surname"
-                      id="surname"
-                      aria-describedby="surname"
+                      name="maxAmount"
+                      id="maxAmount"
+                      aria-describedby="maxAmount"
                     />
                   </div>
 
@@ -85,17 +97,14 @@ const RegulationsFilter = ({ data, onSubmit, open }) => {
   );
 };
 
-const rolReducer = 'rol';
+RegulationsFilter.defaultProps = {
+  filters: null
+};
 
-const mapStateToProps = (state) => ({
-  loading: state.getIn([rolReducer, 'loading']),
-  data: state.getIn([rolReducer, 'data']),
-  filters: state.getIn([rolReducer, 'filters']),
-  total: state.getIn([rolReducer, 'total'])
-});
+RegulationsFilter.propTypes = {
+  filters: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired
+};
 
-const mapDispatchToProps = (dispatch) => ({
-  onGetRoles: () => dispatch(getRoles())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(RegulationsFilter);
+export default RegulationsFilter;

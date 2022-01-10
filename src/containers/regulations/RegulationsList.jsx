@@ -1,36 +1,31 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon } from '@heroicons/react/outline';
+import { XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
 import RegulationsFilter from 'containers/regulations/RegulationsFilter';
-import { PAYMENT_DETAIL_PAGE, PAYMENT_EDIT } from 'lib/constants';
 import Loading from 'components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useRegulations from '@/hooks/regulation/useRegulations';
 import RegulationsForm from './RegulationsForm';
+import TableActions from '@/components/table/TableActions';
 
 const RegulationsList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
-  const router = useRouter();
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
-  const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
-
-  const [filterValues, setFilterValues] = useState({
-    country: '',
-    shipmentItem: ''
-  });
+  const [selectedItem, setSelectedItem] = useState();
+  const [openFilters, setOpenFilters] = useState(false);
+  const [filterValues, setFilterValues] = useState({});
 
   const params = useMemo(() => {
-    return {};
-  }, []);
+    return Object.fromEntries(Object.entries(filterValues).filter(([_, v]) => v));
+  }, [filterValues]);
 
   const { data: regulations } = useRegulations({
     args: params,
@@ -39,7 +34,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     }
   });
 
-  const handleDelete = (event, row) => {
+  const onDelete = (event, row) => {
     event.preventDefault();
     const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
     if (answer) {
@@ -47,12 +42,10 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     }
   };
 
-  const handleEdit = (event, row) => {
+  const onUpdate = (event, item) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = PAYMENT_EDIT(value);
-    onSelectPayment(row.original);
-    router.push(path);
+    setSelectedItem(item);
+    setOpenForm(true);
   };
 
   const columns = React.useMemo(() => [
@@ -70,82 +63,86 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
       Header: t('max-amount'),
       accessor: 'maxAmount'
     },
-
     {
       id: 'optionsRegulations',
       displayName: 'optionsRegulations',
-      Cell: ({ row }) => {
-        return (
-          <div className="flex items-center space-x-4">
-            <button
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              type="button"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              type="button"
-              id="buttonDelete"
-              onClick={() => setOpenDeleteConfirmation(true)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
-        );
-      }
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={() => setOpenDeleteConfirmation(true)}
+        />
+      )
     }
   ]);
+
+  const parseFilterNames = (name) => {
+    switch (name) {
+      case 'maxAmount':
+        return t('max-amount');
+      case 'shipmentItem':
+        return t('shipment-items', { count: 1 });
+      default:
+        return t('countries', { count: 1 });
+    }
+  };
 
   const FilterCriteria = () =>
     Object.keys(filterValues).map(
       (e) =>
+        filterValues[e] &&
         filterValues[e] !== '' && (
-          <div className="flex items-center px-4 py-1 mr-4 text-sm font-medium bg-gray-100 rounded-full w-max">
+          <div className="flex items-center px-4 py-1 mr-4 font-medium bg-gray-100 rounded-full w-max">
             <span key={filterValues[e]} className="font-medium">
-              {`${t(e)}: `}
+              {`${parseFilterNames(e)}: `}
               <span className="font-normal">{filterValues[e]}</span>
             </span>
-            <button type="button" id={filterValues[e]} onClick={(event) => handleClick(event, e)}>
+            <button type="button" id={filterValues[e]} onClick={() => onRemoveFilter(e)}>
               <XCircleIcon className="w-6 h-6 ml-2 float-center" />
             </button>
           </div>
         )
     );
 
-  const handleFilters = (values) => {
-    setFilterValues(values, onGetRegulations(values));
+  const handleFilter = (values) => {
+    if (values.shipmentItem) values.shipmentItem = values?.shipmentItem.name;
+    if (values.country) values.country = values?.country.name;
+    setFilterValues(values);
   };
 
-  const handleClick = (event, value) => {
-    const updatedFilters = Object.keys(filterValues)
-      .filter((key) => value != key)
-      .reduce(
-        (obj, key) => ({
-          ...obj,
-          [key]: filterValues[key]
-        }),
-        {}
-      );
-    onGetRegulations(updatedFilters);
-    setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
+  const onRemoveFilter = (value) => {
+    setFilterValues(
+      Object.keys(filterValues)
+        .filter((key) => value != key)
+        .reduce(
+          (obj, key) => ({
+            ...obj,
+            [key]: filterValues[key]
+          }),
+          {}
+        )
+    );
   };
+
+  const renderCreateButton = () => (
+    <button
+      type="button"
+      className="px-4 py-2 my-8 text-lg border rounded-md border-secondary-500 text-secondary-500 hover:bg-secondary-100"
+      onClick={() => setOpenForm(true)}
+    >
+      {t('new', { entity: t('regulations', { count: 1 }) })}
+    </button>
+  );
 
   const options = {
     columns,
     data: regulations?.rows,
     handleRowClick: (row) => {
       const value = row.original.email;
-      const path = PAYMENT_DETAIL_PAGE(value);
-      onSelectPayment(row.original);
-      router.push(path);
     },
     onFilter: (
       <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
         <div className="mb-4">
-          <RegulationsFilter open={openFilters} onSubmit={handleFilters} />
+          <RegulationsFilter filters={filterValues} open={openFilters} onSubmit={handleFilter} />
         </div>
         <div className="flex">
           <FilterCriteria />
@@ -153,7 +150,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
       </div>
     ),
     actions: (
-      <div className="space-x-2">
+      <div className="space-x-4">
         <button
           type="button"
           className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
@@ -161,13 +158,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
         >
           {t('filter')}
         </button>
-        <button
-          type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md border-primary-600 text-primary-600 w-max hover:bg-gray-100"
-          onClick={() => setOpenForm(true)}
-        >
-          {t('new', { entity: t('regulations', { count: 1 }) })}
-        </button>
+        {renderCreateButton()}
       </div>
     )
   };
@@ -179,19 +170,11 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
       {regulations && regulations?.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('regulations', { count: 0 })}>
-          <button
-            type="button"
-            className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-            onClick={() => setOpenForm(true)}
-          >
-            Nueva regulación
-          </button>
-        </EmptyState>
+        <EmptyState text={t('regulations', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
       <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
-        <RegulationsForm />
+        <RegulationsForm data={selectedItem} />
       </FormDialogWrapper>
 
       <DeleteConfirmationDialog

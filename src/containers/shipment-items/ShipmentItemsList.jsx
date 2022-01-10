@@ -145,6 +145,16 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
     setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
   };
 
+  const renderInsertButton = () => (
+    <button
+      type="button"
+      className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
+      onClick={() => setOpenForm(true)}
+    >
+      Nuevo artículo
+    </button>
+  );
+
   const options = {
     columns,
     data: shipmentItems?.rows,
@@ -165,7 +175,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
       </div>
     ),
     actions: (
-      <>
+      <div className="space-x-4">
         <button
           type="button"
           className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
@@ -173,7 +183,8 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
         >
           {t('filter')}
         </button>
-      </>
+        {renderInsertButton()}
+      </div>
     )
   };
 
@@ -184,15 +195,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
       {shipmentItems && shipmentItems.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('shipment-items', { count: 0 })}>
-          <button
-            type="button"
-            className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-            onClick={() => setOpenForm(true)}
-          >
-            Nuevo artículo
-          </button>
-        </EmptyState>
+        <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
       <FormDialogWrapper open={openForm} onOpen={setOpenForm}>

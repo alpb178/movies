@@ -131,7 +131,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
       className="px-6 py-2 font-medium bg-white border rounded-md border-secondary-600 text-secondary-600 w-max hover:bg-gray-100"
       onClick={() => setOpenForm(true)}
     >
-      {t('new', { entity: t('regulations', { count: 1 }) })}
+      {t('new', { entity: t('airlines', { count: 1 }) })}
     </button>
   );
 

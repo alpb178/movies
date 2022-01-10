@@ -56,19 +56,7 @@ const TravelsList = ({ loading, onDeletePayment }) => {
     router.push(path);
   };
 
-  const renderRoles = (roles) => (
-    <div className="flex space-x-2">
-      {roles?.map((role) => (
-        <span
-          key={role}
-          className="inline-flex px-4 py-1 font-medium leading-5 text-green-700 rounded-full bg-green-50"
-        >
-          {t(role.replace(/_/g, '-').toLowerCase())}
-        </span>
-      ))}
-    </div>
-  );
-
+  
   const formatTraveler = (value) => <div>{value?.internalUser?.name}</div>;
 
   const formatFlight = (value) => <div>{value.number}</div>;
