@@ -84,7 +84,7 @@ const RegionForm = ({ onOpen }) => {
                 <AutosuggestField
                   id="country"
                   name="country"
-                  options={countries ? countries : []}
+                  options={countries ? countries.rows : []}
                   className={`text-field pl-none ${
                     errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
                   }`}

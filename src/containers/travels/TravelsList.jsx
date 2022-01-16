@@ -56,7 +56,6 @@ const TravelsList = ({ loading, onDeletePayment }) => {
     router.push(path);
   };
 
-  
   const formatTraveler = (value) => <div>{value?.internalUser?.name}</div>;
 
   const formatFlight = (value) => <div>{value.number}</div>;
@@ -127,9 +126,19 @@ const TravelsList = ({ loading, onDeletePayment }) => {
     setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
   };
 
+  const renderCreateButton = () => (
+    <button
+      type="button"
+      className="px-4 py-2 my-8 text-lg border rounded-md border-secondary-500 text-secondary-500 hover:bg-secondary-100"
+      onClick={() => router.push('travels/create')}
+    >
+      {t('new', { entity: t('travels', { count: 1 }) })}
+    </button>
+  );
+
   const options = {
     columns,
-    data: travels,
+    data: travels?.rows,
     handleRowClick: (row) => {
       const value = row.original.id;
       const path = TRAVEL_DETAILS_PAGE(value);
@@ -146,7 +155,7 @@ const TravelsList = ({ loading, onDeletePayment }) => {
       </div>
     ),
     actions: (
-      <>
+      <div className="space-x-4">
         <button
           type="button"
           className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
@@ -154,7 +163,8 @@ const TravelsList = ({ loading, onDeletePayment }) => {
         >
           {t('filter')}
         </button>
-      </>
+        {renderCreateButton()}
+      </div>
     )
   };
 
@@ -162,18 +172,10 @@ const TravelsList = ({ loading, onDeletePayment }) => {
     <>
       {loading && <Loading />}
 
-      {travels ? (
+      {travels && travels.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('travels', { count: 0 })}>
-          <button
-            type="button"
-            className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-            onClick={() => router.push('travels/create')}
-          >
-            Nueva regulación
-          </button>
-        </EmptyState>
+        <EmptyState text={t('travels', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
       <DeleteConfirmationDialog

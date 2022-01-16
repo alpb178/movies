@@ -1,3 +1,4 @@
+import { differenceInMilliseconds, subYears } from 'date-fns';
 import { ADMIN_ROLE, BASIC_CLIENT_ROLE } from 'lib/constants';
 
 export const getHomePageFromUser = (user) => {
@@ -23,3 +24,26 @@ export const parseUsername = (name = '') =>
     .slice(0, 2)
     .map((v) => v && v[0].toUpperCase())
     .join('');
+
+export const disablePastDates = ({ date }) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return differenceInMilliseconds(date, today) < 0;
+};
+
+export const disableDatesFrom = ({ date, years }) => {
+  const eighteenYearsAgo = subYears(new Date(), years);
+  eighteenYearsAgo.setHours(0, 0, 0, 0);
+  return differenceInMilliseconds(date, eighteenYearsAgo) > 0;
+};
+
+export const formatPrice = (price) =>
+  new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR'
+  }).format(Math.ceil(price));
+
+export const valuesFromString = (obj, keysArr) =>
+  keysArr.split('.').reduce(function (result, key) {
+    return result[key];
+  }, obj);

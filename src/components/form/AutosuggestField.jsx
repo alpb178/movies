@@ -4,13 +4,17 @@ import { Field } from 'formik';
 import theme from '@/styles/autosuggest.module.scss';
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = (data, value) => {
+const getSuggestions = (data, value, customValue, optionValue) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
   return inputLength === 0
     ? []
-    : data?.filter((item) => item.name.toLowerCase().includes(inputValue));
+    : data?.filter((item) =>
+        customValue
+          ? item[customValue][optionValue || 'name'].toLowerCase().includes(inputValue)
+          : item[optionValue || 'name'].toLowerCase().includes(inputValue)
+      );
 };
 
 // When suggestion is clicked, Autosuggest needs to populate the input
@@ -19,11 +23,13 @@ const getSuggestions = (data, value) => {
 const getSuggestionValue = (suggestion) => suggestion;
 
 // Use your imagination to render suggestions.
-const renderSuggestion = (suggestion) => <div>{suggestion.name}</div>;
-const AutosuggestField = ({ name, onSelection, options, ...props }) => {
+const renderSuggestion = (suggestion, optionValue) => (
+  <div>{suggestion[optionValue || 'name']}</div>
+);
+
+const AutosuggestField = ({ name, onSelection, options, customValue, optionValue, ...props }) => {
   const [suggestions, setSuggestions] = useState(options);
   const [value, setValue] = useState('');
-  console.log(options)
 
   // useEffect(() => {
   //   setValue(props?.value?.name);
@@ -32,7 +38,7 @@ const AutosuggestField = ({ name, onSelection, options, ...props }) => {
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
   const onSuggestionsFetchRequested = ({ value: currentValue }) => {
-    setSuggestions(getSuggestions(options, currentValue));
+    setSuggestions(getSuggestions(options, currentValue, customValue, optionValue));
   };
 
   // Autosuggest will call this function every time you need to clear suggestions.
@@ -53,14 +59,26 @@ const AutosuggestField = ({ name, onSelection, options, ...props }) => {
               onSelection && onSelection(suggestionValue)
             }
             getSuggestionValue={getSuggestionValue}
-            renderSuggestion={renderSuggestion}
+            renderSuggestion={(suggestion) => {
+              return customValue ? (
+                <div>{suggestion[customValue][optionValue || 'name']}</div>
+              ) : (
+                renderSuggestion(suggestion, optionValue)
+              );
+            }}
             inputProps={{
               placeholder: props.placeholder,
               value,
               name,
               onChange: (e, { newValue }) => {
                 setFieldValue(name, newValue);
-                setValue(typeof newValue === 'string' ? newValue : newValue?.name);
+                setValue(
+                  typeof newValue === 'string'
+                    ? newValue
+                    : customValue
+                    ? newValue[customValue][optionValue || 'name']
+                    : newValue[optionValue || 'name']
+                );
               }
             }}
           />

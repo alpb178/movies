@@ -25,6 +25,10 @@ button:focus {
   outline: 0;
 }
 
+.autocomplete-field {
+  @apply w-full p-4 py-3 text-lg border rounded-md hover:border-gray-400 focus:border-primary-500 focus:border-2;
+}
+
 .text-field {
   @apply relative w-full p-3 text-lg text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg hover:border-gray-400;
 }
@@ -38,5 +42,11 @@ label.register-text-field {
 }
 
 .form-header {
-  @apply text-3xl font-semibold text-gray-700 md:text-4xl;
+  @apply text-2xl font-semibold text-gray-700 md:text-3xl;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
 }

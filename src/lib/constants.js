@@ -7,6 +7,7 @@ export const API_USERS_URL = '/users'; // User endpoint
 export const API_ROLES_URL = '/roles';
 export const API_AIRLINES_URL = '/airlines';
 export const API_COUNTRIES_URL = '/countries';
+export const API_FLIGHTS_URL = '/flights';
 export const API_MEASURE_UNITS_URL = '/measure-units';
 export const API_PAYMENTS_URL = '/payments';
 export const API_REGIONS_URL = '/regions';
