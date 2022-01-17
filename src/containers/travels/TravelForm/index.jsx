@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import useTranslation from 'next-translate/useTranslation';
 import { Field, Form, Formik } from 'formik';
@@ -7,21 +7,23 @@ import router from 'next/router';
 import * as Yup from 'yup';
 import useAirlines from '@/hooks/airline/useAirlines';
 import useRegions from '@/hooks/location/region/useRegions';
-import { POST } from '@/lib/constants';
+import { API_FLIGHTS_URL, POST } from '@/lib/constants';
 // import InputMask from 'react-input-mask';
 // import useMediaContext from '@/hooks/useMediaContext';
 import useUsers from '@/hooks/user/useUsers';
 import useTravels from '@/hooks/travel/useTravels';
 import BaggageCapacityForm from './BaggageCapacityForm';
 import DepartureDateForm from './DepartureDateForm';
-import useFlights from '@/hooks/airline/useAirlines';
 import AutocompleteField from '@/components/form/AutocompleteField';
+import { apiFetcher } from '@/lib/apiFetcher';
+import { UserIcon } from '@heroicons/react/outline';
 
-const TravelForm = ({ data, onOpen }) => {
+const TravelForm = ({ isNewData, onOpen }) => {
   const { t } = useTranslation('common');
   // const { isSmall } = useMediaContext();
   const [destination, setDestination] = useState();
   const [airline, setAirline] = useState();
+  const [flights, setFlights] = useState();
   const [baggageCapacity, setBaggageCapacity] = useState();
 
   const initialValues = {
@@ -54,21 +56,18 @@ const TravelForm = ({ data, onOpen }) => {
     }
   });
 
-  const flightsParams = useMemo(() => {
-    const filters = {};
+  useEffect(() => {
     if (airline) {
+      const filters = {};
       filters.airline = airline.name;
-    }
 
-    return filters;
+      const { data } = apiFetcher(API_FLIGHTS_URL, {
+        params: filters,
+        keepPreviousData: true
+      });
+      setFlights(data);
+    }
   }, [airline]);
-
-  const { data: flights } = useFlights({
-    args: flightsParams,
-    options: {
-      keepPreviousData: true
-    }
-  });
 
   const validationSchema = Yup.object().shape({
     traveler: Yup.object().shape({ id: Yup.number().required() }),
@@ -97,27 +96,26 @@ const TravelForm = ({ data, onOpen }) => {
       {({ errors, touched }) => (
         <Form className="p-6 space-y-6 text-lg">
           <p className="mb-8 form-header">
-            {!data ? t('form.travel.title.create') : t('form.travel.title.update')}
+            {isNewData ? t('form.travel.title.create') : t('form.travel.title.update')}
           </p>
 
-          <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-16 lg:flex-row">
+          <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
             <div className="flex flex-col w-full space-y-6">
               <div className="relative w-full mx-auto">
                 <AutocompleteField
-                  id="traveler"
                   name="traveler"
                   placeholder={t('form.travel.placeholder.traveler')}
                   options={users ? users : []}
                   className="autocomplete-field"
-                  optionLabels={['username']}
-                  keysToMatch={['username']}
+                  optionLabels={['firstName', 'lastName']}
+                  keysToMatch={['firstName', 'lastName', 'username']}
+                  icon={UserIcon}
                 />
               </div>
 
               <div className="flex flex-col items-center w-full space-y-6">
                 <div className="relative w-full mx-auto">
                   <AutocompleteField
-                    id="origin"
                     name="origin"
                     placeholder={t('form.travel.placeholder.origin')}
                     options={regions ? regions.rows : []}
@@ -141,7 +139,6 @@ const TravelForm = ({ data, onOpen }) => {
 
                 <div className="relative w-full mx-auto">
                   <AutocompleteField
-                    id="destination"
                     name="destination"
                     placeholder={t('form.travel.placeholder.destination')}
                     options={regions ? regions.rows : []}
@@ -169,10 +166,11 @@ const TravelForm = ({ data, onOpen }) => {
                   <AutocompleteField
                     name="flight"
                     placeholder={t('form.travel.placeholder.flight')}
-                    options={airlines ? airlines.rows : []}
+                    options={flights ? flights.rows : []}
                     className="w-full p-4 py-3 border border-l-0 rounded-r-md"
                     aria-describedby="flight"
                     disabled={!airline}
+                    onSelectionChange={setDestination}
                   />
                 </div>
               </div>
@@ -186,7 +184,7 @@ const TravelForm = ({ data, onOpen }) => {
             />
           </div>
 
-          <div className="relative w-full mx-auto space-y-2">
+          <div className="w-full">
             <Field
               as="textarea"
               name="comments"
@@ -220,11 +218,11 @@ const TravelForm = ({ data, onOpen }) => {
 };
 
 TravelForm.defaultProps = {
-  data: null
+  isNewData: true
 };
 
 TravelForm.propTypes = {
-  data: PropTypes.object,
+  isNewData: PropTypes.bool,
   onOpen: PropTypes.func.isRequired
 };
 

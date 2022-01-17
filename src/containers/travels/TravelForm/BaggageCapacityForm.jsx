@@ -114,68 +114,75 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange }) => {
   };
 
   return (
-    <div className="relative flex flex-col items-center w-full mx-auto space-y-4">
-      <div className="w-full">
-        <AutocompleteField
-          id="shipmentItem"
-          name="shipmentItem"
-          placeholder={t('form.travel.placeholder.baggage-capacity')}
-          options={regulations ? regulations.rows : []}
-          className="autocomplete-field"
-          optionLabels={['shipmentItem.name']}
-          keysToMatch={['shipmentItem.name']}
-          onSelectionChange={handleSelection}
-          disabled={!destination}
-        />
-      </div>
+    <div className="relative flex flex-col w-full space-y-4">
+      <AutocompleteField
+        id="shipmentItem"
+        name="shipmentItem"
+        placeholder={t('form.travel.placeholder.baggage-capacity')}
+        options={regulations ? regulations.rows : []}
+        className="autocomplete-field"
+        optionLabels={['shipmentItem.name']}
+        keysToMatch={['shipmentItem.name']}
+        onSelectionChange={handleSelection}
+        disabled={!destination}
+        emptyOptionsLabel={t('form.common.empty-options')}
+      />
 
       {selectedOptions.length > 0 ? (
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
           {selectedOptions.map((option, idx) => (
-            <div key={option.name} className="flex items-center w-full p-4 space-x-8">
-              <p className="w-full text-lg">{option.name}</p>
-              <div className="flex items-center space-x-2 text-field max-w-max">
+            <div key={option.name} className="flex flex-col">
+              <p className="w-full px-4 pt-4 space-x-2 text-sm text-gray-400">
+                <span>{option?.amount}</span>
+                <span>{option?.measureUnit.name}</span>
+                <span>{`· ${formatPrice(option?.price)} / ${option?.measureUnit.symbol}`}</span>
+              </p>
+              <div className="flex items-center w-full p-4 pt-0 space-x-8">
+                <p className="w-full text-lg">{option.name}</p>
+                <div className="flex items-center space-x-2 text-field max-w-max">
+                  <button
+                    type="button"
+                    className="text-gray-600 rounded-full hover:text-red-500 hover:bg-red-100"
+                    onClick={() => decrementAmount(option)}
+                  >
+                    <MinusCircleIcon className="w-8 h-8" />
+                  </button>
+                  <Field
+                    name={`amount-${idx}`}
+                    id={`amount-${idx}`}
+                    value={option.amount}
+                    className="w-20 px-2 text-lg"
+                    aria-describedby={`amount-${idx}`}
+                  />
+
+                  <button
+                    type="button"
+                    className="text-gray-600 rounded-full hover:text-green-600 hover:bg-green-50"
+                    onClick={() => incrementAmount(option)}
+                  >
+                    <PlusCircleIcon className="w-8 h-8 " />
+                  </button>
+                </div>
+
+                <div className="w-48">
+                  <Field
+                    name={`price-${idx}`}
+                    id={`price-${idx}`}
+                    value={option.price}
+                    onChange={(e) => onPriceChange(e, option)}
+                    className="px-2 text-lg text-field"
+                    aria-describedby={`price-${idx}`}
+                  />
+                </div>
+
                 <button
                   type="button"
                   className="text-gray-600 rounded-full hover:text-red-500 hover:bg-red-100"
-                  onClick={() => decrementAmount(option)}
+                  onClick={() => handleRemoveItem(option)}
                 >
-                  <MinusCircleIcon className="w-8 h-8" />
-                </button>
-                <Field
-                  name={`amount-${idx}`}
-                  id={`amount-${idx}`}
-                  value={option.amount}
-                  className="w-20 px-2 text-lg"
-                  aria-describedby={`amount-${idx}`}
-                />
-                <button
-                  type="button"
-                  className="text-gray-600 rounded-full hover:text-green-600 hover:bg-green-50"
-                  onClick={() => incrementAmount(option)}
-                >
-                  <PlusCircleIcon className="w-8 h-8 " />
+                  <XCircleIcon className="w-8 h-8 " />
                 </button>
               </div>
-
-              <div className="w-48">
-                <Field
-                  name={`price-${idx}`}
-                  id={`price-${idx}`}
-                  value={option.price}
-                  onChange={(e) => onPriceChange(e, option)}
-                  className="px-2 text-lg text-field"
-                  aria-describedby={`price-${idx}`}
-                />
-              </div>
-
-              <button
-                type="button"
-                className="text-gray-600 rounded-full hover:text-red-500 hover:bg-red-100"
-                onClick={() => handleRemoveItem(option)}
-              >
-                <XCircleIcon className="w-8 h-8 " />
-              </button>
             </div>
           ))}
 

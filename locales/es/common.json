@@ -68,6 +68,7 @@
   "flights": { "0": "Aún no existen vuelos registrados", "1": "Vuelo", "other": "Vuelos" },
   "form": {
     "common": {
+      "empty-options": "No se encontraron resultados",
       "label": {
         "code": "Código",
         "name": "Nombre"
@@ -110,10 +111,6 @@
       }
     },
     "travel": {
-      "title": {
-        "create": "Nuevo viaje",
-        "update": "Actualizar viaje"
-      },
       "label": {
         "baggage-capacity": "Capacidad de Equipaje",
         "comments": "Comentarios",
@@ -131,6 +128,10 @@
         "origin": "¿De dónde sale?",
         "traveler": "¿Quién viaja?",
         "comments": "Comentarios sobre el viaje..."
+      },
+      "title": {
+        "create": "Nuevo viaje",
+        "update": "Actualizar viaje"
       }
     }
   },

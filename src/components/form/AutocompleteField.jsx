@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { valuesFromString } from '@/lib/utils';
 
 const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }) => {
-  const { disabled, keysToMatch, optionLabels, placeholder } = props;
+  const { disabled, emptyOptionsLabel, keysToMatch, optionLabels, placeholder } = props;
 
   const getItems = (filter) =>
     filter
@@ -22,12 +22,9 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
     i
       ? optionLabels
         ? optionLabels
-            .map((lbl) => {
-              if (lbl.includes('.')) {
-                return valuesFromString(i, lbl);
-              }
-              return i[lbl];
-            })
+            .map((optionLabel) =>
+              optionLabel.includes('.') ? valuesFromString(i, optionLabel) : i[optionLabel]
+            )
             .join(', ')
         : i.name
       : '';
@@ -55,7 +52,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
           }) => (
             <div>
               <div className="flex flex-col space-y-2">
-                <label {...getLabelProps()}>{label}</label>
+                {label ? <label {...getLabelProps()}>{label}</label> : null}
                 <div className="relative flex items-center">
                   <input
                     {...getInputProps({
@@ -90,7 +87,6 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                     </button>
                   )}
                 </div>
-                {console.log(error)}
                 {error && touched ? (
                   <p className="mt-4 text-red-500">{error.name || error.toString()}</p>
                 ) : null}
@@ -107,21 +103,25 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                   leaveTo="transform scale-95"
                 >
                   <Menu.Items className="absolute w-full mt-2 origin-top bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    {getItems(inputValue).map((item, index) => (
-                      <Menu.Item
-                        as="div"
-                        className="p-4 cursor-pointer hover:bg-secondary-50 hover:text-secondary-700"
-                        key={item.id}
-                        {...getItemProps({
-                          item,
-                          index,
-                          isActive: highlightedIndex === index,
-                          isSelected: selectedItem === item
-                        })}
-                      >
-                        {itemToString(item)}
-                      </Menu.Item>
-                    ))}
+                    {getItems(inputValue).length > 0 ? (
+                      getItems(inputValue).map((item, index) => (
+                        <Menu.Item
+                          as="div"
+                          className="p-4 cursor-pointer hover:bg-secondary-50 hover:text-secondary-700"
+                          key={item.id}
+                          {...getItemProps({
+                            item,
+                            index,
+                            isActive: highlightedIndex === index,
+                            isSelected: selectedItem === item
+                          })}
+                        >
+                          {itemToString(item)}
+                        </Menu.Item>
+                      ))
+                    ) : (
+                      <p className="p-4 text-gray-500">{emptyOptionsLabel}</p>
+                    )}
                   </Menu.Items>
                 </Transition>
               </Menu>
@@ -134,11 +134,15 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
 };
 
 AutocompleteField.defaultProps = {
+  disabled: false,
+  emptyOptionsLabel: 'No options',
   onSelectionChange: () => {}
 };
 
 AutocompleteField.propTypes = {
   className: PropTypes.string,
+  disabled: PropTypes.bool,
+  emptyOptionsLabel: PropTypes.string,
   keysToMatch: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string,
   label: PropTypes.string,
