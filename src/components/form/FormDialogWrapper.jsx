@@ -1,14 +1,25 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
+import { Form, Formik } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
 
-const FormDialogWrapper = ({ children, open, onOpen }) => {
-  const childrenWithProps = React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child, { onOpen });
-    }
-    return child;
-  });
+const FormDialogWrapper = ({
+  children,
+  initialValues,
+  open,
+  onOpen,
+  onSubmit,
+  validationSchema,
+  isNewData,
+  formName
+}) => {
+  const { t } = useTranslation('common');
+  const [title, setTitle] = useState();
+
+  useEffect(() => {
+    setTitle(isNewData ? `form.${formName}.title.create` : `form.${formName}.title.update`);
+  }, [formName]);
 
   return (
     <>
@@ -46,8 +57,40 @@ const FormDialogWrapper = ({ children, open, onOpen }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                {childrenWithProps}
+              <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <Formik
+                  initialValues={initialValues}
+                  validationSchema={validationSchema}
+                  onSubmit={onSubmit}
+                >
+                  {({ errors, touched }) => (
+                    <Form className="m-10 space-y-6">
+                      <p className="form-header">{t(title)}</p>
+                      {React.Children.map(children, (child) => {
+                        if (React.isValidElement(child)) {
+                          return React.cloneElement(child, { onOpen, errors, touched });
+                        }
+                        return child;
+                      })}
+
+                      <div className="flex space-x-6">
+                        <button
+                          className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-gray-700 transition duration-300 ease-in-out bg-white border rounded-md hover:bg-gray-100"
+                          type="button"
+                          onClick={() => onOpen(false)}
+                        >
+                          {t('cancel')}
+                        </button>
+                        <button
+                          className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
+                          type="submit"
+                        >
+                          {t('save')}
+                        </button>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
               </div>
             </Transition.Child>
           </div>
@@ -57,10 +100,20 @@ const FormDialogWrapper = ({ children, open, onOpen }) => {
   );
 };
 
+FormDialogWrapper.defaultProps = {
+  formName: 'common',
+  isNewData: true
+};
+
 FormDialogWrapper.propTypes = {
   children: PropTypes.array.isRequired,
+  formName: PropTypes.string,
+  initialValues: PropTypes.object.isRequired,
+  isNewData: PropTypes.bool,
   onOpen: PropTypes.func.isRequired,
-  open: PropTypes.bool
+  onSubmit: PropTypes.func.isRequired,
+  open: PropTypes.bool,
+  validationSchema: PropTypes.object
 };
 
 export default FormDialogWrapper;

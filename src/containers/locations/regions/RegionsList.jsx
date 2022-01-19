@@ -10,15 +10,13 @@ import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import useRegions from '@/hooks/location/region/useRegions';
 import { PAYMENT_EDIT, REGION_DETAILS_PAGE } from '@/lib/constants';
-import { format } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
 import RegionsFilter from './RegionsFilter';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import RegionForm from './RegionForm';
 
 const locales = { es, en: enGB };
 
-const RegionsList = ({ loading, onDeletePayment }) => {
+const RegionsList = ({ loading }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
   const [page, setPage] = useState(0);
@@ -114,6 +112,12 @@ const RegionsList = ({ loading, onDeletePayment }) => {
     setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
   };
 
+  const renderCreateButton = () => (
+    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
+      {t('add', { entity: t('regions', { count: 1 }) })}
+    </button>
+  );
+
   const options = {
     columns,
     data: regions?.rows,
@@ -143,13 +147,7 @@ const RegionsList = ({ loading, onDeletePayment }) => {
         >
           {t('filter')}
         </button>
-        <button
-          type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md border-primary-600 text-primary-600 w-max hover:bg-gray-100"
-          onClick={() => setOpenForm(true)}
-        >
-          {t('add', { entity: t('regions', { count: 1 }) })}
-        </button>
+        {renderCreateButton()}
       </div>
     )
   };
@@ -161,20 +159,10 @@ const RegionsList = ({ loading, onDeletePayment }) => {
       {regions && regions.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('regions', { count: 0 })}>
-          <button
-            type="button"
-            className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-            onClick={() => setOpenForm(true)}
-          >
-            {t('add', { entity: t('regions', { count: 1 }) })}
-          </button>
-        </EmptyState>
+        <EmptyState text={t('regions', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
-      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
-        <RegionForm />
-      </FormDialogWrapper>
+      <RegionForm data={{}} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}

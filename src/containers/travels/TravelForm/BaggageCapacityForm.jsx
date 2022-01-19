@@ -116,7 +116,6 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange }) => {
   return (
     <div className="relative flex flex-col w-full space-y-4">
       <AutocompleteField
-        id="shipmentItem"
         name="shipmentItem"
         placeholder={t('form.travel.placeholder.baggage-capacity')}
         options={regulations ? regulations.rows : []}

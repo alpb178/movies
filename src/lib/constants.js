@@ -29,7 +29,8 @@ export const REVENUES_PAGE = '/revenues';
 export const SETTINGS_PAGE = '/settings';
 export const SHIPMENT_ITEMS_PAGE = '/shipment-items';
 export const TRAVELS_PAGE = '/travels';
-export const TRAVEL_DETAILS_PAGE = (value) => `/travels/${value}`;
+export const TRAVEL_DETAILS_PAGE = (value) => `${TRAVELS_PAGE}/detail/${value}`;
+export const TRAVEL_FORM_PAGE = (value) => `${TRAVELS_PAGE}/${value}`;
 
 // HTTP Methods
 export const POST = 'POST';

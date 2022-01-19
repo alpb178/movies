@@ -8,10 +8,10 @@ import RegulationsFilter from 'containers/regulations/RegulationsFilter';
 import Loading from 'components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useRegulations from '@/hooks/regulation/useRegulations';
 import RegulationsForm from './RegulationsForm';
 import TableActions from '@/components/table/TableActions';
+import { formatPrice } from '@/lib/utils';
 
 const RegulationsList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
@@ -61,7 +61,20 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     },
     {
       Header: t('max-amount'),
-      accessor: 'maxAmount'
+      accessor: 'maxAmount',
+      Cell: ({ value, row }) => `${value} ${row.original.shipmentItem.measureUnit.name}`
+    },
+
+    {
+      Header: t('price-range'),
+      Cell: ({ row }) =>
+        row.original.minPrice || row.original.maxPrice ? (
+          `${formatPrice(row.original.minPrice || 0)}${
+            row.original.maxPrice ? ' - ' + formatPrice(row.original.maxPrice) : ''
+          }`
+        ) : (
+          <p className="italic text-gray-400">{t('unregulated')}</p>
+        )
     },
     {
       id: 'optionsRegulations',
@@ -124,11 +137,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
   };
 
   const renderCreateButton = () => (
-    <button
-      type="button"
-      className="px-4 py-2 my-8 text-lg border rounded-md border-secondary-500 text-secondary-500 hover:bg-secondary-100"
-      onClick={() => setOpenForm(true)}
-    >
+    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
       {t('new', { entity: t('regulations', { count: 1 }) })}
     </button>
   );
@@ -173,9 +182,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
         <EmptyState text={t('regulations', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
-      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
-        <RegulationsForm data={selectedItem} />
-      </FormDialogWrapper>
+      <RegulationsForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}

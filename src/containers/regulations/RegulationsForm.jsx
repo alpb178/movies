@@ -1,23 +1,26 @@
 /* eslint-disable react/display-name */
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import useTranslation from 'next-translate/useTranslation';
-import { Field, Form, Formik } from 'formik';
+import { Field } from 'formik';
 import * as Yup from 'yup';
-import AutosuggestField from '@/components/form/AutosuggestField';
 import useCountries from '@/hooks/location/country/useCountries';
 import useRegulations from '@/hooks/regulation/useRegulations';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import { POST } from '@/lib/constants';
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
+import AutocompleteField from '@/components/form/AutocompleteField';
+import 'rc-slider/assets/index.css';
+import { Switch, Transition } from '@headlessui/react';
+import clsx from 'clsx';
 
-const RegulationsForm = ({ data, onOpen }) => {
+const RegulationsForm = ({ data, open, onOpen, errors, touched }) => {
   const { t } = useTranslation('common');
+  const [regulatePriceRange, setRegulatePriceRange] = useState(false);
 
-  const initialValues = {
-    maxAmount: data?.maxAmount || 0,
-    shipmentItem: data?.shipmentItem || {},
-    country: data?.country || {}
-  };
+  useEffect(() => {
+    setRegulatePriceRange(data?.minPrice > 0 || data?.maxPrice > 0);
+  }, [data]);
 
   const params = useMemo(() => {
     return {};
@@ -36,6 +39,14 @@ const RegulationsForm = ({ data, onOpen }) => {
       keepPreviousData: true
     }
   });
+
+  const initialValues = {
+    maxAmount: data?.maxAmount || 0,
+    minPrice: data?.minPrice || 0,
+    maxPrice: data?.maxPrice || 0,
+    shipmentItem: data?.shipmentItem || {},
+    country: data?.country || {}
+  };
 
   const validationSchema = Yup.object().shape({
     maxAmount: Yup.string(),
@@ -56,81 +67,135 @@ const RegulationsForm = ({ data, onOpen }) => {
   };
 
   return (
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-      {({ errors, touched }) => (
-        <Form className="m-10 space-y-6">
-          <p className="form-header">
-            {!data ? t('form.regulation.title.create') : t('form.regulation.title.update')}
-          </p>
-          <div className="space-y-2">
-            <label htmlFor="country">{t('form.regulation.label.country')}</label>
-            <div className="relative w-full mx-auto">
-              <AutosuggestField
-                id="country"
-                name="country"
-                options={countries ? countries.rows : []}
-                className={`text-field ${
-                  errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                }`}
-              />
-              {errors.origin && touched.origin ? (
-                <p className="mt-4 text-red-600">{errors.origin.name}</p>
-              ) : null}
-            </div>
-          </div>
+    <FormDialogWrapper
+      formName="regulation"
+      open={open}
+      onOpen={onOpen}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
+      <div className="space-y-2">
+        <label htmlFor="country">{t('form.regulation.label.country')}</label>
+        <div className="relative w-full mx-auto">
+          <AutocompleteField
+            name="country"
+            options={countries ? countries.rows : []}
+            optionLabels={['name', 'code']}
+            keysToMatch={['name', 'code']}
+            className="autocomplete-field"
+            defaultValue={data?.country}
+          />
+        </div>
+      </div>
 
-          <div className="space-y-2">
-            <label htmlFor="country">{t('form.regulation.label.shipment-item')}</label>
-            <div className="relative w-full mx-auto">
-              <AutosuggestField
-                id="shipmentItem"
-                name="shipmentItem"
-                options={shipmentItems ? shipmentItems.rows : []}
-                className={`text-field ${
-                  errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                }`}
-              />
-              {errors.origin && touched.origin ? (
-                <p className="mt-4 text-red-600">{errors.origin.name}</p>
-              ) : null}
-            </div>
-          </div>
+      <div className="space-y-2">
+        <label htmlFor="country">{t('form.regulation.label.shipment-item')}</label>
+        <div className="relative w-full mx-auto">
+          <AutocompleteField
+            name="shipmentItem"
+            options={shipmentItems ? shipmentItems.rows : []}
+            className="autocomplete-field"
+            defaultValue={data?.shipmentItem}
+          />
+        </div>
+      </div>
 
-          <div className="space-y-2">
-            <label htmlFor="maxAmount">{t('form.regulation.label.permited-amount')}</label>
+      <div className="space-y-2">
+        <label htmlFor="maxAmount">{t('form.regulation.label.permited-amount')}</label>
+        <Field
+          type="text"
+          name="maxAmount"
+          id="maxAmount"
+          className={`text-field ${
+            errors && errors?.maxAmount && touched?.maxAmount ? 'border-red-400' : 'border-gray-300'
+          }`}
+          aria-describedby="maxAmount"
+        />
+        {errors && errors?.maxAmount && touched?.maxAmount ? (
+          <p className="mt-2 text-sm text-red-600">{errors?.maxAmount}</p>
+        ) : null}
+      </div>
+
+      <div className="flex items-center space-x-6">
+        <Switch
+          checked={regulatePriceRange}
+          onChange={setRegulatePriceRange}
+          className={clsx(
+            regulatePriceRange ? 'bg-primary-600' : 'bg-gray-200',
+            'relative inline-flex flex-shrink-0 h-6 w-10 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500'
+          )}
+        >
+          <span
+            aria-hidden="true"
+            className={clsx(
+              regulatePriceRange ? 'translate-x-5' : 'translate-x-0',
+              'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'
+            )}
+          />
+        </Switch>
+        <p>{t('form.regulation.label.regulate-price')}</p>
+      </div>
+
+      <Transition
+        show={regulatePriceRange}
+        enter="transition-opacity duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="space-y-2">
+          <label htmlFor="maxAmount">{t('form.regulation.label.price-range')}</label>
+          <div className="flex space-x-6">
             <Field
               type="text"
-              name="maxAmount"
-              id="maxAmount"
+              name="minPrice"
+              id="minPrice"
               className={`text-field ${
-                errors.maxAmount && touched.maxAmount ? 'border-red-400' : 'border-gray-300'
+                errors && errors?.minPrice && touched?.minPrice
+                  ? 'border-red-400'
+                  : 'border-gray-300'
               }`}
-              aria-describedby="maxAmount"
+              aria-describedby="minPrice"
             />
-            {errors.maxAmount && touched.maxAmount ? (
-              <p className="mt-2 text-sm text-red-600">{errors.maxAmount}</p>
+            {errors && errors?.minPrice && touched?.minPrice ? (
+              <p className="mt-2 text-sm text-red-600">{errors?.minPrice}</p>
+            ) : null}
+
+            <Field
+              type="text"
+              name="maxPrice"
+              id="maxPrice"
+              className={`text-field ${
+                errors && errors?.maxPrice && touched?.maxPrice
+                  ? 'border-red-400'
+                  : 'border-gray-300'
+              }`}
+              aria-describedby="maxPrice"
+            />
+            {errors && errors?.maxPrice && touched?.maxPrice ? (
+              <p className="mt-2 text-sm text-red-600">{errors?.maxPrice}</p>
             ) : null}
           </div>
-
-          <button
-            className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
-            type="submit"
-          >
-            {t('save')}
-          </button>
-        </Form>
-      )}
-    </Formik>
+        </div>
+      </Transition>
+    </FormDialogWrapper>
   );
 };
 
 RegulationsForm.defaultProps = {
-  data: null
+  data: null,
+  errors: null
 };
 
 RegulationsForm.propTypes = {
   data: PropTypes.object,
-  onOpen: PropTypes.func.isRequired
+  errors: PropTypes.object,
+  onOpen: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  touched: PropTypes.object
 };
 
 export default RegulationsForm;

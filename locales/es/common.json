@@ -50,7 +50,9 @@
     "female": "Esta {{entity}} será eliminada. Una vez confirmado no es posible revertir la operación."
   },
   "delete-title": "Eliminar {{entity}}",
+  "departure-at": "Fecha de Salida",
   "description": "Descripción",
+  "destination": "Destino",
   "drop-zone-text": "Arrastre un fichero aquí o haz click para añadir una imagen",
   "email": "Correo electrónico",
   "error": {
@@ -89,11 +91,14 @@
     },
     "regulation": {
       "title": {
-        "create": "Nueva Regulación"
+        "create": "Nueva Regulación",
+        "update": "Actualizar Regulación"
       },
       "label": {
         "country": "País",
         "permited-amount": "Cantidad permitida (Máx.)",
+        "price-range": "Rango de precios",
+        "regulate-price": "Regular precio",
         "shipment-item": "Artículo"
       },
       "placeholder": {
@@ -175,6 +180,7 @@
     "one": "Oferta",
     "other": "Ofertas"
   },
+  "origin": "Origen",
   "new-order": {
     "0": "Sin Información",
     "one": "Nuevo Pedido",
@@ -188,6 +194,7 @@
   },
   "phone": "Teléfono",
   "previous": "Anterior",
+  "price-range": "Rango de precios (min - máx)",
   "profile": "Perfil",
   "population": "Población",
   "repeat-password": "Repetir contraseña",
@@ -253,5 +260,6 @@
     "one": "Usuario",
     "other": "Usuarios"
   },
+  "unregulated": "No regulado",
   "voucher": "Justificante"
 }

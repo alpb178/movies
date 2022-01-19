@@ -9,7 +9,8 @@ import clsx from 'clsx';
 import { valuesFromString } from '@/lib/utils';
 
 const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }) => {
-  const { disabled, emptyOptionsLabel, keysToMatch, optionLabels, placeholder } = props;
+  const { defaultValue, disabled, emptyOptionsLabel, keysToMatch, optionLabels, placeholder } =
+    props;
 
   const getItems = (filter) =>
     filter
@@ -38,6 +39,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
             setFieldValue(name, selection);
           }}
           itemToString={itemToString}
+          initialSelectedItem={defaultValue}
         >
           {({
             getLabelProps,
@@ -87,9 +89,6 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                     </button>
                   )}
                 </div>
-                {error && touched ? (
-                  <p className="mt-4 text-red-500">{error.name || error.toString()}</p>
-                ) : null}
               </div>
 
               <Menu as="div" className="relative z-10 text-left">
@@ -125,6 +124,10 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                   </Menu.Items>
                 </Transition>
               </Menu>
+
+              {error && touched ? (
+                <p className="mt-2 text-red-500">{error.name || error.toString()}</p>
+              ) : null}
             </div>
           )}
         </Downshift>
@@ -134,6 +137,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
 };
 
 AutocompleteField.defaultProps = {
+  defaul: null,
   disabled: false,
   emptyOptionsLabel: 'No options',
   onSelectionChange: () => {}

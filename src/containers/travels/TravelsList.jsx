@@ -10,13 +10,14 @@ import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
 import useTravels from '@/hooks/travel/useTravels';
-import { PAYMENT_EDIT, TRAVEL_DETAILS_PAGE } from '@/lib/constants';
+import { TRAVEL_DETAILS_PAGE, TRAVEL_FORM_PAGE } from '@/lib/constants';
 import { format } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
+import TableActions from '@/components/table/TableActions';
 
 const locales = { es, en: enGB };
 
-const TravelsList = ({ loading, onDeletePayment }) => {
+const TravelsList = ({ loading }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
   // const [page, setPage] = useState(0);
@@ -48,19 +49,18 @@ const TravelsList = ({ loading, onDeletePayment }) => {
     ...locales[lang]
   };
 
-  const handleEdit = (event, row) => {
+  const onUpdate = (event, row) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = PAYMENT_EDIT(value);
-    onSelectPayment(row.original);
+    const value = row.id;
+    const path = TRAVEL_FORM_PAGE(`edit/${value}`);
     router.push(path);
   };
 
-  const formatTraveler = (value) => <div>{value?.internalUser?.name}</div>;
+  const formatTraveler = (value) => <div>{`${value?.firstName} ${value?.lastName}`}</div>;
 
-  const formatFlight = (value) => <div>{value.number}</div>;
+  const formatFlight = (value) => <div>{value?.number}</div>;
 
-  const formatPlace = (value) => <div>{value.name}</div>;
+  const formatPlace = (value) => <div>{value?.name}</div>;
 
   const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
 
@@ -89,6 +89,16 @@ const TravelsList = ({ loading, onDeletePayment }) => {
       Header: t('destination'),
       accessor: 'destination',
       Cell: ({ value }) => formatPlace(value)
+    },
+    {
+      id: 'optionsRegulations',
+      displayName: 'optionsRegulations',
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={() => setOpenDeleteConfirmation(true)}
+        />
+      )
     }
   ]);
 
@@ -130,7 +140,7 @@ const TravelsList = ({ loading, onDeletePayment }) => {
     <button
       type="button"
       className="px-4 py-2 my-8 text-lg border rounded-md border-secondary-500 text-secondary-500 hover:bg-secondary-100"
-      onClick={() => router.push('travels/create')}
+      onClick={() => router.push('travels/create/new')}
     >
       {t('new', { entity: t('travels', { count: 1 }) })}
     </button>

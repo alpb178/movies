@@ -17,8 +17,9 @@ import DepartureDateForm from './DepartureDateForm';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import { apiFetcher } from '@/lib/apiFetcher';
 import { UserIcon } from '@heroicons/react/outline';
+import { toast } from 'react-toastify';
 
-const TravelForm = ({ isNewData, onOpen }) => {
+const TravelForm = ({ isNewData }) => {
   const { t } = useTranslation('common');
   // const { isSmall } = useMediaContext();
   const [destination, setDestination] = useState();
@@ -32,6 +33,7 @@ const TravelForm = ({ isNewData, onOpen }) => {
     destination: '',
     departureAt: '',
     airline: '',
+    flight: '',
     shipmentItems: []
   };
 
@@ -56,12 +58,12 @@ const TravelForm = ({ isNewData, onOpen }) => {
     }
   });
 
-  useEffect(() => {
+  useEffect(async () => {
     if (airline) {
       const filters = {};
       filters.airline = airline.name;
 
-      const { data } = apiFetcher(API_FLIGHTS_URL, {
+      const { data } = await apiFetcher(API_FLIGHTS_URL, {
         params: filters,
         keepPreviousData: true
       });
@@ -76,19 +78,46 @@ const TravelForm = ({ isNewData, onOpen }) => {
     departureAt: Yup.string()
   });
 
-  const onSubmit = (values) => {
-    values.shipmentItems = baggageCapacity;
-    values.traveler = values.traveler.id;
-    values.origin = values.origin.id;
-    values.destination = values.destination.id;
+  const onSubmit = async (values) => {
+    try {
+      delete values.shipmentItem;
+      values.shipmentItems = baggageCapacity;
+      values.traveler = values.traveler.id;
+      values.origin = values.origin.id;
+      values.destination = values.destination.id;
+      delete values.airline;
+      values.flight = values.flight.id;
 
-    useTravels({
-      args: values,
-      options: {
-        method: POST
+      await useTravels({
+        args: values,
+        options: {
+          method: POST
+        }
+      });
+    } catch (error) {
+      let _messageErrors = '';
+      if (error.response) {
+        const { status } = error.response;
+        switch (status) {
+          case 400:
+            _messageErrors = t('error.400');
+            break;
+          case 401:
+            _messageErrors = t('error.401');
+            break;
+          case 500:
+            _messageErrors = t('error.500');
+            break;
+          default:
+            _messageErrors = error.toString();
+            break;
+        }
       }
-    });
-    onOpen(false);
+
+      toast.error(_messageErrors, { variant: 'error' });
+    } finally {
+      router.back();
+    }
   };
 
   return (
@@ -167,11 +196,13 @@ const TravelForm = ({ isNewData, onOpen }) => {
                     name="flight"
                     placeholder={t('form.travel.placeholder.flight')}
                     options={flights ? flights.rows : []}
+                    optionLabels={['number']}
+                    keysToMatch={['number']}
                     className="w-full p-4 py-3 border border-l-0 rounded-r-md"
                     aria-describedby="flight"
                     disabled={!airline}
-                    onSelectionChange={setDestination}
                   />
+                  {console.log(flights?.rows)}
                 </div>
               </div>
             </div>
