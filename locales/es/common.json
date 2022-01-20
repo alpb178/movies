@@ -77,6 +77,10 @@
       },
       "placeholder": {
         "search": "Buscar {{entity}}...."
+      },
+      "required": {
+        "name": "El nombre es requerido",
+        "code": "El código es requerido"
       }
     },
     "country": {
@@ -87,6 +91,9 @@
     "region": {
       "title": {
         "create": "Nueva Región"
+      },
+      "required": {
+        "country": "El país es requerido"
       }
     },
     "regulation": {

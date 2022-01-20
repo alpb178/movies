@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import useTranslation from 'next-translate/useTranslation';
 import { XCircleIcon } from '@heroicons/react/outline';
@@ -12,6 +12,7 @@ import useRegulations from '@/hooks/regulation/useRegulations';
 import RegulationsForm from './RegulationsForm';
 import TableActions from '@/components/table/TableActions';
 import { formatPrice } from '@/lib/utils';
+import clsx from 'clsx';
 
 const RegulationsList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
@@ -22,6 +23,12 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
   const [selectedItem, setSelectedItem] = useState();
   const [openFilters, setOpenFilters] = useState(false);
   const [filterValues, setFilterValues] = useState({});
+
+  useEffect(() => {
+    if (!openForm) {
+      setSelectedItem(null);
+    }
+  }, [openForm]);
 
   const params = useMemo(() => {
     return Object.fromEntries(Object.entries(filterValues).filter(([_, v]) => v));
@@ -64,7 +71,6 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
       accessor: 'maxAmount',
       Cell: ({ value, row }) => `${value} ${row.original.shipmentItem.measureUnit.name}`
     },
-
     {
       Header: t('price-range'),
       Cell: ({ row }) =>
@@ -119,6 +125,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
   const handleFilter = (values) => {
     if (values.shipmentItem) values.shipmentItem = values?.shipmentItem.name;
     if (values.country) values.country = values?.country.name;
+    if (values.measureUnit) values.measureUnit = values?.measureUnit.name;
     setFilterValues(values);
   };
 
@@ -148,11 +155,10 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     handleRowClick: (row) => {
       const value = row.original.email;
     },
+    name: t('regulations', { count: 2 }),
     onFilter: (
-      <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
-        <div className="mb-4">
-          <RegulationsFilter filters={filterValues} open={openFilters} onSubmit={handleFilter} />
-        </div>
+      <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
+        <RegulationsFilter filters={filterValues} open={openFilters} onSubmit={handleFilter} />
         <div className="flex">
           <FilterCriteria />
         </div>
@@ -162,7 +168,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
       <div className="space-x-4">
         <button
           type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
+          className="px-8 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}

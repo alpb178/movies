@@ -52,5 +52,5 @@ select:focus {
 }
 
 .btn-outlined {
-  @apply px-4 py-2 my-8 text-lg border rounded-md border-secondary-500 text-secondary-500 hover:bg-secondary-100;
+  @apply px-8 py-2 mb-8 text-lg border rounded-md border-secondary-500 text-secondary-500 hover:bg-secondary-100;
 }

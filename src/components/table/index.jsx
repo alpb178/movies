@@ -4,10 +4,11 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { List } from 'immutable';
-import Pagination from './Pagination';
+import clsx from 'clsx';
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/outline';
+import Pagination from './Pagination';
 
-const DataTable = ({ columns, data, setSortBy, handleRowClick, onFilter, actions }) => {
+const DataTable = ({ actions, columns, data, handleRowClick, name, onFilter, setSortBy }) => {
   const tableInstance = useTable(
     {
       columns,
@@ -38,7 +39,15 @@ const DataTable = ({ columns, data, setSortBy, handleRowClick, onFilter, actions
   return (
     <div className="w-full bg-white border-b">
       <div className="flex flex-col">
-        <div className="flex justify-end w-full p-6 pb-0 text-gray-600">{actions}</div>
+        <div
+          className={clsx(
+            'flex items-center w-full p-6 pb-0 text-gray-600',
+            name ? 'justify-between' : 'justify-end'
+          )}
+        >
+          {name ? <h3 className="mb-8 text-2xl font-semibold">{name}</h3> : null}
+          <div className="flex justify-end w-ful">{actions}</div>
+        </div>
         {onFilter}
       </div>
 
@@ -110,6 +119,7 @@ const DataTable = ({ columns, data, setSortBy, handleRowClick, onFilter, actions
 
 DataTable.defaultProps = {
   data: List([]),
+  name: '',
   setSortBy: () => {},
   handleRowClick: () => {}
 };
@@ -118,6 +128,7 @@ DataTable.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.object,
   setSortBy: PropTypes.func,
+  name: PropTypes.string,
   onFilter: PropTypes.node,
   actions: PropTypes.node,
   handleRowClick: PropTypes.func

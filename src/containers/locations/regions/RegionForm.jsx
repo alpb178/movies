@@ -8,7 +8,7 @@ import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useCountries from '@/hooks/location/country/useCountries';
 import useRegions from '@/hooks/location/region/useRegions';
-import { POST } from '@/lib/constants';
+import { POST, PUT } from '@/lib/constants';
 
 const RegionForm = ({ data, errors, onOpen, open, touched }) => {
   const { t } = useTranslation('common');
@@ -21,21 +21,30 @@ const RegionForm = ({ data, errors, onOpen, open, touched }) => {
   });
 
   const initialValues = {
-    name: '',
-    code: ''
+    name: data?.name || '',
+    code: data?.code || '',
+    country: data?.country || {}
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string(),
-    code: Yup.string()
+    name: Yup.string().required(t('form.common.required.name')),
+    code: Yup.string().required(t('form.common.required.code')),
+    country: Yup.object().required(t('form.region.required.country')).nullable()
   });
 
   const onSubmit = (values) => {
     values.country = values.country.id;
+    let method = POST;
+
+    if (data) {
+      method = PUT;
+      values.id = data.id;
+    }
+
     useRegions({
       args: values,
       options: {
-        method: POST
+        method
       }
     });
     onOpen(false);
@@ -90,16 +99,10 @@ const RegionForm = ({ data, errors, onOpen, open, touched }) => {
             name="country"
             options={countries ? countries.rows : []}
             className="autocomplete-field"
+            defaultValue={data?.country}
           />
         </div>
       </div>
-
-      <button
-        className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
-        type="submit"
-      >
-        {t('save')}
-      </button>
     </FormDialogWrapper>
   );
 };

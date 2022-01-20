@@ -79,7 +79,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
       accessor: 'name'
     },
     {
-      Header: t('measure-unit'),
+      Header: t('measure-units', { count: 1 }),
       accessor: 'measureUnit',
       Cell: ({ value }) => rednerMeasureUnit(value)
     },
@@ -128,7 +128,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
     );
 
   const handleFilters = (values) => {
-    setFilterValues(values, onGetShipmentItems(values));
+    setFilterValues(values);
   };
 
   const handleClick = (event, value) => {
@@ -146,11 +146,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
   };
 
   const renderInsertButton = () => (
-    <button
-      type="button"
-      className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-      onClick={() => setOpenForm(true)}
-    >
+    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
       Nuevo artículo
     </button>
   );

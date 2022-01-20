@@ -1,24 +1,23 @@
 /* eslint-disable react/display-name */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
+import { XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
 import Loading from '@/components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import useRegions from '@/hooks/location/region/useRegions';
-import { PAYMENT_EDIT, REGION_DETAILS_PAGE } from '@/lib/constants';
-import { enGB, es } from 'date-fns/locale';
+import { REGION_DETAILS_PAGE } from '@/lib/constants';
 import RegionsFilter from './RegionsFilter';
 import RegionForm from './RegionForm';
-
-const locales = { es, en: enGB };
+import TableActions from '@/components/table/TableActions';
 
 const RegionsList = ({ loading }) => {
-  const { t, lang } = useTranslation('common');
+  const { t } = useTranslation('common');
   const router = useRouter();
+
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState();
   const onPageChangeCallback = useCallback(setPage, []);
@@ -26,22 +25,23 @@ const RegionsList = ({ loading }) => {
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
-
+  const [selectedItem, setSelectedItem] = useState();
   const [filterValues, setFilterValues] = useState({
-    paymentname: '',
-    surname: '',
-    name: '',
-    phone: '',
-    email: '',
-    roles: ''
+    country: ''
   });
+
+  useEffect(() => {
+    if (!openForm) {
+      setSelectedItem(null);
+    }
+  }, [openForm]);
 
   const params = useMemo(() => {
     const query = {};
     if (page !== 0) query.page = page;
     if (sort) query.sort = sort;
     return query;
-  }, [page, sort]);
+  }, [filterValues, page, sort]);
 
   const { data: regions } = useRegions({
     args: params,
@@ -50,16 +50,10 @@ const RegionsList = ({ loading }) => {
     }
   });
 
-  const locale = {
-    ...locales[lang]
-  };
-
-  const handleEdit = (event, row) => {
+  const onUpdate = (event, item) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = PAYMENT_EDIT(value);
-    onSelectPayment(row.original);
-    router.push(path);
+    setSelectedItem(item);
+    setOpenForm(true);
   };
 
   const columns = React.useMemo(() => [
@@ -75,6 +69,16 @@ const RegionsList = ({ loading }) => {
       Header: t('countries', { count: 1 }),
       accessor: 'country',
       Cell: ({ row }) => row.original.country.name
+    },
+    {
+      id: 'optionsRegions',
+      displayName: 'optionsRegions',
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={() => setOpenDeleteConfirmation(true)}
+        />
+      )
     }
   ]);
 
@@ -87,7 +91,7 @@ const RegionsList = ({ loading }) => {
               {`${t(e)}: `}
               <span className="font-normal">{filterValues[e]}</span>
             </span>
-            <button type="button" id={filterValues[e]} onClick={(event) => handleClick(event, e)}>
+            <button type="button" id={filterValues[e]} onClick={() => onFilterChange(e)}>
               <XCircleIcon className="w-6 h-6 ml-2 float-center" />
             </button>
           </div>
@@ -95,10 +99,10 @@ const RegionsList = ({ loading }) => {
     );
 
   const handleFilters = (values) => {
-    setFilterValues(values, onGetRegions(values));
+    setFilterValues(values);
   };
 
-  const handleClick = (event, value) => {
+  const onFilterChange = (value) => {
     const updatedFilters = Object.keys(filterValues)
       .filter((key) => value != key)
       .reduce(
@@ -108,8 +112,7 @@ const RegionsList = ({ loading }) => {
         }),
         {}
       );
-    onGetRegions(updatedFilters);
-    setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
+    setFilterValues(updatedFilters);
   };
 
   const renderCreateButton = () => (
@@ -162,12 +165,12 @@ const RegionsList = ({ loading }) => {
         <EmptyState text={t('regions', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
-      <RegionForm data={{}} open={openForm} onOpen={setOpenForm} />
+      <RegionForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}
         onOpen={setOpenDeleteConfirmation}
-        title={t('delete', { entity: 'user' })}
+        title={t('delete', { entity: t('regions', { count: 1 }) })}
         content={t('asd')}
       />
     </>

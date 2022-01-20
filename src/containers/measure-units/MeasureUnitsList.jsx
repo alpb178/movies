@@ -103,6 +103,12 @@ const MeasureUnitsList = ({ loading }) => {
     setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
   };
 
+  const renderInsertButton = () => (
+    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
+      {t('add')} {t('measure-units', { count: 1 }).toLowerCase()}
+    </button>
+  );
+
   const options = {
     columns,
     data: measureunits,
@@ -111,17 +117,7 @@ const MeasureUnitsList = ({ loading }) => {
       const path = LOCATION_DETAILS_PAGE(value);
       router.push(path);
     },
-    actions: (
-      <>
-        <button
-          type="button"
-          className="p-2 px-6 py-2 ml-4 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => setOpenForm(true)}
-        >
-          {t('add')} {t('measure-units', { count: 1 }).toLowerCase()}
-        </button>
-      </>
-    )
+    actions: <>{renderInsertButton()}</>
   };
 
   return (
@@ -131,15 +127,7 @@ const MeasureUnitsList = ({ loading }) => {
       {measureunits && measureunits.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('measureunits', { count: 0 })}>
-          <button
-            type="button"
-            className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-            onClick={() => setOpenForm(true)}
-          >
-            {t('add')} {t('measureunits', { count: 1 }).toLowerCase()}
-          </button>
-        </EmptyState>
+        <EmptyState text={t('measure-units', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
       <FormDialogWrapper open={openForm} onOpen={setOpenForm}>

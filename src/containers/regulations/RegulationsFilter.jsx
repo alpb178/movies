@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { Menu, Transition } from '@headlessui/react';
 import useTranslation from 'next-translate/useTranslation';
 import { Formik, Field, Form } from 'formik';
-import AutosuggestField from '@/components/form/AutosuggestField';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import useCountries from '@/hooks/location/country/useCountries';
+import AutocompleteField from '@/components/form/AutocompleteField';
+// import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
 
 const RegulationsFilter = ({ filters, onSubmit, open }) => {
   const { t } = useTranslation('common');
@@ -28,6 +29,12 @@ const RegulationsFilter = ({ filters, onSubmit, open }) => {
     }
   });
 
+  // const { data: measureUnits } = useMeasureUnits({
+  //   options: {
+  //     keepPreviousData: true
+  //   }
+  // });
+
   return (
     <Menu as="div">
       {() => (
@@ -41,49 +48,57 @@ const RegulationsFilter = ({ filters, onSubmit, open }) => {
             leaveFrom="transform translate-y-0 opacity-100"
             leaveTo="transform -translate-y-5 opacity-0"
           >
-            <Menu.Items className="">
+            <Menu.Items className="mb-4">
               <Formik initialValues={initialValues} onSubmit={onSubmit}>
-                <Form className="flex items-end w-full space-x-4">
-                  <div className="relative w-full">
+                <Form className="flex items-end w-full space-x-6">
+                  <div className="relative w-full space-y-2">
                     <label htmlFor="country" className="block font-medium text-gray-700">
                       {t('countries', { count: 1 })}
                     </label>
-                    <AutosuggestField
-                      className="text-field"
+                    <AutocompleteField
+                      className="autocomplete-field"
                       name="country"
-                      id="country"
                       options={countries ? countries.rows : []}
                       aria-describedby="country"
                     />
                   </div>
-                  <div className="relative w-full">
+                  <div className="relative w-full space-y-2">
                     <label htmlFor="shipmentItem" className="block font-medium text-gray-700">
                       {t('shipment-items', { count: 1 })}
                     </label>
-                    <AutosuggestField
-                      className="w-full"
+                    <AutocompleteField
+                      className="autocomplete-field"
                       name="shipmentItem"
-                      id="shipmentItem"
                       options={shipmentItems ? shipmentItems.rows : []}
                       aria-describedby="shipmentItem"
                     />
                   </div>
-                  <div className="w-full">
+                  <div className="w-full space-y-2">
                     <label htmlFor="maxAmount" className="block font-medium text-gray-700">
                       {t('max-amount')}
                     </label>
                     <Field
                       type="text"
-                      className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                      className="text-field"
                       name="maxAmount"
                       id="maxAmount"
                       aria-describedby="maxAmount"
                     />
                   </div>
-
+                  {/* <div className="relative w-full">
+                    <label htmlFor="shipmentItem" className="block font-medium text-gray-700">
+                      {t('measure-units', { count: 1 })}
+                    </label>
+                    <AutocompleteField
+                      className="autocomplete-field"
+                      name="measureUnit"
+                      options={measureUnits ? measureUnits.rows : []}
+                      aria-describedby="measureUnit"
+                    />
+                  </div> */}
                   <button
                     type="submit"
-                    className="px-6 py-2 font-medium text-white rounded-md bg-primary-500"
+                    className="px-8 py-3 font-medium text-white rounded-md bg-primary-500"
                   >
                     {t('filter')}
                   </button>
