@@ -1,30 +1,37 @@
 /* eslint-disable react/display-name */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon } from '@heroicons/react/outline';
+import { XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
 import Loading from '@/components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
 import useCountries from '@/hooks/location/country/useCountries';
-import { COUNTRIES_EDIT, LOCATION_DETAILS_PAGE } from '@/lib/constants';
+import { LOCATION_DETAILS_PAGE } from '@/lib/constants';
 import CountryForm from './CountryForm';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
+import TableActions from '@/components/table/TableActions';
 
 const CountriesList = ({ loading }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
+
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
-
+  const [selectedItem, setSelectedItem] = useState();
   const [filterValues, setFilterValues] = useState({
     name: '',
     code: ''
   });
+
+  useEffect(() => {
+    if (!openForm) {
+      setSelectedItem(null);
+    }
+  }, [openForm]);
 
   const params = useMemo(() => {
     return {};
@@ -46,11 +53,10 @@ const CountriesList = ({ loading }) => {
     console.log();
   };
 
-  const handleEdit = (event, row) => {
+  const onUpdate = (event, item) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = COUNTRIES_EDIT(value);
-    router.push(path);
+    setSelectedItem(item);
+    setOpenForm(true);
   };
 
   const columns = React.useMemo(() => [
@@ -65,28 +71,12 @@ const CountriesList = ({ loading }) => {
     {
       id: 'optionsUsers',
       displayName: 'optionsUsers',
-      Cell: ({ row }) => {
-        return (
-          <div className="flex items-center space-x-4">
-            <button
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              type="button"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              type="button"
-              id="buttonDelete"
-              onClick={(event) => handleDelete(event, row)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
-        );
-      }
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={() => setDeleteConfirmation(true)}
+        />
+      )
     }
   ]);
 
@@ -107,7 +97,7 @@ const CountriesList = ({ loading }) => {
     );
 
   const handleFilters = (values) => {
-    setFilterValues(values, onGetCountries(values));
+    setFilterValues(values);
   };
 
   const handleClick = (event, value) => {
@@ -120,13 +110,18 @@ const CountriesList = ({ loading }) => {
         }),
         {}
       );
-    onGetCountries(updatedFilters);
-    setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
+    setFilterValues(updatedFilters);
   };
+
+  const renderInsertButton = () => (
+    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
+      {t('add')} {t('countries', { count: 1 }).toLowerCase()}
+    </button>
+  );
 
   const options = {
     columns,
-    data: countries,
+    data: countries?.rows,
     handleRowClick: (row) => {
       const value = row.original.id;
       const path = LOCATION_DETAILS_PAGE(value);
@@ -143,7 +138,7 @@ const CountriesList = ({ loading }) => {
       </div>
     ),
     actions: (
-      <>
+      <div className="space-x-6">
         <button
           type="button"
           className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
@@ -151,14 +146,8 @@ const CountriesList = ({ loading }) => {
         >
           {t('filter')}
         </button>
-        <button
-          type="button"
-          className="p-2 px-6 py-2 ml-4 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => setOpenForm(true)}
-        >
-          {t('add')} {t('countries', { count: 1 }).toLowerCase()}
-        </button>
-      </>
+        {renderInsertButton()}
+      </div>
     )
   };
 
@@ -166,23 +155,13 @@ const CountriesList = ({ loading }) => {
     <>
       {loading && <Loading />}
 
-      {countries && countries.length > 0 ? (
+      {countries && countries.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('countries', { count: 0 })}>
-          <button
-            type="button"
-            className="px-4 py-2 my-8 text-lg text-white rounded-md bg-secondary-500"
-            onClick={() => setOpenForm(true)}
-          >
-            {t('add')} {t('countries', { count: 1 }).toLowerCase()}
-          </button>
-        </EmptyState>
+        <EmptyState text={t('countries', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
-        <CountryForm />
-      </FormDialogWrapper>
+      <CountryForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
