@@ -3,7 +3,7 @@
 }
 
 .react-calendar--doubleView .react-calendar__viewContainer {
-  display: flex;
+  
   margin: -0.5em;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .react-calendar__month-view__weekdays {
-  @apply text-center font-medium lg:text-lg text-sm text-gray-800;
+  @apply text-center font-medium lg:text-lg text-sm text-gray-800 grid;
 }
 
 .react-calendar__month-view__weekdays abbr {
@@ -60,7 +60,7 @@
 }
 
 .react-calendar__month-view__weekdays__weekday {
-  @apply lg:p-4 sm:p-0;
+  @apply lg:py-2 sm:p-0;
 }
 
 .react-calendar__month-view__weekNumbers {
@@ -68,13 +68,11 @@
 }
 
 .react-calendar__month-view__weekNumbers .react-calendar__tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply p-0
 }
 
 .react-calendar__month-view__days {
-  @apply w-full;
+  @apply w-full h-full;
 }
 
 .react-calendar__month-view__days__day--neighboringMonth {
@@ -82,7 +80,7 @@
 }
 
 .react-calendar__tile {
-  @apply hover:bg-primary-200 hover:text-gray-800 focus:bg-primary-400 rounded-full lg:h-16 h-12 transition duration-150;
+  @apply hover:bg-primary-200 hover:text-gray-800 focus:bg-primary-400 rounded-full lg:py-5 p-3 transition duration-150;
 }
 
 .react-calendar__tile:disabled {

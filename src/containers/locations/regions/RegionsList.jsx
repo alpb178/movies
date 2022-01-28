@@ -124,6 +124,7 @@ const RegionsList = ({ loading }) => {
   const options = {
     columns,
     data: regions?.rows,
+    name: t('regions', { count: 2 }),
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
     handleRowClick: (row) => {
@@ -132,10 +133,9 @@ const RegionsList = ({ loading }) => {
       router.push(path);
     },
     onFilter: (
-      <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
-        <div className="mb-4">
-          <RegionsFilter open={openFilters} onSubmit={handleFilters} />
-        </div>
+      <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
+        <RegionsFilter open={openFilters} onSubmit={handleFilters} />
+
         <div className="flex">
           <FilterCriteria />
         </div>
@@ -145,7 +145,7 @@ const RegionsList = ({ loading }) => {
       <div className="space-x-4">
         <button
           type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
+          className="px-6 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}

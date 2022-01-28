@@ -69,6 +69,12 @@
   "filters": "Filtros",
   "flights": { "0": "Aún no existen vuelos registrados", "1": "Vuelo", "other": "Vuelos" },
   "form": {
+    "airline": {
+      "title": {
+        "create": "Nuevo Aerolínea",
+        "update": "Actualizar Aerolínea"
+      }
+    },
     "common": {
       "empty-options": "No se encontraron resultados",
       "label": {
@@ -163,6 +169,7 @@
     "one": "Localización",
     "other": "Localizaciones"
   },
+  "logo": "Logo",
   "max-amount": "Cantidad máxima",
   "measure-units": {
     "0": "Aún no existen unidades de medida registradas",

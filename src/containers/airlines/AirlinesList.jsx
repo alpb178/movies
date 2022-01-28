@@ -3,16 +3,16 @@ import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon } from '@heroicons/react/outline';
+import { XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
 import PaymentFilter from 'containers/airlines/AirlinesFilter';
-import { PAYMENT_DETAIL_PAGE, PAYMENT_EDIT } from 'lib/constants';
+import { PAYMENT_DETAIL_PAGE } from 'lib/constants';
 import Loading from 'components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import useAirlines from '@/hooks/airline/useAirlines';
 import AirlinesForm from './AirlinesForm';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
+import TableActions from '@/components/table/TableActions';
 
 const AirlinesList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
@@ -46,12 +46,8 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     }
   };
 
-  const handleEdit = (event, row) => {
+  const onUpdate = (event, row) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = PAYMENT_EDIT(value);
-    onSelectPayment(row.original);
-    router.push(path);
   };
 
   const columns = React.useMemo(() => [
@@ -66,28 +62,12 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     {
       id: 'optionsAirlines',
       displayName: 'optionsAirlines',
-      Cell: ({ row }) => {
-        return (
-          <div className="flex items-center space-x-4">
-            <button
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              type="button"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              type="button"
-              id="buttonDelete"
-              onClick={() => setOpenDeleteConfirmation(true)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
-        );
-      }
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={() => setOpenDeleteConfirmation(true)}
+        />
+      )
     }
   ]);
 
@@ -108,7 +88,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     );
 
   const handleFilters = (values) => {
-    setFilterValues(values, onGetAirlines(values));
+    setFilterValues(values);
   };
 
   const handleClick = (event, value) => {
@@ -121,16 +101,12 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
         }),
         {}
       );
-    onGetAirlines(updatedFilters);
-    setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
+
+    setFilterValues(updatedFilters);
   };
 
   const renderInsertButton = () => (
-    <button
-      type="button"
-      className="px-6 py-2 font-medium bg-white border rounded-md border-secondary-600 text-secondary-600 w-max hover:bg-gray-100"
-      onClick={() => setOpenForm(true)}
-    >
+    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
       {t('new', { entity: t('airlines', { count: 1 }) })}
     </button>
   );
@@ -138,6 +114,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
   const options = {
     columns,
     data: airlines?.rows,
+    name: t('airlines', { count: 2 }),
     handleRowClick: (row) => {
       const value = row.original.email;
       const path = PAYMENT_DETAIL_PAGE(value);
@@ -145,10 +122,9 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
       router.push(path);
     },
     onFilter: (
-      <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
-        <div className="mb-4">
-          <PaymentFilter open={openFilters} onSubmit={handleFilters} />
-        </div>
+      <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
+        <PaymentFilter open={openFilters} onSubmit={handleFilters} />
+
         <div className="flex">
           <FilterCriteria />
         </div>
@@ -158,7 +134,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
       <div className="space-x-4">
         <button
           type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
+          className="px-8 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}
@@ -178,9 +154,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
         <EmptyState text={t('airlines', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
-        <AirlinesForm />
-      </FormDialogWrapper>
+      <AirlinesForm open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}

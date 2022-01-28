@@ -2,9 +2,8 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import useTranslation from 'next-translate/useTranslation';
-import { Disclosure } from '@headlessui/react';
+import { Disclosure, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
-import { Transition } from 'react-transition-group';
 import useAuth from 'hooks/auth/useAuth';
 import navigation from './navigation';
 

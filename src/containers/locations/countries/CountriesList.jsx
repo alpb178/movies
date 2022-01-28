@@ -122,16 +122,16 @@ const CountriesList = ({ loading }) => {
   const options = {
     columns,
     data: countries?.rows,
+    name: t('countries', { count: 2 }),
     handleRowClick: (row) => {
       const value = row.original.id;
       const path = LOCATION_DETAILS_PAGE(value);
       router.push(path);
     },
     onFilter: (
-      <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
-        <div className="mb-4">
-          <CountriesFilter open={openFilters} onSubmit={handleFilters} />
-        </div>
+      <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
+        <CountriesFilter open={openFilters} onSubmit={handleFilters} />
+
         <div className="flex">
           <FilterCriteria />
         </div>

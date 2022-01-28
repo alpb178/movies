@@ -84,13 +84,6 @@ const ShipmentItemsForm = ({ onOpen }) => {
                 ) : null}
               </div>
             </div>
-
-            <button
-              className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
-              type="submit"
-            >
-              {t('save')}
-            </button>
           </Form>
         )}
       </Formik>

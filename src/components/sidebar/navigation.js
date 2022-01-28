@@ -39,12 +39,6 @@ export default [
   //   link: REVENUES_PAGE,
   //   roles: [ADMIN_ROLE]
   // },
-  { name: 'payments', link: PAYMENTS_PAGE, icon: CurrencyDollarIcon, roles: [ADMIN_ROLE] },
-  { name: 'travels', link: TRAVELS_PAGE, icon: TicketIcon, roles: [ADMIN_ROLE] },
-  { name: 'regulations', link: REGULATIONS_PAGE, icon: ShieldCheckIcon, roles: [ADMIN_ROLE] },
-  { name: 'shipment-items', link: SHIPMENT_ITEMS_PAGE, icon: TicketIcon, roles: [ADMIN_ROLE] },
-  { name: 'measure-units', link: MEASURE_UNITS_PAGE, icon: ScaleIcon, roles: [ADMIN_ROLE] },
-  { name: 'airlines', link: AIRLINES_PAGE, icon: PaperAirplaneIcon, roles: [ADMIN_ROLE] },
   {
     name: 'locations',
     children: [
@@ -54,6 +48,12 @@ export default [
     icon: LocationMarkerIcon,
     roles: [ADMIN_ROLE]
   },
+  { name: 'measure-units', link: MEASURE_UNITS_PAGE, icon: ScaleIcon, roles: [ADMIN_ROLE] },
+  { name: 'shipment-items', link: SHIPMENT_ITEMS_PAGE, icon: TicketIcon, roles: [ADMIN_ROLE] },
+  { name: 'airlines', link: AIRLINES_PAGE, icon: PaperAirplaneIcon, roles: [ADMIN_ROLE] },
+  { name: 'regulations', link: REGULATIONS_PAGE, icon: ShieldCheckIcon, roles: [ADMIN_ROLE] },
+  { name: 'travels', link: TRAVELS_PAGE, icon: TicketIcon, roles: [ADMIN_ROLE] },
+  // { name: 'payments', link: PAYMENTS_PAGE, icon: CurrencyDollarIcon, roles: [ADMIN_ROLE] },
   { name: 'users', link: USERS_PAGE, icon: UserGroupIcon, roles: [ADMIN_ROLE] },
   { name: 'settings', link: SETTINGS_PAGE, icon: CogIcon, roles: [ADMIN_ROLE] }
 ];

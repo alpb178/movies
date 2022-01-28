@@ -2,15 +2,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
+import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
+import { TrashIcon, PencilIcon, XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
 import Loading from '@/components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import PaymentFilter from '@/containers/shipment-items/ShipmentItemsFilter';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
-import { PAYMENT_DETAIL_PAGE, PAYMENT_ADD, PAYMENT_EDIT } from '@/lib/constants';
+import { PAYMENT_DETAIL_PAGE } from '@/lib/constants';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import ShipmentItemsForm from './ShipmentItemsForm';
 
@@ -48,28 +49,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
 
   const handleEdit = (event, row) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = PAYMENT_EDIT(value);
-    onSelectPayment(row.original);
-    router.push(path);
   };
-
-  const handleAdd = () => {
-    router.push(PAYMENT_ADD);
-  };
-
-  const renderRoles = (roles) => (
-    <div className="flex space-x-2">
-      {roles?.map((role) => (
-        <span
-          key={role}
-          className="inline-flex px-4 py-1 font-medium leading-5 text-green-700 rounded-full bg-green-50"
-        >
-          {t(role.replace(/_/g, '-').toLowerCase())}
-        </span>
-      ))}
-    </div>
-  );
 
   const rednerMeasureUnit = (value) => <div>{value?.name}</div>;
 
@@ -141,8 +121,8 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
         }),
         {}
       );
-    onGetShipmentItems(updatedFilters);
-    setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
+
+    setFilterValues(updatedFilters);
   };
 
   const renderInsertButton = () => (
@@ -154,6 +134,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
   const options = {
     columns,
     data: shipmentItems?.rows,
+    name: t('shipment-items', { count: 2 }),
     handleRowClick: (row) => {
       const value = row.original.email;
       const path = PAYMENT_DETAIL_PAGE(value);
@@ -161,10 +142,9 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
       router.push(path);
     },
     onFilter: (
-      <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
-        <div className="mb-4">
-          <PaymentFilter open={openFilters} onSubmit={handleFilters} />
-        </div>
+      <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
+        <PaymentFilter open={openFilters} onSubmit={handleFilters} />
+
         <div className="flex">
           <FilterCriteria />
         </div>
@@ -174,7 +154,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
       <div className="space-x-4">
         <button
           type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
+          className="px-8 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}
