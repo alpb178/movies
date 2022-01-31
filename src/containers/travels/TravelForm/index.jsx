@@ -7,7 +7,7 @@ import router from 'next/router';
 import * as Yup from 'yup';
 import useAirlines from '@/hooks/airline/useAirlines';
 import useRegions from '@/hooks/location/region/useRegions';
-import { API_FLIGHTS_URL, POST } from '@/lib/constants';
+import { API_FLIGHTS_URL, API_TRAVELS_URL, POST } from '@/lib/constants';
 // import InputMask from 'react-input-mask';
 // import useMediaContext from '@/hooks/useMediaContext';
 import useUsers from '@/hooks/user/useUsers';
@@ -19,23 +19,33 @@ import { apiFetcher } from '@/lib/apiFetcher';
 import { UserIcon } from '@heroicons/react/outline';
 import { toast } from 'react-toastify';
 
-const TravelForm = ({ isNewData }) => {
+const TravelForm = ({ travelId }) => {
   const { t } = useTranslation('common');
-  // const { isSmall } = useMediaContext();
+
+  const [travel, setTravel] = useState();
+
   const [destination, setDestination] = useState();
   const [airline, setAirline] = useState();
   const [flights, setFlights] = useState();
   const [baggageCapacity, setBaggageCapacity] = useState();
 
   const initialValues = {
-    traveler: '',
-    origin: '',
-    destination: '',
-    departureAt: '',
-    airline: '',
-    flight: '',
-    shipmentItems: []
+    traveler: travel?.traveler || '',
+    origin: travel?.origin || '',
+    destination: travel?.destination || '',
+    departureAt: travel?.departureAt || '',
+    airline: travel?.airline || '',
+    flight: travel?.flight || '',
+    shipmentItems: travel?.shipments || []
   };
+
+  useEffect(async () => {
+    const { data } = await apiFetcher(`${API_TRAVELS_URL}/${travelId}`, {
+      params: {},
+      keepPreviousData: true
+    });
+    setTravel(data);
+  }, [travelId]);
 
   const { data: users } = useUsers({
     args: {},
@@ -72,9 +82,9 @@ const TravelForm = ({ isNewData }) => {
   }, [airline]);
 
   const validationSchema = Yup.object().shape({
-    traveler: Yup.object().shape({ id: Yup.number().required() }),
-    origin: Yup.object().required(t('required.origin')).nullable(),
-    destination: Yup.object().required(t('required.destination')).nullable(),
+    traveler: Yup.object().shape({ id: Yup.number().required(t('form.travel.required.traveler')) }),
+    origin: Yup.object().required(t('form.travel.required.origin')).nullable(),
+    destination: Yup.object().required(t('form.travel.required.destination')).nullable(),
     departureAt: Yup.string()
   });
 
@@ -125,12 +135,12 @@ const TravelForm = ({ isNewData }) => {
       {({ errors, touched }) => (
         <Form className="p-6 space-y-6 text-lg">
           <p className="mb-8 form-header">
-            {isNewData ? t('form.travel.title.create') : t('form.travel.title.update')}
+            {isNaN(travelId) ? t('form.travel.title.create') : t('form.travel.title.update')}
           </p>
 
           <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
             <div className="flex flex-col w-full space-y-6">
-              <div className="relative w-full mx-auto">
+              <div className="w-full">
                 <AutocompleteField
                   name="traveler"
                   placeholder={t('form.travel.placeholder.traveler')}
@@ -139,11 +149,12 @@ const TravelForm = ({ isNewData }) => {
                   optionLabels={['firstName', 'lastName']}
                   keysToMatch={['firstName', 'lastName', 'username']}
                   icon={UserIcon}
+                  defaultValue={travel?.traveler}
                 />
               </div>
 
               <div className="flex flex-col items-center w-full space-y-6">
-                <div className="relative w-full mx-auto">
+                <div className="w-full">
                   <AutocompleteField
                     name="origin"
                     placeholder={t('form.travel.placeholder.origin')}
@@ -151,22 +162,11 @@ const TravelForm = ({ isNewData }) => {
                     optionLabels={['name', 'country.name']}
                     keysToMatch={['name', 'code', 'country.name']}
                     className="autocomplete-field"
+                    defaultValue={travel?.origin}
                   />
                 </div>
 
-                {/* <button
-                  type="button"
-                  onClick={() => {
-                    setValues({ origin: values.destination, destination: values.origin });
-                  }}
-                  className="h-full p-3 mb-1 transition duration-200 ease-in-out border border-gray-300 rounded-full w-max hover:bg-gray-100"
-                >
-                  <SwitchHorizontalIcon
-                    className={`w-6 h-6 text-gray-700 ${isSmall && 'rotate-90'}`}
-                  />
-                </button> */}
-
-                <div className="relative w-full mx-auto">
+                <div className="w-full">
                   <AutocompleteField
                     name="destination"
                     placeholder={t('form.travel.placeholder.destination')}
@@ -175,6 +175,7 @@ const TravelForm = ({ isNewData }) => {
                     keysToMatch={['name', 'code', 'country.name']}
                     className="autocomplete-field"
                     onSelectionChange={setDestination}
+                    defaultValue={travel?.destination}
                   />
                 </div>
               </div>
@@ -202,7 +203,6 @@ const TravelForm = ({ isNewData }) => {
                     aria-describedby="flight"
                     disabled={!airline}
                   />
-                  {console.log(flights?.rows)}
                 </div>
               </div>
             </div>
@@ -249,11 +249,11 @@ const TravelForm = ({ isNewData }) => {
 };
 
 TravelForm.defaultProps = {
-  isNewData: true
+  travelId: null
 };
 
 TravelForm.propTypes = {
-  isNewData: PropTypes.bool,
+  travelId: PropTypes.number,
   onOpen: PropTypes.func.isRequired
 };
 

@@ -79,18 +79,21 @@ function DepartureDateForm() {
                 </div>
 
                 <Field name="departureAt" id="departureAt">
-                  {({ form: { setFieldValue } }) => (
-                    <Calendar
-                      className="text-base lg:text-xl"
-                      name="departureAt"
-                      onChange={(newValue) => {
-                        setSelectedDate(new Date(newValue));
-                        setFieldValue('departureAt', format(newValue, 'yyyy-MM-dd'));
-                        setOpenCalendar(false);
-                      }}
-                      value={selectedDate}
-                      // tileDisabled={disablePastDates}
-                    />
+                  {({ form: { setFieldValue, values } }) => (
+                    <>
+                      <Calendar
+                        className="text-base lg:text-xl"
+                        name="departureAt"
+                        onChange={(newValue) => {
+                          setSelectedDate(new Date(newValue));
+                          setFieldValue('departureAt', format(newValue, 'yyyy-MM-dd'));
+                          setOpenCalendar(false);
+                        }}
+                        value={values.departureAt || selectedDate}
+                        // tileDisabled={disablePastDates}
+                      />
+                      {console.log(values)}
+                    </>
                   )}
                 </Field>
               </div>

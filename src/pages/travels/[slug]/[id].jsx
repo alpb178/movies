@@ -14,7 +14,7 @@ const TravelFormPage = () => {
 
   return (
     <div className="bg-white">
-      <TravelForm isNewData={!id} />
+      <TravelForm travelId={id} />
     </div>
   );
 };

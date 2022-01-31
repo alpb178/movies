@@ -24,6 +24,8 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  plugins: ['react'],
-  rules: {}
+  plugins: ['react', 'unused-imports', 'simple-import-sort'],
+  rules: {
+    'unused-imports/no-unused-imports-ts': 2
+  }
 };

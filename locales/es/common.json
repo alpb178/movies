@@ -150,6 +150,11 @@
       "title": {
         "create": "Nuevo viaje",
         "update": "Actualizar viaje"
+      },
+      "required": {
+        "destination": "El destino del viaje es requerido",
+        "origin": "El origen del viaje es requerido",
+        "traveler": "El viajero es requerido"
       }
     }
   },

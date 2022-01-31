@@ -4,7 +4,7 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
 
 const TableActions = ({ onEdit, onDelete }) => {
   return (
-    <div className="flex items-center justify-end space-x-4">
+    <div className="z-40 flex items-center justify-end space-x-4">
       {onEdit ? (
         <button
           className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"

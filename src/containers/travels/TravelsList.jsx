@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
+import { XCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
 import Loading from '@/components/common/Loading';
 import EmptyState from '@/components/common/EmptyState';
@@ -23,7 +23,7 @@ const TravelsList = ({ loading }) => {
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
   const [openFilters, setOpenFilters] = useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
   const [filterValues, setFilterValues] = useState({
     paymentname: '',
@@ -54,6 +54,15 @@ const TravelsList = ({ loading }) => {
     const value = row.id;
     const path = TRAVEL_FORM_PAGE(`edit/${value}`);
     router.push(path);
+  };
+
+  const onDelete = (event, row) => {
+    event.stopPropagation();
+    setDeleteConfirmation({ open: true, id: row.original.login });
+  };
+
+  const onDeleteConfirmation = () => {
+    // onDeleteUser(deleteConfirmation.id);
   };
 
   const formatTraveler = (value) => <div>{`${value?.firstName} ${value?.lastName}`}</div>;
@@ -96,7 +105,7 @@ const TravelsList = ({ loading }) => {
       Cell: ({ row }) => (
         <TableActions
           onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={() => setOpenDeleteConfirmation(true)}
+          onDelete={() => onDelete(event, row.original)}
         />
       )
     }
@@ -119,7 +128,7 @@ const TravelsList = ({ loading }) => {
     );
 
   const handleFilters = (values) => {
-    setFilterValues(values, onGetTravels(values));
+    setFilterValues(values);
   };
 
   const handleClick = (event, value) => {
@@ -132,14 +141,13 @@ const TravelsList = ({ loading }) => {
         }),
         {}
       );
-    onGetTravels(updatedFilters);
-    setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
+    setFilterValues(updatedFilters);
   };
 
   const renderCreateButton = () => (
     <button
       type="button"
-      className="px-4 py-2 my-8 text-lg border rounded-md border-secondary-500 text-secondary-500 hover:bg-secondary-100"
+      className="btn-outlined"
       onClick={() => router.push('travels/create/new')}
     >
       {t('new', { entity: t('travels', { count: 1 }) })}
@@ -189,10 +197,11 @@ const TravelsList = ({ loading }) => {
       )}
 
       <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onOpen={setOpenDeleteConfirmation}
-        title={t('delete', { entity: 'user' })}
-        content={t('asd')}
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('travels', { count: 1 }).toLowerCase() })}
+        content={t('delete-message.male', { entity: t('travels', { count: 1 }).toLowerCase() })}
       />
     </>
   );
