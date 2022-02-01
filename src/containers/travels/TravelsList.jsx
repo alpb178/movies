@@ -1,19 +1,18 @@
-/* eslint-disable react/display-name */
-import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-import { XCircleIcon } from '@heroicons/react/outline';
-import DataTable from '@/components/table';
-import Loading from '@/components/common/Loading';
-import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
+import EmptyState from '@/components/common/EmptyState';
+import Loading from '@/components/common/Loading';
+import DataTable from '@/components/table';
+import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
 import useTravels from '@/hooks/travel/useTravels';
 import { TRAVEL_DETAILS_PAGE, TRAVEL_FORM_PAGE } from '@/lib/constants';
+import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
-import TableActions from '@/components/table/TableActions';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useMemo, useState } from 'react';
 
 const locales = { es, en: enGB };
 

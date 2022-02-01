@@ -120,6 +120,19 @@
         "permited-amount": "Cantidad permitida (Máx.)"
       }
     },
+    "shipment": {
+      "label": {
+        "measure-unit": "Unidad de medida"
+      },
+      "placeholder": {
+        "payload": "¿Qué deseas enviar?",
+        "sender": "Remitente"
+      },
+      "title": {
+        "create": "Nuevo Envío",
+        "update": "Actualizar Envío"
+      }
+    },
     "shipment-item": {
       "label": {
         "measure-unit": "Unidad de medida"
@@ -252,8 +265,12 @@
     "one": "Artículo",
     "other": "Artículos"
   },
+  "shipments": {
+    "0": "Aún no existen envíos",
+    "one": "Envío",
+    "other": "Envíos"
+  },
   "send": "Enviar",
-  "showing": "Mostrando {{range}} de {{total}} resultados",
   "status": "Estado",
   "symbol": "Símbolo",
   "table": {

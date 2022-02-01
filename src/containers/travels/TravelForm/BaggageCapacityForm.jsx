@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Field } from 'formik';
-import useTranslation from 'next-translate/useTranslation';
+import AutocompleteField from '@/components/form/AutocompleteField';
+import useRegulations from '@/hooks/regulation/useRegulations';
+import { formatPrice } from '@/lib/utils';
 import { Disclosure, Transition } from '@headlessui/react';
 import {
   ChevronDownIcon,
@@ -9,11 +8,12 @@ import {
   PlusCircleIcon,
   XCircleIcon
 } from '@heroicons/react/outline';
-import useRegulations from '@/hooks/regulation/useRegulations';
-import { formatPrice } from '@/lib/utils';
-import AutocompleteField from '@/components/form/AutocompleteField';
+import { Field } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 
-const BaggageCapacityForm = ({ destination, onShipmentItemsChange }) => {
+const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender }) => {
   const { t } = useTranslation('common');
 
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -117,7 +117,11 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange }) => {
     <div className="relative flex flex-col w-full space-y-4">
       <AutocompleteField
         name="shipmentItem"
-        placeholder={t('form.travel.placeholder.baggage-capacity')}
+        placeholder={
+          isSender
+            ? t('form.shipment.placeholder.payload')
+            : t('form.travel.placeholder.baggage-capacity')
+        }
         options={regulations ? regulations.rows : []}
         className="autocomplete-field"
         optionLabels={['shipmentItem.name']}
@@ -134,7 +138,9 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange }) => {
               <p className="w-full px-4 pt-4 space-x-2 text-sm text-gray-400">
                 <span>{option?.amount}</span>
                 <span>{option?.measureUnit.name}</span>
-                <span>{`· ${formatPrice(option?.price)} / ${option?.measureUnit.symbol}`}</span>
+                {!isSender ? (
+                  <span>{`· ${formatPrice(option?.price)} / ${option?.measureUnit.symbol}`}</span>
+                ) : null}
               </p>
               <div className="flex items-center w-full p-4 pt-0 space-x-8">
                 <p className="w-full text-lg">{option.name}</p>
@@ -163,16 +169,18 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange }) => {
                   </button>
                 </div>
 
-                <div className="w-48">
-                  <Field
-                    name={`price-${idx}`}
-                    id={`price-${idx}`}
-                    value={option.price}
-                    onChange={(e) => onPriceChange(e, option)}
-                    className="px-2 text-lg text-field"
-                    aria-describedby={`price-${idx}`}
-                  />
-                </div>
+                {!isSender ? (
+                  <div className="w-48">
+                    <Field
+                      name={`price-${idx}`}
+                      id={`price-${idx}`}
+                      value={option.price}
+                      onChange={(e) => onPriceChange(e, option)}
+                      className="px-2 text-lg text-field"
+                      aria-describedby={`price-${idx}`}
+                    />
+                  </div>
+                ) : null}
 
                 <button
                   type="button"
@@ -185,50 +193,52 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange }) => {
             </div>
           ))}
 
-          <Disclosure as="div" className="bg-white rounded-b-md">
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="flex items-center justify-between w-full p-4 hover:bg-secondary-50 hover:rounded-b-md">
-                  <ChevronDownIcon
-                    className={`${open ? 'rotate-180' : ''} w-6 h-6 transition duration-150`}
-                  />
-                  <div className="flex justify-between space-x-2 font-medium">
-                    <p className="text-xl">{t('total')}:</p>
-                    <p className="text-xl">
-                      {formatPrice(shipmentPrice + Math.ceil(administrationFee) + Math.ceil(iva))}
-                    </p>
-                  </div>
-                </Disclosure.Button>
-
-                <Transition
-                  as={Fragment}
-                  enter="transition duration-150 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-75 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                >
-                  <Disclosure.Panel className="p-4 space-y-2 text-xl border-t">
-                    <div className="flex justify-between">
-                      <p>{t('fees.administration')}:</p>
-                      <p>{formatPrice(administrationFee)}</p>
+          {!isSender ? (
+            <Disclosure as="div" className="bg-white rounded-b-md">
+              {({ open }) => (
+                <>
+                  <Disclosure.Button className="flex items-center justify-between w-full p-4 hover:bg-secondary-50 hover:rounded-b-md">
+                    <ChevronDownIcon
+                      className={`${open ? 'rotate-180' : ''} w-6 h-6 transition duration-150`}
+                    />
+                    <div className="flex justify-between space-x-2 font-medium">
+                      <p className="text-xl">{t('total')}:</p>
+                      <p className="text-xl">
+                        {formatPrice(shipmentPrice + Math.ceil(administrationFee) + Math.ceil(iva))}
+                      </p>
                     </div>
+                  </Disclosure.Button>
 
-                    <div className="flex justify-between">
-                      <p>{t('fees.iva')}:</p>
-                      <p>{formatPrice(iva)}</p>
-                    </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition duration-150 ease-out"
+                    enterFrom="transform scale-95 opacity-0"
+                    enterTo="transform scale-100 opacity-100"
+                    leave="transition duration-75 ease-out"
+                    leaveFrom="transform scale-100 opacity-100"
+                    leaveTo="transform scale-95 opacity-0"
+                  >
+                    <Disclosure.Panel className="p-4 space-y-2 text-xl border-t">
+                      <div className="flex justify-between">
+                        <p>{t('fees.administration')}:</p>
+                        <p>{formatPrice(administrationFee)}</p>
+                      </div>
 
-                    <div className="flex justify-between">
-                      <p>{t('fees.shipment')}:</p>
-                      <p className="font-medium">{formatPrice(shipmentPrice)}</p>
-                    </div>
-                  </Disclosure.Panel>
-                </Transition>
-              </>
-            )}
-          </Disclosure>
+                      <div className="flex justify-between">
+                        <p>{t('fees.iva')}:</p>
+                        <p>{formatPrice(iva)}</p>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <p>{t('fees.shipment')}:</p>
+                        <p className="font-medium">{formatPrice(shipmentPrice)}</p>
+                      </div>
+                    </Disclosure.Panel>
+                  </Transition>
+                </>
+              )}
+            </Disclosure>
+          ) : null}
         </div>
       ) : null}
     </div>

@@ -1,11 +1,11 @@
-import React, { Fragment, useState } from 'react';
-import { Field } from 'formik';
-import useTranslation from 'next-translate/useTranslation';
-import { format } from 'date-fns';
-import { enGB, es } from 'date-fns/locale';
-import Calendar from 'react-calendar';
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, XCircleIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
+import { enGB, es } from 'date-fns/locale';
+import { Field } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
+import React, { Fragment, useState } from 'react';
+import Calendar from 'react-calendar';
 
 const locales = { es, en: enGB };
 
@@ -21,7 +21,7 @@ function DepartureDateForm() {
 
   return (
     <div className="space-y-2">
-      <label htmlFor="destination">{t('form.travel.label.date')}</label>
+      <label htmlFor="departureAt">{t('form.travel.label.date')}</label>
       <button
         className="flex items-center text-left text-field"
         type="button"
