@@ -6,17 +6,15 @@ import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
 import useTravels from '@/hooks/travel/useTravels';
 import { TRAVEL_DETAILS_PAGE, TRAVEL_FORM_PAGE } from '@/lib/constants';
+import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
-import { enGB, es } from 'date-fns/locale';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
 
-const locales = { es, en: enGB };
-
-const TravelsList = ({ loading }) => {
+const TravelsList = ({ hiddenColumns, loading, userId }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
   // const [page, setPage] = useState(0);
@@ -34,7 +32,7 @@ const TravelsList = ({ loading }) => {
   });
 
   const params = useMemo(() => {
-    return {};
+    if (userId) return { traveler: userId };
   }, []);
 
   const { data: travels } = useTravels({
@@ -161,8 +159,9 @@ const TravelsList = ({ loading }) => {
       const path = TRAVEL_DETAILS_PAGE(value);
       router.push(path);
     },
+    hiddenColumns,
     onFilter: (
-      <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
+      <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <div className="mb-4">
           <PaymentFilter open={openFilters} onSubmit={handleFilters} />
         </div>

@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
@@ -7,6 +5,8 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 function Pagination({ tableInstance, pageSizes }) {
   const { t } = useTranslation('common');
@@ -23,7 +23,7 @@ function Pagination({ tableInstance, pageSizes }) {
   } = tableInstance;
 
   return (
-    <div className="flex items-center justify-end px-2 m-4 space-x-8">
+    <div className="flex flex-col items-end justify-end px-2 m-4 space-x-8 space-y-2 sm:space-y-0 sm:items-center sm:flex-row">
       {/* <span>
         Go to page:{' '}
         <input
@@ -55,6 +55,7 @@ function Pagination({ tableInstance, pageSizes }) {
 
       <div className="flex items-center space-x-2">
         <button
+          type="button"
           className={`${
             !canPreviousPage ? 'hover:cursor-not-allowed' : ''
           } hover:bg-gray-100 rounded p-2`}
@@ -66,6 +67,7 @@ function Pagination({ tableInstance, pageSizes }) {
           />
         </button>
         <button
+          type="button"
           className={`${
             !canPreviousPage ? 'hover:cursor-not-allowed' : ''
           } hover:bg-gray-100 rounded p-2`}
@@ -80,6 +82,7 @@ function Pagination({ tableInstance, pageSizes }) {
           {t('table.page-count', { currentPage: pageIndex + 1, lastPage: pageOptions.length })}
         </span>
         <button
+          type="button"
           className={`${
             !canNextPage ? 'hover:cursor-not-allowed' : ''
           } hover:bg-gray-100 rounded p-2`}
@@ -91,6 +94,7 @@ function Pagination({ tableInstance, pageSizes }) {
           />
         </button>
         <button
+          type="button"
           className={`${
             !canNextPage ? 'hover:cursor-not-allowed' : ''
           } hover:bg-gray-100 rounded p-2`}

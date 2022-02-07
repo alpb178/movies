@@ -1,5 +1,5 @@
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 // components
 
 // import IndexDropdown from "components/Dropdowns/IndexDropdown.js";
@@ -20,8 +20,8 @@ export default function Navbar() {
               </a>
             </Link>
             <button
-              className="block px-3 py-1 text-xl leading-none bg-transparent border border-transparent border-solid rounded outline-none cursor-pointer lg:hidden focus:outline-none"
               type="button"
+              className="block px-3 py-1 text-xl leading-none bg-transparent border border-transparent border-solid rounded outline-none cursor-pointer lg:hidden focus:outline-none"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
               <i className="fas fa-bars"></i>
@@ -84,8 +84,8 @@ export default function Navbar() {
 
               <li className="flex items-center">
                 <button
-                  className="px-4 py-2 mb-3 ml-3 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-gray-800 rounded shadow outline-none active:bg-gray-700 hover:shadow-lg focus:outline-none lg:mr-1 lg:mb-0"
                   type="button"
+                  className="px-4 py-2 mb-3 ml-3 text-xs font-bold text-white uppercase transition-all duration-150 ease-linear bg-gray-800 rounded shadow outline-none active:bg-gray-700 hover:shadow-lg focus:outline-none lg:mr-1 lg:mb-0"
                 >
                   <i className="fas fa-arrow-alt-circle-down"></i> Download
                 </button>

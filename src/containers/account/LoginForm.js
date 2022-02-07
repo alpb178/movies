@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Formik, Field, Form } from 'formik';
-import * as Yup from 'yup';
-import { toast } from 'react-toastify';
-import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
-import useTranslation from 'next-translate/useTranslation';
+import { Field, Form, Formik } from 'formik';
 import useAuth from 'hooks/auth/useAuth';
+import useTranslation from 'next-translate/useTranslation';
+import React, { useState } from 'react';
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 const LoginForm = () => {
   const { t } = useTranslation('common');
@@ -125,8 +125,8 @@ const LoginForm = () => {
           </div>
 
           <button
-            className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
             type="submit"
+            className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
           >
             {loading ? '...' : t('account.login')}
           </button>

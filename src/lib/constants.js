@@ -13,6 +13,7 @@ export const API_PAYMENTS_URL = '/payments';
 export const API_REGIONS_URL = '/regions';
 export const API_REGULATIONS_URL = '/regulations';
 export const API_SHIPMENT_ITEMS_URL = '/shipment-items';
+export const API_SHIPMENTS_URL = '/shipments';
 export const API_TRAVELS_URL = '/travels';
 
 // App Routes

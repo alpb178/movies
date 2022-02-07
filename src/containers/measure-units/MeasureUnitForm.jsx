@@ -1,11 +1,11 @@
 /* eslint-disable react/display-name */
-import React from 'react';
-import PropTypes from 'prop-types';
-import useTranslation from 'next-translate/useTranslation';
-import { Field, Form, Formik } from 'formik';
-import * as Yup from 'yup';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
 import { POST } from '@/lib/constants';
+import { Field, Form, Formik } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import React from 'react';
+import * as Yup from 'yup';
 
 const MeasureUnitForm = ({ onOpen }) => {
   const { t } = useTranslation('common');
@@ -69,8 +69,8 @@ const MeasureUnitForm = ({ onOpen }) => {
             </div>
 
             <button
-              className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
               type="submit"
+              className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
             >
               {t('save')}
             </button>

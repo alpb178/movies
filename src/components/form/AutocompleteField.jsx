@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { valuesFromString } from '@/lib/utils';
+import { Menu, Transition } from '@headlessui/react';
+import { ChevronDownIcon, XIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
 import Downshift from 'downshift';
 import { Field } from 'formik';
 import { matchSorter } from 'match-sorter';
-import { ChevronDownIcon, XIcon } from '@heroicons/react/outline';
-import { Menu, Transition } from '@headlessui/react';
-import clsx from 'clsx';
-import { valuesFromString } from '@/lib/utils';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }) => {
   const { defaultValue, disabled, emptyOptionsLabel, keysToMatch, optionLabels, placeholder } =
@@ -69,6 +69,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                   />
                   {selectedItem ? (
                     <button
+                      type="button"
                       className="absolute p-1 rounded-full right-2 hover:bg-gray-100"
                       onClick={clearSelection}
                       aria-label="clear selection"
@@ -77,6 +78,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                     </button>
                   ) : (
                     <button
+                      type="button"
                       className="absolute p-1 rounded-full right-2 hover:bg-gray-100"
                       {...getToggleButtonProps()}
                       disabled={disabled}

@@ -1,23 +1,23 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import useTranslation from 'next-translate/useTranslation';
-import { Field, Form, Formik } from 'formik';
-import router from 'next/router';
-import * as Yup from 'yup';
+import AutocompleteField from '@/components/form/AutocompleteField';
 import useAirlines from '@/hooks/airline/useAirlines';
 import useRegions from '@/hooks/location/region/useRegions';
-import { API_FLIGHTS_URL, API_TRAVELS_URL, POST } from '@/lib/constants';
+import useTravels from '@/hooks/travel/useTravels';
 // import InputMask from 'react-input-mask';
 // import useMediaContext from '@/hooks/useMediaContext';
 import useUsers from '@/hooks/user/useUsers';
-import useTravels from '@/hooks/travel/useTravels';
+import { apiFetcher } from '@/lib/apiFetcher';
+import { API_FLIGHTS_URL, API_TRAVELS_URL, POST } from '@/lib/constants';
+import { UserIcon } from '@heroicons/react/outline';
+import { Field, Form, Formik } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
+import router from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import BaggageCapacityForm from './BaggageCapacityForm';
 import DepartureDateForm from './DepartureDateForm';
-import AutocompleteField from '@/components/form/AutocompleteField';
-import { apiFetcher } from '@/lib/apiFetcher';
-import { UserIcon } from '@heroicons/react/outline';
-import { toast } from 'react-toastify';
 
 const TravelForm = ({ travelId }) => {
   const { t } = useTranslation('common');
@@ -40,11 +40,13 @@ const TravelForm = ({ travelId }) => {
   };
 
   useEffect(async () => {
-    const { data } = await apiFetcher(`${API_TRAVELS_URL}/${travelId}`, {
-      params: {},
-      keepPreviousData: true
-    });
-    setTravel(data);
+    if (!isNaN(travelId)) {
+      const { data } = await apiFetcher(`${API_TRAVELS_URL}/${travelId}`, {
+        params: {},
+        keepPreviousData: true
+      });
+      setTravel(data);
+    }
   }, [travelId]);
 
   const { data: users } = useUsers({
@@ -89,6 +91,7 @@ const TravelForm = ({ travelId }) => {
   });
 
   const onSubmit = async (values) => {
+    debugger;
     try {
       delete values.shipmentItem;
       values.shipmentItems = baggageCapacity;
@@ -229,15 +232,15 @@ const TravelForm = ({ travelId }) => {
 
           <div className="flex justify-end space-x-8">
             <button
-              className="px-8 py-3 mt-6 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
               type="button"
+              className="px-8 py-3 mt-6 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
               onClick={() => router.back()}
             >
               {t('cancel')}
             </button>
             <button
-              className="px-8 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
               type="submit"
+              className="px-8 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
             >
               {t('save')}
             </button>

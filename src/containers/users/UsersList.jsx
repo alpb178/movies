@@ -1,17 +1,18 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
-import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
-import UserFilter from 'containers/users/UserFilter';
-import { getUsers, selectUser, deleteUser } from 'redux/actions';
-import { USER_DETAIL_PAGE, USER_ADD, USER_EDIT } from 'lib/constants';
-import Loading from 'components/common/Loading';
-import EmptyState from 'components/common/EmptyState';
+import TableActions from '@/components/table/TableActions';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
+import EmptyState from 'components/common/EmptyState';
+import Loading from 'components/common/Loading';
+import UserFilter from 'containers/users/UserFilter';
+import { USER_ADD, USER_DETAIL_PAGE, USER_EDIT } from 'lib/constants';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { deleteUser, getUsers, selectUser } from 'redux/actions';
 
 const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
   const { t } = useTranslation('common');
@@ -34,16 +35,16 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     onGetUsers();
   }, []);
 
-  const handleDelete = (event, row) => {
+  const onDelete = (event, row) => {
     event.stopPropagation();
-    setDeleteConfirmation({ open: true, id: row.original.login });
+    setDeleteConfirmation({ open: true, id: row.original.id });
   };
 
   const onDeleteConfirmation = () => {
     onDeleteUser(deleteConfirmation.id);
   };
 
-  const handleEdit = (event, row) => {
+  const onUpdate = (event, row) => {
     event.stopPropagation();
     const value = row.original.email;
     const path = USER_EDIT(value);
@@ -107,24 +108,10 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
       displayName: 'optionsUsers',
       Cell: ({ row }) => {
         return (
-          <div className="flex items-center space-x-4">
-            <button
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              type="button"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              type="button"
-              id="buttonDelete"
-              onClick={(event) => handleDelete(event, row)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
+          <TableActions
+            onEdit={(event) => onUpdate(event, row.original)}
+            onDelete={() => onDelete(event, row.original)}
+          />
         );
       }
     }
@@ -166,11 +153,10 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
 
   const options = {
     columns,
-    data: data?.toJS(),
+    data: data?.toJS().rows,
     handleRowClick: (row) => {
-      const value = row.original.email;
+      const value = row.original.id;
       const path = USER_DETAIL_PAGE(value);
-      onSelectUser(row.original);
       router.push(path);
     },
     onFilter: (

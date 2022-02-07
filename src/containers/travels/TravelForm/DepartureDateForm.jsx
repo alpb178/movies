@@ -1,13 +1,11 @@
+import { locales } from '@/lib/utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { CalendarIcon, XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
-import { enGB, es } from 'date-fns/locale';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import React, { Fragment, useState } from 'react';
 import Calendar from 'react-calendar';
-
-const locales = { es, en: enGB };
 
 function DepartureDateForm() {
   const { t, lang } = useTranslation('common');
@@ -21,10 +19,9 @@ function DepartureDateForm() {
 
   return (
     <div className="space-y-2">
-      <label htmlFor="departureAt">{t('form.travel.label.date')}</label>
       <button
-        className="flex items-center text-left text-field"
         type="button"
+        className="flex items-center text-left text-field"
         onClick={() => setOpenCalendar(true)}
       >
         <CalendarIcon className="w-6 h-6 mr-4 text-gray-500" />
@@ -67,8 +64,8 @@ function DepartureDateForm() {
               <div className="inline-block w-full max-w-xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white rounded-md shadow-lg">
                 <div className="grid items-center justify-between w-full grid-cols-3 mb-8">
                   <button
-                    className="rounded-full w-max hover:bg-gray-200"
                     type="button"
+                    className="rounded-full w-max hover:bg-gray-200"
                     onClick={() => setOpenCalendar(false)}
                   >
                     <XCircleIcon className="w-8 h-8 text-gray-700" />
@@ -86,13 +83,12 @@ function DepartureDateForm() {
                         name="departureAt"
                         onChange={(newValue) => {
                           setSelectedDate(new Date(newValue));
-                          setFieldValue('departureAt', format(newValue, 'yyyy-MM-dd'));
+                          setFieldValue('departureAt', newValue);
                           setOpenCalendar(false);
                         }}
-                        value={values.departureAt || selectedDate}
+                        value={values?.departureAt || selectedDate}
                         // tileDisabled={disablePastDates}
                       />
-                      {console.log(values)}
                     </>
                   )}
                 </Field>

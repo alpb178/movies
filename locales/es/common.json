@@ -1,4 +1,5 @@
 {
+  "about": "Acerca de",
   "account": {
     "access": "Accede a tu cuenta",
     "create": "Crea una cuenta",
@@ -199,6 +200,7 @@
     "message": "Mensaje",
     "message-customer-care": "He leído y acepto la cláusula de Protección de Datos."
   },
+  "mobile": "Móvil",
   "municipality": "Municipio",
   "name": "Nombre",
   "surname": "Apellidos",
@@ -235,6 +237,7 @@
     "one": "Región",
     "other": "Regiones"
   },
+  "registered-at": "Registrado el",
   "regulations": {
     "0": "Aún no existen regulaciones registradas.",
     "one": "Regulación",

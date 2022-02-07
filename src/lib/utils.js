@@ -1,5 +1,8 @@
 import { differenceInMilliseconds, subYears } from 'date-fns';
+import { enGB, es } from 'date-fns/locale';
 import { ADMIN_ROLE, BASIC_CLIENT_ROLE } from 'lib/constants';
+
+export const locales = { es, en: enGB };
 
 export const getHomePageFromUser = (user) => {
   let to;
@@ -37,10 +40,11 @@ export const disableDatesFrom = ({ date, years }) => {
   return differenceInMilliseconds(date, eighteenYearsAgo) > 0;
 };
 
-export const formatPrice = (price) =>
+export const formatPrice = (price, decimals = 2) =>
   new Intl.NumberFormat('de-DE', {
     style: 'currency',
-    currency: 'EUR'
+    currency: 'EUR',
+    minimumFractionDigits: decimals
   }).format(Math.ceil(price));
 
 export const valuesFromString = (obj, keysArr) =>

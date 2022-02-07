@@ -1,17 +1,17 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
-import useTranslation from 'next-translate/useTranslation';
-import { TrashIcon, PencilIcon, XCircleIcon, CheckCircleIcon } from '@heroicons/react/outline';
 import DataTable from '@/components/table';
-import PaymentFilter from 'containers/payments/PaymentsFilter';
-import { getPayments, selectPayment, deletePayment } from 'redux/actions';
-import { PAYMENT_DETAIL_PAGE, PAYMENT_ADD, PAYMENT_EDIT } from 'lib/constants';
+import { CheckCircleIcon, PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/outline';
 import Loading from 'components/common/Loading';
-import EmptyState from '../../components/common/EmptyState';
+import PaymentFilter from 'containers/payments/PaymentsFilter';
+import { PAYMENT_ADD, PAYMENT_DETAIL_PAGE, PAYMENT_EDIT } from 'lib/constants';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { deletePayment, getPayments, selectPayment } from 'redux/actions';
 import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
+import EmptyState from '../../components/common/EmptyState';
 
 const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeletePayment }) => {
   const { t } = useTranslation('common');
@@ -108,16 +108,16 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
         return (
           <div className="flex items-center space-x-4">
             <button
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
               type="button"
+              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
               id="buttonEdit"
               onClick={(event) => handleEdit(event, row)}
             >
               <PencilIcon className="w-6 h-6" />
             </button>
             <button
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
               type="button"
+              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
               id="buttonDelete"
               onClick={() => setOpenDeleteConfirmation(true)}
             >

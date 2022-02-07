@@ -1,9 +1,9 @@
+import { Menu, Transition } from '@headlessui/react';
+import setLanguage from 'next-translate/setLanguage';
+import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { HiOutlineTranslate as TranslateIcon } from 'react-icons/hi';
-import { Menu, Transition } from '@headlessui/react';
 import { lang } from 'utils';
-import useTranslation from 'next-translate/useTranslation';
-import setLanguage from 'next-translate/setLanguage';
 
 export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
@@ -19,8 +19,8 @@ export default function Navbar() {
         <div className="container flex flex-wrap items-center justify-between px-4 mx-auto">
           <div className="relative flex justify-between w-full lg:w-auto lg:static lg:block lg:justify-start">
             <button
-              className="block px-3 py-1 text-xl leading-none bg-transparent border border-transparent border-solid rounded outline-none cursor-pointer lg:hidden focus:outline-none"
               type="button"
+              className="block px-3 py-1 text-xl leading-none bg-transparent border border-transparent border-solid rounded outline-none cursor-pointer lg:hidden focus:outline-none"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
               <i className="text-white fas fa-bars"></i>
@@ -58,10 +58,10 @@ export default function Navbar() {
                         <Menu.Items static className="flex flex-col justify-center w-max">
                           <Menu.Item>
                             <button
+                              type="button"
                               className={`${
                                 language === 'ca' ? 'text-primary-500' : ''
                               } px-8 py-4 duration-300 hover:text-primary-500 hover:bg-green-50`}
-                              type="button"
                               onClick={() => handleLanguageChanged('ca')}
                             >
                               Catalán
@@ -69,10 +69,10 @@ export default function Navbar() {
                           </Menu.Item>
                           <Menu.Item>
                             <button
+                              type="button"
                               className={`${
                                 language === 'es' ? 'text-primary-500' : ''
                               } px-8 py-4 duration-300 hover:text-primary-500 hover:bg-green-50`}
-                              type="button"
                               onClick={() => handleLanguageChanged('es')}
                             >
                               Español
@@ -80,10 +80,10 @@ export default function Navbar() {
                           </Menu.Item>
                           <Menu.Item>
                             <button
+                              type="button"
                               className={`${
                                 language === 'en' ? 'text-primary-500' : ''
                               } px-8 py-4 duration-300 hover:text-primary-500 hover:bg-green-50`}
-                              type="button"
                               onClick={() => handleLanguageChanged('en')}
                             >
                               English

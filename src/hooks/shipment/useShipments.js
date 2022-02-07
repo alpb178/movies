@@ -1,8 +1,8 @@
-import { useQuery } from 'react-query';
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_SHIPMENT_ITEMS_URL, POST } from '@/lib/constants';
+import { API_SHIPMENTS_URL, POST } from '@/lib/constants';
+import { useQuery } from 'react-query';
 
-const getShipmentItems = async ({ queryKey }) => {
+const getShipments = async ({ queryKey }) => {
   const [path, params] = queryKey;
   const { data } = await apiFetcher(path, { params });
   return data;
@@ -14,11 +14,11 @@ const createShipmentItem = async (args) => {
   return data;
 };
 
-export default function useShipmentItems({ args = {}, options = {} } = {}) {
+export default function useShipments({ args = {}, options = {} } = {}) {
   if (options?.method === POST) {
-    createShipmentItem({ path: API_SHIPMENT_ITEMS_URL, data: args, method: POST });
+    createShipmentItem({ path: API_SHIPMENTS_URL, data: args, method: POST });
   } else {
-    return useQuery([API_SHIPMENT_ITEMS_URL, { ...args }], getShipmentItems, {
+    return useQuery([API_SHIPMENTS_URL, { ...args }], getShipments, {
       ...options
     });
   }

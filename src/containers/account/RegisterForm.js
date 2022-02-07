@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Formik, Field, Form } from 'formik';
-import * as Yup from 'yup';
-import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import { connect } from 'react-redux';
 import { createUser } from 'redux/actions';
+import * as Yup from 'yup';
 
 const RegisterForm = ({ onCreateUser }) => {
   const { t } = useTranslation('common');
@@ -214,8 +214,8 @@ const RegisterForm = ({ onCreateUser }) => {
           </div>
 
           <button
-            className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
             type="submit"
+            className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
           >
             {loading ? '...' : t('account.create')}
           </button>

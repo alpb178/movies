@@ -1,19 +1,28 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { usePagination, useSortBy, useTable } from 'react-table';
-import { List } from 'immutable';
-import clsx from 'clsx';
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
+import { List } from 'immutable';
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
+import { usePagination, useSortBy, useTable } from 'react-table';
 import Pagination from './Pagination';
 
-const DataTable = ({ actions, columns, data, handleRowClick, name, onFilter, setSortBy }) => {
+const DataTable = ({
+  actions,
+  columns,
+  data,
+  handleRowClick,
+  hiddenColumns,
+  name,
+  onFilter,
+  setSortBy
+}) => {
   const tableInstance = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: 0, hiddenColumns },
       manualSortBy: true,
       autoResetSortBy: false,
       autoResetPage: false
@@ -119,6 +128,7 @@ const DataTable = ({ actions, columns, data, handleRowClick, name, onFilter, set
 
 DataTable.defaultProps = {
   data: List([]),
+  hiddenColumns: [],
   name: '',
   setSortBy: () => {},
   handleRowClick: () => {}
@@ -131,7 +141,8 @@ DataTable.propTypes = {
   name: PropTypes.string,
   onFilter: PropTypes.node,
   actions: PropTypes.node,
-  handleRowClick: PropTypes.func
+  handleRowClick: PropTypes.func,
+  hiddenColumns: PropTypes.array
 };
 
 export default DataTable;

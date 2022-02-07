@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import React, { Fragment, useEffect, useState } from 'react';
 
 const FormDialogWrapper = ({
   children,
@@ -75,15 +75,15 @@ const FormDialogWrapper = ({
 
                       <div className="flex space-x-6">
                         <button
-                          className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-gray-700 transition duration-300 ease-in-out bg-white border rounded-md hover:bg-gray-100"
                           type="button"
+                          className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-gray-700 transition duration-300 ease-in-out bg-white border rounded-md hover:bg-gray-100"
                           onClick={() => onOpen(false)}
                         >
                           {t('cancel')}
                         </button>
                         <button
-                          className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
                           type="submit"
+                          className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
                         >
                           {t('save')}
                         </button>

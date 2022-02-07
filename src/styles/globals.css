@@ -51,6 +51,10 @@ select:focus {
   outline: none;
 }
 
+.btn-contained {
+  @apply px-8 py-2 mb-8 text-lg text-white rounded-md bg-secondary-600 hover:bg-secondary-500;
+}
+
 .btn-outlined {
   @apply px-8 py-2 mb-8 text-lg border rounded-md border-secondary-500 text-secondary-500 hover:bg-secondary-100;
 }

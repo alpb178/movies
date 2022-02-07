@@ -1,10 +1,13 @@
-import { useQuery } from 'react-query';
 import { apiFetcher } from '@/lib/apiFetcher';
 import { API_USERS_URL } from '@/lib/constants';
+import { useQuery } from 'react-query';
 
 const getUsers = async ({ queryKey }) => {
   const [path, params] = queryKey;
-  const { data } = await apiFetcher(path, { params });
+  const { id, ...rest } = params;
+  const url = id ? path.concat('/', id) : path;
+
+  const { data } = await apiFetcher(url, { params: rest });
   return data;
 };
 
