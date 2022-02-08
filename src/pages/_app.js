@@ -1,18 +1,16 @@
-import 'styles/globals.css';
 import '@/styles/calendar.scss';
-
-import React from 'react';
-import PropTypes from 'prop-types';
+import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import Router from 'next/router';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { CookiesProvider } from 'react-cookie';
-import { ToastContainer } from 'react-toastify';
 import NProgress from 'nprogress';
-import wrapper from 'redux/configureStore';
-import useTranslation from 'next-translate/useTranslation';
-
+import PropTypes from 'prop-types';
+import React from 'react';
+import { CookiesProvider } from 'react-cookie';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import wrapper from 'redux/configureStore';
+import 'styles/globals.css';
 import 'styles/nprogress.scss';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -43,7 +41,17 @@ const App = ({ Component, pageProps }) => {
         <CookiesProvider>
           <Layout roles={Component?.roles}>
             <Component {...pageProps} />
-            <ToastContainer autoClose={5000} hideProgressBar theme="colored" className="mt-16" />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar
+              newestOnTop={false}
+              draggable={false}
+              pauseOnVisibilityChange
+              closeOnClick
+              pauseOnHover
+              theme="colored"
+            />
           </Layout>
         </CookiesProvider>
       </QueryClientProvider>

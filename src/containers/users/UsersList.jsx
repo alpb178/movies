@@ -110,7 +110,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
         return (
           <TableActions
             onEdit={(event) => onUpdate(event, row.original)}
-            onDelete={() => onDelete(event, row.original)}
+            onDelete={(event) => onDelete(event, row.original)}
           />
         );
       }

@@ -1,25 +1,30 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import useTranslation from 'next-translate/useTranslation';
-import { XCircleIcon } from '@heroicons/react/outline';
-import DataTable from '@/components/table';
-import RegulationsFilter from 'containers/regulations/RegulationsFilter';
-import Loading from 'components/common/Loading';
-import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
-import useRegulations from '@/hooks/regulation/useRegulations';
-import RegulationsForm from './RegulationsForm';
+import EmptyState from '@/components/common/EmptyState';
+import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
+import useRegulations from '@/hooks/regulation/useRegulations';
+import { apiFetcher } from '@/lib/apiFetcher';
+import { API_REGULATIONS_URL, DELETE } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
+import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import Loading from 'components/common/Loading';
+import RegulationsFilter from 'containers/regulations/RegulationsFilter';
+import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
+import RegulationsForm from './RegulationsForm';
 
-const RegulationsList = ({ loading, onDeletePayment }) => {
+const RegulationsList = ({ loading }) => {
   const { t } = useTranslation('common');
+  const queryClient = useQueryClient();
   // const [page, setPage] = useState(0);
   // const [size, setSize] = useState(20);
   const [openForm, setOpenForm] = useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [selectedItem, setSelectedItem] = useState();
   const [openFilters, setOpenFilters] = useState(false);
   const [filterValues, setFilterValues] = useState({});
@@ -41,11 +46,27 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
     }
   });
 
-  const onDelete = (event, row) => {
-    event.preventDefault();
-    const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
-    if (answer) {
-      onDeletePayment(row.original.paymentname);
+  const refetchRegulations = () => {
+    queryClient.refetchQueries([API_REGULATIONS_URL]);
+  };
+
+  const onDelete = (event, item) => {
+    event.stopPropagation();
+    setDeleteConfirmation({ open: true, id: item.id });
+  };
+
+  const onDeleteConfirmation = async () => {
+    try {
+      const { data: deleteMessage } = await apiFetcher(
+        `${API_REGULATIONS_URL}/${deleteConfirmation.id}`,
+        { method: DELETE }
+      );
+      setDeleteConfirmation({ open: false });
+      toast(deleteMessage);
+      refetchRegulations();
+    } catch (error) {
+      console.log(error);
+      toast.error(error.toString());
     }
   };
 
@@ -88,7 +109,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
       Cell: ({ row }) => (
         <TableActions
           onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={() => setOpenDeleteConfirmation(true)}
+          onDelete={(event) => onDelete(event, row.original)}
         />
       )
     }
@@ -152,9 +173,7 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
   const options = {
     columns,
     data: regulations?.rows,
-    handleRowClick: (row) => {
-      const value = row.original.email;
-    },
+    handleRowClick: () => {},
     name: t('regulations', { count: 2 }),
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
@@ -191,10 +210,13 @@ const RegulationsList = ({ loading, onDeletePayment }) => {
       <RegulationsForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onOpen={setOpenDeleteConfirmation}
-        title={t('delete', { entity: 'user' })}
-        content={t('asd')}
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('regulations', { count: 1 }).toLowerCase() })}
+        content={t('delete-message.female', {
+          entity: t('regulations', { count: 1 }).toLowerCase()
+        })}
       />
     </>
   );

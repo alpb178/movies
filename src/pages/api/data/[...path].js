@@ -1,7 +1,7 @@
-import { refreshToken } from 'lib/auth';
-import { TOKEN_KEY } from 'lib/constants';
 import axios from 'axios';
 import Cookies from 'cookies';
+import { refreshToken } from 'lib/auth';
+import { TOKEN_KEY } from 'lib/constants';
 import url from 'url';
 const qs = require('query-string');
 
@@ -33,7 +33,7 @@ const handler = async (req, res) => {
     };
 
     if (['post', 'put', 'patch', 'delete'].includes(req.method.toLowerCase())) {
-      options['data'] = req.body || null; // body data type must match "Content-Type" header
+      options['data'] = req.body || {}; // body data type must match "Content-Type" header
     }
     try {
       const parsedUrl = url.parse(req.url).path;
