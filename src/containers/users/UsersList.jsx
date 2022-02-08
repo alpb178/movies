@@ -154,7 +154,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
   const options = {
     columns,
     data: data?.toJS().rows,
-    handleRowClick: (row) => {
+    onRowClick: (row) => {
       const value = row.original.id;
       const path = USER_DETAIL_PAGE(value);
       router.push(path);

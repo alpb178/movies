@@ -8,8 +8,9 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-function Pagination({ tableInstance, pageSizes }) {
+function Pagination({ tableInstance, pageSizes, onPageSizeChange }) {
   const { t } = useTranslation('common');
+
   const {
     canPreviousPage,
     canNextPage,
@@ -23,7 +24,7 @@ function Pagination({ tableInstance, pageSizes }) {
   } = tableInstance;
 
   return (
-    <div className="flex flex-col items-end justify-end px-2 m-4 space-x-8 space-y-2 sm:space-y-0 sm:items-center sm:flex-row">
+    <div className="flex items-center justify-end px-2 m-4 space-x-8">
       {/* <span>
         Go to page:{' '}
         <input
@@ -42,6 +43,7 @@ function Pagination({ tableInstance, pageSizes }) {
           value={pageSize}
           onChange={(e) => {
             setPageSize(Number(e.target.value));
+            onPageSizeChange(Number(e.target.value));
           }}
           className="bg-gray-100 border-0 rounded-md"
         >
@@ -55,7 +57,6 @@ function Pagination({ tableInstance, pageSizes }) {
 
       <div className="flex items-center space-x-2">
         <button
-          type="button"
           className={`${
             !canPreviousPage ? 'hover:cursor-not-allowed' : ''
           } hover:bg-gray-100 rounded p-2`}
@@ -67,7 +68,6 @@ function Pagination({ tableInstance, pageSizes }) {
           />
         </button>
         <button
-          type="button"
           className={`${
             !canPreviousPage ? 'hover:cursor-not-allowed' : ''
           } hover:bg-gray-100 rounded p-2`}
@@ -82,7 +82,6 @@ function Pagination({ tableInstance, pageSizes }) {
           {t('table.page-count', { currentPage: pageIndex + 1, lastPage: pageOptions.length })}
         </span>
         <button
-          type="button"
           className={`${
             !canNextPage ? 'hover:cursor-not-allowed' : ''
           } hover:bg-gray-100 rounded p-2`}
@@ -94,7 +93,6 @@ function Pagination({ tableInstance, pageSizes }) {
           />
         </button>
         <button
-          type="button"
           className={`${
             !canNextPage ? 'hover:cursor-not-allowed' : ''
           } hover:bg-gray-100 rounded p-2`}
@@ -116,6 +114,8 @@ Pagination.defaultProps = {
 
 Pagination.propTypes = {
   tableInstance: PropTypes.object.isRequired,
-  pageSizes: PropTypes.array
+  pageSizes: PropTypes.array,
+  onPageSizeChange: PropTypes.func
 };
+
 export default Pagination;

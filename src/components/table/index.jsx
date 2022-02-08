@@ -11,21 +11,26 @@ import Pagination from './Pagination';
 const DataTable = ({
   actions,
   columns,
+  count,
   data,
-  handleRowClick,
+  onRowClick,
   hiddenColumns,
   name,
   onFilter,
+  onPageSizeChange,
+  pageSize,
   setSortBy
 }) => {
   const tableInstance = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0, hiddenColumns },
+      initialState: { hiddenColumns, pageIndex: 0, pageSize },
+      manualPagination: true,
       manualSortBy: true,
       autoResetSortBy: false,
-      autoResetPage: false
+      autoResetPage: false,
+      pageCount: Math.ceil(count / pageSize)
     },
     useSortBy,
     usePagination
@@ -103,9 +108,9 @@ const DataTable = ({
             return (
               <tr
                 {...row.getRowProps({
-                  onClick: () => handleRowClick(row)
+                  onClick: () => onRowClick(row)
                 })}
-                className={`${handleRowClick ? 'cursor-pointer hover:bg-gray-50' : ''}`}
+                className={`${onRowClick ? 'cursor-pointer hover:bg-gray-50' : ''}`}
               >
                 {row.cells.map((cell) => (
                   <td
@@ -121,27 +126,28 @@ const DataTable = ({
         </tbody>
       </table>
 
-      <Pagination tableInstance={tableInstance} />
+      <Pagination tableInstance={tableInstance} onPageSizeChange={onPageSizeChange} />
     </div>
   );
 };
 
 DataTable.defaultProps = {
   data: List([]),
+  onRowClick: () => {},
   hiddenColumns: [],
   name: '',
-  setSortBy: () => {},
-  handleRowClick: () => {}
+  setSortBy: () => {}
 };
 
 DataTable.propTypes = {
+  count: PropTypes.number.isRequired,
   columns: PropTypes.array.isRequired,
   data: PropTypes.object,
   setSortBy: PropTypes.func,
   name: PropTypes.string,
   onFilter: PropTypes.node,
   actions: PropTypes.node,
-  handleRowClick: PropTypes.func,
+  onRowClick: PropTypes.func,
   hiddenColumns: PropTypes.array
 };
 

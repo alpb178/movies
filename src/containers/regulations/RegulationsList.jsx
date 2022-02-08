@@ -5,7 +5,7 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRegulations from '@/hooks/regulation/useRegulations';
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_REGULATIONS_URL, DELETE } from '@/lib/constants';
+import { API_REGULATIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
@@ -13,7 +13,7 @@ import Loading from 'components/common/Loading';
 import RegulationsFilter from 'containers/regulations/RegulationsFilter';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import RegulationsForm from './RegulationsForm';
@@ -21,8 +21,12 @@ import RegulationsForm from './RegulationsForm';
 const RegulationsList = ({ loading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
-  // const [page, setPage] = useState(0);
-  // const [size, setSize] = useState(20);
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sort, setSort] = useState('');
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
   const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [selectedItem, setSelectedItem] = useState();
@@ -36,8 +40,21 @@ const RegulationsList = ({ loading }) => {
   }, [openForm]);
 
   const params = useMemo(() => {
-    return Object.fromEntries(Object.entries(filterValues).filter(([_, v]) => v));
-  }, [filterValues]);
+    let queryParams = {};
+    if (Object.keys(filterValues).length > 0) {
+      queryParams = Object.fromEntries(Object.entries(filterValues).filter(([_, v]) => v));
+    }
+    if (page) {
+      queryParams.page = page;
+    }
+    if (pageSize) {
+      queryParams.size = pageSize;
+    }
+    if (sort) {
+      queryParams.sort = sort;
+    }
+    return queryParams;
+  }, [filterValues, page, pageSize, sort]);
 
   const { data: regulations } = useRegulations({
     args: params,
@@ -173,7 +190,12 @@ const RegulationsList = ({ loading }) => {
   const options = {
     columns,
     data: regulations?.rows,
-    handleRowClick: () => {},
+    count: regulations?.count,
+    setPage: onPageChangeCallback,
+    setSortBy: onSortChangeCallback,
+    pageSize,
+    onPageSizeChange: setPageSize,
+    onRowClick: () => {},
     name: t('regulations', { count: 2 }),
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>

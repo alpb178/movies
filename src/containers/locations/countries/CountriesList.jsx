@@ -1,18 +1,18 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-import { XCircleIcon } from '@heroicons/react/outline';
-import DataTable from '@/components/table';
-import Loading from '@/components/common/Loading';
-import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
+import EmptyState from '@/components/common/EmptyState';
+import Loading from '@/components/common/Loading';
+import DataTable from '@/components/table';
+import TableActions from '@/components/table/TableActions';
 import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
 import useCountries from '@/hooks/location/country/useCountries';
 import { LOCATION_DETAILS_PAGE } from '@/lib/constants';
+import { XCircleIcon } from '@heroicons/react/outline';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useEffect, useMemo, useState } from 'react';
 import CountryForm from './CountryForm';
-import TableActions from '@/components/table/TableActions';
 
 const CountriesList = ({ loading }) => {
   const { t } = useTranslation('common');
@@ -123,7 +123,7 @@ const CountriesList = ({ loading }) => {
     columns,
     data: countries?.rows,
     name: t('countries', { count: 2 }),
-    handleRowClick: (row) => {
+    onRowClick: (row) => {
       const value = row.original.id;
       const path = LOCATION_DETAILS_PAGE(value);
       router.push(path);

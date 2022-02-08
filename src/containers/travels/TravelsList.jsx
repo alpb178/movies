@@ -154,7 +154,7 @@ const TravelsList = ({ hiddenColumns, loading, userId }) => {
   const options = {
     columns,
     data: travels?.rows,
-    handleRowClick: (row) => {
+    onRowClick: (row) => {
       const value = row.original.id;
       const path = TRAVEL_DETAILS_PAGE(value);
       router.push(path);

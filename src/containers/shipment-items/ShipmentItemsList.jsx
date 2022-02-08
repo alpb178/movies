@@ -133,7 +133,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
     columns,
     data: shipmentItems?.rows,
     name: t('shipment-items', { count: 2 }),
-    handleRowClick: (row) => {},
+    onRowClick: (row) => {},
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
         <PaymentFilter open={openFilters} onSubmit={handleFilters} />

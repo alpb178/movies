@@ -1,18 +1,18 @@
 /* eslint-disable react/display-name */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-import { XCircleIcon } from '@heroicons/react/outline';
-import DataTable from '@/components/table';
-import Loading from '@/components/common/Loading';
-import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
+import EmptyState from '@/components/common/EmptyState';
+import Loading from '@/components/common/Loading';
+import DataTable from '@/components/table';
+import TableActions from '@/components/table/TableActions';
 import useRegions from '@/hooks/location/region/useRegions';
 import { REGION_DETAILS_PAGE } from '@/lib/constants';
-import RegionsFilter from './RegionsFilter';
+import { XCircleIcon } from '@heroicons/react/outline';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import RegionForm from './RegionForm';
-import TableActions from '@/components/table/TableActions';
+import RegionsFilter from './RegionsFilter';
 
 const RegionsList = ({ loading }) => {
   const { t } = useTranslation('common');
@@ -127,7 +127,7 @@ const RegionsList = ({ loading }) => {
     name: t('regions', { count: 2 }),
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
-    handleRowClick: (row) => {
+    onRowClick: (row) => {
       const value = row.original.id;
       const path = REGION_DETAILS_PAGE(value);
       router.push(path);

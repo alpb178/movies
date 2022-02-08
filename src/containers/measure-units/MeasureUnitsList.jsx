@@ -112,7 +112,7 @@ const MeasureUnitsList = ({ loading }) => {
   const options = {
     columns,
     data: measureunits,
-    handleRowClick: (row) => {
+    onRowClick: (row) => {
       const value = row.original.id;
       const path = LOCATION_DETAILS_PAGE(value);
       router.push(path);

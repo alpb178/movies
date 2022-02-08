@@ -116,7 +116,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     columns,
     data: airlines?.rows,
     name: t('airlines', { count: 2 }),
-    handleRowClick: (row) => {},
+    onRowClick: (row) => {},
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <PaymentFilter open={openFilters} onSubmit={handleFilters} />

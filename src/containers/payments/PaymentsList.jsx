@@ -166,7 +166,7 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
   const options = {
     columns,
     data: data?.toJS(),
-    handleRowClick: (row) => {
+    onRowClick: (row) => {
       const value = row.original.email;
       const path = PAYMENT_DETAIL_PAGE(value);
       onSelectPayment(row.original);
