@@ -54,7 +54,7 @@ const DataTable = ({
             name ? 'justify-between' : 'justify-end'
           )}
         >
-          {name ? <h3 className="mb-8 text-2xl font-semibold">{name}</h3> : null}
+          {name ? <h3 className="mb-8 text-xl font-medium lg:text-3xl">{name}</h3> : null}
           <div className="flex justify-end w-ful">{actions}</div>
         </div>
         {onFilter}

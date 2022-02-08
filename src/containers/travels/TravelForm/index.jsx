@@ -91,7 +91,6 @@ const TravelForm = ({ travelId }) => {
   });
 
   const onSubmit = async (values) => {
-    debugger;
     try {
       delete values.shipmentItem;
       values.shipmentItems = baggageCapacity;

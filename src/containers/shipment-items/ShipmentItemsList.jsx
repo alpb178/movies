@@ -2,11 +2,9 @@
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import DataTable from '@/components/table';
 import PaymentFilter from '@/containers/shipment-items/ShipmentItemsFilter';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
-import { PAYMENT_DETAIL_PAGE } from '@/lib/constants';
 import { PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
@@ -135,12 +133,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
     columns,
     data: shipmentItems?.rows,
     name: t('shipment-items', { count: 2 }),
-    handleRowClick: (row) => {
-      const value = row.original.email;
-      const path = PAYMENT_DETAIL_PAGE(value);
-      onSelectPayment(row.original);
-      router.push(path);
-    },
+    handleRowClick: (row) => {},
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
         <PaymentFilter open={openFilters} onSubmit={handleFilters} />
@@ -174,9 +167,7 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
         <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
-        <ShipmentItemsForm />
-      </FormDialogWrapper>
+      <ShipmentItemsForm open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}

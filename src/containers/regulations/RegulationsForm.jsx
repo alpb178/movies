@@ -1,18 +1,18 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import useTranslation from 'next-translate/useTranslation';
-import { Field } from 'formik';
-import * as Yup from 'yup';
+import AutocompleteField from '@/components/form/AutocompleteField';
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
 import useRegulations from '@/hooks/regulation/useRegulations';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
-import { POST } from '@/lib/constants';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
-import AutocompleteField from '@/components/form/AutocompleteField';
-import 'rc-slider/assets/index.css';
+import { POST, PUT } from '@/lib/constants';
 import { Switch, Transition } from '@headlessui/react';
 import clsx from 'clsx';
+import { Field } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import 'rc-slider/assets/index.css';
+import React, { useEffect, useMemo, useState } from 'react';
+import * as Yup from 'yup';
 
 const RegulationsForm = ({ data, open, onOpen, errors, touched }) => {
   const { t } = useTranslation('common');
@@ -54,14 +54,19 @@ const RegulationsForm = ({ data, open, onOpen, errors, touched }) => {
     country: Yup.object().shape({ name: Yup.string() })
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     values.shipmentItem = values.shipmentItem.id;
     values.country = values.country.id;
-    useRegulations({
+    let method = POST;
+
+    if (data) {
+      method = PUT;
+      values.id = data.id;
+    }
+
+    await useRegulations({
       args: values,
-      options: {
-        method: POST
-      }
+      options: { method }
     });
     onOpen(false);
   };

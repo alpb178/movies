@@ -42,7 +42,7 @@ label.register-text-field {
 }
 
 .form-header {
-  @apply text-2xl font-semibold text-gray-700 md:text-3xl;
+  @apply text-2xl font-medium text-gray-700 md:text-3xl;
 }
 
 input:focus,

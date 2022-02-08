@@ -1,18 +1,17 @@
 /* eslint-disable react/display-name */
-import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/router';
-import useTranslation from 'next-translate/useTranslation';
-import { XCircleIcon } from '@heroicons/react/outline';
-import DataTable from '@/components/table';
-import PaymentFilter from 'containers/airlines/AirlinesFilter';
-import { PAYMENT_DETAIL_PAGE } from 'lib/constants';
-import Loading from 'components/common/Loading';
-import EmptyState from '@/components/common/EmptyState';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
-import useAirlines from '@/hooks/airline/useAirlines';
-import AirlinesForm from './AirlinesForm';
+import EmptyState from '@/components/common/EmptyState';
+import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
+import useAirlines from '@/hooks/airline/useAirlines';
+import { XCircleIcon } from '@heroicons/react/outline';
+import Loading from 'components/common/Loading';
+import PaymentFilter from 'containers/airlines/AirlinesFilter';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useMemo, useState } from 'react';
+import AirlinesForm from './AirlinesForm';
 
 const AirlinesList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
@@ -22,7 +21,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
-
+  const [selectedItem, setSelectedItem] = useState();
   const [filterValues, setFilterValues] = useState({
     name: ''
   });
@@ -38,7 +37,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     }
   });
 
-  const handleDelete = (event, row) => {
+  const onDelete = (event, row) => {
     event.preventDefault();
     const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
     if (answer) {
@@ -46,8 +45,10 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     }
   };
 
-  const onUpdate = (event, row) => {
+  const onUpdate = (event, item) => {
     event.stopPropagation();
+    setSelectedItem(item);
+    setOpenForm(true);
   };
 
   const columns = React.useMemo(() => [
@@ -115,12 +116,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     columns,
     data: airlines?.rows,
     name: t('airlines', { count: 2 }),
-    handleRowClick: (row) => {
-      const value = row.original.email;
-      const path = PAYMENT_DETAIL_PAGE(value);
-      onSelectPayment(row.original);
-      router.push(path);
-    },
+    handleRowClick: (row) => {},
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <PaymentFilter open={openFilters} onSubmit={handleFilters} />
@@ -154,7 +150,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
         <EmptyState text={t('airlines', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <AirlinesForm open={openForm} onOpen={setOpenForm} />
+      <AirlinesForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}

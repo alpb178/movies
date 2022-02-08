@@ -1,6 +1,6 @@
-import { useQuery } from 'react-query';
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_REGULATIONS_URL, POST } from '@/lib/constants';
+import { API_REGULATIONS_URL, POST, PUT } from '@/lib/constants';
+import { useQuery } from 'react-query';
 
 const getRegulations = async ({ queryKey }) => {
   const [path, params] = queryKey;
@@ -14,12 +14,23 @@ const createRegulation = async (args) => {
   return data;
 };
 
+const updateRegulation = async (args) => {
+  const { path, data: values, method } = args;
+  const { data } = await apiFetcher(`${path}/${values.id}`, { data: values, method });
+  return data;
+};
+
 export default function useRegulations({ args = {}, options = {} } = {}) {
-  if (options?.method === POST) {
-    createRegulation({ path: API_REGULATIONS_URL, data: args, method: POST });
-  } else {
-    return useQuery([API_REGULATIONS_URL, { ...args }], getRegulations, {
-      ...options
-    });
+  switch (options?.method) {
+    case POST:
+      createRegulation({ path: API_REGULATIONS_URL, data: args, method: options.method });
+      break;
+    case PUT:
+      updateRegulation({ path: API_REGULATIONS_URL, data: args, method: options.method });
+      break;
+    default:
+      return useQuery([API_REGULATIONS_URL, { ...args }], getRegulations, {
+        ...options
+      });
   }
 }
