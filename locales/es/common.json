@@ -251,6 +251,18 @@
     "email": "El correo electrónico es requerido",
     "phone": "El número de telefóno es requerido"
   },
+  "reviews": {
+    "left": {
+      "0": "Aún no ha recibido reseñas",
+      "1": "Reseña recibida",
+      "other": "Reseñas recibidas"
+    },
+    "made": {
+      "0": "Aún no ha dejado ninguna reseña",
+      "1": "Reseña dejada",
+      "other": "Reseñas dejadas"
+    }
+  },
   "roles": { "0": "Sin roles", "one": "Role", "other": "Roles" },
   "role-admin": "Admin",
   "role-user": "Usuario",

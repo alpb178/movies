@@ -70,7 +70,7 @@ const TravelsList = ({ hiddenColumns, loading, userId }) => {
 
   const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
 
-  const columns = React.useMemo(() => [
+  const columns = useMemo(() => [
     {
       Header: t('travelers', { count: 1 }),
       accessor: 'traveler',

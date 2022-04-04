@@ -1,3 +1,4 @@
+import { APP_NAME } from '@/lib/constants';
 import '@/styles/calendar.scss';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
@@ -35,7 +36,7 @@ const App = ({ Component, pageProps }) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta httpEquiv="Content-Language" content={lang} />
-        <title>Backpackpool</title>
+        <title>{APP_NAME}</title>
       </Head>
       <QueryClientProvider client={queryClient}>
         <CookiesProvider>

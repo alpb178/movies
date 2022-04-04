@@ -1,9 +1,8 @@
+import { APP_NAME } from 'lib/constants';
 import React from 'react';
 import SimpleBar from 'simplebar-react';
-import NavigationMenu from './NavigationMenu';
-
 import 'simplebar/dist/simplebar.min.css';
-import { APP_NAME } from 'lib/constants';
+import NavigationMenu from './NavigationMenu';
 
 const Sidebar = () => (
   <div className="hidden md:flex md:flex-shrink-0">
