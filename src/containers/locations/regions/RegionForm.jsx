@@ -1,17 +1,20 @@
 /* eslint-disable react/display-name */
-import React from 'react';
-import PropTypes from 'prop-types';
-import useTranslation from 'next-translate/useTranslation';
-import { Field } from 'formik';
-import * as Yup from 'yup';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import AutocompleteField from '@/components/form/AutocompleteField';
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
 import useRegions from '@/hooks/location/region/useRegions';
-import { POST, PUT } from '@/lib/constants';
+import { API_REGIONS_URL, POST, PUT } from '@/lib/constants';
+import { Field } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 
 const RegionForm = ({ data, errors, onOpen, open, touched }) => {
   const { t } = useTranslation('common');
+  const queryClient = useQueryClient();
 
   const { data: countries } = useCountries({
     args: {},
@@ -33,21 +36,27 @@ const RegionForm = ({ data, errors, onOpen, open, touched }) => {
   });
 
   const onSubmit = (values) => {
-    values.country = values.country.id;
-    let method = POST;
+    try {
+      values.country = values.country.id;
+      let method = POST;
 
-    if (data) {
-      method = PUT;
-      values.id = data.id;
-    }
-
-    useRegions({
-      args: values,
-      options: {
-        method
+      if (data) {
+        method = PUT;
+        values.id = data.id;
       }
-    });
-    onOpen(false);
+
+      useRegions({
+        args: values,
+        options: {
+          method
+        }
+      });
+
+      onOpen(false);
+      queryClient.refetchQueries([API_REGIONS_URL]);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (

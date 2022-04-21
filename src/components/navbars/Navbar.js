@@ -16,6 +16,7 @@ const Navbar = ({ onSidebarOpen }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const { user, logoutUser } = useAuth();
+
   const userNavigation = [
     { name: t('profile'), action: () => router.push('/profile') },
     { name: t('settings'), action: () => router.push('/settings') },
@@ -28,7 +29,7 @@ const Navbar = ({ onSidebarOpen }) => {
   ];
 
   return (
-    <div className={`relative z-10 flex flex-shrink-0 bg-white border-b h-${NAVBAR_HEIGHT / 4}`}>
+    <div className={`relative z-10 flex flex-shrink-0 bg-white border-b  h-${NAVBAR_HEIGHT / 4}`}>
       <button
         type="button"
         className="px-4 text-gray-500 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 xl:hidden"
@@ -98,7 +99,7 @@ const Navbar = ({ onSidebarOpen }) => {
                 >
                   <Menu.Items
                     static
-                    className="absolute right-0 py-2 mt-2 origin-top-right bg-white rounded-md shadow-lg w-max ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className="absolute right-0 py-2 mt-3 origin-top-right bg-white shadow-lg rounded-b-md w-max ring-1 ring-gray-400 ring-opacity-5 focus:outline-none"
                   >
                     {userNavigation.map((item) => (
                       <Menu.Item key={item.name}>

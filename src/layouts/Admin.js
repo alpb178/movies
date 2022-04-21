@@ -27,7 +27,7 @@ const Admin = ({ children, roles }) => {
       <div className="flex flex-col flex-1 w-0 overflow-hidden">
         <Navbar onSidebarOpen={setSidebarOpen} />
 
-        <main className="relative flex-1 overflow-y-auto bg-gray-50 focus:outline-none">
+        <main className="relative flex-1 overflow-y-auto bg-white focus:outline-none">
           <div className="h-full mx-auto">{canAccess ? children : <NotFound />}</div>
         </main>
       </div>
