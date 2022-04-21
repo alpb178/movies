@@ -2,6 +2,8 @@ export const APP_NAME = 'Backpackpool';
 
 export const DEFAULT_PAGE_SIZE = 10;
 
+export const NAVBAR_HEIGHT = 64; // in pixels
+
 export const TOKEN_KEY = 'token';
 export const API_REFRESH_TOKEN_URL = '/token'; // Refresh token action
 export const API_LOGIN_URL = '/users/login'; // Login endpoint

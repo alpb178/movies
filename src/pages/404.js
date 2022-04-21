@@ -1,12 +1,15 @@
+import NotFound from '@/containers/common/NotFound';
+import dynamic from 'next/dynamic';
 import React from 'react';
 
-const NotFound = () => (
-  <div className="flex h-screen w-full justify-center items-center">
-    <h1 className="text-xl">
-      <span className="font-semibold">Error 404</span>
-      {` page not found`}
-    </h1>
-  </div>
-);
+const Admin = dynamic(() => import('layouts/Admin'), {
+  ssr: false
+});
 
-export default NotFound;
+const NotFoundPage = () => {
+  return <NotFound />;
+};
+
+NotFoundPage.layout = Admin;
+
+export default NotFoundPage;
