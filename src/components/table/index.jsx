@@ -51,7 +51,7 @@ const DataTable = ({
   }, [pageIndex, sortBy]);
 
   return (
-    <div className="w-full bg-white border-b">
+    <div className="w-full ">
       <div className="flex flex-col">
         <div
           className={clsx(
@@ -78,7 +78,7 @@ const DataTable = ({
                     },
                     column.getSortByToggleProps()
                   ])}
-                  className="px-6 py-5 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                  className="px-6 py-5 text-xs font-medium text-left text-gray-500 uppercase"
                 >
                   <div className="flex items-center group">
                     {column.render('Header')}

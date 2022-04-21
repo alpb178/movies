@@ -5,20 +5,24 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
 import useTravels from '@/hooks/travel/useTravels';
-import { TRAVEL_DETAILS_PAGE, TRAVEL_FORM_PAGE } from '@/lib/constants';
+import { DEFAULT_PAGE_SIZE, TRAVEL_DETAILS_PAGE, TRAVEL_FORM_PAGE } from '@/lib/constants';
 import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 const TravelsList = ({ hiddenColumns, loading, userId }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
-  // const [page, setPage] = useState(0);
-  // const [size, setSize] = useState(20);
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sort, setSort] = useState('');
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
@@ -154,6 +158,11 @@ const TravelsList = ({ hiddenColumns, loading, userId }) => {
   const options = {
     columns,
     data: travels?.rows,
+    count: travels?.count,
+    setPage: onPageChangeCallback,
+    setSortBy: onSortChangeCallback,
+    pageSize,
+    onPageSizeChange: setPageSize,
     onRowClick: (row) => {
       const value = row.original.id;
       const path = TRAVEL_DETAILS_PAGE(value);
