@@ -1,9 +1,8 @@
-import React from 'react';
-import Link from 'next/link';
+import LoginForm from 'containers/account/LoginForm';
+import useAuth from 'hooks/auth/useAuth';
 import Auth from 'layouts/Auth.js';
 import useTranslation from 'next-translate/useTranslation';
-import useAuth from 'hooks/auth/useAuth';
-import LoginForm from 'containers/account/LoginForm';
+import React from 'react';
 
 const Login = () => {
   const { t } = useTranslation('common');
@@ -33,25 +32,6 @@ const Login = () => {
           </div>
 
           <LoginForm />
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 text-gray-500 bg-white">{t('account.new')}</span>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <Link href="/register">
-                <a className="inline-flex justify-center w-full px-4 py-3 font-medium text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50">
-                  <span className="">{t('account.create')}</span>
-                </a>
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
     </div>
