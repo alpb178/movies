@@ -5,19 +5,24 @@ import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import PaymentFilter from '@/containers/shipment-items/ShipmentItemsFilter';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
+import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
 import { PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ShipmentItemsForm from './ShipmentItemsForm';
 
 const ShipmentItemsList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  // const [page, setPage] = useState(0);
-  // const [size, setSize] = useState(20);
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sort, setSort] = useState('');
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -27,8 +32,11 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
   });
 
   const params = useMemo(() => {
-    return {};
-  }, []);
+    const query = {};
+    if (page !== 0) query.page = page;
+    if (sort) query.sort = sort;
+    return query;
+  }, [filterValues, page, sort]);
 
   const { data: shipmentItems } = useShipmentItems({
     args: params,
@@ -130,9 +138,14 @@ const ShipmentItemsList = ({ loading, onDeletePayment }) => {
   );
 
   const options = {
+    name: t('shipment-items', { count: 2 }),
     columns,
     data: shipmentItems?.rows,
-    name: t('shipment-items', { count: 2 }),
+    count: shipmentItems?.count,
+    setPage: onPageChangeCallback,
+    setSortBy: onSortChangeCallback,
+    pageSize,
+    onPageSizeChange: setPageSize,
     onRowClick: (row) => {},
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
