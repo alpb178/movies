@@ -1,10 +1,10 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import useTranslation from 'next-translate/useTranslation';
 import { Disclosure, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 import useAuth from 'hooks/auth/useAuth';
+import useTranslation from 'next-translate/useTranslation';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 import navigation from './navigation';
 
 const NavigationMenu = () => {
@@ -12,7 +12,7 @@ const NavigationMenu = () => {
   const { t } = useTranslation('common');
   const { user } = useAuth();
 
-  const roles = user?.auth.split(',');
+  const roles = user?.auth?.split(',');
 
   return navigation.map((item, idx) =>
     item?.roles.some((role) => roles?.includes(role)) ? (
