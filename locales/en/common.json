@@ -4,7 +4,7 @@
     "create": "Create an account",
     "login": "Login",
     "logout": "Logout",
-    "new": "¿New to Control Pack?"
+    "new": "¿New to BackpackPool?"
   },
   "add": "Add",
   "applications": {
@@ -22,7 +22,7 @@
     "one": "Buys",
     "other": "Buys"
   },
-  "amount":"Amount",
+  "amount": "Amount",
   "business-name": "Business name",
   "cancel": "Cancel",
   "catalogs": {
@@ -30,8 +30,8 @@
     "one": "Catalogs",
     "other": "Catalogs"
   },
-  "client":"Client",
-  "client-number":"Client Number",
+  "client": "Client",
+  "client-number": "Client Number",
   "certificate": {
     "0": "No Certificate 347",
     "one": "Certificate 347",
@@ -42,18 +42,17 @@
     "one": "Certificate ISO",
     "other": "Certificate ISO"
   },
- 
+
   "backpackpool-gold": {
     "0": "Backpackpool Gold",
     "one": "Backpackpool Gold",
     "other": "Backpackpool Gold"
-
-  }, 
+  },
   "current-payment": {
     "0": "No Current Payment",
     "one": "Current Payment",
     "other": "Current Payment"
-  }, 
+  },
   "customer-care": {
     "0": "No Customer Care",
     "one": "Customer Care",
@@ -65,11 +64,11 @@
     "other": "Customer Services"
   },
   "contact-person": "Contact person",
-  "company":"Company",
+  "company": "Company",
   "dashboard": "Dashboard",
   "demo": "Demo",
-  "date-order":" Date Order",
-  "date-delivery":" Date Delivery",
+  "date-order": " Date Order",
+  "date-delivery": " Date Delivery",
   "delete": "Delete",
   "delete-filter": "Clear Filter",
   "deleted": {
@@ -101,19 +100,19 @@
     "one": "Information del Product",
     "other": "Information Product"
   },
-  "issue":"Issue",
+  "issue": "Issue",
   "loading": "Loading...",
   "message": {
     "user-delete": "You want to Delete the User",
-    "message":"Message",
+    "message": "Message",
     "message-customer-care": "I have read and accept the Data Protection clause."
   },
   "municipality": "Municipality",
   "name": "Name",
-  "surname":"Surname",
+  "surname": "Surname",
   "none": "None",
   "no-name": "No name for {lang}",
-  "no-order":"Nº Order",
+  "no-order": "Nº Order",
   "new": "New",
   "new-order": {
     "0": "No New Order",
@@ -142,7 +141,7 @@
     "one": "PPU",
     "other": "PPU"
   },
-  "population":"Population",
+  "population": "Population",
   "rappel": {
     "0": "Rappel",
     "one": "Rappel",
@@ -156,15 +155,15 @@
   "required": {
     "username": "Username is required",
     "password": "Password is required",
-    "name":"Name is required",
-    "surname":"Surname is required",
-    "email":"Email is required",
-    "phone":"Phone is required"
+    "name": "Name is required",
+    "surname": "Surname is required",
+    "email": "Email is required",
+    "phone": "Phone is required"
   },
   "remember-me": "Remember me",
   "results": "results",
   "role": "Role",
-  "rols":"Role",
+  "rols": "Role",
   "save": "Save",
   "saved": {
     "male": "{{entity}} saved successfully.",
@@ -180,13 +179,13 @@
     "one": "Sales History",
     "other": "Sales History"
   },
-  "send":"Send",
+  "send": "Send",
   "search": "Search",
   "select": "Select",
   "settings": "Settings",
   "showing": "Showing",
-  "status":"Status",
-  "type":"Type",
+  "status": "Status",
+  "type": "Type",
   "trade-name": "Trade name",
   "update": "Update",
   "username": "Username",
@@ -195,5 +194,5 @@
     "one": "User",
     "other": "Users"
   },
-  "voucher":"Voucher"
+  "voucher": "Voucher"
 }

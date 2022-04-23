@@ -5,7 +5,7 @@ import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRegions from '@/hooks/location/region/useRegions';
-import { REGION_DETAILS_PAGE } from '@/lib/constants';
+import { DEFAULT_PAGE_SIZE, REGION_DETAILS_PAGE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -19,6 +19,7 @@ const RegionsList = ({ loading }) => {
   const router = useRouter();
 
   const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
@@ -122,11 +123,14 @@ const RegionsList = ({ loading }) => {
   );
 
   const options = {
+    name: t('regions', { count: 2 }),
     columns,
     data: regions?.rows,
-    name: t('regions', { count: 2 }),
+    count: regions?.count,
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
+    pageSize,
+    onPageSizeChange: setPageSize,
     onRowClick: (row) => {
       const value = row.original.id;
       const path = REGION_DETAILS_PAGE(value);
