@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Menu, Transition } from '@headlessui/react';
+import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
-import { getRoles } from 'redux/actions';
-import { Formik, Field, Form } from 'formik';
+import React from 'react';
 
-const PaymentsFilter = ({ data, onGetRoles, onSubmit, open }) => {
+const PaymentsFilter = ({ onSubmit, open }) => {
   const { t } = useTranslation('common');
 
   const initialValues = {
@@ -13,13 +11,8 @@ const PaymentsFilter = ({ data, onGetRoles, onSubmit, open }) => {
     surname: '',
     name: '',
     phone: '',
-    email: '',
-    roles: ''
+    email: ''
   };
-
-  useEffect(() => {
-    onGetRoles();
-  }, []);
 
   return (
     <Menu as="div">
@@ -97,23 +90,6 @@ const PaymentsFilter = ({ data, onGetRoles, onSubmit, open }) => {
                       aria-describedby="email"
                     />
                   </div>
-                  <div className="w-full">
-                    <label htmlFor="rol" className="block font-medium text-gray-700">
-                      {t('role')}
-                    </label>
-                    <Field
-                      as="select"
-                      className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-                      name="roles"
-                    >
-                      <option value="first"></option>
-                      {/* {data?.toJS().map((rol) => (
-                        <option key={rol.name} value={rol.name}>
-                          {rol.name}
-                        </option>
-                      ))} */}
-                    </Field>
-                  </div>
 
                   <button
                     type="submit"
@@ -131,17 +107,4 @@ const PaymentsFilter = ({ data, onGetRoles, onSubmit, open }) => {
   );
 };
 
-const rolReducer = 'rol';
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([rolReducer, 'loading']),
-  data: state.getIn([rolReducer, 'data']),
-  filters: state.getIn([rolReducer, 'filters']),
-  total: state.getIn([rolReducer, 'total'])
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGetRoles: () => dispatch(getRoles())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PaymentsFilter);
+export default PaymentsFilter;

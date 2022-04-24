@@ -9,11 +9,10 @@ import { LOCATION_DETAILS_PAGE, MEASUREUNITS_EDIT } from '@/lib/constants';
 import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
 import CountryForm from './MeasureUnitForm';
 
-const MeasureUnitsList = ({ loading }) => {
+const MeasureUnitsList = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [openFilters, setOpenFilters] = useState(false);
@@ -29,7 +28,7 @@ const MeasureUnitsList = ({ loading }) => {
     return {};
   }, []);
 
-  const { data: measureunits } = useMeasureUnits({
+  const { data: measureunits, isLoading } = useMeasureUnits({
     args: params,
     options: {
       keepPreviousData: true
@@ -99,8 +98,8 @@ const MeasureUnitsList = ({ loading }) => {
         }),
         {}
       );
-    onGetMeasureUnits(updatedFilters);
-    setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
+
+    setFilterValues(updatedFilters);
   };
 
   const renderInsertButton = () => (
@@ -122,7 +121,7 @@ const MeasureUnitsList = ({ loading }) => {
 
   return (
     <>
-      {loading && <Loading />}
+      {isLoading && <Loading />}
 
       {measureunits && measureunits.length > 0 ? (
         <DataTable {...options} />
@@ -143,15 +142,6 @@ const MeasureUnitsList = ({ loading }) => {
       />
     </>
   );
-};
-
-MeasureUnitsList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetMeasureUnits: PropTypes.func.isRequired,
-  onSelectMeasureUnits: PropTypes.func.isRequired,
-  onDeleteMeasureUnits: PropTypes.func.isRequired
 };
 
 export default MeasureUnitsList;

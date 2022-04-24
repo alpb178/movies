@@ -46,17 +46,13 @@ export const POST = 'POST';
 export const PUT = 'PUT';
 export const DELETE = 'DELETE';
 
-//Register
-export const REGISTER_PAGE = '/register';
-
 // Roles
 export const ROLE_ADMIN = 'ROLE_ADMIN';
-export const BASIC_CLIENT_ROLE = 'ROLE_USER';
+export const ROLE_USER = 'ROLE_USER';
 
 // Users
 export const GET_USER_KEY = 'getUsers';
-export const REGISTER_USER_KEY = 'registerUser';
-export const USER_DETAIL_PAGE = (user) => `/users/${user}`;
-export const USER_ADD = '/users/add';
+export const USER_DETAIL_PAGE = (id) => `/users/${id}`;
+export const USER_FORM_PAGE = (id) => (id ? `/users/form/${id}` : `/users/form/create`);
 export const USER_EDIT = (user) => `/users/edit/${user}`;
 export const USERS_PAGE = '/users';

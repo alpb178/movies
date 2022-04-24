@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import useRoles from '@/hooks/role/useRoles';
 import { Menu, Transition } from '@headlessui/react';
+import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
-import { getRoles } from 'redux/actions';
-import { Formik, Field, Form } from 'formik';
+import React from 'react';
 
-const userFilter = ({ data, onGetRoles, onSubmit, open }) => {
+const UserFilter = ({ onSubmit, open }) => {
   const { t } = useTranslation('common');
 
   const initialValues = {
@@ -17,9 +16,11 @@ const userFilter = ({ data, onGetRoles, onSubmit, open }) => {
     roles: ''
   };
 
-  useEffect(() => {
-    onGetRoles();
-  }, []);
+  const { data: roles, isLoading } = useRoles({
+    options: {
+      keepPreviousData: true
+    }
+  });
 
   return (
     <Menu as="div">
@@ -131,17 +132,4 @@ const userFilter = ({ data, onGetRoles, onSubmit, open }) => {
   );
 };
 
-const rolReducer = 'rol';
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([rolReducer, 'loading']),
-  data: state.getIn([rolReducer, 'data']),
-  filters: state.getIn([rolReducer, 'filters']),
-  total: state.getIn([rolReducer, 'total'])
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGetRoles: () => dispatch(getRoles())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(userFilter);
+export default UserFilter;

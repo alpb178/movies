@@ -1,31 +1,6 @@
-import React, { useEffect /*, useState*/ } from 'react';
-import PropTypes from 'prop-types';
-import dynamic from 'next/dynamic';
-import { connect } from 'react-redux';
-// import { getScopes, getAllOffers, searchOffers, selectOffer, deleteOffer } from 'redux/actions';
 import useTranslation from 'next-translate/useTranslation';
-import { List } from 'immutable';
-
-const offers = List([
-  {
-    number: '123',
-    createdAt: 'asdasda',
-    status: '',
-    product: 'F000',
-    description: 'dasdasd',
-    amount: 1,
-    price: '11000'
-  },
-  {
-    number: '123',
-    createdAt: 'asdasda',
-    status: '',
-    product: 'F000',
-    description: 'dasdasd',
-    amount: 1,
-    price: '11000'
-  }
-]);
+import dynamic from 'next/dynamic';
+import React, { useEffect /*, useState*/ } from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -51,24 +26,6 @@ const Offers = () => {
   );
 };
 
-Offers.propTypes = {
-  // offers: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired
-  // onGetOffers: PropTypes.func.isRequired,
-  // onSearchOffers: PropTypes.func.isRequired
-};
-
-const offerReducer = 'offer';
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([offerReducer, 'loading']),
-  offers: state.getIn([offerReducer, 'offers']),
-  filters: state.getIn([offerReducer, 'filters']),
-  total: state.getIn([offerReducer, 'total'])
-});
-
-const mapDispatchToProps = () => ({});
-
 Offers.layout = Admin;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Offers);
+export default Offers;

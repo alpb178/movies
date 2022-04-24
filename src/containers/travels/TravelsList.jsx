@@ -11,7 +11,6 @@ import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useState } from 'react';
 
 const TravelsList = ({ hiddenColumns, loading, userId }) => {
@@ -212,15 +211,6 @@ const TravelsList = ({ hiddenColumns, loading, userId }) => {
       />
     </>
   );
-};
-
-TravelsList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetTravels: PropTypes.func.isRequired,
-  onSelectPayment: PropTypes.func.isRequired,
-  onDeletePayment: PropTypes.func.isRequired
 };
 
 export default TravelsList;

@@ -6,14 +6,11 @@ import PaymentFilter from 'containers/payments/PaymentsFilter';
 import { PAYMENT_ADD, PAYMENT_DETAIL_PAGE, PAYMENT_EDIT } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { deletePayment, getPayments, selectPayment } from 'redux/actions';
+import React, { useState } from 'react';
 import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
 import EmptyState from '../../components/common/EmptyState';
 
-const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeletePayment }) => {
+const PaymentsList = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   // const [page, setPage] = useState(0);
@@ -29,10 +26,6 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
     email: '',
     roles: ''
   });
-
-  useEffect(() => {
-    onGetPayments();
-  }, []);
 
   const handleDelete = (event, row) => {
     event.preventDefault();
@@ -215,28 +208,4 @@ const PaymentsList = ({ data, loading, onGetPayments, onSelectPayment, onDeleteP
   );
 };
 
-PaymentsList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetPayments: PropTypes.func.isRequired,
-  onSelectPayment: PropTypes.func.isRequired,
-  onDeletePayment: PropTypes.func.isRequired
-};
-
-const paymentReducer = 'payment';
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([paymentReducer, 'loading']),
-  data: state.getIn([paymentReducer, 'data']),
-  filters: state.getIn([paymentReducer, 'filters']),
-  total: state.getIn([paymentReducer, 'total'])
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGetPayments: () => dispatch(getPayments()),
-  onSelectPayment: (payment) => dispatch(selectPayment(payment)),
-  onDeletePayment: (paymentname) => dispatch(deletePayment(paymentname))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PaymentsList);
+export default PaymentsList;

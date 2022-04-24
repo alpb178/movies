@@ -1,20 +1,13 @@
+import useRoles from '@/hooks/role/useRoles';
 import { Field, Form, Formik } from 'formik';
-import { ROLE_ADMIN, USERS_PAGE } from 'lib/constants';
+import { USERS_PAGE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
-import dynamic from 'next/dynamic';
 import router from 'next/router';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
-import { connect } from 'react-redux';
-import { createUser, getRoles } from 'redux/actions';
 import * as Yup from 'yup';
 
-const Admin = dynamic(() => import('layouts/Admin'), {
-  ssr: false
-});
-
-const UsersAdd = ({ data, onGetRoles, onCreateUser }) => {
+const UsersForm = () => {
   const { t } = useTranslation('common');
 
   const [loading, setLoading] = useState(false);
@@ -39,9 +32,11 @@ const UsersAdd = ({ data, onGetRoles, onCreateUser }) => {
     roles: []
   };
 
-  useEffect(() => {
-    onGetRoles();
-  }, []);
+  const { data: roles, isLoading } = useRoles({
+    options: {
+      keepPreviousData: true
+    }
+  });
 
   const onSubmit = (values) => {
     try {
@@ -219,27 +214,4 @@ const UsersAdd = ({ data, onGetRoles, onCreateUser }) => {
   );
 };
 
-const rolReducer = 'rol';
-
-UsersAdd.propTypes = {
-  onCreateUser: PropTypes.func.isRequired,
-  onGetRoles: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired
-};
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([rolReducer, 'loading']),
-  data: state.getIn([rolReducer, 'data']),
-  filters: state.getIn([rolReducer, 'filters']),
-  total: state.getIn([rolReducer, 'total'])
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGetRoles: () => dispatch(getRoles()),
-  onCreateUser: (user) => dispatch(createUser(user))
-});
-
-UsersAdd.layout = Admin;
-UsersAdd.roles = [ROLE_ADMIN];
-
-export default connect(mapStateToProps, mapDispatchToProps)(UsersAdd);
+export default UsersForm;

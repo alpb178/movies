@@ -1,24 +1,25 @@
-/* eslint-disable react/display-name */
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
+import useUsers from '@/hooks/user/useUsers';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
 import UserFilter from 'containers/users/UserFilter';
-import { USER_ADD, USER_DETAIL_PAGE, USER_EDIT } from 'lib/constants';
+import { DEFAULT_PAGE_SIZE, USER_DETAIL_PAGE, USER_FORM_PAGE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { deleteUser, getUsers, selectUser } from 'redux/actions';
+import React, { useCallback, useMemo, useState } from 'react';
 
-const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
+const UsersList = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  // const [page, setPage] = useState(0);
-  // const [size, setSize] = useState(20);
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sort, setSort] = useState('');
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
@@ -31,9 +32,19 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     roles: ''
   });
 
-  useEffect(() => {
-    onGetUsers();
-  }, []);
+  const params = useMemo(() => {
+    const query = {};
+    if (page !== 0) query.page = page;
+    if (sort) query.sort = sort;
+    return query;
+  }, [filterValues, page, sort]);
+
+  const { data: users, isLoading } = useUsers({
+    args: params,
+    options: {
+      keepPreviousData: true
+    }
+  });
 
   const onDelete = (event, row) => {
     event.stopPropagation();
@@ -46,14 +57,13 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
 
   const onUpdate = (event, row) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = USER_EDIT(value);
-    onSelectUser(row.original);
+    const value = row.original.id;
+    const path = USER_FORM_PAGE(value);
     router.push(path);
   };
 
   const handleAdd = () => {
-    router.push(USER_ADD);
+    router.push(USER_FORM_PAGE());
   };
 
   const renderRoles = (roles) => (
@@ -105,8 +115,8 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
       Cell: ({ row }) => {
         return (
           <TableActions
-            onEdit={(event) => onUpdate(event, row.original)}
-            onDelete={(event) => onDelete(event, row.original)}
+            onEdit={(event) => onUpdate(event, row)}
+            onDelete={(event) => onDelete(event, row)}
           />
         );
       }
@@ -130,7 +140,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     );
 
   const handleFilters = (values) => {
-    setFilterValues(values, onGetUsers(values));
+    setFilterValues(values);
   };
 
   const handleClick = (event, value) => {
@@ -143,13 +153,25 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
         }),
         {}
       );
-    onGetUsers(updatedFilters);
-    setFilterValues((prevState) => ({ ...prevState, [value]: '' }));
+
+    setFilterValues(updatedFilters);
   };
 
+  const renderInsertButton = () => (
+    <button type="button" className="btn-outlined" onClick={() => handleAdd()}>
+      {t('add')} {t('users', { count: 1 }).toLowerCase()}
+    </button>
+  );
+
   const options = {
+    name: t('shipment-items', { count: 2 }),
     columns,
-    data: data?.toJS().rows,
+    data: users?.rows,
+    count: users?.count,
+    setPage: onPageChangeCallback,
+    setSortBy: onSortChangeCallback,
+    pageSize,
+    onPageSizeChange: setPageSize,
     onRowClick: (row) => {
       const value = row.original.id;
       const path = USER_DETAIL_PAGE(value);
@@ -166,7 +188,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
       </div>
     ),
     actions: (
-      <>
+      <div className="space-x-4">
         <button
           type="button"
           className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
@@ -174,22 +196,20 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
         >
           {t('filter')}
         </button>
-        <button
-          type="button"
-          className="p-2 px-6 py-2 ml-4 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => handleAdd()}
-        >
-          {t('add')} {t('users', { count: 1 }).toLowerCase()}
-        </button>
-      </>
+        {renderInsertButton()}
+      </div>
     )
   };
 
   return (
     <>
-      {loading && <Loading />}
+      {isLoading && <Loading />}
 
-      {data ? <DataTable {...options} /> : <EmptyState text={t('users', { count: 0 })} />}
+      {users && users.rows.length > 0 ? (
+        <DataTable {...options} />
+      ) : (
+        <EmptyState text={t('users', { count: 0 })}>{renderInsertButton()}</EmptyState>
+      )}
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
@@ -202,28 +222,4 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
   );
 };
 
-Users.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetUsers: PropTypes.func.isRequired,
-  onSelectUser: PropTypes.func.isRequired,
-  onDeleteUser: PropTypes.func.isRequired
-};
-
-const userReducer = 'user';
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([userReducer, 'loading']),
-  data: state.getIn([userReducer, 'data']),
-  filters: state.getIn([userReducer, 'filters']),
-  total: state.getIn([userReducer, 'total'])
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGetUsers: (user) => dispatch(getUsers(user)),
-  onSelectUser: (user) => dispatch(selectUser(user)),
-  onDeleteUser: (username) => dispatch(deleteUser(username))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Users);
+export default UsersList;

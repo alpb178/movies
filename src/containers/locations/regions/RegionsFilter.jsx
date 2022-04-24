@@ -1,10 +1,8 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Menu, Transition } from '@headlessui/react';
-import useTranslation from 'next-translate/useTranslation';
-import { getRoles } from 'redux/actions';
-import { Formik, Form } from 'formik';
 import AutocompleteField from '@/components/form/AutocompleteField';
+import { Menu, Transition } from '@headlessui/react';
+import { Form, Formik } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
+import React from 'react';
 
 const RegionsFilter = ({ data, onSubmit, open }) => {
   const { t } = useTranslation('common');
@@ -50,17 +48,4 @@ const RegionsFilter = ({ data, onSubmit, open }) => {
   );
 };
 
-const rolReducer = 'rol';
-
-const mapStateToProps = (state) => ({
-  loading: state.getIn([rolReducer, 'loading']),
-  data: state.getIn([rolReducer, 'data']),
-  filters: state.getIn([rolReducer, 'filters']),
-  total: state.getIn([rolReducer, 'total'])
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGetRoles: () => dispatch(getRoles())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(RegionsFilter);
+export default RegionsFilter;

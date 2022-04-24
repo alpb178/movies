@@ -10,7 +10,6 @@ import { CookiesProvider } from 'react-cookie';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import wrapper from 'redux/configureStore';
 import 'styles/globals.css';
 import 'styles/nprogress.scss';
 
@@ -65,4 +64,4 @@ App.propTypes = {
   pageProps: PropTypes.object.isRequired
 };
 
-export default wrapper.withRedux(App);
+export default App;
