@@ -1,7 +1,7 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
-import { ADMIN_ROLE } from 'lib/constants';
 import PaymentsList from 'containers/payments/PaymentsList';
+import { ROLE_ADMIN } from 'lib/constants';
+import dynamic from 'next/dynamic';
+import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -12,6 +12,6 @@ const PaymentsPage = () => {
 };
 
 PaymentsPage.layout = Admin;
-PaymentsPage.roles = [ADMIN_ROLE];
+PaymentsPage.roles = [ROLE_ADMIN];
 
 export default PaymentsPage;

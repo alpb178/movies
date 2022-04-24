@@ -1,7 +1,7 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
 import UsersList from 'containers/users/UsersList';
-import { ADMIN_ROLE } from 'lib/constants';
+import { ROLE_ADMIN } from 'lib/constants';
+import dynamic from 'next/dynamic';
+import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -12,6 +12,6 @@ const UsersPage = () => {
 };
 
 UsersPage.layout = Admin;
-UsersPage.roles = [ADMIN_ROLE];
+UsersPage.roles = [ROLE_ADMIN];
 
 export default UsersPage;

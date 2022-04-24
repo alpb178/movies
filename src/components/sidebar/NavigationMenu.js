@@ -12,10 +12,11 @@ const NavigationMenu = () => {
   const { t } = useTranslation('common');
   const { user } = useAuth();
 
-  const roles = user?.auth?.split(',');
+  const canAccess = (item) =>
+    item?.roles.length === 0 || item?.roles.some((role) => user?.roles?.includes(role));
 
   return navigation.map((item, idx) =>
-    item?.roles.some((role) => roles?.includes(role)) ? (
+    canAccess(item) ? (
       item.children ? (
         <Disclosure as="div" key={item.name} className="space-y-1">
           {({ open }) => (

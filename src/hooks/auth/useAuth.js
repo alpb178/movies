@@ -1,14 +1,14 @@
 import useTokenUser from 'hooks/auth/useTokenUser';
-import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
 import {
-  HOME_PAGE,
-  ADMIN_ROLE,
-  DASHBOARD_PAGE,
   BASIC_CLIENT_ROLE,
+  DASHBOARD_PAGE,
+  HOME_PAGE,
   LOGIN_PAGE,
+  ROLE_ADMIN,
   USERS_PAGE
 } from 'lib/constants';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo } from 'react';
 import useLogin from './useLogin';
 import useLogout from './useLogout';
 
@@ -27,7 +27,7 @@ export default function useAuth({
     let flag = false;
 
     if (roles.length > 0 && user?.isLoggedIn) {
-      flag = user?.auth?.split(',').some((role) => roles.includes(role));
+      flag = user?.roles?.some((role) => roles.includes(role));
     }
     return flag;
   }, [user, roles]);
@@ -37,9 +37,9 @@ export default function useAuth({
 
     if (user?.isLoggedIn === false) {
       to = LOGIN_PAGE;
-    } else if (user?.auth.split(',')[0] === BASIC_CLIENT_ROLE) {
+    } else if (user?.roles[0] === BASIC_CLIENT_ROLE) {
       to = DASHBOARD_PAGE;
-    } else if (user?.auth.split(',')[0] === ADMIN_ROLE) {
+    } else if (user?.roles[0] === ROLE_ADMIN) {
       to = USERS_PAGE;
     } else {
       to = DASHBOARD_PAGE;
@@ -53,7 +53,7 @@ export default function useAuth({
     // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
     if (!redirectTo || !user) return;
 
-    if (roles.length > 0 && !roles.some((role) => user?.auth?.split(',')?.includes(role))) {
+    if (roles.length > 0 && !roles.some((role) => user?.roles?.includes(role))) {
       router.replace(redirectIfNotAccess);
     }
 

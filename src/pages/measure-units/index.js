@@ -1,7 +1,7 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
-import { ADMIN_ROLE } from '@/lib/constants';
 import MeasureUnitsList from '@/containers/measure-units/MeasureUnitsList';
+import { ROLE_ADMIN } from '@/lib/constants';
+import dynamic from 'next/dynamic';
+import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -12,6 +12,6 @@ const MeasureUnitsPage = () => {
 };
 
 MeasureUnitsPage.layout = Admin;
-MeasureUnitsPage.roles = [ADMIN_ROLE];
+MeasureUnitsPage.roles = [ROLE_ADMIN];
 
 export default MeasureUnitsPage;

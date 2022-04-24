@@ -1,5 +1,5 @@
 import ShipmentsForm from '@/containers/shipments/ShipmentsForm';
-import { ADMIN_ROLE } from '@/lib/constants';
+import { ROLE_ADMIN } from '@/lib/constants';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -16,6 +16,6 @@ const CreateShipmentPage = () => {
 };
 
 CreateShipmentPage.layout = Admin;
-CreateShipmentPage.roles = [ADMIN_ROLE];
+CreateShipmentPage.roles = [ROLE_ADMIN];
 
 export default CreateShipmentPage;

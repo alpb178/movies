@@ -47,7 +47,7 @@ export const DELETE = 'DELETE';
 export const REGISTER_PAGE = '/register';
 
 // Roles
-export const ADMIN_ROLE = 'ROLE_ADMIN';
+export const ROLE_ADMIN = 'ROLE_ADMIN';
 export const BASIC_CLIENT_ROLE = 'ROLE_USER';
 
 // Users

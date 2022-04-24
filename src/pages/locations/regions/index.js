@@ -1,7 +1,7 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
-import { ADMIN_ROLE } from '@/lib/constants';
 import RegionsList from '@/containers/locations/regions/RegionsList';
+import { ROLE_ADMIN } from '@/lib/constants';
+import dynamic from 'next/dynamic';
+import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -12,6 +12,6 @@ const RegionsPage = () => {
 };
 
 RegionsPage.layout = Admin;
-RegionsPage.roles = [ADMIN_ROLE];
+RegionsPage.roles = [ROLE_ADMIN];
 
 export default RegionsPage;

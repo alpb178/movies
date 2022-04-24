@@ -1,8 +1,8 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
-import { ADMIN_ROLE } from 'lib/constants';
 import TravelForm from '@/containers/travels/TravelForm';
+import { ROLE_ADMIN } from 'lib/constants';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -20,6 +20,6 @@ const TravelFormPage = () => {
 };
 
 TravelFormPage.layout = Admin;
-TravelFormPage.roles = [ADMIN_ROLE];
+TravelFormPage.roles = [ROLE_ADMIN];
 
 export default TravelFormPage;

@@ -1,5 +1,5 @@
 import UserDetails from '@/containers/users/UserDetails';
-import { ADMIN_ROLE } from '@/lib/constants';
+import { ROLE_ADMIN } from '@/lib/constants';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -21,6 +21,6 @@ UserDetailPage.propTypes = {
 };
 
 UserDetailPage.layout = Admin;
-UserDetailPage.roles = [ADMIN_ROLE];
+UserDetailPage.roles = [ROLE_ADMIN];
 
 export default UserDetailPage;

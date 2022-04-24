@@ -1,9 +1,9 @@
-import React from 'react';
 import Cookies from 'cookies';
 import jwt_decode from 'jwt-decode';
-import dynamic from 'next/dynamic';
 import { TOKEN_KEY } from 'lib/constants';
 import { getHomePageFromUser } from 'lib/utils';
+import dynamic from 'next/dynamic';
+import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false

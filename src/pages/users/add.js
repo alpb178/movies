@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { ADMIN_ROLE, USERS_PAGE } from 'lib/constants';
-import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import { Field, Form, Formik } from 'formik';
+import { ROLE_ADMIN, USERS_PAGE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
-import { getRoles, createUser } from 'redux/actions';
-import { Formik, Field, Form } from 'formik';
+import dynamic from 'next/dynamic';
 import router from 'next/router';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import { connect } from 'react-redux';
+import { createUser, getRoles } from 'redux/actions';
+import * as Yup from 'yup';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -240,6 +240,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 UsersAdd.layout = Admin;
-UsersAdd.roles = [ADMIN_ROLE];
+UsersAdd.roles = [ROLE_ADMIN];
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersAdd);

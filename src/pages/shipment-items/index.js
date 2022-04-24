@@ -1,7 +1,7 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
-import { ADMIN_ROLE } from 'lib/constants';
 import ShipmentItemsList from 'containers/shipment-items/ShipmentItemsList';
+import { ROLE_ADMIN } from 'lib/constants';
+import dynamic from 'next/dynamic';
+import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -12,6 +12,6 @@ const ShipmentItemsPage = () => {
 };
 
 ShipmentItemsPage.layout = Admin;
-ShipmentItemsPage.roles = [ADMIN_ROLE];
+ShipmentItemsPage.roles = [ROLE_ADMIN];
 
 export default ShipmentItemsPage;

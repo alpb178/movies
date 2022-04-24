@@ -1,9 +1,9 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
 import CardBarChart from 'components/cards/CardBarChart.js';
 import CardPageVisits from 'components/cards/CardPageVisits.js';
 import CardSocialTraffic from 'components/cards/CardSocialTraffic.js';
-import { ADMIN_ROLE, BASIC_CLIENT_ROLE } from '../../lib/constants';
+import dynamic from 'next/dynamic';
+import React from 'react';
+import { ROLE_ADMIN } from '../../lib/constants';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -28,6 +28,6 @@ const DashboardPage = () => {
 };
 
 DashboardPage.layout = Admin;
-DashboardPage.roles = [ADMIN_ROLE];
+DashboardPage.roles = [ROLE_ADMIN];
 
 export default DashboardPage;
