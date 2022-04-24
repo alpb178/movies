@@ -6,18 +6,21 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
 import useCountries from '@/hooks/location/country/useCountries';
-import { LOCATION_DETAILS_PAGE } from '@/lib/constants';
+import { DELETE, LOCATION_DETAILS_PAGE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import CountryForm from './CountryForm';
 
-const CountriesList = ({ loading }) => {
+const CountriesList = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
@@ -46,11 +49,25 @@ const CountriesList = ({ loading }) => {
 
   const handleDelete = (event, row) => {
     event.stopPropagation();
-    setDeleteConfirmation({ open: true, id: row.original.login });
+    setDeleteConfirmation({ open: true, id: row.original.id });
   };
 
-  const onDeleteConfirmation = () => {
-    console.log();
+  const onDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+      await useCountries({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+
+      queryClient.refetchQueries();
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onUpdate = (event, item) => {
@@ -74,7 +91,7 @@ const CountriesList = ({ loading }) => {
       Cell: ({ row }) => (
         <TableActions
           onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={() => setDeleteConfirmation(true)}
+          onDelete={(event) => handleDelete(event, row)}
         />
       )
     }
@@ -167,8 +184,8 @@ const CountriesList = ({ loading }) => {
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete', { entity: 'countries' })}
-        content={t('asd')}
+        title={t('delete-title', { entity: t('countries', { count: 1 }) })}
+        content={t('delete-message.male', { entity: t('countries', { count: 1 }) })}
       />
     </>
   );

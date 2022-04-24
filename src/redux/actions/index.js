@@ -1,19 +1,18 @@
 export { getDemoData } from './demoActions';
 export {
-  getPayments,
+  createPayment,
   deletePayment,
+  getPayments,
   searchPayment,
   selectPayment,
-  updatePayment,
-  createPayment
+  updatePayment
 } from './paymentsActions';
+export { getRoles } from './rolesActions';
 export {
-  getUsers,
+  createUser,
   deleteUser,
+  getUsers,
   searchUser,
   selectUser,
-  updateUser,
-  createUser
+  updateUser
 } from './usersActions';
-
-export { getRoles } from './rolesActions';

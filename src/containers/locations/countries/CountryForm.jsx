@@ -1,16 +1,17 @@
 /* eslint-disable react/display-name */
-import React from 'react';
-import PropTypes from 'prop-types';
-import useTranslation from 'next-translate/useTranslation';
-import { Field } from 'formik';
-import * as Yup from 'yup';
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
 import { POST } from '@/lib/constants';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
+import { Field } from 'formik';
+import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useQueryClient } from 'react-query';
+import * as Yup from 'yup';
 
 const CountryForm = ({ data, errors, onOpen, open, touched }) => {
   const { t } = useTranslation('common');
-
+  const queryClient = useQueryClient();
   const initialValues = {
     name: data?.name || '',
     code: data?.code || ''
@@ -29,6 +30,7 @@ const CountryForm = ({ data, errors, onOpen, open, touched }) => {
       }
     });
     onOpen(false);
+    queryClient.invalidateQueries();
   };
 
   return (
@@ -76,6 +78,8 @@ const CountryForm = ({ data, errors, onOpen, open, touched }) => {
 };
 
 CountryForm.propTypes = {
+  code: PropTypes.object.isRequired,
+  name: PropTypes.object.isRequired,
   onOpen: PropTypes.func.isRequired
 };
 
