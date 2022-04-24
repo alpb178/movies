@@ -1,19 +1,20 @@
 /* eslint-disable react/display-name */
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useRoles from '@/hooks/role/useRoles';
+import usePermissions from '@/hooks/permission/usePermissions';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
-import { DEFAULT_PAGE_SIZE, ROLE_ADD, ROLE_EDIT } from 'lib/constants';
+import { DEFAULT_PAGE_SIZE, PERMISSION_ADD, PERMISSION_EDIT } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
-import RolesFilter from './RolesFilter';
+import PermissionsFilter from './PermissionsFilter';
+import PermissionsForm from './PermissionsForm';
 
-const Roles = () => {
+const Permissions = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
@@ -37,7 +38,7 @@ const Roles = () => {
     return query;
   }, [filterValues, page, sort]);
 
-  const { data: roles, isLoading } = useRoles({
+  const { data: permissions, isLoading } = usePermissions({
     args: params,
     options: {
       keepPreviousData: true
@@ -55,46 +56,24 @@ const Roles = () => {
   const onUpdate = (event, row) => {
     event.stopPropagation();
     const value = row.original.email;
-    const path = ROLE_EDIT(value);
-    onSelectRole(row.original);
+    const path = PERMISSION_EDIT(value);
+    onSelectPermission(row.original);
     router.push(path);
   };
 
   const handleAdd = () => {
-    router.push(ROLE_ADD);
+    router.push(PERMISSION_ADD);
   };
-
-  const renderPermissions = (permissions) => (
-    <div className="flex space-x-2">
-      {permissions?.map((permission) => (
-        <span
-          key={permission.id}
-          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-100"
-        >
-          {t(permission.name.replace(/_/g, '-').toLowerCase())}
-        </span>
-      ))}
-    </div>
-  );
 
   const columns = React.useMemo(() => [
     {
       Header: t('name'),
       accessor: 'name'
     },
+
     {
-      Header: t('permissions', { count: 2 }),
-      accessor: 'permissions',
-      Cell: ({ value: permissions }) =>
-        permissions.length > 0 ? (
-          renderPermissions(permissions)
-        ) : (
-          <p className="text-gray-400">{t('permissions', { count: 0 })}</p>
-        )
-    },
-    {
-      id: 'optionsRoles',
-      displayName: 'optionsRoles',
+      id: 'optionsPermissions',
+      displayName: 'optionsPermissions',
       Cell: ({ row }) => {
         return (
           <TableActions
@@ -142,15 +121,15 @@ const Roles = () => {
 
   const renderInsertButton = () => (
     <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('roles')}
+      {t('new', { entity: 'permissions' })}
     </button>
   );
 
   const options = {
-    name: t('roles', { count: 2 }),
+    name: t('permissions', { count: 2 }),
     columns,
-    data: roles?.rows,
-    count: roles?.count,
+    data: permissions?.rows,
+    count: permissions?.count,
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
     pageSize,
@@ -158,7 +137,7 @@ const Roles = () => {
     onRowClick: (row) => {},
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
-        <RolesFilter open={openFilters} onSubmit={handleFilters} />
+        <PermissionsFilter open={openFilters} onSubmit={handleFilters} />
 
         <div className="flex">
           <FilterCriteria />
@@ -183,21 +162,23 @@ const Roles = () => {
     <>
       {isLoading && <Loading />}
 
-      {roles && roles.rows.length > 0 ? (
+      {permissions && permissions.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
         <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
+      <PermissionsForm open={openForm} onOpen={setOpenForm} />
+
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete-title', { entity: t('roles', { count: 1 }).toLowerCase() })}
-        content={t('delete-message.male', { entity: t('roles', { count: 1 }).toLowerCase() })}
+        title={t('delete-title', { entity: t('permissions', { count: 1 }).toLowerCase() })}
+        content={t('delete-message.male', { entity: t('permissions', { count: 1 }).toLowerCase() })}
       />
     </>
   );
 };
 
-export default Roles;
+export default Permissions;

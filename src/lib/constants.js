@@ -29,6 +29,7 @@ export const COUNTRIES_PAGE = '/locations/countries';
 export const DASHBOARD_PAGE = '/dashboard';
 export const MEASURE_UNITS_PAGE = '/measure-units';
 export const PAYMENTS_PAGE = '/payments';
+export const PERMISSIONS_PAGE = '/permissions';
 export const REGIONS_PAGE = '/locations/regions';
 export const REGULATIONS_PAGE = '/regulations';
 export const REVENUES_PAGE = '/revenues';

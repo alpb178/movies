@@ -61,7 +61,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
       {roles?.map((role) => (
         <span
           key={role.id}
-          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-50"
+          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-100"
         >
           {t(role.name.replace(/_/g, '-').toLowerCase())}
         </span>

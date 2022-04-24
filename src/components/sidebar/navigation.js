@@ -16,6 +16,7 @@ import {
   COUNTRIES_PAGE,
   DASHBOARD_PAGE,
   MEASURE_UNITS_PAGE,
+  PERMISSIONS_PAGE,
   REGIONS_PAGE,
   REGULATIONS_PAGE,
   ROLES_PAGE,
@@ -58,6 +59,14 @@ export default [
   { name: 'shipments', link: SHIPMENTS_PAGE, icon: BriefcaseIcon, roles: [ROLE_ADMIN] },
   // { name: 'payments', link: PAYMENTS_PAGE, icon: CurrencyDollarIcon, roles: [ROLE_ADMIN] },
   { name: 'users', link: USERS_PAGE, icon: UserGroupIcon, roles: [ROLE_ADMIN] },
-  { name: 'roles', link: ROLES_PAGE, icon: KeyIcon, roles: [ROLE_ADMIN] },
+  {
+    name: 'access-control',
+    icon: KeyIcon,
+    children: [
+      { name: 'roles', link: ROLES_PAGE, roles: [ROLE_ADMIN] },
+      { name: 'permissions', link: PERMISSIONS_PAGE, roles: [ROLE_ADMIN] }
+    ],
+    roles: [ROLE_ADMIN]
+  },
   { name: 'settings', link: SETTINGS_PAGE, icon: CogIcon, roles: [ROLE_ADMIN] }
 ];

@@ -6,11 +6,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import {
-  HiOutlineBell as BellIcon,
-  HiOutlineMenuAlt2 as MenuAlt2Icon,
-  HiSearch as SearchIcon
-} from 'react-icons/hi';
+import { HiOutlineBell as BellIcon, HiOutlineMenuAlt2 as MenuAlt2Icon } from 'react-icons/hi';
 
 const Navbar = ({ onSidebarOpen }) => {
   const { t } = useTranslation('common');
@@ -40,7 +36,7 @@ const Navbar = ({ onSidebarOpen }) => {
       </button>
       <div className="flex justify-between flex-1 px-6">
         <div className="flex flex-1">
-          <form className="flex w-full md:ml-0" action="#" method="GET">
+          {/* <form className="flex w-full md:ml-0" action="#" method="GET">
             <label htmlFor="search_field" className="text-lg sr-only">
               {t('search')}
             </label>
@@ -56,7 +52,7 @@ const Navbar = ({ onSidebarOpen }) => {
                 name="search"
               />
             </div>
-          </form>
+          </form> */}
         </div>
         <div className="flex items-center ml-4 mr-2 md:ml-6">
           <button
