@@ -1,19 +1,19 @@
 /* eslint-disable react/display-name */
-import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
-import EmptyState from '@/components/common/EmptyState';
-import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
-import PaymentFilter from '@/containers/shipment-items/ShipmentItemsFilter';
-import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
-import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
-import { PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/outline';
+import TableActions from '@/components/table/TableActions';
+import useRoles from '@/hooks/role/useRoles';
+import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
+import EmptyState from 'components/common/EmptyState';
+import Loading from 'components/common/Loading';
+import { DEFAULT_PAGE_SIZE, ROLE_ADD, ROLE_EDIT } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
-import ShipmentItemsForm from './ShipmentItemsForm';
+import RolesFilter from './RolesFilter';
 
-const ShipmentItemsList = () => {
+const Roles = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
@@ -24,7 +24,7 @@ const ShipmentItemsList = () => {
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
   const [filterValues, setFilterValues] = useState({
     measureUnit: ''
@@ -37,23 +37,45 @@ const ShipmentItemsList = () => {
     return query;
   }, [filterValues, page, sort]);
 
-  const { data: shipmentItems, isLoading } = useShipmentItems({
+  const { data: roles, isLoading } = useRoles({
     args: params,
     options: {
       keepPreviousData: true
     }
   });
 
-  const handleDelete = (event, row) => {
-    event.preventDefault();
-    const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
-  };
-
-  const handleEdit = (event, row) => {
+  const onDelete = (event, row) => {
     event.stopPropagation();
+    setDeleteConfirmation({ open: true, id: row.original.id });
   };
 
-  const rednerMeasureUnit = (value) => <div>{value?.name}</div>;
+  const onDeleteConfirmation = () => {
+    // onDeleteUser(deleteConfirmation.id);
+  };
+  const onUpdate = (event, row) => {
+    event.stopPropagation();
+    const value = row.original.email;
+    const path = ROLE_EDIT(value);
+    onSelectRole(row.original);
+    router.push(path);
+  };
+
+  const handleAdd = () => {
+    router.push(ROLE_ADD);
+  };
+
+  const renderPermissions = (permissions) => (
+    <div className="flex space-x-2">
+      {permissions?.map((permission) => (
+        <span
+          key={permission.id}
+          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-50"
+        >
+          {t(permission.name.replace(/_/g, '-').toLowerCase())}
+        </span>
+      ))}
+    </div>
+  );
 
   const columns = React.useMemo(() => [
     {
@@ -61,33 +83,24 @@ const ShipmentItemsList = () => {
       accessor: 'name'
     },
     {
-      Header: t('measure-units', { count: 1 }),
-      accessor: 'measureUnit',
-      Cell: ({ value }) => rednerMeasureUnit(value)
+      Header: t('permissions', { count: 2 }),
+      accessor: 'permissions',
+      Cell: ({ value: permissions }) =>
+        permissions.length > 0 ? (
+          renderPermissions(permissions)
+        ) : (
+          <p className="text-gray-400">{t('permissions', { count: 0 })}</p>
+        )
     },
     {
-      id: 'optionsShipmentItems',
-      displayName: 'optionsShipmentItems',
+      id: 'optionsRoles',
+      displayName: 'optionsRoles',
       Cell: ({ row }) => {
         return (
-          <div className="flex items-center space-x-4">
-            <button
-              type="button"
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              type="button"
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              id="buttonDelete"
-              onClick={() => setOpenDeleteConfirmation(true)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
+          <TableActions
+            onEdit={(event) => onUpdate(event, row.original)}
+            onDelete={(event) => onDelete(event, row.original)}
+          />
         );
       }
     }
@@ -129,15 +142,15 @@ const ShipmentItemsList = () => {
 
   const renderInsertButton = () => (
     <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      Nuevo artículo
+      {t('roles')}
     </button>
   );
 
   const options = {
-    name: t('shipment-items', { count: 2 }),
+    name: t('roles', { count: 2 }),
     columns,
-    data: shipmentItems?.rows,
-    count: shipmentItems?.count,
+    data: roles?.rows,
+    count: roles?.count,
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
     pageSize,
@@ -145,7 +158,7 @@ const ShipmentItemsList = () => {
     onRowClick: (row) => {},
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
-        <PaymentFilter open={openFilters} onSubmit={handleFilters} />
+        <RolesFilter open={openFilters} onSubmit={handleFilters} />
 
         <div className="flex">
           <FilterCriteria />
@@ -170,22 +183,21 @@ const ShipmentItemsList = () => {
     <>
       {isLoading && <Loading />}
 
-      {shipmentItems && shipmentItems.rows.length > 0 ? (
+      {roles && roles.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
         <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <ShipmentItemsForm open={openForm} onOpen={setOpenForm} />
-
       <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onOpen={setOpenDeleteConfirmation}
-        title={t('delete', { entity: 'user' })}
-        content={t('asd')}
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('roles', { count: 1 }).toLowerCase() })}
+        content={t('delete-message.male', { entity: t('roles', { count: 1 }).toLowerCase() })}
       />
     </>
   );
 };
 
-export default ShipmentItemsList;
+export default Roles;

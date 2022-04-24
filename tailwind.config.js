@@ -19,7 +19,7 @@ module.exports = {
       blue: colors.blue,
       red: colors.red,
       primary: colors.indigo,
-      secondary: colors.blue
+      secondary: colors.sky
     },
     extend: {
       spacing: {

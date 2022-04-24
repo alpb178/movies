@@ -60,10 +60,10 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     <div className="flex space-x-2">
       {roles?.map((role) => (
         <span
-          key={role}
-          className="inline-flex px-4 py-1 font-medium leading-5 text-green-700 rounded-full bg-green-50"
+          key={role.id}
+          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-50"
         >
-          {t(role.replace(/_/g, '-').toLowerCase())}
+          {t(role.name.replace(/_/g, '-').toLowerCase())}
         </span>
       ))}
     </div>
@@ -77,10 +77,6 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     );
 
   const columns = React.useMemo(() => [
-    {
-      Header: t('username'),
-      accessor: 'username'
-    },
     {
       Header: t('name'),
       accessor: 'firstName'
@@ -100,7 +96,7 @@ const Users = ({ data, loading, onGetUsers, onSelectUser, onDeleteUser }) => {
     },
     {
       Header: t('roles', { count: 2 }),
-      accessor: 'authorities',
+      accessor: 'roles',
       Cell: ({ value: roles }) => renderRoles(roles)
     },
     {

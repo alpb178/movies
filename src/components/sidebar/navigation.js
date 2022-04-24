@@ -2,6 +2,7 @@ import {
   BriefcaseIcon,
   CogIcon,
   HomeIcon,
+  KeyIcon,
   LocationMarkerIcon,
   PaperAirplaneIcon,
   ScaleIcon,
@@ -17,6 +18,7 @@ import {
   MEASURE_UNITS_PAGE,
   REGIONS_PAGE,
   REGULATIONS_PAGE,
+  ROLES_PAGE,
   ROLE_ADMIN,
   // REVENUES_PAGE,
   SETTINGS_PAGE,
@@ -55,6 +57,7 @@ export default [
   { name: 'travels', link: TRAVELS_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN] },
   { name: 'shipments', link: SHIPMENTS_PAGE, icon: BriefcaseIcon, roles: [ROLE_ADMIN] },
   // { name: 'payments', link: PAYMENTS_PAGE, icon: CurrencyDollarIcon, roles: [ROLE_ADMIN] },
-  { name: 'users', link: USERS_PAGE, icon: UserGroupIcon, roles: [] },
+  { name: 'users', link: USERS_PAGE, icon: UserGroupIcon, roles: [ROLE_ADMIN] },
+  { name: 'roles', link: ROLES_PAGE, icon: KeyIcon, roles: [ROLE_ADMIN] },
   { name: 'settings', link: SETTINGS_PAGE, icon: CogIcon, roles: [ROLE_ADMIN] }
 ];

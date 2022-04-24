@@ -11,18 +11,18 @@
   "add": "Añadir",
   "airlines": {
     "0": "Aún no existen aerolíneas registradas",
-    "one": "Aerolínea",
+    "1": "Aerolínea",
     "other": "Aerolíneas"
   },
   "applications": {
     "0": "Sin Aplicaciones",
-    "one": "Aplicaciones",
+    "1": "Aplicaciones",
     "other": "Aplicaciones"
   },
   "amount": "Importe",
   "bills": {
     "0": "Sin Facturas",
-    "one": "Facturas",
+    "1": "Facturas",
     "other": "Facturas"
   },
   "business-name": "Razón social",
@@ -34,7 +34,7 @@
   "company": "Empresa",
   "countries": {
     "0": "Aún no existen países registrados",
-    "one": "País",
+    "1": "País",
     "other": "Países"
   },
   "dashboard": "Dashboard",
@@ -177,7 +177,7 @@
   "home": "Inicio",
   "information-product": {
     "0": "Sin Información del Producto",
-    "one": "Información del Producto",
+    "1": "Información del Producto",
     "other": "Información Productos"
   },
   "invalid-credentials": "Credenciales no válidas.",
@@ -185,7 +185,7 @@
   "loading": "Cargando...",
   "locations": {
     "0": "Aún no existen localizaciones registradas.",
-    "one": "Localización",
+    "1": "Localización",
     "other": "Localizaciones"
   },
   "logo": "Logo",
@@ -211,20 +211,25 @@
   "observations": "Observaciones",
   "offers": {
     "0": "Sin ofertas",
-    "one": "Oferta",
+    "1": "Oferta",
     "other": "Ofertas"
   },
   "origin": "Origen",
   "new-order": {
     "0": "Sin Información",
-    "one": "Nuevo Pedido",
+    "1": "Nuevo Pedido",
     "other": "Nuevos Pedidos"
   },
   "password": "Contraseña",
   "payments": {
     "0": "Aún no existen pagos",
-    "one": "Pago",
+    "1": "Pago",
     "other": "Pagos"
+  },
+  "permissions": {
+    "0": "Sin permisos",
+    "1": "Permiso",
+    "other": "Permisos"
   },
   "phone": "Teléfono",
   "previous": "Anterior",
@@ -234,13 +239,13 @@
   "repeat-password": "Repetir contraseña",
   "regions": {
     "0": "Aún no existen regiones registradas.",
-    "one": "Región",
+    "1": "Región",
     "other": "Regiones"
   },
   "registered-at": "Registrado el",
   "regulations": {
     "0": "Aún no existen regulaciones registradas.",
-    "one": "Regulación",
+    "1": "Regulación",
     "other": "Regulaciones"
   },
   "required": {
@@ -263,8 +268,8 @@
       "other": "Reseñas dejadas"
     }
   },
-  "roles": { "0": "Sin roles", "one": "Role", "other": "Roles" },
-  "role-admin": "Admin",
+  "roles": { "0": "Sin roles", "1": "Role", "other": "Roles" },
+  "role-admin": "Administrador",
   "role-user": "Usuario",
   "remember-me": "Recuérdame",
   "save": "Guardar",
@@ -277,12 +282,12 @@
   "settings": "Ajustes",
   "shipment-items": {
     "0": "Aún no existen artículos",
-    "one": "Artículo",
+    "1": "Artículo",
     "other": "Artículos"
   },
   "shipments": {
     "0": "Aún no existen envíos",
-    "one": "Envío",
+    "1": "Envío",
     "other": "Envíos"
   },
   "send": "Enviar",
@@ -295,12 +300,12 @@
   "total": "Total",
   "travelers": {
     "0": "Aún no existen viajeros registrados",
-    "one": "Viajero",
+    "1": "Viajero",
     "other": "Viajeros"
   },
   "travels": {
     "0": "Aún no existen viajes registrados",
-    "one": "Viaje",
+    "1": "Viaje",
     "other": "Viajes"
   },
   "type": "Tipo",
@@ -308,7 +313,7 @@
   "username": "Usuario",
   "users": {
     "0": "Sin usuarios",
-    "one": "Usuario",
+    "1": "Usuario",
     "other": "Usuarios"
   },
   "unregulated": "No regulado",
