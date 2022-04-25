@@ -9,7 +9,7 @@ const UserTravels = ({ userId }) => {
   const { t } = useTranslation('common');
 
   return (
-    <Tab.Group as="div" className="bg-white rounded-md shadow">
+    <Tab.Group as="div" className="bg-white border border-gray-100 rounded-md shadow">
       <Tab.List className="flex border-b">
         <Tab
           className={({ selected }) =>

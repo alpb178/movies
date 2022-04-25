@@ -164,7 +164,7 @@ const UsersList = () => {
   );
 
   const options = {
-    name: t('shipment-items', { count: 2 }),
+    name: t('users', { count: 2 }),
     columns,
     data: users?.rows,
     count: users?.count,

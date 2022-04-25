@@ -57,26 +57,15 @@ const UserDetails = ({ userId }) => {
         </div>
       </div>
 
-      <div className="flex space-x-6 sm:flex-col lg:flex-row">
+      <div className="flex flex-col space-y-6 lg:space-y-0 lg:space-x-6 lg:flex-row">
         <div className="w-full space-y-6">
           {/* Description list*/}
           <section
             aria-labelledby="applicant-information-title"
-            className="bg-white rounded-md shadow"
+            className="bg-white border border-gray-100 rounded-md shadow"
           >
             <div className="">
               <div className="px-4 py-5 sm:px-6">
-                <h2
-                  id="applicant-information-title"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
-                  Applicant Information
-                </h2>
-                <p className="max-w-2xl mt-1 text-sm text-gray-500">
-                  Personal details and application.
-                </p>
-              </div>
-              <div className="px-4 py-5 border-t border-gray-200 sm:px-6">
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                   <div className="sm:col-span-1">
                     <dt className="text-sm font-medium text-gray-500">{t('email')}</dt>
@@ -91,6 +80,22 @@ const UserDetails = ({ userId }) => {
                   <div className="sm:col-span-2">
                     <dt className="text-sm font-medium text-gray-500">{t('about')}</dt>
                     <dd className="mt-1 text-sm text-gray-900">{user.description || '-'}</dd>
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <dt className="text-sm font-medium text-gray-500">
+                      {t('roles', { count: 2 })}
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900">
+                      {user.roles.map((role) => (
+                        <span
+                          key={role.id}
+                          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-100"
+                        >
+                          {t(role.name.replace(/_/g, '-').toLowerCase())}
+                        </span>
+                      )) || '-'}
+                    </dd>
                   </div>
                 </dl>
               </div>
