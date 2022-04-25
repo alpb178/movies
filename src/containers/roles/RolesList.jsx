@@ -12,6 +12,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
 import RolesFilter from './RolesFilter';
+import RolesForm from './RolesForm';
 
 const Roles = () => {
   const { t } = useTranslation('common');
@@ -188,6 +189,8 @@ const Roles = () => {
       ) : (
         <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
+
+      <RolesForm data={{}} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}

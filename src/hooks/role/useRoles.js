@@ -1,5 +1,5 @@
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_ROLES_URL } from '@/lib/constants';
+import { API_ROLES_URL, POST } from '@/lib/constants';
 import { useQuery } from 'react-query';
 
 const getRoles = async ({ queryKey }) => {
@@ -11,8 +11,18 @@ const getRoles = async ({ queryKey }) => {
   return data;
 };
 
+const createRole = async (args) => {
+  const { path, data: values, method } = args;
+  const { data } = await apiFetcher(path, { data: values, method });
+  return data;
+};
+
 export default function useRoles({ args = {}, options = {} } = {}) {
-  return useQuery([API_ROLES_URL, { ...args }], getRoles, {
-    ...options
-  });
+  if (options?.method === POST) {
+    createRole({ path: API_ROLES_URL, data: args, method: POST });
+  } else {
+    return useQuery([API_ROLES_URL, { ...args }], getRoles, {
+      ...options
+    });
+  }
 }
