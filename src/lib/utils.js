@@ -1,13 +1,13 @@
+import { ROLE_ADMIN, ROLE_USER } from '@/lib/constants';
 import { differenceInMilliseconds, subYears } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
-import { BASIC_CLIENT_ROLE, ROLE_ADMIN } from 'lib/constants';
 
 export const locales = { es, en: enGB };
 
 export const getHomePageFromUser = (user) => {
   let to;
   switch (user?.roles[0]) {
-    case BASIC_CLIENT_ROLE:
+    case ROLE_USER:
       to = '/dashboard';
       break;
     case ROLE_ADMIN:

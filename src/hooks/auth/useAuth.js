@@ -1,10 +1,10 @@
 import useTokenUser from 'hooks/auth/useTokenUser';
 import {
-  BASIC_CLIENT_ROLE,
   DASHBOARD_PAGE,
   HOME_PAGE,
   LOGIN_PAGE,
   ROLE_ADMIN,
+  ROLE_USER,
   USERS_PAGE
 } from 'lib/constants';
 import { useRouter } from 'next/router';
@@ -37,7 +37,7 @@ export default function useAuth({
 
     if (user?.isLoggedIn === false) {
       to = LOGIN_PAGE;
-    } else if (user?.roles[0] === BASIC_CLIENT_ROLE) {
+    } else if (user?.roles[0] === ROLE_USER) {
       to = DASHBOARD_PAGE;
     } else if (user?.roles[0] === ROLE_ADMIN) {
       to = USERS_PAGE;

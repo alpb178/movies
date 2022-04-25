@@ -1,7 +1,7 @@
+import { TOKEN_KEY } from '@/lib/constants';
+import { getHomePageFromUser } from '@/lib/utils';
 import Cookies from 'cookies';
 import jwt_decode from 'jwt-decode';
-import { TOKEN_KEY } from 'lib/constants';
-import { getHomePageFromUser } from 'lib/utils';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -9,7 +9,7 @@ const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
 });
 
-const Home = () => {
+const HomePage = () => {
   return (
     <section className="flex flex-1 section lg:items-stretch">
       <div className="flex items-center justify-center w-full space-x-2 container-fluid">HOME</div>
@@ -41,6 +41,6 @@ export async function getServerSideProps({ req, res }) {
   };
 }
 
-Home.layout = Admin;
+HomePage.layout = Admin;
 
-export default Home;
+export default HomePage;
