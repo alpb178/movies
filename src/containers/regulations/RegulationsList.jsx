@@ -12,13 +12,12 @@ import clsx from 'clsx';
 import Loading from 'components/common/Loading';
 import RegulationsFilter from 'containers/regulations/RegulationsFilter';
 import useTranslation from 'next-translate/useTranslation';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import RegulationsForm from './RegulationsForm';
 
-const RegulationsList = ({ loading }) => {
+const RegulationsList = () => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
 
@@ -56,7 +55,7 @@ const RegulationsList = ({ loading }) => {
     return queryParams;
   }, [filterValues, page, pageSize, sort]);
 
-  const { data: regulations } = useRegulations({
+  const { data: regulations, isLoading } = useRegulations({
     args: params,
     options: {
       keepPreviousData: true
@@ -82,7 +81,6 @@ const RegulationsList = ({ loading }) => {
       toast(deleteMessage);
       refetchRegulations();
     } catch (error) {
-      console.log(error);
       toast.error(error.toString());
     }
   };
@@ -221,7 +219,7 @@ const RegulationsList = ({ loading }) => {
 
   return (
     <>
-      {loading && <Loading />}
+      {isLoading && <Loading />}
 
       {regulations && regulations?.rows.length > 0 ? (
         <DataTable {...options} />
@@ -242,15 +240,6 @@ const RegulationsList = ({ loading }) => {
       />
     </>
   );
-};
-
-RegulationsList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetRegulations: PropTypes.func.isRequired,
-  onSelectPayment: PropTypes.func.isRequired,
-  onDeletePayment: PropTypes.func.isRequired
 };
 
 export default RegulationsList;

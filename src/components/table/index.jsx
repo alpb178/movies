@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import { List } from 'immutable';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { usePagination, useSortBy, useTable } from 'react-table';
@@ -132,7 +131,7 @@ const DataTable = ({
 };
 
 DataTable.defaultProps = {
-  data: List([]),
+  data: [],
   onRowClick: () => {},
   hiddenColumns: [],
   name: '',
