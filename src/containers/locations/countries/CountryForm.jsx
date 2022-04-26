@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
-import { POST } from '@/lib/constants';
+import { POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -23,10 +23,16 @@ const CountryForm = ({ data, errors, onOpen, open, touched }) => {
   });
 
   const onSubmit = (values) => {
+    let method = POST;
+    if (data) {
+      method = PUT;
+      values.id = data.id;
+    }
+
     useCountries({
       args: values,
       options: {
-        method: POST
+        method: method
       }
     });
     onOpen(false);
@@ -78,9 +84,13 @@ const CountryForm = ({ data, errors, onOpen, open, touched }) => {
 };
 
 CountryForm.propTypes = {
+  data: PropTypes.object.isRequired,
+  touched: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
   code: PropTypes.object.isRequired,
   name: PropTypes.object.isRequired,
-  onOpen: PropTypes.func.isRequired
+  onOpen: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired
 };
 
 export default CountryForm;

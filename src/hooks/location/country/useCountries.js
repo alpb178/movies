@@ -1,5 +1,5 @@
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_COUNTRIES_URL, DELETE, POST } from '@/lib/constants';
+import { API_COUNTRIES_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 
 const getCountries = async ({ queryKey }) => {
@@ -25,6 +25,8 @@ export default function useCountries({ args = {}, options = {} } = {}) {
     createCountry({ path: API_COUNTRIES_URL, data: args, method: POST });
   } else if (options?.method === DELETE) {
     deleteCountry({ path: API_COUNTRIES_URL + `/${args.id}`, method: DELETE });
+  } else if (options?.method === PUT) {
+    createCountry({ path: API_COUNTRIES_URL + `/${args.id}`, data: args, method: PUT });
   } else {
     return useQuery([API_COUNTRIES_URL, { ...args }], getCountries, {
       ...options
