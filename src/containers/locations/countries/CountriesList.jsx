@@ -61,7 +61,7 @@ const CountriesList = () => {
           method: DELETE
         }
       });
-
+      toast(t('deleted.male', { entity: t('countries', { count: 1 }) }));
       queryClient.refetchQueries();
     } catch (error) {
       toast.error(error);
