@@ -2,21 +2,25 @@
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRoles from '@/hooks/role/useRoles';
+import { apiFetcher } from '@/lib/apiFetcher';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
-import { DEFAULT_PAGE_SIZE, ROLE_ADD, ROLE_EDIT } from 'lib/constants';
+import { API_ROLES_URL, DEFAULT_PAGE_SIZE, DELETE, ROLE_ADD, ROLE_EDIT } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import RolesFilter from './RolesFilter';
 import RolesForm from './RolesForm';
 
 const Roles = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
@@ -45,13 +49,27 @@ const Roles = () => {
     }
   });
 
+  const refetchRoles = () => {
+    queryClient.refetchQueries([API_ROLES_URL]);
+  };
+
   const onDelete = (event, row) => {
     event.stopPropagation();
     setDeleteConfirmation({ open: true, id: row.original.id });
   };
 
-  const onDeleteConfirmation = () => {
-    // onDeleteUser(deleteConfirmation.id);
+  const onDeleteConfirmation = async () => {
+    try {
+      const { data: deleteMessage } = await apiFetcher(
+        `${API_ROLES_URL}/${deleteConfirmation.id}`,
+        { method: DELETE }
+      );
+      setDeleteConfirmation({ open: false });
+      toast(deleteMessage);
+      refetchRoles();
+    } catch (error) {
+      toast.error(error.toString());
+    }
   };
   const onUpdate = (event, row) => {
     event.stopPropagation();
@@ -99,8 +117,8 @@ const Roles = () => {
       Cell: ({ row }) => {
         return (
           <TableActions
-            onEdit={(event) => onUpdate(event, row.original)}
-            onDelete={(event) => onDelete(event, row.original)}
+            onEdit={(event) => onUpdate(event, row)}
+            onDelete={(event) => onDelete(event, row)}
           />
         );
       }
