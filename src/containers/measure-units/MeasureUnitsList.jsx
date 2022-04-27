@@ -2,31 +2,49 @@
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import DataTable from '@/components/table';
+import TableActions from '@/components/table/TableActions';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
-import { LOCATION_DETAILS_PAGE, MEASUREUNITS_EDIT } from '@/lib/constants';
-import { PencilIcon, TrashIcon } from '@heroicons/react/outline';
+import {
+  API_MEASURE_UNITS_URL,
+  DEFAULT_PAGE_SIZE,
+  DELETE,
+  LOCATION_DETAILS_PAGE
+} from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react';
-import CountryForm from './MeasureUnitForm';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
+import MeasureUnitsForm from './MeasureUnitForm';
 
 const MeasureUnitsList = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const [openFilters, setOpenFilters] = useState(false);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sort, setSort] = useState();
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
   const [openForm, setOpenForm] = useState(false);
+  const queryClient = useQueryClient();
+  const [selectedItem, setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  const [loading, setLoading] = useState(false);
 
-  const [filterValues, setFilterValues] = useState({
-    name: '',
-    symbol: ''
-  });
+  useEffect(() => {
+    if (!openForm) {
+      setSelectedItem(null);
+    }
+  }, [openForm]);
 
   const params = useMemo(() => {
-    return {};
-  }, []);
+    const query = {};
+    if (page !== 0) query.page = page;
+    if (sort) query.sort = sort;
+    return query;
+  }, [page, sort]);
 
   const { data: measureunits, isLoading } = useMeasureUnits({
     args: params,
@@ -37,18 +55,31 @@ const MeasureUnitsList = () => {
 
   const handleDelete = (event, row) => {
     event.stopPropagation();
-    setDeleteConfirmation({ open: true, id: row.original.login });
+    setDeleteConfirmation({ open: true, id: row.original.id });
   };
 
-  const onDeleteConfirmation = () => {
-    console.log();
+  const onDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+      await useMeasureUnits({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+      toast(t('deleted.male', { entity: t('measure-units', { count: 1 }) }));
+      queryClient.refetchQueries([API_MEASURE_UNITS_URL]);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleEdit = (event, row) => {
+  const onUpdate = (event, item) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = MEASUREUNITS_EDIT(value);
-    router.push(path);
+    setSelectedItem(item);
+    setOpenForm(true);
   };
 
   const columns = React.useMemo(() => [
@@ -63,44 +94,14 @@ const MeasureUnitsList = () => {
     {
       id: 'optionsUsers',
       displayName: 'optionsUsers',
-      Cell: ({ row }) => {
-        return (
-          <div className="flex items-center space-x-4">
-            <button
-              type="button"
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              type="button"
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              id="buttonDelete"
-              onClick={(event) => handleDelete(event, row)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
-        );
-      }
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={(event) => handleDelete(event, row)}
+        />
+      )
     }
   ]);
-
-  const handleClick = (event, value) => {
-    const updatedFilters = Object.keys(filterValues)
-      .filter((key) => value != key)
-      .reduce(
-        (obj, key) => ({
-          ...obj,
-          [key]: filterValues[key]
-        }),
-        {}
-      );
-
-    setFilterValues(updatedFilters);
-  };
 
   const renderInsertButton = () => (
     <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
@@ -110,7 +111,13 @@ const MeasureUnitsList = () => {
 
   const options = {
     columns,
-    data: measureunits,
+    data: measureunits?.rows,
+    count: measureunits?.count,
+    setPage: onPageChangeCallback,
+    setSortBy: onSortChangeCallback,
+    pageSize,
+    onPageSizeChange: setPageSize,
+    name: t('countries', { count: 2 }),
     onRowClick: (row) => {
       const value = row.original.id;
       const path = LOCATION_DETAILS_PAGE(value);
@@ -123,25 +130,34 @@ const MeasureUnitsList = () => {
     <>
       {isLoading && <Loading />}
 
-      {measureunits && measureunits.length > 0 ? (
+      {measureunits && measureunits.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
         <EmptyState text={t('measure-units', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
-        <CountryForm />
-      </FormDialogWrapper>
+      <MeasureUnitsForm
+        data={selectedItem}
+        open={openForm}
+        onOpen={setOpenForm}
+        setLoading={setLoading}
+      />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete', { entity: 'measureunits' })}
-        content={t('asd')}
+        title={t('delete', { entity: 'measure-units' })}
+        content={t('delete-message.male', { entity: t('measure-units', { count: 1 }) })}
       />
     </>
   );
+};
+
+MeasureUnitsList.propTypes = {
+  row: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 export default MeasureUnitsList;

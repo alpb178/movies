@@ -1,18 +1,22 @@
 /* eslint-disable react/display-name */
+import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
-import { POST } from '@/lib/constants';
-import { Field, Form, Formik } from 'formik';
+import { API_MEASURE_UNITS_URL, POST, PUT } from '@/lib/constants';
+import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const MeasureUnitForm = ({ onOpen }) => {
+const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
   const { t } = useTranslation('common');
-
+  const queryClient = useQueryClient();
+  const [isNewData, setIsNewData] = useState(true);
   const initialValues = {
-    name: '',
-    symbol: ''
+    name: data?.name || '',
+    symbol: data?.symbol || ''
   };
 
   const validationSchema = Yup.object().shape({
@@ -21,68 +25,89 @@ const MeasureUnitForm = ({ onOpen }) => {
   });
 
   const onSubmit = (values) => {
-    useMeasureUnits({
-      args: values,
-      options: {
-        method: POST
-      }
-    });
-    onOpen(false);
+    let method = POST;
+    let message = t('inserted.male', { entity: t('measure-units', { count: 1 }) });
+    if (data) {
+      method = PUT;
+      values.id = data.id;
+      message = t('updated.male', { entity: t('measure-units', { count: 1 }) });
+    }
+    try {
+      setLoading(true);
+      useMeasureUnits({
+        args: values,
+        options: {
+          method: method
+        }
+      });
+      onOpen(false);
+      queryClient.invalidateQueries([API_MEASURE_UNITS_URL]);
+      toast(message);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    data?.id ? setIsNewData(false) : setIsNewData(true);
+  }, [data?.id]);
+
   return (
-    <>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-        {({ errors, touched }) => (
-          <Form className="m-10 space-y-6">
-            <p className="form-header">{t('form.measure-unit.title.create')}</p>
-            <div className="space-y-2">
-              <label htmlFor="name">{t('form.common.label.name')}</label>
-              <div className="relative w-full mx-auto">
-                <Field
-                  id="name"
-                  name="name"
-                  className={`text-field ${
-                    errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                  }`}
-                />
-                {errors.origin && touched.origin ? (
-                  <p className="mt-4 text-red-600">{errors.origin.name}</p>
-                ) : null}
-              </div>
-            </div>
+    <FormDialogWrapper
+      formName="measure-unit"
+      open={open}
+      onOpen={onOpen}
+      isNewData={isNewData}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
+      <div className="space-y-2">
+        <label htmlFor="name">{t('form.common.label.name')}</label>
+        <div className="relative w-full mx-auto">
+          <Field
+            id="name"
+            name="name"
+            className={`text-field ${
+              errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
+            }`}
+          />
+          {errors?.name && touched?.name ? (
+            <p className="mt-4 text-red-600">{errors?.name}</p>
+          ) : null}
+        </div>
+      </div>
 
-            <div className="space-y-2">
-              <label htmlFor="symbol">{t('form.common.label.symbol')}</label>
-              <div className="relative w-full mx-auto">
-                <Field
-                  id="symbol"
-                  name="symbol"
-                  className={`text-field ${
-                    errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                  }`}
-                />
-                {errors.origin && touched.origin ? (
-                  <p className="mt-4 text-red-600">{errors.origin.name}</p>
-                ) : null}
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-300"
-            >
-              {t('save')}
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </>
+      <div className="space-y-2">
+        <label htmlFor="symbol">{t('symbol')}</label>
+        <div className="relative w-full mx-auto">
+          <Field
+            id="symbol"
+            name="symbol"
+            className={`text-field ${
+              errors?.symbol && touched?.symbol ? 'border-red-400' : 'border-gray-300'
+            }`}
+          />
+          {errors?.symbol && touched?.symbol ? (
+            <p className="mt-4 text-red-600">{errors?.symbol}</p>
+          ) : null}
+        </div>
+      </div>
+    </FormDialogWrapper>
   );
 };
 
-MeasureUnitForm.propTypes = {
-  onOpen: PropTypes.func.isRequired
+MeasureUnitsForm.propTypes = {
+  data: PropTypes.object.isRequired,
+  touched: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  symbol: PropTypes.object.isRequired,
+  name: PropTypes.object.isRequired,
+  onOpen: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired
 };
 
-export default MeasureUnitForm;
+export default MeasureUnitsForm;
