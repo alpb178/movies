@@ -6,12 +6,17 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
 import useCountries from '@/hooks/location/country/useCountries';
-import { API_COUNTRIES_URL, DELETE, LOCATION_DETAILS_PAGE } from '@/lib/constants';
+import {
+  API_COUNTRIES_URL,
+  DEFAULT_PAGE_SIZE,
+  DELETE,
+  LOCATION_DETAILS_PAGE
+} from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import CountryForm from './CountryForm';
@@ -29,6 +34,11 @@ const CountriesList = () => {
     name: '',
     code: ''
   });
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sort, setSort] = useState();
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
 
   useEffect(() => {
     if (!openForm) {
@@ -37,8 +47,11 @@ const CountriesList = () => {
   }, [openForm]);
 
   const params = useMemo(() => {
-    return {};
-  }, []);
+    const query = {};
+    if (page !== 0) query.page = page;
+    if (sort) query.sort = sort;
+    return query;
+  }, [filterValues, page, sort]);
 
   const { data: countries } = useCountries({
     args: params,
@@ -139,6 +152,11 @@ const CountriesList = () => {
   const options = {
     columns,
     data: countries?.rows,
+    count: countries?.count,
+    setPage: onPageChangeCallback,
+    setSortBy: onSortChangeCallback,
+    pageSize,
+    onPageSizeChange: setPageSize,
     name: t('countries', { count: 2 }),
     onRowClick: (row) => {
       const value = row.original.id;
