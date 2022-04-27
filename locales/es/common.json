@@ -99,7 +99,8 @@
     },
     "region": {
       "title": {
-        "create": "Nueva Región"
+        "create": "Nueva Región",
+        "update": "Editar Región"
       },
       "required": {
         "country": "El país es requerido"

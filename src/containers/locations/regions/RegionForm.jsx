@@ -7,14 +7,15 @@ import { API_REGIONS_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const RegionForm = ({ data, errors, onOpen, open, touched }) => {
+const RegionForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
+  const [isNewData, setIsNewData] = useState(true);
 
   const { data: countries } = useCountries({
     args: {},
@@ -36,15 +37,21 @@ const RegionForm = ({ data, errors, onOpen, open, touched }) => {
   });
 
   const onSubmit = (values) => {
+    values.country = values.country.id;
+    let method = POST;
+    let message = t('inserted.male', { entity: t('regions', { count: 1 }) });
+    if (data) {
+      method = PUT;
+      values.id = data.id;
+      message = t('updated.male', { entity: t('regions', { count: 1 }) });
+    }
+
+    if (data) {
+      method = PUT;
+      values.id = data.id;
+    }
     try {
-      values.country = values.country.id;
-      let method = POST;
-
-      if (data) {
-        method = PUT;
-        values.id = data.id;
-      }
-
+      setLoading(true);
       useRegions({
         args: values,
         options: {
@@ -53,17 +60,25 @@ const RegionForm = ({ data, errors, onOpen, open, touched }) => {
       });
 
       onOpen(false);
+      toast(message);
       queryClient.refetchQueries([API_REGIONS_URL]);
     } catch (error) {
       toast.error(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    data?.id ? setIsNewData(false) : setIsNewData(true);
+  }, [data?.id]);
 
   return (
     <FormDialogWrapper
       formName="region"
       open={open}
       onOpen={onOpen}
+      isNewData={isNewData}
       initialValues={initialValues}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
@@ -126,7 +141,8 @@ RegionForm.propTypes = {
   errors: PropTypes.object,
   onOpen: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  touched: PropTypes.object
+  touched: PropTypes.object,
+  setLoading: PropTypes.func.isRequired
 };
 
 export default RegionForm;

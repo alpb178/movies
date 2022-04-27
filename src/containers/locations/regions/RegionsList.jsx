@@ -5,16 +5,18 @@ import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRegions from '@/hooks/location/region/useRegions';
-import { DEFAULT_PAGE_SIZE, REGION_DETAILS_PAGE } from '@/lib/constants';
+import { API_REGIONS_URL, DEFAULT_PAGE_SIZE, DELETE, REGION_DETAILS_PAGE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import RegionForm from './RegionForm';
 import RegionsFilter from './RegionsFilter';
 
-const RegionsList = ({ loading }) => {
+const RegionsList = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
 
@@ -25,8 +27,10 @@ const RegionsList = ({ loading }) => {
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState();
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  const [loading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
     country: ''
   });
@@ -50,6 +54,29 @@ const RegionsList = ({ loading }) => {
       keepPreviousData: true
     }
   });
+
+  const handleDelete = (event, row) => {
+    event.stopPropagation();
+    setDeleteConfirmation({ open: true, id: row.original.id });
+  };
+
+  const onDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+      await useRegions({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+      queryClient.refetchQueries([API_REGIONS_URL]);
+      toast(t('deleted.male', { entity: t('regions', { count: 1 }) }));
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onUpdate = (event, item) => {
     event.stopPropagation();
@@ -77,7 +104,7 @@ const RegionsList = ({ loading }) => {
       Cell: ({ row }) => (
         <TableActions
           onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={() => setOpenDeleteConfirmation(true)}
+          onDelete={(event) => handleDelete(event, row)}
         />
       )
     }
@@ -169,13 +196,19 @@ const RegionsList = ({ loading }) => {
         <EmptyState text={t('regions', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
-      <RegionForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
+      <RegionForm
+        data={selectedItem}
+        open={openForm}
+        onOpen={setOpenForm}
+        setLoading={setLoading}
+      />
 
       <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onOpen={setOpenDeleteConfirmation}
-        title={t('delete', { entity: t('regions', { count: 1 }) })}
-        content={t('asd')}
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('regions', { count: 1 }) })}
+        content={t('delete-message.female', { entity: t('regions', { count: 1 }) })}
       />
     </>
   );
