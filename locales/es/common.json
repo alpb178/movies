@@ -77,6 +77,7 @@
         "update": "Actualizar Aerolínea"
       }
     },
+   
     "common": {
       "empty-options": "No se encontraron resultados",
       "label": {
@@ -91,6 +92,12 @@
         "code": "El código es requerido"
       }
     },
+    "measure-unit": {
+      "title": {
+        "create": "Nueva Unidad de Medida",
+        "update": "Editar Unidad de Medida"
+      }
+      },
     "country": {
       "title": {
         "create": "Nuevo País",
@@ -100,7 +107,7 @@
     "region": {
       "title": {
         "create": "Nueva Región",
-        "update": "Editar Región"
+        "update": "Actualizar Región"
       },
       "required": {
         "country": "El país es requerido"
