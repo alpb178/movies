@@ -4,7 +4,7 @@ import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
+import CountriesSearch from '@/containers/locations/countries/CountriesSearch';
 import useCountries from '@/hooks/location/country/useCountries';
 import {
   API_COUNTRIES_URL,
@@ -165,7 +165,7 @@ const CountriesList = () => {
     },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
-        <CountriesFilter open={openFilters} onSubmit={handleFilters} />
+        <CountriesSearch open={openFilters} onSubmit={handleFilters} />
 
         <div className="flex">
           <FilterCriteria />
@@ -217,10 +217,7 @@ const CountriesList = () => {
 CountriesList.propTypes = {
   row: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetCountries: PropTypes.func.isRequired,
-  onSelectCountries: PropTypes.func.isRequired,
-  onDeleteCountries: PropTypes.func.isRequired
+  loading: PropTypes.bool.isRequired
 };
 
 export default CountriesList;

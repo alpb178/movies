@@ -52,7 +52,6 @@ const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
 
   useEffect(() => {
     data?.id ? setIsNewData(false) : setIsNewData(true);
-    console.log(isNewData);
   }, [data?.id]);
 
   return (
