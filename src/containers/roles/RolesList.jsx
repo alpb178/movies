@@ -60,17 +60,15 @@ const Roles = () => {
 
   const onDeleteConfirmation = async () => {
     try {
-      const { data: deleteMessage } = await apiFetcher(
-        `${API_ROLES_URL}/${deleteConfirmation.id}`,
-        { method: DELETE }
-      );
+      await apiFetcher(`${API_ROLES_URL}/${deleteConfirmation.id}`, { method: DELETE });
       setDeleteConfirmation({ open: false });
-      toast(deleteMessage);
+      toast(t('deleted.male', { entity: t('roles', { count: 1 }) }));
       refetchRoles();
     } catch (error) {
       toast.error(error.toString());
     }
   };
+
   const onUpdate = (event, row) => {
     event.stopPropagation();
     const value = row.original.email;
