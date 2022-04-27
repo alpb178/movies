@@ -93,7 +93,8 @@
     },
     "country": {
       "title": {
-        "create": "Nuevo País"
+        "create": "Nuevo País",
+        "update": "Editar País"
       }
     },
     "region": {
@@ -283,6 +284,7 @@
     "female": "{{entity}} guardada exitosamente."
   },
   "search": "Buscar",
+  "search-entity": "Buscar {{entity}}",
   "select": "Seleccione",
   "settings": "Ajustes",
   "shipment-items": {

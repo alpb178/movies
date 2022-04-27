@@ -19,7 +19,7 @@ const FormDialogWrapper = ({
 
   useEffect(() => {
     setTitle(isNewData ? `form.${formName}.title.create` : `form.${formName}.title.update`);
-  }, [formName]);
+  }, [isNewData]);
 
   return (
     <>

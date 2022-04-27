@@ -5,7 +5,7 @@ import { API_COUNTRIES_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
+  const [isNewData, setIsNewData] = useState(true);
   const initialValues = {
     name: data?.name || '',
     code: data?.code || ''
@@ -49,11 +50,17 @@ const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
     }
   };
 
+  useEffect(() => {
+    data?.id ? setIsNewData(false) : setIsNewData(true);
+    console.log(isNewData);
+  }, [data?.id]);
+
   return (
     <FormDialogWrapper
       formName="country"
       open={open}
       onOpen={onOpen}
+      isNewData={isNewData}
       initialValues={initialValues}
       onSubmit={onSubmit}
       validationSchema={validationSchema}

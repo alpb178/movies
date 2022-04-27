@@ -185,6 +185,7 @@
   },
   "send": "Send",
   "search": "Search",
+  "search-entity": "Search {{entity}}",
   "select": "Select",
   "settings": "Settings",
   "showing": "Showing",

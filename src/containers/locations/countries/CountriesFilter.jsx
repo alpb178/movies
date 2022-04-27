@@ -1,87 +1,36 @@
-import DataFilter from '@/components/filter/DataFilter';
+import DataSearch from '@/components/search/DataSearch';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
 import React from 'react';
 
-const TravelsFilter = ({ data, onSubmit, open }) => {
-  const { t } = useTranslation('common');
-
+const TravelsSearch = ({ onSubmit, open }) => {
   const initialValues = {
-    surname: '',
-    name: '',
-    phone: '',
-    email: ''
+    textSearch: ''
   };
 
+  const { t } = useTranslation('common');
+
   return (
-    <DataFilter initialValues={initialValues} onSubmit={onSubmit} open={open}>
+    <DataSearch initialValues={initialValues} onSubmit={onSubmit} open={open}>
       <div className="w-full">
-        <label htmlFor="name" className="block font-medium text-gray-700">
-          {t('name')}
-        </label>
         <Field
           type="text"
           className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-          name="name"
-          id="name"
-          aria-describedby="name"
+          name="textSearch"
+          id="textSearch"
+          placeholder={t('search-entity', { entity: t('countries', { count: 1 }) })}
+          aria-describedby="textSearch"
         />
       </div>
-      <div className="w-full">
-        <label htmlFor="surname" className="block font-medium text-gray-700">
-          {t('surname')}
-        </label>
-        <Field
-          type="text"
-          className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-          name="surname"
-          id="surname"
-          aria-describedby="surname"
-        />
-      </div>
-      <div className="w-full">
-        <label htmlFor="phone" className="block font-medium text-gray-700">
-          {t('phone')}
-        </label>
-        <Field
-          type="text"
-          className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-          name="phone"
-          id="phone"
-          aria-describedby="phone"
-        />
-      </div>
-      <div className="w-full">
-        <label htmlFor="email" className="block font-medium text-gray-700">
-          {t('email')}
-        </label>
-        <Field
-          type="text"
-          className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-          name="email"
-          id="email"
-          aria-describedby="email"
-        />
-      </div>
-      <div className="w-full">
-        <label htmlFor="rol" className="block font-medium text-gray-700">
-          {t('role')}
-        </label>
-        <Field
-          as="select"
-          className="w-full mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
-          name="roles"
-        >
-          <option value="first"></option>
-          {/* {data?.toJS().map((rol) => (
-                        <option key={rol.name} value={rol.name}>
-                          {rol.name}
-                        </option>
-                      ))} */}
-        </Field>
-      </div>
-    </DataFilter>
+    </DataSearch>
   );
 };
 
-export default TravelsFilter;
+TravelsSearch.propTypes = {
+  children: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  open: PropTypes.bool
+};
+
+export default TravelsSearch;

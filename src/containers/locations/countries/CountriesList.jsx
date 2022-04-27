@@ -161,7 +161,7 @@ const CountriesList = () => {
           className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
-          {t('filter')}
+          {t('search')}
         </button>
         {renderInsertButton()}
       </div>
