@@ -90,6 +90,10 @@
   "forgot-password": "Forgot Password?",
   "go-back": "Back",
   "home": "Home",
+  "inserted": {
+    "male": "{{entity}} inserted succesful.",
+    "female": "{{entity}} inserted succesful."
+  },
   "information": {
     "0": "No Information",
     "one": "Information",
@@ -188,6 +192,11 @@
   "type": "Type",
   "trade-name": "Trade name",
   "update": "Update",
+  "updated": {
+    "male": "{{entity}} updated succesful.",
+    "female": "{{entity}} updated succesful."
+  },
+  "update-title": "Update {{entity}}",
   "username": "Username",
   "users": {
     "0": "No users",

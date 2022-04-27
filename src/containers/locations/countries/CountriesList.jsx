@@ -6,7 +6,7 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import CountriesFilter from '@/containers/locations/countries/CountriesFilter';
 import useCountries from '@/hooks/location/country/useCountries';
-import { DELETE, LOCATION_DETAILS_PAGE } from '@/lib/constants';
+import { API_COUNTRIES_URL, DELETE, LOCATION_DETAILS_PAGE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -62,7 +62,7 @@ const CountriesList = () => {
         }
       });
       toast(t('deleted.male', { entity: t('countries', { count: 1 }) }));
-      queryClient.refetchQueries();
+      queryClient.refetchQueries([API_COUNTRIES_URL]);
     } catch (error) {
       toast.error(error);
     } finally {
@@ -178,7 +178,12 @@ const CountriesList = () => {
         <EmptyState text={t('countries', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <CountryForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
+      <CountryForm
+        data={selectedItem}
+        open={openForm}
+        onOpen={setOpenForm}
+        setLoading={setLoading}
+      />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}

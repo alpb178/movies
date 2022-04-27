@@ -176,6 +176,10 @@
   "forgot-password": "¿Olvidaste la contraseña?",
   "go-back": "Volver",
   "home": "Inicio",
+  "inserted": {
+    "male": "{{entity}} insertado exitosamente.",
+    "female": "{{entity}} insertada exitosamente."
+  },
   "information-product": {
     "0": "Sin Información del Producto",
     "1": "Información del Producto",
@@ -311,6 +315,11 @@
   },
   "type": "Tipo",
   "update": "Editar",
+  "updated": {
+    "male": "{{entity}} editado exitosamente.",
+    "female": "{{entity}} editada exitosamente."
+  },
+  "update-title": "Editar {{entity}}",
   "username": "Usuario",
   "users": {
     "0": "Sin usuarios",

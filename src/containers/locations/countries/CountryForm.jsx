@@ -1,15 +1,16 @@
 /* eslint-disable react/display-name */
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
-import { POST, PUT } from '@/lib/constants';
+import { API_COUNTRIES_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const CountryForm = ({ data, errors, onOpen, open, touched }) => {
+const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
   const initialValues = {
@@ -24,19 +25,28 @@ const CountryForm = ({ data, errors, onOpen, open, touched }) => {
 
   const onSubmit = (values) => {
     let method = POST;
+    let message = t('inserted.male', { entity: t('countries', { count: 1 }) });
     if (data) {
       method = PUT;
       values.id = data.id;
+      message = t('updated.male', { entity: t('countries', { count: 1 }) });
     }
-
-    useCountries({
-      args: values,
-      options: {
-        method: method
-      }
-    });
-    onOpen(false);
-    queryClient.invalidateQueries();
+    try {
+      setLoading(true);
+      useCountries({
+        args: values,
+        options: {
+          method: method
+        }
+      });
+      onOpen(false);
+      queryClient.invalidateQueries([API_COUNTRIES_URL]);
+      toast(message);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,6 +100,7 @@ CountryForm.propTypes = {
   code: PropTypes.object.isRequired,
   name: PropTypes.object.isRequired,
   onOpen: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired
 };
 
