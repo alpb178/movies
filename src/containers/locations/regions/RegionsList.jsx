@@ -50,7 +50,7 @@ const RegionsList = () => {
     return query;
   }, [filterValues, page, sort]);
 
-  const { data: regions } = useRegions({
+  const { data: regions, isLoading } = useRegions({
     args: params,
     options: {
       keepPreviousData: true
@@ -194,7 +194,7 @@ const RegionsList = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {(loading || isLoading) && <Loading />}
 
       {regions && regions.rows.length > 0 ? (
         <DataTable {...options} />
