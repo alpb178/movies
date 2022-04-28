@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
@@ -119,7 +118,7 @@ const CountriesList = () => {
               {`${t(e)}: `}
               <span className="font-normal">{filterValues[e]}</span>
             </span>
-            <button type="button" id={filterValues[e]} onClick={(event) => handleClick(event, e)}>
+            <button type="button" id={filterValues[e]} onClick={() => handleClick(e)}>
               <XCircleIcon className="w-6 h-6 ml-2 float-center" />
             </button>
           </div>
@@ -130,7 +129,7 @@ const CountriesList = () => {
     setFilterValues(values);
   };
 
-  const handleClick = (event, value) => {
+  const handleClick = (value) => {
     const updatedFilters = Object.keys(filterValues)
       .filter((key) => value != key)
       .reduce(
@@ -215,9 +214,7 @@ const CountriesList = () => {
 };
 
 CountriesList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired
+  row: PropTypes.object.isRequired
 };
 
 export default CountriesList;

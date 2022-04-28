@@ -1,8 +1,7 @@
-import React from 'react';
-import Document, { Head, Main, NextScript, Html } from 'next/document';
+import { APP_NAME } from '@/lib/constants';
 import Cookies from 'js-cookie';
-
-const APP_NAME = 'Backpackpool';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
+import React from 'react';
 
 class BackpackpoolDocument extends Document {
   static async getInitialProps(ctx) {

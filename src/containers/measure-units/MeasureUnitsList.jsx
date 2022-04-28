@@ -117,7 +117,7 @@ const MeasureUnitsList = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
-    name: t('countries', { count: 2 }),
+    name: t('measure-units', { count: 2 }),
     onRowClick: (row) => {
       const value = row.original.id;
       const path = LOCATION_DETAILS_PAGE(value);

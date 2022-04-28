@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
 import { API_COUNTRIES_URL, POST, PUT } from '@/lib/constants';
@@ -103,8 +102,6 @@ CountryForm.propTypes = {
   data: PropTypes.object.isRequired,
   touched: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  code: PropTypes.object.isRequired,
-  name: PropTypes.object.isRequired,
   onOpen: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired

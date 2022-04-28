@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
 import DataTable from '@/components/table';
@@ -12,6 +11,7 @@ import clsx from 'clsx';
 import Loading from 'components/common/Loading';
 import RegulationsFilter from 'containers/regulations/RegulationsFilter';
 import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -240,6 +240,10 @@ const RegulationsList = () => {
       />
     </>
   );
+};
+
+RegulationsList.propTypes = {
+  row: PropTypes.object.isRequired
 };
 
 export default RegulationsList;
