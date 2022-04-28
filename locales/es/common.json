@@ -77,6 +77,12 @@
         "update": "Actualizar Aerolínea"
       }
     },
+    "role": {
+      "title": {
+        "create": "Nuevo Rol",
+        "update": "Actualizar Rol"
+      }
+    },
    
     "common": {
       "empty-options": "No se encontraron resultados",
