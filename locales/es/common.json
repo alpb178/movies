@@ -113,7 +113,8 @@
     "region": {
       "title": {
         "create": "Nueva Región",
-        "update": "Actualizar Región"
+        "update": "Actualizar Región",
+        "details": "Detalles de una Región"
       },
       "required": {
         "country": "El país es requerido"
