@@ -3,19 +3,23 @@ import AutocompleteField from '@/components/form/AutocompleteField';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
-import { POST, PUT } from '@/lib/constants';
+import { API_SHIPMENT_ITEMS_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const ShipmentItemsForm = ({ data, open, onOpen, errors, touched }) => {
+const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) => {
   const { t } = useTranslation('common');
+  const queryClient = useQueryClient();
+  const [isNewData, setIsNewData] = useState(true);
 
   const initialValues = {
     name: data?.name || '',
-    measureUnit: {}
+    measureUnit: data?.measureUnit || {}
   };
 
   const params = useMemo(() => {
@@ -37,18 +41,34 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched }) => {
   const onSubmit = async (values) => {
     values.measureUnit = values.measureUnit.id;
     let method = POST;
-
+    let message = t('inserted.male', { entity: t('shipment-items', { count: 1 }) });
     if (data) {
       method = PUT;
       values.id = data.id;
+      message = t('updated.male', { entity: t('shipment-items', { count: 1 }) });
     }
-
-    await useShipmentItems({
-      args: values,
-      options: { method }
-    });
+    try {
+      setLoading(true);
+      useShipmentItems({
+        args: values,
+        options: {
+          method: method
+        }
+      });
+      onOpen(false);
+      queryClient.invalidateQueries([API_SHIPMENT_ITEMS_URL]);
+      toast(message);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
     onOpen(false);
   };
+
+  useEffect(() => {
+    data?.id ? setIsNewData(false) : setIsNewData(true);
+  }, [data?.id]);
 
   return (
     <FormDialogWrapper
@@ -57,8 +77,10 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched }) => {
       onOpen={onOpen}
       initialValues={initialValues}
       onSubmit={onSubmit}
+      isNewData={isNewData}
       validationSchema={validationSchema}
     >
+      {console.log(data?.measureUnit)}
       <div className="space-y-2">
         <label htmlFor="name">{t('form.common.label.name')}</label>
         <div className="relative w-full mx-auto">
@@ -78,8 +100,9 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched }) => {
           <AutocompleteField
             id="measureUnit"
             name="measureUnit"
-            placeholder={t('form.publish.departure.placeholder')}
+            placeholder={t('form.shipment-item.placeholder.payload')}
             options={measureUnits ? measureUnits.rows : []}
+            defaultValue={data?.measureUnit}
             className="autocomplete-field"
           />
         </div>
@@ -89,8 +112,12 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched }) => {
 };
 
 ShipmentItemsForm.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.object.isRequired,
+  touched: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  name: PropTypes.object.isRequired,
   onOpen: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired
 };
 

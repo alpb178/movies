@@ -148,8 +148,12 @@
       "label": {
         "measure-unit": "Unidad de medida"
       },
+      "placeholder": {
+        "payload": "Seleccione una Unidad de Medida"
+      },
       "title": {
-        "create": "Nuevo Artículo"
+        "create": "Nuevo Artículo",
+        "update": "Editar Artículo"
       }
     },
     "travel": {

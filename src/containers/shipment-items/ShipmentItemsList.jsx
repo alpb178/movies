@@ -3,19 +3,21 @@ import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDial
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
+import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/shipment-items/ShipmentItemsFilter';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
-import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
-import { PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/outline';
+import { API_SHIPMENT_ITEMS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
+import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import ShipmentItemsForm from './ShipmentItemsForm';
 
 const ShipmentItemsList = () => {
   const { t } = useTranslation('common');
-  const router = useRouter();
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
@@ -25,10 +27,19 @@ const ShipmentItemsList = () => {
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  const [selectedItem, setSelectedItem] = useState();
 
   const [filterValues, setFilterValues] = useState({
     measureUnit: ''
   });
+  useEffect(() => {
+    if (!openForm) {
+      setSelectedItem(null);
+    }
+  }, [openForm]);
 
   const params = useMemo(() => {
     const query = {};
@@ -37,7 +48,7 @@ const ShipmentItemsList = () => {
     return query;
   }, [filterValues, page, sort]);
 
-  const { data: shipmentItems, isLoading } = useShipmentItems({
+  const { data: shipmentItems } = useShipmentItems({
     args: params,
     options: {
       keepPreviousData: true
@@ -45,12 +56,32 @@ const ShipmentItemsList = () => {
   });
 
   const handleDelete = (event, row) => {
-    event.preventDefault();
-    const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
+    event.stopPropagation();
+    setDeleteConfirmation({ open: true, id: row.original.id });
   };
 
-  const handleEdit = (event, row) => {
+  const onDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+      await useShipmentItems({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+      toast(t('deleted.male', { entity: t('shipment-items', { count: 1 }) }));
+      queryClient.refetchQueries([API_SHIPMENT_ITEMS_URL]);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onUpdate = (event, item) => {
     event.stopPropagation();
+    setSelectedItem(item);
+    setOpenForm(true);
   };
 
   const rednerMeasureUnit = (value) => <div>{value?.name}</div>;
@@ -68,28 +99,12 @@ const ShipmentItemsList = () => {
     {
       id: 'optionsShipmentItems',
       displayName: 'optionsShipmentItems',
-      Cell: ({ row }) => {
-        return (
-          <div className="flex items-center space-x-4">
-            <button
-              type="button"
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              type="button"
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              id="buttonDelete"
-              onClick={() => setOpenDeleteConfirmation(true)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
-        );
-      }
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={(event) => handleDelete(event, row)}
+        />
+      )
     }
   ]);
 
@@ -168,7 +183,7 @@ const ShipmentItemsList = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {loading && <Loading />}
 
       {shipmentItems && shipmentItems.rows.length > 0 ? (
         <DataTable {...options} />
@@ -176,16 +191,28 @@ const ShipmentItemsList = () => {
         <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <ShipmentItemsForm open={openForm} onOpen={setOpenForm} />
+      <ShipmentItemsForm
+        data={selectedItem}
+        open={openForm}
+        onOpen={setOpenForm}
+        setLoading={setLoading}
+      />
 
       <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onOpen={setOpenDeleteConfirmation}
-        title={t('delete', { entity: 'user' })}
-        content={t('asd')}
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('shipment-items', { count: 1 }) })}
+        content={t('delete-message.male', { entity: t('shipment-items', { count: 1 }) })}
       />
     </>
   );
+};
+
+ShipmentItemsList.propTypes = {
+  row: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 export default ShipmentItemsList;
