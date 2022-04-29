@@ -26,7 +26,6 @@ const ShipmentItemsList = () => {
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });

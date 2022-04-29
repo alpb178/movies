@@ -80,7 +80,6 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
       isNewData={isNewData}
       validationSchema={validationSchema}
     >
-      {console.log(data?.measureUnit)}
       <div className="space-y-2">
         <label htmlFor="name">{t('form.common.label.name')}</label>
         <div className="relative w-full mx-auto">
