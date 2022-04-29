@@ -8,10 +8,10 @@ import clsx from 'clsx';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
-import { API_ROLES_URL, DEFAULT_PAGE_SIZE, DELETE, ROLE_ADD, ROLE_EDIT } from 'lib/constants';
+import { API_ROLES_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import RolesFilter from './RolesFilter';
@@ -30,6 +30,7 @@ const Roles = () => {
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  const [selectedItem, setSelectedItem] = useState();
 
   const [filterValues, setFilterValues] = useState({
     measureUnit: ''
@@ -41,6 +42,12 @@ const Roles = () => {
     if (sort) query.sort = sort;
     return query;
   }, [filterValues, page, sort]);
+
+  useEffect(() => {
+    if (!openForm) {
+      setSelectedItem(null);
+    }
+  }, [openForm]);
 
   const { data: roles, isLoading } = useRoles({
     args: params,
@@ -69,16 +76,10 @@ const Roles = () => {
     }
   };
 
-  const onUpdate = (event, row) => {
+  const onUpdate = (event, item) => {
     event.stopPropagation();
-    const value = row.original.email;
-    const path = ROLE_EDIT(value);
-    onSelectRole(row.original);
-    router.push(path);
-  };
-
-  const handleAdd = () => {
-    router.push(ROLE_ADD);
+    setSelectedItem(item);
+    setOpenForm(true);
   };
 
   const renderPermissions = (permissions) => (
@@ -115,7 +116,7 @@ const Roles = () => {
       Cell: ({ row }) => {
         return (
           <TableActions
-            onEdit={(event) => onUpdate(event, row)}
+            onEdit={(event) => onUpdate(event, row.original)}
             onDelete={(event) => onDelete(event, row)}
           />
         );
@@ -206,7 +207,7 @@ const Roles = () => {
         <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <RolesForm data={{}} open={openForm} onOpen={setOpenForm} />
+      <RolesForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}

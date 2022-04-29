@@ -1,8 +1,8 @@
-import { apiFetcher } from '@/lib/apiFetcher';
-import { API_ROLES_URL, POST } from '@/lib/constants';
+import { API_ROLES_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
+import { deleteData, getData, safeData } from 'utils/hooks';
 
-const getRoles = async ({ queryKey }) => {
+/*const getRoles = async ({ queryKey }) => {
   const [path, params] = queryKey;
   const { id, ...rest } = params;
   const url = id ? path.concat('/', id) : path;
@@ -24,5 +24,23 @@ export default function useRoles({ args = {}, options = {} } = {}) {
     return useQuery([API_ROLES_URL, { ...args }], getRoles, {
       ...options
     });
+  }
+}
+*/
+export default function useRoles({ args = {}, options = {} } = {}) {
+  switch (options?.method) {
+    case POST:
+      safeData({ path: API_ROLES_URL, data: args, method: POST });
+      break;
+    case DELETE:
+      deleteData({ path: API_ROLES_URL + `/${args.id}`, method: DELETE });
+      break;
+    case PUT:
+      safeData({ path: API_ROLES_URL + `/${args.id}`, data: args, method: PUT });
+      break;
+    default:
+      return useQuery([API_ROLES_URL, { ...args }], getData, {
+        ...options
+      });
   }
 }
