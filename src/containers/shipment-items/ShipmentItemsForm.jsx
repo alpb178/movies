@@ -51,10 +51,10 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
 
     try {
       setLoading(true);
-      useShipmentItems({
+      await useShipmentItems({
         args: values,
         options: {
-          method: method
+          method
         }
       });
 

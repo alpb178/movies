@@ -1,8 +1,8 @@
 import { API_SHIPMENT_ITEMS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
-import { deleteData, getData, safeData } from 'utils/hooks';
+import { deleteData, getData, safeData } from '..';
 
-export default function useMeasureUnits({ args = {}, options = {} } = {}) {
+export default function useShipmentItems({ args = {}, options = {} } = {}) {
   switch (options?.method) {
     case POST:
       safeData({ path: API_SHIPMENT_ITEMS_URL, data: args, method: POST });

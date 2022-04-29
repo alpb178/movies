@@ -1,5 +1,5 @@
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
-import useCountries from '@/hooks/location/country/useCountries';
+import { saveCountry } from '@/hooks/location/country/useCountries';
 import { API_COUNTRIES_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -23,7 +23,7 @@ const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
     code: Yup.string()
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     let method = POST;
     let message = t('inserted.male', { entity: t('countries', { count: 1 }) });
     if (data) {
@@ -33,7 +33,7 @@ const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
     }
     try {
       setLoading(true);
-      useCountries({
+      await saveCountry({
         args: values,
         options: {
           method

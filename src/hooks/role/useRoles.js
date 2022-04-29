@@ -1,6 +1,6 @@
+import { deleteData, getData, safeData } from '@/hooks/hooks';
 import { API_ROLES_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
-import { deleteData, getData, safeData } from 'utils/hooks';
 
 /*const getRoles = async ({ queryKey }) => {
   const [path, params] = queryKey;

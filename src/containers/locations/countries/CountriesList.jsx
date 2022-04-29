@@ -4,7 +4,7 @@ import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import CountriesSearch from '@/containers/locations/countries/CountriesSearch';
-import useCountries from '@/hooks/location/country/useCountries';
+import useCountries, { saveCountry } from '@/hooks/location/country/useCountries';
 import {
   API_COUNTRIES_URL,
   DEFAULT_PAGE_SIZE,
@@ -67,7 +67,7 @@ const CountriesList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await useCountries({
+      await saveCountry({
         args: { id: deleteConfirmation.id },
         options: {
           method: DELETE
@@ -148,6 +148,7 @@ const CountriesList = () => {
     </button>
   );
 
+  console.log(countries);
   const options = {
     columns,
     data: countries?.rows,

@@ -14,6 +14,6 @@ export const safeData = async (args) => {
 
 export const deleteData = async (args) => {
   const { path, method } = args;
-  const data = await apiFetcher(path, { method });
+  const { data } = await apiFetcher(path, { method });
   return data;
 };

@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
