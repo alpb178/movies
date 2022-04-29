@@ -4,7 +4,7 @@ import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
 import useRegulations from '@/hooks/regulation/useRegulations';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
-import { POST, PUT } from '@/lib/constants';
+import { API_REGULATIONS_URL, POST, PUT } from '@/lib/constants';
 import { Switch, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import { Field } from 'formik';
@@ -12,15 +12,23 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import 'rc-slider/assets/index.css';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const RegulationsForm = ({ data, open, onOpen, errors, touched }) => {
+const RegulationsForm = ({ data, open, onOpen, errors, touched, setLoading }) => {
   const { t } = useTranslation('common');
   const [regulatePriceRange, setRegulatePriceRange] = useState(false);
+  const queryClient = useQueryClient();
+  const [isNewData, setIsNewData] = useState(true);
 
   useEffect(() => {
     setRegulatePriceRange(data?.minPrice > 0 || data?.maxPrice > 0);
   }, [data]);
+
+  useEffect(() => {
+    data?.id ? setIsNewData(false) : setIsNewData(true);
+  }, [data?.id]);
 
   const params = useMemo(() => {
     return {};
@@ -58,16 +66,27 @@ const RegulationsForm = ({ data, open, onOpen, errors, touched }) => {
     values.shipmentItem = values.shipmentItem.id;
     values.country = values.country.id;
     let method = POST;
-
+    let message = t('inserted.female', { entity: t('regulations', { count: 1 }) });
     if (data) {
       method = PUT;
       values.id = data.id;
+      message = t('updated.female', { entity: t('regulations', { count: 1 }) });
     }
-
-    await useRegulations({
-      args: values,
-      options: { method }
-    });
+    try {
+      setLoading(true);
+      useRegulations({
+        args: values,
+        options: {
+          method: method
+        }
+      });
+      queryClient.invalidateQueries([API_REGULATIONS_URL]);
+      toast(message);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
     onOpen(false);
   };
 
@@ -78,6 +97,7 @@ const RegulationsForm = ({ data, open, onOpen, errors, touched }) => {
       onOpen={onOpen}
       initialValues={initialValues}
       onSubmit={onSubmit}
+      isNewData={isNewData}
       validationSchema={validationSchema}
     >
       <div className="space-y-2">
@@ -200,7 +220,8 @@ RegulationsForm.propTypes = {
   errors: PropTypes.object,
   onOpen: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  touched: PropTypes.object
+  touched: PropTypes.object,
+  setLoading: PropTypes.func.isRequired
 };
 
 export default RegulationsForm;

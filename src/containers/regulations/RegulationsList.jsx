@@ -3,7 +3,6 @@ import EmptyState from '@/components/common/EmptyState';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRegulations from '@/hooks/regulation/useRegulations';
-import { apiFetcher } from '@/lib/apiFetcher';
 import { API_REGULATIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
@@ -31,6 +30,7 @@ const RegulationsList = () => {
   const [selectedItem, setSelectedItem] = useState();
   const [openFilters, setOpenFilters] = useState(false);
   const [filterValues, setFilterValues] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!openForm) {
@@ -62,10 +62,6 @@ const RegulationsList = () => {
     }
   });
 
-  const refetchRegulations = () => {
-    queryClient.refetchQueries([API_REGULATIONS_URL]);
-  };
-
   const onDelete = (event, item) => {
     event.stopPropagation();
     setDeleteConfirmation({ open: true, id: item.id });
@@ -73,15 +69,19 @@ const RegulationsList = () => {
 
   const onDeleteConfirmation = async () => {
     try {
-      const { data: deleteMessage } = await apiFetcher(
-        `${API_REGULATIONS_URL}/${deleteConfirmation.id}`,
-        { method: DELETE }
-      );
-      setDeleteConfirmation({ open: false });
-      toast(deleteMessage);
-      refetchRegulations();
+      setLoading(true);
+      await useRegulations({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+      toast(t('deleted.female', { entity: t('regulations', { count: 1 }) }));
+      queryClient.refetchQueries([API_REGULATIONS_URL]);
     } catch (error) {
-      toast.error(error.toString());
+      toast.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -219,7 +219,7 @@ const RegulationsList = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {isLoading || (loading && <Loading />)}
 
       {regulations && regulations?.rows.length > 0 ? (
         <DataTable {...options} />
@@ -227,7 +227,12 @@ const RegulationsList = () => {
         <EmptyState text={t('regulations', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
-      <RegulationsForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
+      <RegulationsForm
+        data={selectedItem}
+        open={openForm}
+        onOpen={setOpenForm}
+        setLoading={setLoading}
+      />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
