@@ -36,9 +36,10 @@ const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
       useCountries({
         args: values,
         options: {
-          method: method
+          method
         }
       });
+
       onOpen(false);
       queryClient.invalidateQueries([API_COUNTRIES_URL]);
       toast(message);

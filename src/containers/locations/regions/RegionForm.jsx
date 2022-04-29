@@ -46,10 +46,6 @@ const RegionForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
       message = t('updated.male', { entity: t('regions', { count: 1 }) });
     }
 
-    if (data) {
-      method = PUT;
-      values.id = data.id;
-    }
     try {
       setLoading(true);
       useRegions({

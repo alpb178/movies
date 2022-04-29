@@ -4,6 +4,7 @@ import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import { API_SHIPMENT_ITEMS_URL, POST, PUT } from '@/lib/constants';
+import clsx from 'clsx';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -47,6 +48,7 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
       values.id = data.id;
       message = t('updated.male', { entity: t('shipment-items', { count: 1 }) });
     }
+
     try {
       setLoading(true);
       useShipmentItems({
@@ -55,6 +57,7 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
           method: method
         }
       });
+
       onOpen(false);
       queryClient.invalidateQueries([API_SHIPMENT_ITEMS_URL]);
       toast(message);
@@ -63,7 +66,6 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
     } finally {
       setLoading(false);
     }
-    onOpen(false);
   };
 
   useEffect(() => {
@@ -86,9 +88,10 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
           <Field
             id="name"
             name="name"
-            className={`text-field ${
+            className={clsx(
+              'text-field',
               errors && errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
-            }`}
+            )}
           />
         </div>
       </div>

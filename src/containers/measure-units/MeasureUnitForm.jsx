@@ -32,6 +32,7 @@ const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) =
       values.id = data.id;
       message = t('updated.male', { entity: t('measure-units', { count: 1 }) });
     }
+
     try {
       setLoading(true);
       useMeasureUnits({
@@ -40,6 +41,7 @@ const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) =
           method: method
         }
       });
+
       onOpen(false);
       queryClient.invalidateQueries([API_MEASURE_UNITS_URL]);
       toast(message);
