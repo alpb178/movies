@@ -4,6 +4,8 @@ import { enGB, es } from 'date-fns/locale';
 
 export const locales = { es, en: enGB };
 
+export const lang = { es: 'Español', en: 'English' };
+
 export const getHomePageFromUser = (user) => {
   let to;
   switch (user?.roles[0]) {

@@ -1,11 +1,11 @@
+import { lang } from '@/lib/utils';
 import { Menu, Transition } from '@headlessui/react';
 import setLanguage from 'next-translate/setLanguage';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { HiOutlineTranslate as TranslateIcon } from 'react-icons/hi';
-import { lang } from 'utils';
 
-export default function Navbar() {
+export default function AuthNavbar() {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
   const { lang: language } = useTranslation('common');
 
@@ -55,40 +55,20 @@ export default function Navbar() {
                         leaveTo="transform translate-y-5 opacity-0"
                         className="absolute z-50 max-w-md py-2 overflow-hidden bg-white rounded-md top-16 lg:max-w-2xl lg:ml-0 lg:shadow-lg focus:outline-none focus:ring focus:border-blue-300"
                       >
-                        <Menu.Items static className="flex flex-col justify-center w-max">
-                          <Menu.Item>
-                            <button
-                              type="button"
-                              className={`${
-                                language === 'ca' ? 'text-primary-500' : ''
-                              } px-8 py-4 duration-300 hover:text-primary-500 hover:bg-green-50`}
-                              onClick={() => handleLanguageChanged('ca')}
-                            >
-                              Catalán
-                            </button>
-                          </Menu.Item>
-                          <Menu.Item>
-                            <button
-                              type="button"
-                              className={`${
-                                language === 'es' ? 'text-primary-500' : ''
-                              } px-8 py-4 duration-300 hover:text-primary-500 hover:bg-green-50`}
-                              onClick={() => handleLanguageChanged('es')}
-                            >
-                              Español
-                            </button>
-                          </Menu.Item>
-                          <Menu.Item>
-                            <button
-                              type="button"
-                              className={`${
-                                language === 'en' ? 'text-primary-500' : ''
-                              } px-8 py-4 duration-300 hover:text-primary-500 hover:bg-green-50`}
-                              onClick={() => handleLanguageChanged('en')}
-                            >
-                              English
-                            </button>
-                          </Menu.Item>
+                        <Menu.Items static className="flex flex-col w-max">
+                          {Object.entries(lang).map(([key, value]) => (
+                            <Menu.Item key={key}>
+                              <button
+                                type="button"
+                                className={`${
+                                  language === key ? 'text-primary-500' : ''
+                                } px-8 py-4 duration-300 hover:text-primary-500 hover:bg-green-50`}
+                                onClick={() => handleLanguageChanged(key)}
+                              >
+                                {value}
+                              </button>
+                            </Menu.Item>
+                          ))}
                         </Menu.Items>
                       </Transition>
                     </>
