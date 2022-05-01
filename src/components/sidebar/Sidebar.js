@@ -11,7 +11,7 @@ const Sidebar = () => (
         <img
           className="h-10 w-max"
           src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-          alt="Backpackpool"
+          alt={APP_NAME}
         />
         <span className="text-xl font-medium text-white">{APP_NAME}</span>
       </div>

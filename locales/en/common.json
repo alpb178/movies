@@ -4,7 +4,7 @@
     "create": "Create an account",
     "login": "Login",
     "logout": "Logout",
-    "new": "¿New to BackpackPool?"
+    "new": "¿New to Zendinit?"
   },
   "add": "Add",
   "applications": {
@@ -41,12 +41,6 @@
     "0": "No Certificate ISOS",
     "one": "Certificate ISO",
     "other": "Certificate ISO"
-  },
-
-  "backpackpool-gold": {
-    "0": "Backpackpool Gold",
-    "one": "Backpackpool Gold",
-    "other": "Backpackpool Gold"
   },
   "current-payment": {
     "0": "No Current Payment",

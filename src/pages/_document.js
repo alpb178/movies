@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
 
-class BackpackpoolDocument extends Document {
+class ZendinitDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
     return { ...initialProps };
@@ -43,4 +43,4 @@ class BackpackpoolDocument extends Document {
   }
 }
 
-export default BackpackpoolDocument;
+export default ZendinitDocument;

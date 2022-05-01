@@ -1,4 +1,4 @@
-export const APP_NAME = 'Backpackpool';
+export const APP_NAME = 'Zendinit';
 
 export const DEFAULT_PAGE_SIZE = 10;
 

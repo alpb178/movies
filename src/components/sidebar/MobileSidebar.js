@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Dialog, Transition } from '@headlessui/react';
-import { HiX as XIcon } from 'react-icons/hi';
 import { APP_NAME } from 'lib/constants';
+import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
+import { HiX as XIcon } from 'react-icons/hi';
 import NavigationMenu from './NavigationMenu';
 
 const MobileSidebar = ({ open, onOpen }) => (
@@ -61,7 +61,7 @@ const MobileSidebar = ({ open, onOpen }) => (
             <img
               className="h-10 w-max"
               src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-              alt="Backpackpool"
+              alt={APP_NAME}
             />
             <span className="text-xl font-medium text-white">{APP_NAME}</span>
           </div>

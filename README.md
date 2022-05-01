@@ -33,13 +33,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 First we build the docker image from project root dir
 
-`docker build . -t backpackpool-admin`
+`docker build . -t zendinit-admin`
 
 Once is finished, we need to run a docker container from the image previously created, to do so we execute
 
-`docker run -p 5000:3000 backpackpool-admin`
+`docker run -p 5000:3000 zendinit-admin`
 
-To stop docker container we should check the docker container id 
+To stop docker container we should check the docker container id
 
 `docker container ls`
 
