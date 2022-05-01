@@ -146,7 +146,7 @@ const TravelForm = ({ travelId }) => {
                 <AutocompleteField
                   name="traveler"
                   placeholder={t('form.travel.placeholder.traveler')}
-                  options={users ? users : []}
+                  options={users ? users.rows : []}
                   className="autocomplete-field"
                   optionLabels={['firstName', 'lastName']}
                   keysToMatch={['firstName', 'lastName', 'username']}
