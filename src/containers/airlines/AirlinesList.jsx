@@ -4,31 +4,38 @@ import EmptyState from '@/components/common/EmptyState';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useAirlines from '@/hooks/airline/useAirlines';
+import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import Loading from 'components/common/Loading';
 import PaymentFilter from 'containers/airlines/AirlinesFilter';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import AirlinesForm from './AirlinesForm';
 
 const AirlinesList = ({ loading, onDeletePayment }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  // const [page, setPage] = useState(0);
-  // const [size, setSize] = useState(20);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [selectedItem, setSelectedItem] = useState();
   const [filterValues, setFilterValues] = useState({
     name: ''
   });
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sort, setSort] = useState();
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
 
   const params = useMemo(() => {
-    return {};
-  }, []);
+    const query = {};
+    if (page !== 0) query.page = page;
+    if (sort) query.sort = sort;
+    return query;
+  }, [filterValues, page, sort]);
 
   const { data: airlines } = useAirlines({
     args: params,
@@ -115,6 +122,11 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
   const options = {
     columns,
     data: airlines?.rows,
+    count: airlines?.count,
+    setPage: onPageChangeCallback,
+    setSortBy: onSortChangeCallback,
+    pageSize,
+    onPageSizeChange: setPageSize,
     name: t('airlines', { count: 2 }),
     onRowClick: (row) => {},
     onFilter: (
@@ -153,8 +165,9 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
       <AirlinesForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
-        open={openDeleteConfirmation}
-        onOpen={setOpenDeleteConfirmation}
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={() => {}}
         title={t('delete', { entity: 'user' })}
         content={t('asd')}
       />

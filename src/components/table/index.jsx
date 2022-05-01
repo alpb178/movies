@@ -45,7 +45,7 @@ const DataTable = ({
   } = tableInstance;
 
   useEffect(() => {
-    const sortStr = sortBy.map((c) => `${c.id}:${c.desc ? 'desc' : 'asc'}`).join(',');
+    const sortStr = sortBy.map((c) => `${c.id},${c.desc ? 'desc' : 'asc'}`).join(',');
     setSortBy(sortStr);
   }, [pageIndex, sortBy]);
 
