@@ -43,7 +43,7 @@ const UsersForm = () => {
       setLoading(true);
       delete values['repeat-password'];
       values.roles = [values['roles']];
-      onCreateUser(values);
+      //onCreateUser(values);
     } catch (error) {
       // let _messageErrors = [trans.unknownUserErrorMsg];
     } finally {

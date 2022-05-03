@@ -1,18 +1,23 @@
-import { apiFetcher } from '@/lib/apiFetcher';
-import { API_USERS_URL } from '@/lib/constants';
+import { API_USERS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
-
-const getUsers = async ({ queryKey }) => {
-  const [path, params] = queryKey;
-  const { id, ...rest } = params;
-  const url = id ? path.concat('/', id) : path;
-
-  const { data } = await apiFetcher(url, { params: rest });
-  return data;
-};
+import { deleteData, getData, safeData } from '..';
 
 export default function useUsers({ args = {}, options = {} } = {}) {
-  return useQuery([API_USERS_URL, { ...args }], getUsers, {
+  return useQuery([API_USERS_URL, { ...args }], getData, {
     ...options
   });
 }
+
+export const saveUser = async ({ args = {}, options = {} } = {}) => {
+  switch (options?.method) {
+    case POST:
+      safeData({ path: API_USERS_URL, data: args, method: POST });
+      break;
+    case DELETE:
+      deleteData({ path: API_USERS_URL + `/${args.id}`, method: DELETE });
+      break;
+    case PUT:
+      safeData({ path: API_USERS_URL + `/${args.id}`, data: args, method: PUT });
+      break;
+  }
+};

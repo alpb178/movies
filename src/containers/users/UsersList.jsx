@@ -9,6 +9,7 @@ import UserFilter from 'containers/users/UserFilter';
 import { DEFAULT_PAGE_SIZE, USER_DETAIL_PAGE, USER_FORM_PAGE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useState } from 'react';
 
 const UsersList = () => {
@@ -52,7 +53,7 @@ const UsersList = () => {
   };
 
   const onDeleteConfirmation = () => {
-    onDeleteUser(deleteConfirmation.id);
+    //  onDeleteUser(deleteConfirmation.id);
   };
 
   const onUpdate = (event, row) => {
@@ -220,6 +221,10 @@ const UsersList = () => {
       />
     </>
   );
+};
+
+UsersList.propTypes = {
+  row: PropTypes.object.isRequired
 };
 
 export default UsersList;
