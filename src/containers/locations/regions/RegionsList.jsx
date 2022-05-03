@@ -8,18 +8,15 @@ import useRegions, { saveRegions } from '@/hooks/location/region/useRegions';
 import { API_REGIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import RegionDetails from './RegionDetails';
 import RegionForm from './RegionForm';
 import RegionsFilter from './RegionsFilter';
 
 const RegionsList = () => {
   const { t } = useTranslation('common');
-  const router = useRouter();
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
@@ -28,7 +25,6 @@ const RegionsList = () => {
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-  const [openDetails, setOpenDetails] = useState(false);
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
@@ -84,12 +80,6 @@ const RegionsList = () => {
     event.stopPropagation();
     setSelectedItem(item);
     setOpenForm(true);
-  };
-
-  const onDetails = (event, item) => {
-    event.stopPropagation();
-    setSelectedItem(item);
-    setOpenDetails(true);
   };
 
   const columns = React.useMemo(() => [
@@ -166,9 +156,6 @@ const RegionsList = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
-    onRowClick: (row) => {
-      onDetails(event, row.original);
-    },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <RegionsFilter open={openFilters} onSubmit={handleFilters} />
@@ -208,8 +195,6 @@ const RegionsList = () => {
         onOpen={setOpenForm}
         setLoading={setLoading}
       />
-
-      <RegionDetails data={selectedItem} open={openDetails} onOpen={setOpenDetails} />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
