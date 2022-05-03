@@ -24,7 +24,7 @@ const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) =
     symbol: Yup.string()
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     let method = POST;
     let message = t('inserted.female', { entity: t('measure-units', { count: 1 }) });
     if (data) {
@@ -35,7 +35,7 @@ const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) =
 
     try {
       setLoading(true);
-      saveMeasureUnits({
+      await saveMeasureUnits({
         args: values,
         options: {
           method: method
