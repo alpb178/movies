@@ -4,7 +4,7 @@ import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/shipment-items/ShipmentItemsFilter';
-import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
+import useShipmentItems, { saveShipmentItems } from '@/hooks/shipment-item/useShipmentItems';
 import { API_SHIPMENT_ITEMS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
@@ -61,7 +61,7 @@ const ShipmentItemsList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await useShipmentItems({
+      await saveShipmentItems({
         args: { id: deleteConfirmation.id },
         options: {
           method: DELETE
@@ -155,7 +155,6 @@ const ShipmentItemsList = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
-    onRowClick: (row) => {},
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
         <PaymentFilter open={openFilters} onSubmit={handleFilters} />

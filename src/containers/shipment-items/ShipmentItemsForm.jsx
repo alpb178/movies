@@ -2,7 +2,7 @@
 import AutocompleteField from '@/components/form/AutocompleteField';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
-import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
+import { saveShipmentItems } from '@/hooks/shipment-item/useShipmentItems';
 import { API_SHIPMENT_ITEMS_URL, POST, PUT } from '@/lib/constants';
 import clsx from 'clsx';
 import { Field } from 'formik';
@@ -51,7 +51,7 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
 
     try {
       setLoading(true);
-      await useShipmentItems({
+      await saveShipmentItems({
         args: values,
         options: {
           method
