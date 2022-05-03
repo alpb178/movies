@@ -6,7 +6,7 @@ export const NAVBAR_HEIGHT = 64; // in pixels
 
 export const TOKEN_KEY = 'token';
 export const API_REFRESH_TOKEN_URL = '/token'; // Refresh token action
-export const API_LOGIN_URL = '/users/login'; // Login endpoint
+export const API_LOGIN_URL = '/auth/login'; // Login endpoint
 export const API_USERS_URL = '/users'; // User endpoint
 export const API_AIRLINES_URL = '/airlines';
 export const API_COUNTRIES_URL = '/countries';
