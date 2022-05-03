@@ -2,7 +2,7 @@
 import AutocompleteField from '@/components/form/AutocompleteField';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
-import useRegulations from '@/hooks/regulation/useRegulations';
+import { saveRegulations } from '@/hooks/regulation/useRegulations';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import { API_REGULATIONS_URL, POST, PUT } from '@/lib/constants';
 import { Switch, Transition } from '@headlessui/react';
@@ -74,7 +74,7 @@ const RegulationsForm = ({ data, open, onOpen, errors, touched, setLoading }) =>
     }
     try {
       setLoading(true);
-      useRegulations({
+      await saveRegulations({
         args: values,
         options: {
           method: method

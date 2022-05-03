@@ -2,7 +2,7 @@ import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDial
 import EmptyState from '@/components/common/EmptyState';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useRegulations from '@/hooks/regulation/useRegulations';
+import useRegulations, { saveRegulations } from '@/hooks/regulation/useRegulations';
 import { API_REGULATIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
@@ -70,7 +70,7 @@ const RegulationsList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await useRegulations({
+      await saveRegulations({
         args: { id: deleteConfirmation.id },
         options: {
           method: DELETE
