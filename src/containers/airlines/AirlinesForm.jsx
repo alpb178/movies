@@ -1,16 +1,20 @@
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
-import useAirlines from '@/hooks/airline/useAirlines';
-import { POST } from '@/lib/constants';
+import { saveAirlines } from '@/hooks/airline/useAirlines';
+import { API_AIRLINES_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const AirlinesForm = ({ data, errors, onOpen, open, touched }) => {
+const AirlinesForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
   const { t } = useTranslation('common');
   const [files, setFiles] = useState([]);
+  const queryClient = useQueryClient();
+  const [isNewData, setIsNewData] = useState(true);
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/jpeg, image/png',
     onDrop: (acceptedFiles) => {
@@ -39,7 +43,7 @@ const AirlinesForm = ({ data, errors, onOpen, open, touched }) => {
   // ));
 
   const initialValues = {
-    logo: data?.logo || '',
+    imageUrl: data?.logo || '',
     name: data?.name || ''
   };
 
@@ -47,15 +51,37 @@ const AirlinesForm = ({ data, errors, onOpen, open, touched }) => {
     name: Yup.string().required(t('required.name'))
   });
 
-  const onSubmit = (values) => {
-    useAirlines({
-      args: values,
-      options: {
-        method: POST
-      }
-    });
-    onOpen(false);
+  const onSubmit = async (values) => {
+    console.log(values);
+    let method = POST;
+    let message = t('inserted.female', { entity: t('airlines', { count: 1 }) });
+    if (data) {
+      method = PUT;
+      values.id = data.id;
+      message = t('updated.female', { entity: t('airlines', { count: 1 }) });
+    }
+
+    try {
+      setLoading(true);
+      await saveAirlines({
+        args: values,
+        options: {
+          method: method
+        }
+      });
+      queryClient.refetchQueries([API_AIRLINES_URL]);
+      toast(message);
+    } catch (error) {
+      toast.error(error.toString());
+    } finally {
+      setLoading(false);
+      onOpen(false);
+    }
   };
+
+  useEffect(() => {
+    data?.id ? setIsNewData(false) : setIsNewData(true);
+  }, [data?.id]);
 
   return (
     <FormDialogWrapper
@@ -64,6 +90,7 @@ const AirlinesForm = ({ data, errors, onOpen, open, touched }) => {
       onOpen={onOpen}
       initialValues={initialValues}
       onSubmit={onSubmit}
+      isNewData={isNewData}
       validationSchema={validationSchema}
     >
       <div className="space-y-2">

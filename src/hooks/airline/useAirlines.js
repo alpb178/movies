@@ -11,13 +11,13 @@ export default function useAirlines({ args = {}, options = {} } = {}) {
 export const saveAirlines = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
-      safeData({ path: API_AIRLINES_URL, data: args, method: POST });
+      await safeData({ path: API_AIRLINES_URL, data: args, method: POST });
       break;
     case DELETE:
-      deleteData({ path: API_AIRLINES_URL + `/${args.id}`, method: DELETE });
+      await deleteData({ path: API_AIRLINES_URL + `/${args.id}`, method: DELETE });
       break;
     case PUT:
-      safeData({ path: API_AIRLINES_URL + `/${args.id}`, data: args, method: PUT });
+      await safeData({ path: API_AIRLINES_URL + `/${args.id}`, data: args, method: PUT });
       break;
   }
 };

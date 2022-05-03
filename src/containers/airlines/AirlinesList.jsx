@@ -3,20 +3,21 @@ import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDial
 import EmptyState from '@/components/common/EmptyState';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useAirlines from '@/hooks/airline/useAirlines';
-import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
+import useAirlines, { saveAirlines } from '@/hooks/airline/useAirlines';
+import { API_AIRLINES_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import Loading from 'components/common/Loading';
 import PaymentFilter from 'containers/airlines/AirlinesFilter';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import AirlinesForm from './AirlinesForm';
 
-const AirlinesList = ({ loading, onDeletePayment }) => {
+const AirlinesList = () => {
   const { t } = useTranslation('common');
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
@@ -24,6 +25,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
   const [filterValues, setFilterValues] = useState({
     name: ''
   });
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
@@ -37,6 +39,12 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     return query;
   }, [filterValues, page, sort]);
 
+  useEffect(() => {
+    if (!openForm) {
+      setSelectedItem(null);
+    }
+  }, [openForm]);
+
   const { data: airlines } = useAirlines({
     args: params,
     options: {
@@ -44,11 +52,26 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     }
   });
 
-  const onDelete = (event, row) => {
-    event.preventDefault();
-    const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
-    if (answer) {
-      onDeletePayment(row.original.paymentname);
+  const handleDelete = (event, row) => {
+    event.stopPropagation();
+    setDeleteConfirmation({ open: true, id: row.original.id });
+  };
+
+  const onDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+      await saveAirlines({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+      toast(t('deleted.female', { entity: t('airlines', { count: 1 }) }));
+      queryClient.refetchQueries([API_AIRLINES_URL]);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,7 +96,7 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
       Cell: ({ row }) => (
         <TableActions
           onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={() => setOpenDeleteConfirmation(true)}
+          onDelete={(event) => handleDelete(event, row)}
         />
       )
     }
@@ -128,7 +151,6 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
     pageSize,
     onPageSizeChange: setPageSize,
     name: t('airlines', { count: 2 }),
-    onRowClick: (row) => {},
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <PaymentFilter open={openFilters} onSubmit={handleFilters} />
@@ -162,14 +184,19 @@ const AirlinesList = ({ loading, onDeletePayment }) => {
         <EmptyState text={t('airlines', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <AirlinesForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
+      <AirlinesForm
+        data={selectedItem}
+        open={openForm}
+        onOpen={setOpenForm}
+        setLoading={setLoading}
+      />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
-        onDeleteConfirmation={() => {}}
-        title={t('delete', { entity: 'user' })}
-        content={t('asd')}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('airlines', { count: 1 }) })}
+        content={t('delete-message.female', { entity: t('airlines', { count: 1 }) })}
       />
     </>
   );
