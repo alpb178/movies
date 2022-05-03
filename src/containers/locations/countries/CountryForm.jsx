@@ -9,9 +9,11 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
+const CountryForm = ({ data, onOpen, open, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
+  const [errors, setErrorsForm] = useState({});
+  const [touched, setTouchedForm] = useState({});
   const [isNewData, setIsNewData] = useState(true);
   const initialValues = {
     name: data?.name || '',
@@ -19,8 +21,8 @@ const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string(),
-    code: Yup.string()
+    name: Yup.string().required(t('required.name')),
+    code: Yup.string().required(t('required.code'))
   });
 
   const onSubmit = async (values) => {
@@ -62,6 +64,8 @@ const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
       isNewData={isNewData}
       initialValues={initialValues}
       onSubmit={onSubmit}
+      setErrorsForm={setErrorsForm}
+      setTouchedForm={setTouchedForm}
       validationSchema={validationSchema}
     >
       <div className="space-y-2">
@@ -79,7 +83,6 @@ const CountryForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
           ) : null}
         </div>
       </div>
-
       <div className="space-y-2">
         <label htmlFor="code">{t('form.common.label.code')}</label>
         <div className="relative w-full mx-auto">

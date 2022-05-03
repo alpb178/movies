@@ -12,7 +12,9 @@ const FormDialogWrapper = ({
   onSubmit,
   validationSchema,
   isNewData,
-  formName
+  formName,
+  setErrorsForm,
+  setTouchedForm
 }) => {
   const { t } = useTranslation('common');
   const [title, setTitle] = useState();
@@ -66,6 +68,8 @@ const FormDialogWrapper = ({
                       <p className="form-header">{t(title)}</p>
                       {React.Children.map(children, (child) => {
                         if (React.isValidElement(child)) {
+                          setErrorsForm(errors);
+                          setTouchedForm(touched);
                           return React.cloneElement(child, { onOpen, errors, touched });
                         }
                         return child;
@@ -111,6 +115,8 @@ FormDialogWrapper.propTypes = {
   onOpen: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   open: PropTypes.bool,
+  setErrorsForm: PropTypes.func,
+  setTouchedForm: PropTypes.func,
   validationSchema: PropTypes.object
 };
 

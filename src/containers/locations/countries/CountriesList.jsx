@@ -148,7 +148,6 @@ const CountriesList = () => {
     </button>
   );
 
-  console.log(countries);
   const options = {
     columns,
     data: countries?.rows,
