@@ -2,7 +2,7 @@
 import AutocompleteField from '@/components/form/AutocompleteField';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useCountries from '@/hooks/location/country/useCountries';
-import useRegions from '@/hooks/location/region/useRegions';
+import { saveRegions } from '@/hooks/location/region/useRegions';
 import { API_REGIONS_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -39,29 +39,28 @@ const RegionForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
   const onSubmit = (values) => {
     values.country = values.country.id;
     let method = POST;
-    let message = t('inserted.male', { entity: t('regions', { count: 1 }) });
+    let message = t('inserted.female', { entity: t('regions', { count: 1 }) });
     if (data) {
       method = PUT;
       values.id = data.id;
-      message = t('updated.male', { entity: t('regions', { count: 1 }) });
+      message = t('updated.female', { entity: t('regions', { count: 1 }) });
     }
 
     try {
       setLoading(true);
-      useRegions({
+      saveRegions({
         args: values,
         options: {
           method
         }
       });
-
-      onOpen(false);
       toast(message);
       queryClient.refetchQueries([API_REGIONS_URL]);
     } catch (error) {
       toast.error(error);
     } finally {
       setLoading(false);
+      onOpen(false);
     }
   };
 

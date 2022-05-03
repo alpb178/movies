@@ -4,7 +4,7 @@ import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useRegions from '@/hooks/location/region/useRegions';
+import useRegions, { saveRegions } from '@/hooks/location/region/useRegions';
 import { API_REGIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
@@ -65,7 +65,7 @@ const RegionsList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await useRegions({
+      await saveRegions({
         args: { id: deleteConfirmation.id },
         options: {
           method: DELETE
