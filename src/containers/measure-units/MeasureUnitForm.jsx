@@ -10,18 +10,20 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
+const MeasureUnitsForm = ({ data, onOpen, open, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
   const [isNewData, setIsNewData] = useState(true);
+  const [errors, setErrorsForm] = useState({});
+  const [touched, setTouchedForm] = useState({});
   const initialValues = {
     name: data?.name || '',
     symbol: data?.symbol || ''
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string(),
-    symbol: Yup.string()
+    name: Yup.string().required(t('form.common.required.name')),
+    symbol: Yup.string().required(t('form.common.required.symbol'))
   });
 
   const onSubmit = async (values) => {
@@ -42,12 +44,12 @@ const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) =
         }
       });
       queryClient.refetchQueries([API_MEASURE_UNITS_URL]);
-      onOpen(false);
       toast(message);
     } catch (error) {
       toast.error(error);
     } finally {
       setLoading(false);
+      onOpen(false);
     }
   };
 
@@ -64,6 +66,8 @@ const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) =
       initialValues={initialValues}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
+      setErrorsForm={setErrorsForm}
+      setTouchedForm={setTouchedForm}
     >
       <div className="space-y-2">
         <label htmlFor="name">{t('form.common.label.name')}</label>
