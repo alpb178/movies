@@ -12,10 +12,12 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const RegionForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
+const RegionForm = ({ data, onOpen, open, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
   const [isNewData, setIsNewData] = useState(true);
+  const [errors, setErrorsForm] = useState({});
+  const [touched, setTouchedForm] = useState({});
 
   const { data: countries } = useCountries({
     args: {},
@@ -77,6 +79,8 @@ const RegionForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
       initialValues={initialValues}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
+      setErrorsForm={setErrorsForm}
+      setTouchedForm={setTouchedForm}
     >
       <div className="space-y-2">
         <label htmlFor="name">{t('form.common.label.name')}</label>
