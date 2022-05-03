@@ -136,8 +136,12 @@ const AirlinesForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
 };
 
 AirlinesForm.propTypes = {
-  data: PropTypes.object,
-  onOpen: PropTypes.func.isRequired
+  data: PropTypes.object.isRequired,
+  touched: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  onOpen: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired
 };
 
 export default AirlinesForm;
