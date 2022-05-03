@@ -1,8 +1,7 @@
 /* eslint-disable react/display-name */
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useRoles from '@/hooks/role/useRoles';
-import { apiFetcher } from '@/lib/apiFetcher';
+import useRoles, { saveRoles } from '@/hooks/role/useRoles';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
@@ -10,7 +9,7 @@ import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
 import { API_ROLES_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -19,7 +18,7 @@ import RolesForm from './RolesForm';
 
 const Roles = () => {
   const { t } = useTranslation('common');
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
   const [page, setPage] = useState(1);
@@ -56,10 +55,6 @@ const Roles = () => {
     }
   });
 
-  const refetchRoles = () => {
-    queryClient.refetchQueries([API_ROLES_URL]);
-  };
-
   const onDelete = (event, row) => {
     event.stopPropagation();
     setDeleteConfirmation({ open: true, id: row.original.id });
@@ -67,12 +62,19 @@ const Roles = () => {
 
   const onDeleteConfirmation = async () => {
     try {
-      await apiFetcher(`${API_ROLES_URL}/${deleteConfirmation.id}`, { method: DELETE });
-      setDeleteConfirmation({ open: false });
+      setLoading(true);
+      await saveRoles({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
       toast(t('deleted.male', { entity: t('roles', { count: 1 }) }));
-      refetchRoles();
+      queryClient.refetchQueries([API_ROLES_URL]);
     } catch (error) {
       toast.error(error.toString());
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -173,7 +175,6 @@ const Roles = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
-    onRowClick: (row) => {},
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
         <RolesFilter open={openFilters} onSubmit={handleFilters} />
@@ -199,7 +200,7 @@ const Roles = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {(isLoading || loading) && <Loading />}
 
       {roles && roles.rows.length > 0 ? (
         <DataTable {...options} />
@@ -218,6 +219,13 @@ const Roles = () => {
       />
     </>
   );
+};
+
+Roles.propTypes = {
+  row: PropTypes.object.isRequired,
+  value: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 export default Roles;

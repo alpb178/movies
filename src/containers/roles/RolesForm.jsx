@@ -1,7 +1,7 @@
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import MultipleSelectionAutcompleteField from '@/components/form/MultipleSelectionAutocompleteField';
 import usePermissions from '@/hooks/permission/usePermissions';
-import useRoles from '@/hooks/role/useRoles';
+import { saveRoles } from '@/hooks/role/useRoles';
 import { API_ROLES_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -32,7 +32,7 @@ const RolesForm = ({ data, errors, onOpen, open, touched }) => {
     code: Yup.string()
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     let method = POST;
     let message = t('inserted.male', { entity: t('roles', { count: 1 }) });
     if (data) {
@@ -42,19 +42,19 @@ const RolesForm = ({ data, errors, onOpen, open, touched }) => {
     }
     try {
       // setLoading(true);
-      useRoles({
+      await saveRoles({
         args: values,
         options: {
           method: method
         }
       });
-      onOpen(false);
       queryClient.invalidateQueries([API_ROLES_URL]);
       toast(message);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.toString());
     } finally {
       //setLoading(false);
+      onOpen(false);
     }
   };
 
