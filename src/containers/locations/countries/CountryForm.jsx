@@ -21,8 +21,8 @@ const CountryForm = ({ data, onOpen, open, setLoading }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t('required.name')),
-    code: Yup.string().required(t('required.code'))
+    name: Yup.string().required(t('form.common.required.name')),
+    code: Yup.string().required(t('form.common.required.code'))
   });
 
   const onSubmit = async (values) => {
