@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
-import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
+import { saveMeasureUnits } from '@/hooks/measure-unit/useMeasureUnits';
 import { API_MEASURE_UNITS_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -26,24 +26,23 @@ const MeasureUnitsForm = ({ data, errors, onOpen, open, touched, setLoading }) =
 
   const onSubmit = (values) => {
     let method = POST;
-    let message = t('inserted.male', { entity: t('measure-units', { count: 1 }) });
+    let message = t('inserted.female', { entity: t('measure-units', { count: 1 }) });
     if (data) {
       method = PUT;
       values.id = data.id;
-      message = t('updated.male', { entity: t('measure-units', { count: 1 }) });
+      message = t('updated.female', { entity: t('measure-units', { count: 1 }) });
     }
 
     try {
       setLoading(true);
-      useMeasureUnits({
+      saveMeasureUnits({
         args: values,
         options: {
           method: method
         }
       });
-
+      queryClient.refetchQueries([API_MEASURE_UNITS_URL]);
       onOpen(false);
-      queryClient.invalidateQueries([API_MEASURE_UNITS_URL]);
       toast(message);
     } catch (error) {
       toast.error(error);

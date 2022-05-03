@@ -4,13 +4,8 @@ import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
-import {
-  API_MEASURE_UNITS_URL,
-  DEFAULT_PAGE_SIZE,
-  DELETE,
-  LOCATION_DETAILS_PAGE
-} from '@/lib/constants';
+import useMeasureUnits, { saveMeasureUnits } from '@/hooks/measure-unit/useMeasureUnits';
+import { API_MEASURE_UNITS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -61,7 +56,7 @@ const MeasureUnitsList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await useMeasureUnits({
+      await saveMeasureUnits({
         args: { id: deleteConfirmation.id },
         options: {
           method: DELETE
@@ -118,11 +113,6 @@ const MeasureUnitsList = () => {
     pageSize,
     onPageSizeChange: setPageSize,
     name: t('measure-units', { count: 2 }),
-    onRowClick: (row) => {
-      const value = row.original.id;
-      const path = LOCATION_DETAILS_PAGE(value);
-      router.push(path);
-    },
     actions: <>{renderInsertButton()}</>
   };
 
@@ -148,7 +138,7 @@ const MeasureUnitsList = () => {
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
         title={t('delete', { entity: 'measure-units' })}
-        content={t('delete-message.male', { entity: t('measure-units', { count: 1 }) })}
+        content={t('delete-message.female', { entity: t('measure-units', { count: 1 }) })}
       />
     </>
   );
