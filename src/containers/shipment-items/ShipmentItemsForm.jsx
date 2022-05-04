@@ -4,7 +4,6 @@ import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
 import { saveShipmentItems } from '@/hooks/shipment-item/useShipmentItems';
 import { API_SHIPMENT_ITEMS_URL, POST, PUT } from '@/lib/constants';
-import clsx from 'clsx';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -13,10 +12,12 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) => {
+const ShipmentItemsForm = ({ data, open, onOpen, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
   const [isNewData, setIsNewData] = useState(true);
+  const [errors, setErrorsForm] = useState({});
+  const [touched, setTouchedForm] = useState({});
 
   const initialValues = {
     name: data?.name || '',
@@ -35,8 +36,8 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
   });
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(),
-    measureUnit: Yup.object().shape({ name: Yup.string() })
+    name: Yup.string().required(t('form.common.required.name')),
+    measureUnit: Yup.object().required(t('form.common.required.measureUnit')).nullable()
   });
 
   const onSubmit = async (values) => {
@@ -58,13 +59,13 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
         }
       });
 
-      onOpen(false);
       queryClient.invalidateQueries([API_SHIPMENT_ITEMS_URL]);
       toast(message);
     } catch (error) {
       toast.error(error);
     } finally {
       setLoading(false);
+      onOpen(false);
     }
   };
 
@@ -80,6 +81,8 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
       initialValues={initialValues}
       onSubmit={onSubmit}
       isNewData={isNewData}
+      setErrorsForm={setErrorsForm}
+      setTouchedForm={setTouchedForm}
       validationSchema={validationSchema}
     >
       <div className="space-y-2">
@@ -88,14 +91,15 @@ const ShipmentItemsForm = ({ data, open, onOpen, errors, touched, setLoading }) 
           <Field
             id="name"
             name="name"
-            className={clsx(
-              'text-field',
-              errors && errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
-            )}
+            className={`text-field ${
+              errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
+            }`}
           />
+          {errors?.name && touched?.name ? (
+            <p className="mt-4 text-red-600">{errors?.name}</p>
+          ) : null}
         </div>
       </div>
-
       <div className="space-y-2">
         <label htmlFor="measureUnit">{t('form.shipment-item.label.measure-unit')}</label>
         <div className="relative w-full mx-auto">
