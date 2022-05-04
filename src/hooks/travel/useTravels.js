@@ -1,31 +1,7 @@
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_TRAVELS_URL, POST } from '@/lib/constants';
+import { API_TRAVELS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
-
-const getTravels = async ({ queryKey }) => {
-  const [path, params] = queryKey;
-  const { id, ...rest } = params;
-  const url = id ? path.concat('/', id) : path;
-
-  const { data } = await apiFetcher(url, { params: rest });
-  return data;
-};
-
-const createTravel = async (args) => {
-  const { path, data: values, method } = args;
-  const { data } = await apiFetcher(path, { data: values, method });
-  return data;
-};
-
-export default function useTravels({ args = {}, options = {} } = {}) {
-  if (options?.method === POST) {
-    createTravel({ path: API_TRAVELS_URL, data: args, method: POST });
-  } else {
-    return useQuery([API_TRAVELS_URL, { ...args }], getTravels, {
-      ...options
-    });
-  }
-}
+import { deleteData, getData, safeData } from '..';
 
 export function useAvailablePayload({ args = {}, options = {} } = {}) {
   return useQuery([API_TRAVELS_URL, { ...args }], getAvailablePayload, {
@@ -38,4 +14,24 @@ const getAvailablePayload = async ({ queryKey }) => {
   const url = `${path}/available-payload`;
   const { data } = await apiFetcher(url, { params });
   return data;
+};
+
+export default function useTravels({ args = {}, options = {} } = {}) {
+  return useQuery([API_TRAVELS_URL, { ...args }], getData, {
+    ...options
+  });
+}
+
+export const saveTravels = async ({ args = {}, options = {} } = {}) => {
+  switch (options?.method) {
+    case POST:
+      await safeData({ path: API_TRAVELS_URL, data: args, method: POST });
+      break;
+    case DELETE:
+      await deleteData({ path: API_TRAVELS_URL + `/${args.id}`, method: DELETE });
+      break;
+    case PUT:
+      await safeData({ path: API_TRAVELS_URL + `/${args.id}`, data: args, method: PUT });
+      break;
+  }
 };

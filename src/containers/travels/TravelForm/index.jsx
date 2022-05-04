@@ -2,7 +2,7 @@
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useAirlines from '@/hooks/airline/useAirlines';
 import useRegions from '@/hooks/location/region/useRegions';
-import useTravels from '@/hooks/travel/useTravels';
+import { saveTravels } from '@/hooks/travel/useTravels';
 // import InputMask from 'react-input-mask';
 // import useMediaContext from '@/hooks/useMediaContext';
 import useUsers from '@/hooks/user/useUsers';
@@ -100,7 +100,7 @@ const TravelForm = ({ travelId }) => {
       delete values.airline;
       values.flight = values.flight.id;
 
-      await useTravels({
+      await saveTravels({
         args: values,
         options: {
           method: POST
