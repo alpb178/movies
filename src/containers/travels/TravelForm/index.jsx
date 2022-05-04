@@ -8,7 +8,6 @@ import { saveTravels } from '@/hooks/travel/useTravels';
 import useUsers from '@/hooks/user/useUsers';
 import { apiFetcher } from '@/lib/apiFetcher';
 import { API_FLIGHTS_URL, API_TRAVELS_URL, POST } from '@/lib/constants';
-import { UserIcon } from '@heroicons/react/outline';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import router from 'next/router';
@@ -23,21 +22,10 @@ const TravelForm = ({ travelId }) => {
   const { t } = useTranslation('common');
 
   const [travel, setTravel] = useState();
-
   const [destination, setDestination] = useState();
   const [airline, setAirline] = useState();
   const [flights, setFlights] = useState();
   const [baggageCapacity, setBaggageCapacity] = useState();
-
-  const initialValues = {
-    traveler: travel?.traveler || '',
-    origin: travel?.origin || '',
-    destination: travel?.destination || '',
-    departureAt: travel?.departureAt || new Date(),
-    airline: travel?.airline || '',
-    flight: travel?.flight || '',
-    shipmentItems: travel?.shipments || []
-  };
 
   useEffect(async () => {
     if (!isNaN(travelId)) {
@@ -132,6 +120,16 @@ const TravelForm = ({ travelId }) => {
     }
   };
 
+  const initialValues = {
+    traveler: travel?.traveler || {},
+    origin: travel?.origin || {},
+    destination: travel?.destination || {},
+    departureAt: travel?.departureAt || new Date(),
+    airline: travel?.airline || {},
+    flight: travel?.flight || {},
+    shipmentItems: travel?.shipments || []
+  };
+
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
       {({ errors, touched }) => (
@@ -140,6 +138,8 @@ const TravelForm = ({ travelId }) => {
             {isNaN(travelId) ? t('form.travel.title.create') : t('form.travel.title.update')}
           </p>
 
+          {console.log(initialValues, 'Viaje')}
+
           <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
             <div className="flex flex-col w-full space-y-6">
               <div className="w-full">
@@ -147,10 +147,9 @@ const TravelForm = ({ travelId }) => {
                   name="traveler"
                   placeholder={t('form.travel.placeholder.traveler')}
                   options={users ? users.rows : []}
-                  className="autocomplete-field"
                   optionLabels={['firstName', 'lastName']}
                   keysToMatch={['firstName', 'lastName', 'username']}
-                  icon={UserIcon}
+                  className="autocomplete-field"
                   defaultValue={travel?.traveler}
                 />
               </div>
@@ -192,6 +191,7 @@ const TravelForm = ({ travelId }) => {
                     options={airlines ? airlines.rows : []}
                     onSelectionChange={setAirline}
                     className="w-full p-4 py-3 border rounded-l-md"
+                    defaultValue={travel?.airline}
                   />
                 </div>
                 <div className="w-full">
@@ -203,6 +203,7 @@ const TravelForm = ({ travelId }) => {
                     keysToMatch={['number']}
                     className="w-full p-4 py-3 border border-l-0 rounded-r-md"
                     aria-describedby="flight"
+                    defaultValue={travel?.flight}
                     disabled={!airline}
                   />
                 </div>
