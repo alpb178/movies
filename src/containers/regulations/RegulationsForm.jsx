@@ -16,11 +16,13 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const RegulationsForm = ({ data, open, onOpen, errors, touched, setLoading }) => {
+const RegulationsForm = ({ data, open, onOpen, setLoading }) => {
   const { t } = useTranslation('common');
   const [regulatePriceRange, setRegulatePriceRange] = useState(false);
   const queryClient = useQueryClient();
   const [isNewData, setIsNewData] = useState(true);
+  const [errors, setErrorsForm] = useState({});
+  const [touched, setTouchedForm] = useState({});
 
   useEffect(() => {
     setRegulatePriceRange(data?.minPrice > 0 || data?.maxPrice > 0);
@@ -98,6 +100,8 @@ const RegulationsForm = ({ data, open, onOpen, errors, touched, setLoading }) =>
       initialValues={initialValues}
       onSubmit={onSubmit}
       isNewData={isNewData}
+      setErrorsForm={setErrorsForm}
+      setTouchedForm={setTouchedForm}
       validationSchema={validationSchema}
     >
       <div className="space-y-2">
