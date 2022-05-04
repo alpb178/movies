@@ -4,19 +4,29 @@ import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
-import useTravels from '@/hooks/travel/useTravels';
-import { DEFAULT_PAGE_SIZE, TRAVEL_DETAILS_PAGE, TRAVEL_FORM_PAGE } from '@/lib/constants';
+import useTravels, { saveTravels } from '@/hooks/travel/useTravels';
+import {
+  API_TRAVELS_URL,
+  DEFAULT_PAGE_SIZE,
+  DELETE,
+  TRAVEL_DETAILS_PAGE,
+  TRAVEL_FORM_PAGE
+} from '@/lib/constants';
 import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
-const TravelsList = ({ hiddenColumns, loading, userId }) => {
+const TravelsList = ({ hiddenColumns, userId }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
-
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
@@ -35,8 +45,12 @@ const TravelsList = ({ hiddenColumns, loading, userId }) => {
   });
 
   const params = useMemo(() => {
+    const query = {};
     if (userId) return { traveler: userId };
-  }, []);
+    if (page !== 0) query.page = page;
+    if (sort) query.sort = sort;
+    return query;
+  }, [filterValues, page, sort]);
 
   const { data: travels } = useTravels({
     args: params,
@@ -56,13 +70,27 @@ const TravelsList = ({ hiddenColumns, loading, userId }) => {
     router.push(path);
   };
 
-  const onDelete = (event, row) => {
+  const handleDelete = (event, row) => {
     event.stopPropagation();
-    setDeleteConfirmation({ open: true, id: row.original.login });
+    setDeleteConfirmation({ open: true, id: row.original.id });
   };
 
-  const onDeleteConfirmation = () => {
-    // onDeleteUser(deleteConfirmation.id);
+  const onDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+      await saveTravels({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+      toast(t('deleted.male', { entity: t('travels', { count: 1 }) }));
+      queryClient.refetchQueries([API_TRAVELS_URL]);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const formatTraveler = (value) => <div>{`${value?.firstName} ${value?.lastName}`}</div>;
@@ -105,7 +133,7 @@ const TravelsList = ({ hiddenColumns, loading, userId }) => {
       Cell: ({ row }) => (
         <TableActions
           onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={() => onDelete(event, row.original)}
+          onDelete={(event) => handleDelete(event, row)}
         />
       )
     }
@@ -206,11 +234,17 @@ const TravelsList = ({ hiddenColumns, loading, userId }) => {
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete-title', { entity: t('travels', { count: 1 }).toLowerCase() })}
-        content={t('delete-message.male', { entity: t('travels', { count: 1 }).toLowerCase() })}
+        title={t('delete-title', { entity: t('travels', { count: 1 }) })}
+        content={t('delete-message.male', { entity: t('travels', { count: 1 }) })}
       />
     </>
   );
+};
+
+TravelsList.propTypes = {
+  row: PropTypes.object.isRequired,
+  hiddenColumns: PropTypes.object.isRequired,
+  userId: PropTypes.object.isRequired
 };
 
 export default TravelsList;
