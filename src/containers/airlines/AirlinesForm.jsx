@@ -10,11 +10,14 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const AirlinesForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
+const AirlinesForm = ({ data, onOpen, open, setLoading }) => {
   const { t } = useTranslation('common');
   const [files, setFiles] = useState([]);
   const queryClient = useQueryClient();
   const [isNewData, setIsNewData] = useState(true);
+  const [errors, setErrorsForm] = useState({});
+  const [touched, setTouchedForm] = useState({});
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/jpeg, image/png',
     onDrop: (acceptedFiles) => {
@@ -52,7 +55,6 @@ const AirlinesForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
     let method = POST;
     let message = t('inserted.female', { entity: t('airlines', { count: 1 }) });
     if (data) {
@@ -91,6 +93,8 @@ const AirlinesForm = ({ data, errors, onOpen, open, touched, setLoading }) => {
       initialValues={initialValues}
       onSubmit={onSubmit}
       isNewData={isNewData}
+      setErrorsForm={setErrorsForm}
+      setTouchedForm={setTouchedForm}
       validationSchema={validationSchema}
     >
       <div className="space-y-2">
