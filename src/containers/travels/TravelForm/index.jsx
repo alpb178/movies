@@ -33,7 +33,7 @@ const TravelForm = ({ travelId }) => {
     traveler: travel?.traveler || '',
     origin: travel?.origin || '',
     destination: travel?.destination || '',
-    departureAt: travel?.departureAt || '',
+    departureAt: travel?.departureAt || new Date(),
     airline: travel?.airline || '',
     flight: travel?.flight || '',
     shipmentItems: travel?.shipments || []
