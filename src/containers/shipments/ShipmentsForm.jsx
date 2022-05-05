@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useRegions from '@/hooks/location/region/useRegions';
-import useShipments from '@/hooks/shipment/useShipments';
+import { saveShipments } from '@/hooks/shipment/useShipments';
 import useUsers from '@/hooks/user/useUsers';
 import { apiFetcher } from '@/lib/apiFetcher';
 import { API_TRAVELS_URL, POST } from '@/lib/constants';
@@ -54,7 +54,7 @@ const ShipmentsForm = ({ onOpen }) => {
 
   const onSubmit = (values) => {
     values.measureUnit = values.measureUnit.id;
-    useShipments({
+    saveShipments({
       args: values,
       options: {
         method: POST
