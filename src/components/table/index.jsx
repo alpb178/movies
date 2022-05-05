@@ -141,7 +141,7 @@ DataTable.defaultProps = {
 DataTable.propTypes = {
   count: PropTypes.number.isRequired,
   columns: PropTypes.array.isRequired,
-  data: PropTypes.object,
+  data: PropTypes.array,
   setSortBy: PropTypes.func,
   name: PropTypes.string,
   onFilter: PropTypes.node,

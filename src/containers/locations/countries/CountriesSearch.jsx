@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const TravelsSearch = ({ onSubmit, open }) => {
+const CountriesSearch = ({ onSubmit, open }) => {
   const initialValues = {
     textSearch: ''
   };
@@ -27,10 +27,9 @@ const TravelsSearch = ({ onSubmit, open }) => {
   );
 };
 
-TravelsSearch.propTypes = {
-  children: PropTypes.object.isRequired,
+CountriesSearch.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   open: PropTypes.bool
 };
 
-export default TravelsSearch;
+export default CountriesSearch;

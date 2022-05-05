@@ -192,7 +192,9 @@ const CountriesList = () => {
       {countries && countries.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('countries', { count: 0 })}>{renderInsertButton()}</EmptyState>
+        loading && (
+          <EmptyState text={t('countries', { count: 0 })}>{renderInsertButton()}</EmptyState>
+        )
       )}
 
       <CountryForm
@@ -214,7 +216,7 @@ const CountriesList = () => {
 };
 
 CountriesList.propTypes = {
-  row: PropTypes.object.isRequired
+  row: PropTypes.object
 };
 
 export default CountriesList;

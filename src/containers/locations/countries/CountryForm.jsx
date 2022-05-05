@@ -16,8 +16,8 @@ const CountryForm = ({ data, onOpen, open, setLoading }) => {
   const [touched, setTouchedForm] = useState({});
   const [isNewData, setIsNewData] = useState(true);
   const initialValues = {
-    name: data?.name || '',
-    code: data?.code || ''
+    name: data?.name,
+    code: data?.code
   };
 
   const validationSchema = Yup.object().shape({
@@ -42,13 +42,12 @@ const CountryForm = ({ data, onOpen, open, setLoading }) => {
         }
       });
 
+      setLoading(false);
       onOpen(false);
       queryClient.invalidateQueries([API_COUNTRIES_URL]);
       toast(message);
     } catch (error) {
       toast.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -102,10 +101,12 @@ const CountryForm = ({ data, onOpen, open, setLoading }) => {
   );
 };
 
+CountryForm.defaultProps = {
+  data: {}
+};
+
 CountryForm.propTypes = {
-  data: PropTypes.object.isRequired,
-  touched: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
+  data: PropTypes.object,
   onOpen: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired
