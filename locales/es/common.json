@@ -94,11 +94,18 @@
         "search": "Buscar {{entity}}...."
       },
       "required": {
-        "name": "El nombre es requerido",
+        "airline": "La Aerolinea es requerida",
         "code": "El código es requerido",
+        "destination": "El destino es requerido",
+        "departureAt": "La Fecha es requerida",
+        "flight": "El vuelo es requerido",
         "measureUnit": "La Unidad de Medida es Requerida",
-        "region": "El País es Requerido"
-      }
+        "name": "El nombre es requerido",
+        "origin": "El origen es requerido",
+        "region": "El País es Requerido",
+        "shipmentItems": "Los Articulos son requeridos",
+        "traveler": "El viajero es requerido"  
+        }
     },
     "measure-unit": {
       "title": {

@@ -13,7 +13,7 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 
-const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender }) => {
+const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender, errors, touched }) => {
   const { t } = useTranslation('common');
 
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -116,7 +116,7 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender }) =
   return (
     <div className="relative flex flex-col w-full space-y-4">
       <AutocompleteField
-        name="shipmentItem"
+        name="shipmentItems"
         placeholder={
           isSender
             ? t('form.shipment.placeholder.payload')
@@ -130,6 +130,11 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender }) =
         disabled={!destination}
         emptyOptionsLabel={t('form.common.empty-options')}
       />
+      <div>
+        {errors?.shipmentItems && touched?.shipmentItems ? (
+          <p className="mt-4 text-red-600">{errors?.name}</p>
+        ) : null}
+      </div>
 
       {selectedOptions.length > 0 ? (
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
@@ -251,7 +256,10 @@ BaggageCapacityForm.defaultProps = {
 
 BaggageCapacityForm.propTypes = {
   destination: PropTypes.object.isRequired,
-  onShipmentItemsChange: PropTypes.func.isRequired
+  onShipmentItemsChange: PropTypes.func.isRequired,
+  isSender: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  touched: PropTypes.object.isRequired
 };
 
 export default BaggageCapacityForm;

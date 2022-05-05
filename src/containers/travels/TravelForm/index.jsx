@@ -72,9 +72,12 @@ const TravelForm = ({ travelId }) => {
   }, [airline]);
 
   const validationSchema = Yup.object().shape({
-    traveler: Yup.object().shape({ id: Yup.number().required(t('form.travel.required.traveler')) }),
-    origin: Yup.object().required(t('form.travel.required.origin')).nullable(),
-    destination: Yup.object().required(t('form.travel.required.destination')).nullable(),
+    traveler: Yup.object().nullable().required(t('form.common.required.traveler')),
+    origin: Yup.object().required(t('form.common.required.origin')).nullable(),
+    destination: Yup.object().required(t('form.common.required.destination')).nullable(),
+    airline: Yup.object().required(t('form.common.required.airline')).nullable(),
+    flight: Yup.object().required(t('form.common.required.flight')).nullable(),
+    shipmentItems: Yup.object().required(t('form.common.required.shipmentItems')).nullable(),
     departureAt: Yup.string()
   });
 
@@ -121,13 +124,13 @@ const TravelForm = ({ travelId }) => {
   };
 
   const initialValues = {
-    traveler: travel?.traveler || {},
-    origin: travel?.origin || {},
-    destination: travel?.destination || {},
+    traveler: travel?.traveler || '',
+    origin: travel?.origin || '',
+    destination: travel?.destination || '',
     departureAt: travel?.departureAt || new Date(),
-    airline: travel?.airline || {},
-    flight: travel?.flight || {},
-    shipmentItems: travel?.shipments || []
+    airline: travel?.airline || '',
+    flight: travel?.flight || '',
+    shipmentItems: travel?.shipments || ''
   };
 
   return (
@@ -137,8 +140,6 @@ const TravelForm = ({ travelId }) => {
           <p className="mb-8 form-header">
             {isNaN(travelId) ? t('form.travel.title.create') : t('form.travel.title.update')}
           </p>
-
-          {console.log(initialValues, 'Viaje')}
 
           <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
             <div className="flex flex-col w-full space-y-6">
