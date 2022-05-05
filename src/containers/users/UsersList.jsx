@@ -1,7 +1,7 @@
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useUsers from '@/hooks/user/useUsers';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline';
+import { CheckCircleIcon, ClockIcon, XCircleIcon } from '@heroicons/react/outline';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
@@ -80,13 +80,17 @@ const UsersList = () => {
     </div>
   );
 
-  const renderStatus = (clientNumber) =>
-    clientNumber ? (
-      <CheckCircleIcon className="w-6 h-6 text-green-700" />
-    ) : (
-      <XCircleIcon className="w-6 h-6 text-red-600" />
-    );
+  const renderStatus = (status) => {
+    switch (status) {
+      case 'ACTIVE':
+        return <CheckCircleIcon className="w-6 h-6 text-green-700" />;
+      case 'PENDING':
+        return <ClockIcon className="w-6 h-6 text-green-700" />;
 
+      default:
+        return <XCircleIcon className="w-6 h-6 text-red-600" />;
+    }
+  };
   const columns = React.useMemo(() => [
     {
       Header: t('name'),
@@ -102,8 +106,8 @@ const UsersList = () => {
     },
     {
       Header: t('status'),
-      accessor: 'activated',
-      Cell: ({ cell }) => renderStatus(cell.row.original['activated'])
+      accessor: 'status',
+      Cell: ({ cell }) => renderStatus(cell.row.original.status)
     },
     {
       Header: t('roles', { count: 2 }),
