@@ -2,18 +2,16 @@
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useAirlines from '@/hooks/airline/useAirlines';
 import useRegions from '@/hooks/location/region/useRegions';
-import { saveTravels } from '@/hooks/travel/useTravels';
 // import InputMask from 'react-input-mask';
 // import useMediaContext from '@/hooks/useMediaContext';
 import useUsers from '@/hooks/user/useUsers';
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_FLIGHTS_URL, API_TRAVELS_URL, POST } from '@/lib/constants';
+import { API_FLIGHTS_URL, API_TRAVELS_URL } from '@/lib/constants';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import router from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import BaggageCapacityForm from './BaggageCapacityForm';
 import DepartureDateForm from './DepartureDateForm';
@@ -77,12 +75,18 @@ const TravelForm = ({ travelId }) => {
     destination: Yup.object().required(t('form.common.required.destination')).nullable(),
     airline: Yup.object().required(t('form.common.required.airline')).nullable(),
     flight: Yup.object().required(t('form.common.required.flight')).nullable(),
-    shipmentItems: Yup.object().required(t('form.common.required.shipmentItems')).nullable(),
-    departureAt: Yup.string()
+    // shipmentItems: Yup.object().required(t('form.common.required.shipmentItems')).nullable(),
+    departureAt: Yup.string(),
+    shipmentItems: Yup.object()
+      .required(t('form.common.required.shipmentItems'))
+      .nullable()
+      .shape({
+        price: Yup.string().nullable().max(9, 'Telefono Invalido').min(0, 'Telefono Invalido')
+      })
   });
 
   const onSubmit = async (values) => {
-    try {
+    /*  try {
       delete values.shipmentItem;
       values.shipmentItems = baggageCapacity;
       values.traveler = values.traveler.id;
@@ -120,7 +124,8 @@ const TravelForm = ({ travelId }) => {
       toast.error(_messageErrors, { variant: 'error' });
     } finally {
       router.back();
-    }
+    }*/
+    console.log(values);
   };
 
   const initialValues = {
