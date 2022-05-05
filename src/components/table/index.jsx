@@ -132,22 +132,25 @@ const DataTable = ({
 
 DataTable.defaultProps = {
   data: [],
-  onRowClick: () => {},
   hiddenColumns: [],
   name: '',
-  setSortBy: () => {}
+  onPageSizeChange: () => null,
+  onRowClick: () => null,
+  setSortBy: () => null
 };
 
 DataTable.propTypes = {
-  count: PropTypes.number.isRequired,
+  actions: PropTypes.node,
   columns: PropTypes.array.isRequired,
+  count: PropTypes.number.isRequired,
   data: PropTypes.array,
-  setSortBy: PropTypes.func,
+  hiddenColumns: PropTypes.array,
   name: PropTypes.string,
   onFilter: PropTypes.node,
-  actions: PropTypes.node,
+  onPageSizeChange: PropTypes.func,
   onRowClick: PropTypes.func,
-  hiddenColumns: PropTypes.array
+  pageSize: PropTypes.number,
+  setSortBy: PropTypes.func
 };
 
 export default DataTable;

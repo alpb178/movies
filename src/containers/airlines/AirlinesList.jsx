@@ -203,12 +203,7 @@ const AirlinesList = () => {
 };
 
 AirlinesList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetAirlines: PropTypes.func.isRequired,
-  onSelectPayment: PropTypes.func.isRequired,
-  onDeletePayment: PropTypes.func.isRequired
+  row: PropTypes.object
 };
 
 export default AirlinesList;

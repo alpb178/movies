@@ -183,6 +183,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   );
 
   const options = {
+    name: t('travels', { count: 2 }),
     columns,
     data: travels?.rows,
     count: travels?.count,

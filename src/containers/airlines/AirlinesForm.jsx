@@ -46,8 +46,8 @@ const AirlinesForm = ({ data, onOpen, open, setLoading }) => {
   // ));
 
   const initialValues = {
-    imageUrl: data?.logo || '',
-    name: data?.name || ''
+    imageUrl: data?.logo,
+    name: data?.name
   };
 
   const validationSchema = Yup.object().shape({
@@ -139,10 +139,12 @@ const AirlinesForm = ({ data, onOpen, open, setLoading }) => {
   );
 };
 
+AirlinesForm.defaultProps = {
+  data: {}
+};
+
 AirlinesForm.propTypes = {
-  data: PropTypes.object.isRequired,
-  touched: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
+  data: PropTypes.object,
   onOpen: PropTypes.func.isRequired,
   setLoading: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired
