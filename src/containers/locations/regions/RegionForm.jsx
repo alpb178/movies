@@ -29,16 +29,16 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
   const initialValues = {
     name: data?.name || '',
     code: data?.code || '',
-    country: data?.country || {}
+    country: data?.country || ''
   };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
     code: Yup.string().required(t('form.common.required.code')),
-    country: Yup.object().required(t('form.region.required.country')).nullable()
+    country: Yup.object().nullable().required(t('form.region.required.country'))
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     values.country = values.country.id;
     let method = POST;
     let message = t('inserted.female', { entity: t('regions', { count: 1 }) });
@@ -50,7 +50,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
 
     try {
       setLoading(true);
-      saveRegions({
+      await saveRegions({
         args: values,
         options: {
           method
