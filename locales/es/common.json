@@ -95,7 +95,8 @@
       },
       "required": {
         "name": "El nombre es requerido",
-        "code": "El código es requerido"
+        "code": "El código es requerido",
+        "measureUnit": "La Unidad de Medida es Requerida"
       }
     },
     "measure-unit": {

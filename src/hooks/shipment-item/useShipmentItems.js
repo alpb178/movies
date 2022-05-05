@@ -11,13 +11,13 @@ export default function useShipmentItems({ args = {}, options = {} } = {}) {
 export const saveShipmentItems = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
-      safeData({ path: API_SHIPMENT_ITEMS_URL, data: args, method: POST });
+      await safeData({ path: API_SHIPMENT_ITEMS_URL, data: args, method: POST });
       break;
     case DELETE:
-      deleteData({ path: API_SHIPMENT_ITEMS_URL + `/${args.id}`, method: DELETE });
+      await deleteData({ path: API_SHIPMENT_ITEMS_URL + `/${args.id}`, method: DELETE });
       break;
     case PUT:
-      safeData({ path: API_SHIPMENT_ITEMS_URL + `/${args.id}`, data: args, method: PUT });
+      await safeData({ path: API_SHIPMENT_ITEMS_URL + `/${args.id}`, data: args, method: PUT });
       break;
   }
 };

@@ -21,7 +21,7 @@ const ShipmentItemsForm = ({ data, open, onOpen, setLoading }) => {
 
   const initialValues = {
     name: data?.name || '',
-    measureUnit: data?.measureUnit || {}
+    measureUnit: data?.measureUnit || ''
   };
 
   const params = useMemo(() => {
@@ -37,7 +37,7 @@ const ShipmentItemsForm = ({ data, open, onOpen, setLoading }) => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
-    measureUnit: Yup.object().required(t('form.common.required.measureUnit')).nullable()
+    measureUnit: Yup.object().nullable().required(t('form.common.required.measureUnit'))
   });
 
   const onSubmit = async (values) => {
@@ -62,7 +62,7 @@ const ShipmentItemsForm = ({ data, open, onOpen, setLoading }) => {
       queryClient.invalidateQueries([API_SHIPMENT_ITEMS_URL]);
       toast(message);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.toString());
     } finally {
       setLoading(false);
       onOpen(false);
