@@ -57,3 +57,11 @@ export const USER_DETAIL_PAGE = (id) => `/users/${id}`;
 export const USER_FORM_PAGE = (id) => (id ? `/users/form/${id}` : `/users/form/create`);
 export const USER_EDIT = (user) => `/users/edit/${user}`;
 export const USERS_PAGE = '/users';
+
+// Permisions actions (CRUD)
+export const actions = [
+  { name: 'create' },
+  { name: 'read' },
+  { name: 'update' },
+  { name: 'delete' }
+];

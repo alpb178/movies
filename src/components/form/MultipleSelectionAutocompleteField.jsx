@@ -6,10 +6,10 @@ import { Field } from 'formik';
 import { matchSorter } from 'match-sorter';
 import React from 'react';
 
-class MultiDownshift extends React.Component {
-  state = { selectedItems: [] };
+const MultiDownshift = ({ render, name, children = render, ...props }) => {
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  stateReducer = (state, changes) => {
+  const stateReducer = (state, changes) => {
     switch (changes.type) {
       case Downshift.stateChangeTypes.keyDownEnter:
       case Downshift.stateChangeTypes.clickItem:
@@ -24,86 +24,81 @@ class MultiDownshift extends React.Component {
     }
   };
 
-  handleSelection = (selectedItem, downshift) => {
+  const handleSelection = (selectedItem, downshift) => {
     const callOnChange = () => {
-      const { onSelect, onChange } = this.props;
-      const { selectedItems } = this.state;
+      const { onSelect, onChange } = props;
       if (onSelect) {
-        onSelect(selectedItems, this.getStateAndHelpers(downshift));
+        onSelect(selectedItems, getStateAndHelpers(downshift));
       }
       if (onChange) {
-        onChange(selectedItems, this.getStateAndHelpers(downshift));
+        onChange(selectedItems, getStateAndHelpers(downshift));
       }
     };
-    if (this.state.selectedItems.includes(selectedItem)) {
-      this.removeItem(selectedItem, callOnChange);
+    if (selectedItems.includes(selectedItem)) {
+      removeItem(selectedItem, callOnChange);
     } else {
-      this.addSelectedItem(selectedItem, callOnChange);
+      addSelectedItem(selectedItem, callOnChange);
     }
   };
 
-  removeItem = (item, cb) => {
-    this.setState(({ selectedItems }) => {
+  const removeItem = (item, cb) => {
+    setState(({ items }) => {
       return {
-        selectedItems: selectedItems.filter((i) => i !== item)
+        selectedItems: items.filter((i) => i !== item)
       };
     }, cb);
   };
 
-  addSelectedItem(item, cb) {
-    this.setState(
-      ({ selectedItems }) => ({
-        selectedItems: [...selectedItems, item]
+  const addSelectedItem = (item, cb) => {
+    setState(
+      ({ items }) => ({
+        selectedItems: [...items, item]
       }),
       cb
     );
-  }
+  };
 
-  getRemoveButtonProps = ({ onClick, item, ...props } = {}) => {
+  const getRemoveButtonProps = ({ onClick, item, ...rest } = {}) => {
     return {
       onClick: (e) => {
         // TODO: use something like downshift's composeEventHandlers utility instead
         onClick && onClick(e);
         e.stopPropagation();
-        this.removeItem(item);
+        removeItem(item);
       },
-      ...props
+      ...rest
     };
   };
 
-  getStateAndHelpers(downshift) {
-    const { selectedItems } = this.state;
-    const { getRemoveButtonProps, removeItem } = this;
+  const getStateAndHelpers = (downshift) => {
     return {
       getRemoveButtonProps,
       removeItem,
       selectedItems,
       ...downshift
     };
-  }
+  };
 
-  render() {
-    const { render, name, children = render, ...props } = this.props;
-    // TODO: compose together props (rather than overwriting them) like downshift does
-    return (
-      <Field name={name} id={name}>
-        {({ field: { value: fieldValue }, form: { setFieldValue }, meta: { error, touched } }) => (
-          <Downshift
-            {...props}
-            stateReducer={this.stateReducer}
-            onChange={(selection) => {
-              this.handleSelection(selection);
-              setFieldValue(name, [...fieldValue, selection]);
-            }}
-            selectedItem={null}
-          >
-            {(downshift) => children(this.getStateAndHelpers(downshift))}
-          </Downshift>
-        )}
-      </Field>
-    );
-  }
-}
+  // TODO: compose together props (rather than overwriting them) like downshift does
+  return (
+    <Field name={name} id={name}>
+      {({ field: { value: fieldValue }, form: { setFieldValue }, meta: { error, touched } }) => (
+        <Downshift
+          {...props}
+          stateReducer={Reducer}
+          onChange={(selection) => {
+            handleSelection(selection);
+            setFieldValue(name, [...fieldValue, selection]);
+          }}
+          itemToString={itemToString}
+          initialSelectedItem={defaultValue}
+        >
+          {(downshift) => children(getStateAndHelpers(downshift))}
+        </Downshift>
+      )}
+    </Field>
+  );
+};
 
 class MultipleSelectionAutocompleteField extends React.Component {
   input = React.createRef();
@@ -113,7 +108,7 @@ class MultipleSelectionAutocompleteField extends React.Component {
   };
 
   render() {
-    const { className, placeholder, options, optionLabels, keysToMatch, name } = this.props;
+    const { className, placeholder, options, optionLabels, keysToMatch, name } = props;
 
     const itemToString = (i) =>
       i
@@ -135,7 +130,7 @@ class MultipleSelectionAutocompleteField extends React.Component {
 
     return (
       <div>
-        <MultiDownshift onChange={this.handleChange} itemToString={itemToString} name={name}>
+        <MultiDownshift onChange={handleChange} itemToString={itemToString} name={name}>
           {({
             getInputProps,
             getToggleButtonProps,
@@ -157,13 +152,13 @@ class MultipleSelectionAutocompleteField extends React.Component {
                 className="relative cursor-pointer"
                 onClick={() => {
                   toggleMenu();
-                  !isOpen && this.input.current.focus();
+                  !isOpen && input.current.focus();
                 }}
               >
                 <div className="relative flex items-center">
                   <input
                     {...getInputProps({
-                      ref: this.input,
+                      ref: input,
                       onKeyDown(event) {
                         if (event.key === 'Backspace' && !inputValue) {
                           removeItem(selectedItems[selectedItems.length - 1]);

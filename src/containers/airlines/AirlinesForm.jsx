@@ -12,8 +12,9 @@ import * as Yup from 'yup';
 
 const AirlinesForm = ({ data, onOpen, open, setLoading }) => {
   const { t } = useTranslation('common');
-  const [files, setFiles] = useState([]);
   const queryClient = useQueryClient();
+
+  const [files, setFiles] = useState([]);
   const [isNewData, setIsNewData] = useState(true);
   const [errors, setErrorsForm] = useState({});
   const [touched, setTouchedForm] = useState({});
@@ -71,13 +72,13 @@ const AirlinesForm = ({ data, onOpen, open, setLoading }) => {
           method: method
         }
       });
+
+      setLoading(false);
       queryClient.refetchQueries([API_AIRLINES_URL]);
       toast(message);
+      onOpen(false);
     } catch (error) {
       toast.error(error.toString());
-    } finally {
-      setLoading(false);
-      onOpen(false);
     }
   };
 

@@ -11,14 +11,17 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const RolesForm = ({ data, errors, onOpen, open, touched }) => {
+const RolesForm = ({ data, onLoading, onOpen, open }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
+
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [isNewData, setIsNewData] = useState(true);
 
   const initialValues = {
-    name: data?.name || '',
-    permissions: data?.permissions || ''
+    name: data?.name,
+    permissions: data?.permissions
   };
 
   const { data: permissions } = usePermissions({
@@ -29,7 +32,7 @@ const RolesForm = ({ data, errors, onOpen, open, touched }) => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string(),
-    code: Yup.string()
+    permissions: Yup.string()
   });
 
   const onSubmit = async (values) => {
@@ -41,7 +44,7 @@ const RolesForm = ({ data, errors, onOpen, open, touched }) => {
       message = t('updated.male', { entity: t('roles', { count: 1 }) });
     }
     try {
-      // setLoading(true);
+      onLoading(true);
       await saveRoles({
         args: values,
         options: {
@@ -53,7 +56,7 @@ const RolesForm = ({ data, errors, onOpen, open, touched }) => {
     } catch (error) {
       toast.error(error.toString());
     } finally {
-      //setLoading(false);
+      onLoading(false);
       onOpen(false);
     }
   };
@@ -69,6 +72,8 @@ const RolesForm = ({ data, errors, onOpen, open, touched }) => {
       onOpen={onOpen}
       initialValues={initialValues}
       onSubmit={onSubmit}
+      setErrorsForm={setErrors}
+      setTouchedForm={setTouched}
       validationSchema={validationSchema}
       isNewData={isNewData}
     >
@@ -96,6 +101,7 @@ const RolesForm = ({ data, errors, onOpen, open, touched }) => {
             id="permissions"
             name="permissions"
             options={permissions?.rows ? permissions.rows : []}
+            option
             className="autocomplete-field"
             defaultValue={data?.permissions}
           />
@@ -105,8 +111,12 @@ const RolesForm = ({ data, errors, onOpen, open, touched }) => {
   );
 };
 
+RolesForm.defaultProps = {
+  data: {}
+};
+
 RolesForm.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.object,
   errors: PropTypes.object.isRequired,
   onOpen: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,

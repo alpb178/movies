@@ -1,4 +1,4 @@
-import RolesList from 'containers/roles/RolesList';
+import RolesList from '@/containers/access-control/roles/RolesList';
 import { ROLE_ADMIN } from 'lib/constants';
 import dynamic from 'next/dynamic';
 import React from 'react';

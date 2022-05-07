@@ -1,39 +1,37 @@
 /* eslint-disable react/display-name */
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useRoles, { saveRoles } from '@/hooks/role/useRoles';
+import usePermissions, { savePermission } from '@/hooks/permission/usePermissions';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
-import { API_ROLES_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
+import { API_PERMISSIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
-import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import RolesFilter from './RolesFilter';
-import RolesForm from './RolesForm';
+import ResourcesList from '../resources/ResourcesList';
+import PermissionsFilter from './PermissionsFilter';
+import PermissionsForm from './PermissionsForm';
 
-const Roles = () => {
+const Permissions = () => {
   const { t } = useTranslation('common');
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
-
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const [sort, setSort] = useState('');
-  const onPageChangeCallback = useCallback(setPage, []);
-  const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [selectedItem, setSelectedItem] = useState();
-
   const [filterValues, setFilterValues] = useState({
-    measureUnit: ''
+    actions: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sort, setSort] = useState();
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
 
   const params = useMemo(() => {
     const query = {};
@@ -42,13 +40,7 @@ const Roles = () => {
     return query;
   }, [filterValues, page, sort]);
 
-  useEffect(() => {
-    if (!openForm) {
-      setSelectedItem(null);
-    }
-  }, [openForm]);
-
-  const { data: roles, isLoading } = useRoles({
+  const { data: permissions, isLoading } = usePermissions({
     args: params,
     options: {
       keepPreviousData: true
@@ -63,16 +55,16 @@ const Roles = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await saveRoles({
+      await savePermission({
         args: { id: deleteConfirmation.id },
         options: {
           method: DELETE
         }
       });
-      toast(t('deleted.male', { entity: t('roles', { count: 1 }) }));
-      queryClient.refetchQueries([API_ROLES_URL]);
+      toast(t('deleted.male', { entity: t('permission', { count: 1 }) }));
+      queryClient.refetchQueries([API_PERMISSIONS_URL]);
     } catch (error) {
-      toast.error(error.toString());
+      toast.error(error);
     } finally {
       setLoading(false);
     }
@@ -80,45 +72,27 @@ const Roles = () => {
 
   const onUpdate = (event, item) => {
     event.stopPropagation();
-    setSelectedItem(item);
+    setSelectedItem(item.original);
     setOpenForm(true);
   };
 
-  const renderPermissions = (permissions) => (
-    <div className="flex space-x-2">
-      {permissions?.map((permission) => (
-        <span
-          key={permission.id}
-          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-100"
-        >
-          {t(permission.name.replace(/_/g, '-').toLowerCase())}
-        </span>
-      ))}
-    </div>
-  );
-
   const columns = React.useMemo(() => [
     {
-      Header: t('name'),
-      accessor: 'name'
+      Header: t('action'),
+      accessor: 'action'
     },
     {
-      Header: t('permissions', { count: 2 }),
-      accessor: 'permissions',
-      Cell: ({ value: permissions }) =>
-        permissions.length > 0 ? (
-          renderPermissions(permissions)
-        ) : (
-          <p className="text-gray-400">{t('permissions', { count: 0 })}</p>
-        )
+      Header: t('resources', { count: 1 }),
+      accessor: 'resource',
+      Cell: ({ value: resource }) => t(resource?.name, { count: 2 })
     },
     {
-      id: 'optionsRoles',
-      displayName: 'optionsRoles',
+      id: 'optionsPermissions',
+      displayName: 'optionsPermissions',
       Cell: ({ row }) => {
         return (
           <TableActions
-            onEdit={(event) => onUpdate(event, row.original)}
+            onEdit={(event) => onUpdate(event, row)}
             onDelete={(event) => onDelete(event, row)}
           />
         );
@@ -162,22 +136,23 @@ const Roles = () => {
 
   const renderInsertButton = () => (
     <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('roles')}
+      {t('create', { entity: t('permissions', { count: 1 }).toLowerCase() })}
     </button>
   );
 
   const options = {
-    name: t('roles', { count: 2 }),
+    name: t('permissions', { count: 2 }),
     columns,
-    data: roles?.rows,
-    count: roles?.count,
+    data: permissions?.rows,
+    count: permissions?.count,
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
+    onRowClick: () => null, // TODO: Here we show details view
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
-        <RolesFilter open={openFilters} onSubmit={handleFilters} />
+        <PermissionsFilter open={openFilters} onSubmit={handleFilters} />
 
         <div className="flex">
           <FilterCriteria />
@@ -200,32 +175,38 @@ const Roles = () => {
 
   return (
     <>
-      {(isLoading || loading) && <Loading />}
+      {isLoading && <Loading />}
 
-      {roles && roles.rows.length > 0 ? (
-        <DataTable {...options} />
-      ) : (
-        <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
-      )}
+      <div className="flex space-x-8">
+        <div className="w-full">
+          {permissions && permissions.rows.length > 0 ? (
+            <DataTable {...options} />
+          ) : (
+            <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
+          )}
+        </div>
 
-      <RolesForm data={selectedItem} open={openForm} onOpen={setOpenForm} />
+        <div className="w-1/3 max-w-md">
+          <ResourcesList />
+        </div>
+      </div>
+
+      <PermissionsForm
+        data={selectedItem}
+        onLoading={setLoading}
+        onOpen={setOpenForm}
+        open={openForm}
+      />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete-title', { entity: t('roles', { count: 1 }).toLowerCase() })}
-        content={t('delete-message.male', { entity: t('roles', { count: 1 }).toLowerCase() })}
+        title={t('delete-title', { entity: t('permissions', { count: 1 }).toLowerCase() })}
+        content={t('delete-message.male', { entity: t('permissions', { count: 1 }).toLowerCase() })}
       />
     </>
   );
 };
 
-Roles.propTypes = {
-  row: PropTypes.object.isRequired,
-  value: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired
-};
-
-export default Roles;
+export default Permissions;

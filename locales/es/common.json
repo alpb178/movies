@@ -9,6 +9,11 @@
     "logout": "Cerrar sesión",
     "new": "¿Nuevo en Zendinit?"
   },
+  "actions": {
+    "0": "No existen acciones para este elemento",
+    "1": "Acción",
+    "other": "Acciones"
+  },
   "add": "Añadir",
   "airlines": {
     "0": "Aún no existen aerolíneas registradas",
