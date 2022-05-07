@@ -178,7 +178,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
       className="btn-outlined"
       onClick={() => router.push('travels/create/new')}
     >
-      {t('new', { entity: t('travels', { count: 1 }) })}
+      {t('create', { entity: t('travels', { count: 1 }) })}
     </button>
   );
 

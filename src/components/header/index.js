@@ -1,9 +1,9 @@
-import React from 'react';
+import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
+import React from 'react';
 // import { SearchBar } from 'components';
 import { IconContext } from 'react-icons';
-import { MdViewList as ListIcon, MdApps as GridIcon } from 'react-icons/md';
-import useTranslation from 'next-translate/useTranslation';
+import { MdApps as GridIcon, MdViewList as ListIcon } from 'react-icons/md';
 
 const Header = ({ children, /*onSearch,*/ onCreate, onViewChange }) => {
   const { t } = useTranslation('common');
@@ -47,7 +47,7 @@ const Header = ({ children, /*onSearch,*/ onCreate, onViewChange }) => {
                   className="inline-flex justify-center px-4 py-2 ml-4 text-sm font-medium leading-5 text-white uppercase transition duration-300 ease-in-out border rounded-md sm:mt-0 bg-primary-500 hover:bg-white hover:text-primary focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 border-primary"
                   onClick={onCreate}
                 >
-                  {t('new')}
+                  {t('create')}
                 </button>
               )}
             </div>

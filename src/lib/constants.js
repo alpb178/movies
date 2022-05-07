@@ -16,6 +16,7 @@ export const API_PAYMENTS_URL = '/payments';
 export const API_PERMISSIONS_URL = '/permissions';
 export const API_REGIONS_URL = '/regions';
 export const API_REGULATIONS_URL = '/regulations';
+export const API_RESOURCES_URL = '/resources';
 export const API_ROLES_URL = '/roles';
 export const API_SHIPMENT_ITEMS_URL = '/shipment-items';
 export const API_SHIPMENTS_URL = '/shipments';

@@ -38,6 +38,7 @@
     "1": "País",
     "other": "Países"
   },
+  "create": "Crear {{entity}}",
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
   "date-delivery": " Fecha Entrega",
@@ -282,6 +283,7 @@
     "1": "Regulación",
     "other": "Regulaciones"
   },
+  "remember-me": "Recuérdame",
   "required": {
     "username": "El nombre de usuario es requerido",
     "password": "La contraseña es requerida",
@@ -290,7 +292,12 @@
     "email": "El correo electrónico es requerido",
     "phone": "El número de telefóno es requerido",
     "symbol": "El símbolo es requerido",
-    "measureUnit": "La Unidad de Medida es Requerida"
+    "measure-unit": "La Unidad de Medida es Requerida"
+  },
+  "resources": {
+    "0": "Aún no existen recursos",
+    "1": "Recurso",
+    "other": "Recursos"
   },
   "reviews": {
     "left": {
@@ -307,7 +314,6 @@
   "roles": { "0": "Sin roles", "1": "Role", "other": "Roles" },
   "role-admin": "Administrador",
   "role-user": "Usuario",
-  "remember-me": "Recuérdame",
   "save": "Guardar",
   "saved": {
     "male": "{{entity}} guardado exitosamente.",

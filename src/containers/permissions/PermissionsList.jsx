@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
 import PermissionsFilter from './PermissionsFilter';
 import PermissionsForm from './PermissionsForm';
+import ResourcesList from './ResourcesList';
 
 const Permissions = () => {
   const { t } = useTranslation('common');
@@ -67,10 +68,14 @@ const Permissions = () => {
 
   const columns = React.useMemo(() => [
     {
-      Header: t('name'),
-      accessor: 'name'
+      Header: t('action'),
+      accessor: 'action'
     },
-
+    {
+      Header: t('resources', { count: 1 }),
+      accessor: 'resource',
+      Cell: ({ value: resource }) => resource?.name
+    },
     {
       id: 'optionsPermissions',
       displayName: 'optionsPermissions',
@@ -121,7 +126,7 @@ const Permissions = () => {
 
   const renderInsertButton = () => (
     <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('new', { entity: 'permissions' })}
+      {t('create', { entity: t('permissions', { count: 1 }).toLowerCase() })}
     </button>
   );
 
@@ -134,7 +139,7 @@ const Permissions = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
-    onRowClick: (row) => {},
+    onRowClick: () => null, // TODO: Here we show details view
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
         <PermissionsFilter open={openFilters} onSubmit={handleFilters} />
@@ -162,11 +167,19 @@ const Permissions = () => {
     <>
       {isLoading && <Loading />}
 
-      {permissions && permissions.rows.length > 0 ? (
-        <DataTable {...options} />
-      ) : (
-        <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
-      )}
+      <div className="flex space-x-8">
+        <div className="w-full">
+          {permissions && permissions.rows.length > 0 ? (
+            <DataTable {...options} />
+          ) : (
+            <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
+          )}
+        </div>
+
+        <div className="w-1/3 max-w-md">
+          <ResourcesList />
+        </div>
+      </div>
 
       <PermissionsForm open={openForm} onOpen={setOpenForm} />
 

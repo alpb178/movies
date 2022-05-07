@@ -138,7 +138,7 @@ const AirlinesList = () => {
 
   const renderInsertButton = () => (
     <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('new', { entity: t('airlines', { count: 1 }) })}
+      {t('create', { entity: t('airlines', { count: 1 }).toLowerCase() })}
     </button>
   );
 
