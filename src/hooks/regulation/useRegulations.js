@@ -1,14 +1,14 @@
 import { API_REGULATIONS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
-import { deleteData, getData, safeData } from '..';
+import { deleteData, getData, saveData } from '..';
 
 export const saveRegulations = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
-      await safeData({ path: API_REGULATIONS_URL, data: args, method: options.method });
+      await saveData({ path: API_REGULATIONS_URL, data: args, method: options.method });
       break;
     case PUT:
-      await safeData({
+      await saveData({
         path: API_REGULATIONS_URL + `/${args.id}`,
         data: args,
         method: options.method

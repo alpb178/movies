@@ -9,7 +9,7 @@ export const getData = async ({ queryKey }) => {
   return data;
 };
 
-export const safeData = async (args) => {
+export const saveData = async (args) => {
   const { path, data: values, method } = args;
   const { data } = await apiFetcher(path, { data: values, method });
   return data;
