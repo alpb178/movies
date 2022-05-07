@@ -1,6 +1,6 @@
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useRoles, { saveRoles } from '@/hooks/role/useRoles';
+import useRoles, { saveRole } from '@/hooks/role/useRoles';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
@@ -61,7 +61,7 @@ const RolesList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await saveRoles({
+      await saveRole({
         args: { id: deleteConfirmation.id },
         options: {
           method: DELETE
@@ -88,7 +88,7 @@ const RolesList = () => {
           key={permission.id}
           className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-100"
         >
-          {t(permission.name.replace(/_/g, '-').toLowerCase())}
+          {`${t(permission?.action)} ${t(permission.resource.name, { count: 2 })}`}
         </span>
       ))}
     </div>

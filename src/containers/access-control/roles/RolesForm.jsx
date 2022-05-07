@@ -1,7 +1,8 @@
+import Loading from '@/components/common/Loading';
 import DataTable from '@/components/table';
 import usePermissions from '@/hooks/permission/usePermissions';
 import useResources from '@/hooks/resource/useResources';
-import { saveRoles } from '@/hooks/role/useRoles';
+import { saveRole } from '@/hooks/role/useRoles';
 import { apiFetcher } from '@/lib/apiFetcher';
 import { actions, API_ROLES_URL, POST, PUT } from '@/lib/constants';
 import { Field, Form, Formik } from 'formik';
@@ -13,12 +14,14 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const RolesForm = ({ roleId, onLoading }) => {
+const RolesForm = ({ roleId }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation('common');
 
   const [role, setRole] = useState();
+  const [rolePermissions, setRolePermissions] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const [isNewData, setIsNewData] = useState(true);
 
   useEffect(() => {
@@ -37,16 +40,23 @@ const RolesForm = ({ roleId, onLoading }) => {
 
   const initialValues = {
     name: role?.name || ''
-    // permissions: role?.permissions || []
   };
 
-  const { data: resources } = useResources({
+  const { data: resources, isLoading: isLoadingResources } = useResources({
     options: {
       keepPreviousData: true
     }
   });
 
-  const { data: permissions } = usePermissions({
+  const permissionsParams = useMemo(() => {
+    if (resources?.count) {
+      // Max size amount of permissions allowed to exist
+      return { size: resources.count * 4 };
+    }
+  }, [resources]);
+
+  const { data: permissions, isLoading: isLoadingPermissions } = usePermissions({
+    args: permissionsParams,
     options: {
       keepPreviousData: true
     }
@@ -54,14 +64,13 @@ const RolesForm = ({ roleId, onLoading }) => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required()
-    // permissions: Yup.string()
   });
 
   const onSubmit = async (values) => {
-    debugger;
     const { name, ...rest } = values;
     const body = { name };
-    body.permissions = [rest];
+
+    body.permissions = Object.keys(rest).map((key) => ({ id: key }));
     let method = POST;
     let message = t('inserted.male', { entity: t('roles', { count: 1 }) });
 
@@ -70,9 +79,10 @@ const RolesForm = ({ roleId, onLoading }) => {
       body.id = role.id;
       message = t('updated.male', { entity: t('roles', { count: 1 }) });
     }
+
     try {
-      // onLoading(true);
-      await saveRoles({
+      setIsLoading(true);
+      await saveRole({
         args: body,
         options: {
           method
@@ -80,9 +90,11 @@ const RolesForm = ({ roleId, onLoading }) => {
       });
       queryClient.invalidateQueries([API_ROLES_URL]);
       toast(message);
-      // onLoading(false);
+      router.back();
     } catch (error) {
       toast.error(error.toString());
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -92,16 +104,17 @@ const RolesForm = ({ roleId, onLoading }) => {
 
   const columns = useMemo(() => [
     {
-      Header: t('name'),
+      Header: t('resources', { count: 1 }),
       accessor: 'name',
       Cell: ({ value: name }) => t(name, { count: 2 })
     },
     {
       id: 'permissions',
+      accessor: 'permissions',
       className: 'w-full flex justify-between',
       displayName: 'permissions',
       Cell: ({ row }) => (
-        <div role="group" aria-labelledby="checkbox-group" className="grid w-full grid-cols-4">
+        <div aria-labelledby="checkbox-group" className="grid w-full grid-cols-4">
           {actions.map((action) => {
             const existentPermissions =
               permissions?.rows &&
@@ -119,8 +132,7 @@ const RolesForm = ({ roleId, onLoading }) => {
                   // id={`permissions.${action.name}.${row.original.name}`}
                   className="w-5 h-5 transition-all duration-150 ease-linear text-secondary-600 form-checkbox"
                   type="checkbox"
-                  name={`${row.original.name}.${action.name}`}
-                  // value={`permissions.${row.original.name}.${action.name}`}
+                  name={`${existentPermissions.id}`}
                 />
                 <span className="ml-2 font-medium text-gray-700">{t(action.name)}</span>
               </label>
@@ -170,12 +182,11 @@ const RolesForm = ({ roleId, onLoading }) => {
   const options = {
     columns,
     data: resources?.rows,
-    count: resources?.count,
+    count: resources?.count
     // setPage: onPageChangeCallback,
     // setSortBy: onSortChangeCallback,
     // pageSize,
     // onPageSizeChange: setPageSize,
-    onRowClick: () => null // TODO: Here we show details view
     // onFilter: (
     //   <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
     //     <PermissionsFilter open={openFilters} onSubmit={handleFilters} />
@@ -199,47 +210,57 @@ const RolesForm = ({ roleId, onLoading }) => {
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-      {({ errors, touched }) => (
-        <Form className="p-6 space-y-6 text-lg">
-          <div className="flex items-center justify-between mb-8">
-            <p className="form-header">
-              {isNaN(roleId) ? t('form.role.title.create') : t('form.role.title.update')}
-            </p>
-            <div className="flex justify-end space-x-8">
-              <button
-                type="button"
-                className="px-8 py-3 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
-                onClick={() => router.back()}
-              >
-                {t('cancel')}
-              </button>
-              <button type="submit" className="btn-contained">
-                {t('save')}
-              </button>
-            </div>
-          </div>
+    <>
+      {isLoading || isLoadingResources || isLoadingPermissions ? <Loading /> : null}
 
-          <div className="space-y-2">
-            <label htmlFor="name">{t('form.common.label.name')}</label>
-            <div className="relative w-full max-w-md">
-              <Field
-                id="name"
-                name="name"
-                className={`text-field ${
-                  errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
-                }`}
-              />
-              {errors?.name && touched?.name ? (
-                <p className="mt-4 text-red-600">{errors?.name}</p>
-              ) : null}
-            </div>
-          </div>
+      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+        {({ errors, setFieldValue, touched }) => {
+          useEffect(() => {
+            Object.keys(initialValues).forEach((field) => {
+              setFieldValue(field, initialValues[field], false);
+            });
+          }, [role]);
 
-          <div className="space-y-2">
-            {/* <label htmlFor="code">{t('permissions', { count: 2 })}</label>
+          return (
+            <Form className="p-6 space-y-6 text-lg">
+              <div className="flex items-center justify-between mb-8">
+                <p className="form-header">
+                  {isNaN(roleId) ? t('form.role.title.create') : t('form.role.title.update')}
+                </p>
+                <div className="flex justify-end space-x-8">
+                  <button
+                    type="button"
+                    className="px-8 py-3 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
+                    onClick={() => router.back()}
+                  >
+                    {t('cancel')}
+                  </button>
+                  <button type="submit" className="btn-contained">
+                    {t('save')}
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="name">{t('form.common.label.name')}</label>
+                <div className="relative w-full max-w-md">
+                  <Field
+                    id="name"
+                    name="name"
+                    className={`text-field ${
+                      errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
+                    }`}
+                  />
+                  {errors?.name && touched?.name ? (
+                    <p className="mt-4 text-red-600">{errors?.name}</p>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {/* <label htmlFor="code">{t('permissions', { count: 2 })}</label>
             <div className="relative w-full mx-auto"> */}
-            {/* <MultipleSelectionAutcompleteField
+                {/* <MultipleSelectionAutcompleteField
                 name="permissions"
                 options={resources?.rows ? resources.rows : []}
                 optionLabels={['action', 'resource.name']}
@@ -247,17 +268,18 @@ const RolesForm = ({ roleId, onLoading }) => {
                 labelSeparator=" "
                 className="autocomplete-field"
               /> */}
-            <DataTable {...options} />
-            {/* </div> */}
-          </div>
-        </Form>
-      )}
-    </Formik>
+                <DataTable {...options} />
+                {/* </div> */}
+              </div>
+            </Form>
+          );
+        }}
+      </Formik>
+    </>
   );
 };
 
 RolesForm.propTypes = {
-  onLoading: PropTypes.func.isRequired,
   roleId: PropTypes.number,
   row: PropTypes.object
 };
