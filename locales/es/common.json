@@ -43,7 +43,7 @@
     "1": "País",
     "other": "Países"
   },
-  "create": "Crear {{entity}}",
+  "create": "Crear",
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
   "date-delivery": " Fecha Entrega",
@@ -110,8 +110,8 @@
         "origin": "El origen es requerido",
         "region": "El País es Requerido",
         "shipmentItems": "Los Articulos son requeridos",
-        "traveler": "El viajero es requerido"  
-        }
+        "traveler": "El viajero es requerido"
+      }
     },
     "measure-unit": {
       "title": {
@@ -277,6 +277,7 @@
   "profile": "Perfil",
   "population": "Población",
   "repeat-password": "Repetir contraseña",
+  "read": "Leer",
   "regions": {
     "0": "Aún no existen regiones registradas.",
     "1": "Región",

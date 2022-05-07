@@ -2,12 +2,6 @@ import { API_SHIPMENT_ITEMS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { deleteData, getData, safeData } from '..';
 
-export default function useShipmentItems({ args = {}, options = {} } = {}) {
-  return useQuery([API_SHIPMENT_ITEMS_URL, { ...args }], getData, {
-    ...options
-  });
-}
-
 export const saveShipmentItems = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
@@ -21,3 +15,9 @@ export const saveShipmentItems = async ({ args = {}, options = {} } = {}) => {
       break;
   }
 };
+
+export default function useShipmentItems({ args = {}, options = {} } = {}) {
+  return useQuery([API_SHIPMENT_ITEMS_URL, { ...args }], getData, {
+    ...options
+  });
+}

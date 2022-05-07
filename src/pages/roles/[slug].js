@@ -1,4 +1,4 @@
-import UserDetails from '@/containers/users/UserDetails';
+import RolesForm from '@/containers/access-control/roles/RolesForm';
 import { ROLE_ADMIN } from '@/lib/constants';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -9,18 +9,18 @@ const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
 });
 
-const UserDetailPage = () => {
+const RolePage = () => {
   const router = useRouter();
-  const userId = router.query.slug;
+  const roleId = router.query.slug;
 
-  return <UserDetails userId={userId} />;
+  return <RolesForm roleId={roleId} />;
 };
 
-UserDetailPage.propTypes = {
+RolePage.propTypes = {
   user: PropTypes.object.isRequired
 };
 
-UserDetailPage.layout = Admin;
-UserDetailPage.roles = [ROLE_ADMIN];
+RolePage.layout = Admin;
+RolePage.roles = [ROLE_ADMIN];
 
-export default UserDetailPage;
+export default RolePage;

@@ -2,12 +2,6 @@ import { API_REGIONS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { deleteData, getData, safeData } from '../..';
 
-export default function useRegions({ args = {}, options = {} } = {}) {
-  return useQuery([API_REGIONS_URL, { ...args }], getData, {
-    ...options
-  });
-}
-
 export const saveRegions = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
@@ -21,3 +15,9 @@ export const saveRegions = async ({ args = {}, options = {} } = {}) => {
       break;
   }
 };
+
+export default function useRegions({ args = {}, options = {} } = {}) {
+  return useQuery([API_REGIONS_URL, { ...args }], getData, {
+    ...options
+  });
+}

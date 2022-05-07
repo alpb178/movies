@@ -76,7 +76,7 @@ const Permissions = () => {
     setOpenForm(true);
   };
 
-  const columns = React.useMemo(() => [
+  const columns = useMemo(() => [
     {
       Header: t('action'),
       accessor: 'action'

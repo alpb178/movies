@@ -2,12 +2,6 @@ import { API_MEASURE_UNITS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { deleteData, getData, safeData } from '..';
 
-export default function useMeasureUnits({ args = {}, options = {} } = {}) {
-  return useQuery([API_MEASURE_UNITS_URL, { ...args }], getData, {
-    ...options
-  });
-}
-
 export const saveMeasureUnits = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
@@ -21,3 +15,9 @@ export const saveMeasureUnits = async ({ args = {}, options = {} } = {}) => {
       break;
   }
 };
+
+export default function useMeasureUnits({ args = {}, options = {} } = {}) {
+  return useQuery([API_MEASURE_UNITS_URL, { ...args }], getData, {
+    ...options
+  });
+}

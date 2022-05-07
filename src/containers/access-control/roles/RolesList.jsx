@@ -8,23 +8,23 @@ import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
 import { API_ROLES_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import RolesFilter from './RolesFilter';
-import RolesForm from './RolesForm';
 
 const RolesList = () => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
   const [openFilters, setOpenFilters] = useState(false);
-  const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [selectedItem, setSelectedItem] = useState();
   const [filterValues, setFilterValues] = useState({
@@ -40,11 +40,11 @@ const RolesList = () => {
     return query;
   }, [filterValues, page, sort]);
 
-  useEffect(() => {
-    if (!openForm) {
-      setSelectedItem(null);
-    }
-  }, [openForm]);
+  // useEffect(() => {
+  //   if (!openForm) {
+  //     setSelectedItem(null);
+  //   }
+  // }, []);
 
   const { data: roles, isLoading } = useRoles({
     args: params,
@@ -78,8 +78,7 @@ const RolesList = () => {
 
   const onUpdate = (event, item) => {
     event.stopPropagation();
-    setSelectedItem(item);
-    setOpenForm(true);
+    router.push(`roles/${item.id}`);
   };
 
   const renderPermissions = (permissions) => (
@@ -159,7 +158,7 @@ const RolesList = () => {
   };
 
   const renderInsertButton = () => (
-    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
+    <button type="button" className="btn-outlined" onClick={() => router.push('roles/create')}>
       {t('create', { entity: t('roles', { count: 1 }).toLowerCase() })}
     </button>
   );
@@ -205,8 +204,6 @@ const RolesList = () => {
       ) : (
         <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
-
-      <RolesForm data={selectedItem} onLoading={setLoading} open={openForm} onOpen={setOpenForm} />
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}

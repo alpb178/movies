@@ -51,18 +51,20 @@ const DataTable = ({
 
   return (
     <div className="w-full ">
-      <div className="flex flex-col">
-        <div
-          className={clsx(
-            'flex items-center w-full p-6 pb-0 text-gray-600 mb-8',
-            name ? 'justify-between' : 'justify-end'
-          )}
-        >
-          {name ? <h3 className="text-xl font-medium lg:text-3xl">{name}</h3> : null}
-          <div className="flex justify-end w-ful">{actions}</div>
+      {name || actions ? (
+        <div className="flex flex-col">
+          <div
+            className={clsx(
+              'flex items-center w-full p-6 pb-0 text-gray-600 mb-8',
+              name ? 'justify-between' : 'justify-end'
+            )}
+          >
+            {name ? <h3 className="text-xl font-medium lg:text-3xl">{name}</h3> : null}
+            <div className="flex justify-end w-ful">{actions}</div>
+          </div>
+          {onFilter}
         </div>
-        {onFilter}
-      </div>
+      ) : null}
 
       <table {...getTableProps()} className="w-full border-b">
         <thead className="border-b">

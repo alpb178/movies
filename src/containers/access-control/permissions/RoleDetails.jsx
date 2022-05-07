@@ -1,5 +1,5 @@
 import Loading from '@/components/common/Loading';
-import useRoles from '@/hooks/role/useRoles';
+import usePermissions from '@/hooks/permission/usePermissions';
 import { locales } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
@@ -9,10 +9,10 @@ import React from 'react';
 import RoleReviews from './RoleReviews';
 import RoleTravels from './RoleTravels';
 
-const RoleDetails = ({ roleId }) => {
+const Permissionsetails = ({ roleId }) => {
   const { t, lang } = useTranslation('common');
 
-  const { data: role, isLoading } = useRoles({
+  const { data: role, isLoading } = usePermissions({
     args: { id: roleId },
     options: {
       keepPreviousData: true,
@@ -108,8 +108,8 @@ const RoleDetails = ({ roleId }) => {
   );
 };
 
-RoleDetails.propTypes = {
+Permissionsetails.propTypes = {
   roleId: PropTypes.number.isRequired
 };
 
-export default RoleDetails;
+export default Permissionsetails;

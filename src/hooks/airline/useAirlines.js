@@ -2,12 +2,6 @@ import { API_AIRLINES_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { deleteData, getData, safeData } from '..';
 
-export default function useAirlines({ args = {}, options = {} } = {}) {
-  return useQuery([API_AIRLINES_URL, { ...args }], getData, {
-    ...options
-  });
-}
-
 export const saveAirlines = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
@@ -21,3 +15,9 @@ export const saveAirlines = async ({ args = {}, options = {} } = {}) => {
       break;
   }
 };
+
+export default function useAirlines({ args = {}, options = {} } = {}) {
+  return useQuery([API_AIRLINES_URL, { ...args }], getData, {
+    ...options
+  });
+}
