@@ -20,8 +20,8 @@ const RolesForm = ({ data, onLoading, onOpen, open }) => {
   const [isNewData, setIsNewData] = useState(true);
 
   const initialValues = {
-    name: data?.name,
-    permissions: data?.permissions
+    name: data?.name || '',
+    permissions: data?.permissions || []
   };
 
   const { data: permissions } = usePermissions({
@@ -36,6 +36,7 @@ const RolesForm = ({ data, onLoading, onOpen, open }) => {
   });
 
   const onSubmit = async (values) => {
+    debugger;
     let method = POST;
     let message = t('inserted.male', { entity: t('roles', { count: 1 }) });
     if (data) {
@@ -77,7 +78,6 @@ const RolesForm = ({ data, onLoading, onOpen, open }) => {
       validationSchema={validationSchema}
       isNewData={isNewData}
     >
-      {console.log(data?.permissions)}
       <div className="space-y-2">
         <label htmlFor="name">{t('form.common.label.name')}</label>
         <div className="relative w-full mx-auto">
@@ -98,12 +98,12 @@ const RolesForm = ({ data, onLoading, onOpen, open }) => {
         <label htmlFor="code">{t('permissions', { count: 2 })}</label>
         <div className="relative w-full mx-auto">
           <MultipleSelectionAutcompleteField
-            id="permissions"
             name="permissions"
             options={permissions?.rows ? permissions.rows : []}
-            option
+            optionLabels={['action', 'resource.name']}
+            keysToMatch={['action', 'resource.name']}
+            labelSeparator=" "
             className="autocomplete-field"
-            defaultValue={data?.permissions}
           />
         </div>
       </div>
@@ -111,16 +111,11 @@ const RolesForm = ({ data, onLoading, onOpen, open }) => {
   );
 };
 
-RolesForm.defaultProps = {
-  data: {}
-};
-
 RolesForm.propTypes = {
   data: PropTypes.object,
-  errors: PropTypes.object.isRequired,
+  onLoading: PropTypes.func.isRequired,
   onOpen: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  touched: PropTypes.object.isRequired
+  open: PropTypes.bool.isRequired
 };
 
 export default RolesForm;

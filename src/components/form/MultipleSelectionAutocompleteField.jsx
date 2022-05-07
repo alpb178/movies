@@ -1,12 +1,23 @@
+import { valuesFromString } from '@/lib/utils';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import Downshift from 'downshift';
 import { Field } from 'formik';
 import { matchSorter } from 'match-sorter';
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
-const MultiDownshift = ({ render, name, children = render, ...props }) => {
+const MultiDownshift = ({
+  render,
+  name,
+  children = render,
+  onSelect,
+  onChange,
+  itemToString,
+  defaultValue,
+  ...props
+}) => {
   const [selectedItems, setSelectedItems] = useState([]);
 
   const stateReducer = (state, changes) => {
@@ -26,7 +37,6 @@ const MultiDownshift = ({ render, name, children = render, ...props }) => {
 
   const handleSelection = (selectedItem, downshift) => {
     const callOnChange = () => {
-      const { onSelect, onChange } = props;
       if (onSelect) {
         onSelect(selectedItems, getStateAndHelpers(downshift));
       }
@@ -42,20 +52,11 @@ const MultiDownshift = ({ render, name, children = render, ...props }) => {
   };
 
   const removeItem = (item, cb) => {
-    setState(({ items }) => {
-      return {
-        selectedItems: items.filter((i) => i !== item)
-      };
-    }, cb);
+    setSelectedItems((items) => items.filter((i) => i !== item), cb);
   };
 
   const addSelectedItem = (item, cb) => {
-    setState(
-      ({ items }) => ({
-        selectedItems: [...items, item]
-      }),
-      cb
-    );
+    setSelectedItems((items) => [...items, item], cb);
   };
 
   const getRemoveButtonProps = ({ onClick, item, ...rest } = {}) => {
@@ -85,7 +86,7 @@ const MultiDownshift = ({ render, name, children = render, ...props }) => {
       {({ field: { value: fieldValue }, form: { setFieldValue }, meta: { error, touched } }) => (
         <Downshift
           {...props}
-          stateReducer={Reducer}
+          stateReducer={stateReducer}
           onChange={(selection) => {
             handleSelection(selection);
             setFieldValue(name, [...fieldValue, selection]);
@@ -100,145 +101,167 @@ const MultiDownshift = ({ render, name, children = render, ...props }) => {
   );
 };
 
-class MultipleSelectionAutocompleteField extends React.Component {
-  input = React.createRef();
-
-  handleChange = (selectedItems) => {
+const MultipleSelectionAutocompleteField = ({
+  className,
+  placeholder,
+  options,
+  optionLabels,
+  keysToMatch,
+  name,
+  defaultValue,
+  noOptionsLabel,
+  labelSeparator
+}) => {
+  const handleChange = (selectedItems) => {
     console.log({ selectedItems });
   };
 
-  render() {
-    const { className, placeholder, options, optionLabels, keysToMatch, name } = props;
-
-    const itemToString = (i) =>
-      i
+  const itemToString = (i) =>
+    i
+      ? optionLabels
         ? optionLabels
-          ? optionLabels
-              .map((optionLabel) =>
-                optionLabel.includes('.') ? valuesFromString(i, optionLabel) : i[optionLabel]
-              )
-              .join(', ')
-          : i.name
-        : '';
+            .map((optionLabel) =>
+              optionLabel.includes('.') ? valuesFromString(i, optionLabel) : i[optionLabel]
+            )
+            .join(labelSeparator || ', ')
+        : i.name
+      : '';
 
-    const getItems = (filter) =>
-      filter
-        ? matchSorter(options, filter, {
-            keys: keysToMatch ? keysToMatch : ['name']
-          })
-        : options;
+  const getItems = (filter) =>
+    filter
+      ? matchSorter(options, filter, {
+          keys: keysToMatch ? keysToMatch : ['name']
+        })
+      : options;
 
-    return (
-      <div>
-        <MultiDownshift onChange={handleChange} itemToString={itemToString} name={name}>
-          {({
-            getInputProps,
-            getToggleButtonProps,
-            getMenuProps,
-            // note that the getRemoveButtonProps prop getter and the removeItem
-            // action are coming from MultiDownshift composibility for the win!
-            getRemoveButtonProps,
-            removeItem,
+  return (
+    <div>
+      <MultiDownshift
+        onChange={handleChange}
+        itemToString={itemToString}
+        defaultValue={defaultValue}
+        name={name}
+      >
+        {({
+          getInputProps,
+          getToggleButtonProps,
+          getMenuProps,
+          // note that the getRemoveButtonProps prop getter and the removeItem
+          // action are coming from MultiDownshift composibility for the win!
+          getRemoveButtonProps,
+          removeItem,
 
-            isOpen,
-            inputValue,
-            selectedItems,
-            getItemProps,
-            highlightedIndex,
-            toggleMenu
-          }) => (
-            <div className="relative w-full m-auto">
-              <div
-                className="relative cursor-pointer"
-                onClick={() => {
-                  toggleMenu();
-                  !isOpen && input.current.focus();
-                }}
+          isOpen,
+          inputValue,
+          selectedItems,
+          getItemProps,
+          highlightedIndex
+        }) => (
+          <div className="relative w-full m-auto">
+            <div className="relative flex items-center">
+              <input
+                {...getInputProps({
+                  onKeyDown(event) {
+                    if (event.key === 'Backspace' && !inputValue) {
+                      removeItem(selectedItems[selectedItems.length - 1]);
+                    }
+                  },
+                  isOpen,
+                  placeholder: placeholder || 'Enter a name'
+                })}
+                className={clsx(
+                  'flex flex-1 border-0 outline-none mb-2',
+                  className
+                  //   error && touched ? 'border-red-500' : 'border-gray-300'
+                )}
+              />
+              <button
+                type="button"
+                className="absolute p-1 rounded-full right-2 hover:bg-gray-100"
+                {...getToggleButtonProps()}
               >
-                <div className="relative flex items-center">
-                  <input
-                    {...getInputProps({
-                      ref: input,
-                      onKeyDown(event) {
-                        if (event.key === 'Backspace' && !inputValue) {
-                          removeItem(selectedItems[selectedItems.length - 1]);
-                        }
-                      },
-                      isOpen,
-                      placeholder: placeholder || 'Enter a name'
-                    })}
-                    className={clsx(
-                      'flex flex-1 border-0 outline-none mb-2',
-                      className
-                      //   error && touched ? 'border-red-500' : 'border-gray-300'
-                    )}
-                  />
-                  <button
-                    type="button"
-                    className="absolute p-1 rounded-full right-2 hover:bg-gray-100"
-                    {...getToggleButtonProps()}
-                  >
-                    <ChevronDownIcon
-                      className={`${
-                        isOpen ? 'rotate-180' : ''
-                      } icon-bold h-4 w-4 text-gray-500 transition duration-150`}
-                    />
-                  </button>
-                </div>
-
-                <div className="flex flex-wrap items-center w-full">
-                  {selectedItems.length > 0 &&
-                    selectedItems.map((item) => (
-                      <div
-                        key={item?.id}
-                        className="flex items-center p-1 px-4 space-x-2 rounded-full bg-secondary-100 text-secondary-600"
-                      >
-                        <span>{item?.name}</span>
-                        <button {...getRemoveButtonProps({ item })}>
-                          <XIcon className="w-4 h-4 text-gray-500" />
-                        </button>
-                      </div>
-                    ))}
-                </div>
-              </div>
-
-              <Menu>
-                <Transition
-                  show={isOpen}
-                  enter="transition duration-150 ease-out"
-                  enterFrom="transform scale-95"
-                  enterTo="transform scale-100"
-                  leave="transition duration-75 ease-out"
-                  leaveFrom="transform scale-100"
-                  leaveTo="transform scale-95"
-                >
-                  <Menu.Items className="absolute z-50 mt-2 overflow-y-scroll origin-top bg-white rounded-md shadow-lg max-h-48 w-max focus:outline-none">
-                    {isOpen
-                      ? getItems(inputValue).map((item, index) => (
-                          <Menu.Item
-                            as="div"
-                            key={item.id}
-                            className="p-4 cursor-pointer hover:bg-primary-50 hover:text-primary-700"
-                            {...getItemProps({
-                              item,
-                              index,
-                              isActive: highlightedIndex === index,
-                              isSelected: selectedItems.includes(item)
-                            })}
-                          >
-                            {itemToString(item)}
-                          </Menu.Item>
-                        ))
-                      : null}
-                  </Menu.Items>
-                </Transition>
-              </Menu>
+                <ChevronDownIcon
+                  className={`${
+                    isOpen ? 'rotate-180' : ''
+                  } w-6 h-6 transition duration-150 text-gray-500`}
+                />
+              </button>
             </div>
-          )}
-        </MultiDownshift>
-      </div>
-    );
-  }
-}
+
+            <div className="flex flex-wrap items-center w-full">
+              {selectedItems.length > 0 &&
+                selectedItems.map((item) => (
+                  <div
+                    key={item?.id}
+                    className="flex items-center justify-between p-1 px-3 m-1 space-x-4 rounded-full bg-primary-50"
+                  >
+                    <p className="text-primary-800">{itemToString(item)}</p>
+                    <button {...getRemoveButtonProps({ item })}>
+                      <XIcon className="w-4 h-4 text-gray-700" />
+                    </button>
+                  </div>
+                ))}
+            </div>
+
+            <Menu>
+              <Transition
+                show={isOpen}
+                enter="transition duration-150 ease-out"
+                enterFrom="transform scale-95"
+                enterTo="transform scale-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100"
+                leaveTo="transform scale-95"
+              >
+                <Menu.Items className="absolute z-50 mt-2 overflow-y-scroll origin-top bg-white rounded-md shadow-lg max-h-48 w-max focus:outline-none">
+                  {getItems(inputValue).length > 0 ? (
+                    getItems(inputValue).map((item, index) => (
+                      <Menu.Item
+                        as="div"
+                        key={item.id}
+                        className="p-4 cursor-pointer hover:bg-primary-50 hover:text-primary-700"
+                        {...getItemProps({
+                          item,
+                          index,
+                          isActive: highlightedIndex === index,
+                          isSelected: selectedItems.includes(item)
+                        })}
+                      >
+                        {itemToString(item)}
+                      </Menu.Item>
+                    ))
+                  ) : (
+                    <p className="p-4 text-gray-500">{noOptionsLabel}</p>
+                  )}
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </div>
+        )}
+      </MultiDownshift>
+    </div>
+  );
+};
+
+MultipleSelectionAutocompleteField.defaultProps = {
+  disabled: false,
+  noOptionsLabel: 'No options',
+  onSelectionChange: () => null
+};
+
+MultipleSelectionAutocompleteField.propTypes = {
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  noOptionsLabel: PropTypes.string,
+  keysToMatch: PropTypes.arrayOf(PropTypes.string),
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  onSelectionChange: PropTypes.func,
+  options: PropTypes.array.isRequired,
+  optionLabels: PropTypes.arrayOf(PropTypes.string),
+  optionValue: PropTypes.string,
+  placeholder: PropTypes.string,
+  props: PropTypes.object
+};
 
 export default MultipleSelectionAutocompleteField;

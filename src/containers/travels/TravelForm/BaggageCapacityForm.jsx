@@ -128,7 +128,7 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender, err
         keysToMatch={['shipmentItem.name']}
         onSelectionChange={handleSelection}
         disabled={!destination}
-        emptyOptionsLabel={t('form.common.empty-options')}
+        noOptionsLabel={t('form.common.empty-options')}
       />
       <div>
         {errors?.shipmentItems && touched?.shipmentItems ? (

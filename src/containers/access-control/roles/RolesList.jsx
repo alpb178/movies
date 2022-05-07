@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRoles, { saveRoles } from '@/hooks/role/useRoles';
@@ -16,24 +15,23 @@ import { toast } from 'react-toastify';
 import RolesFilter from './RolesFilter';
 import RolesForm from './RolesForm';
 
-const Roles = () => {
+const RolesList = () => {
   const { t } = useTranslation('common');
-  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
-  const onPageChangeCallback = useCallback(setPage, []);
-  const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [selectedItem, setSelectedItem] = useState();
-
   const [filterValues, setFilterValues] = useState({
     measureUnit: ''
   });
+  const onPageChangeCallback = useCallback(setPage, []);
+  const onSortChangeCallback = useCallback(setSort, []);
 
   const params = useMemo(() => {
     const query = {};
@@ -221,11 +219,11 @@ const Roles = () => {
   );
 };
 
-Roles.propTypes = {
+RolesList.propTypes = {
   row: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired
 };
 
-export default Roles;
+export default RolesList;

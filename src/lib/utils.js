@@ -51,5 +51,5 @@ export const formatPrice = (price, decimals = 2) =>
 
 export const valuesFromString = (obj, keysArr) =>
   keysArr.split('.').reduce(function (result, key) {
-    return result[key];
+    return result?.[key];
   }, obj);

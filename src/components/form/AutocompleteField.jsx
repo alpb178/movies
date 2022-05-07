@@ -9,8 +9,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }) => {
-  const { defaultValue, disabled, emptyOptionsLabel, keysToMatch, optionLabels, placeholder } =
-    props;
+  const { defaultValue, disabled, noOptionsLabel, keysToMatch, optionLabels, placeholder } = props;
 
   const getItems = (filter) =>
     filter
@@ -121,7 +120,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                         </Menu.Item>
                       ))
                     ) : (
-                      <p className="p-4 text-gray-500">{emptyOptionsLabel}</p>
+                      <p className="p-4 text-gray-500">{noOptionsLabel}</p>
                     )}
                   </Menu.Items>
                 </Transition>
@@ -139,18 +138,17 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
 };
 
 AutocompleteField.defaultProps = {
-  defaul: null,
   disabled: false,
-  emptyOptionsLabel: 'No options',
+  noOptionsLabel: 'No options',
   onSelectionChange: () => {}
 };
 
 AutocompleteField.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
-  emptyOptionsLabel: PropTypes.string,
+  noOptionsLabel: PropTypes.string,
   keysToMatch: PropTypes.arrayOf(PropTypes.string),
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   label: PropTypes.string,
   onSelectionChange: PropTypes.func,
   options: PropTypes.array.isRequired,
