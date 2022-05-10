@@ -183,13 +183,13 @@ const RolesList = () => {
     ),
     actions: (
       <div className="space-x-4">
-        <button
+        {/*  <button
           type="button"
           className="px-8 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}
-        </button>
+    </button>*/}
         {renderInsertButton()}
       </div>
     )
