@@ -100,7 +100,7 @@ const MeasureUnitsList = () => {
 
   const renderInsertButton = () => (
     <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('add')} {t('measure-units', { count: 1 }).toLowerCase()}
+      {t('create')} {t('measure-units', { count: 1 }).toLowerCase()}
     </button>
   );
 
