@@ -164,7 +164,7 @@ const UsersList = () => {
 
   const renderInsertButton = () => (
     <button type="button" className="btn-outlined" onClick={() => handleAdd()}>
-      {t('add')} {t('users', { count: 1 }).toLowerCase()}
+      {t('create')} {t('users', { count: 1 }).toLowerCase()}
     </button>
   );
 
@@ -194,13 +194,15 @@ const UsersList = () => {
     ),
     actions: (
       <div className="space-x-4">
-        <button
-          type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => setOpenFilters(!openFilters)}
-        >
-          {t('filter')}
-        </button>
+        {/*
+          <button
+            type="button"
+            className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
+            onClick={() => setOpenFilters(!openFilters)}
+          >
+            {t('filter')}
+          </button>
+    */}
         {renderInsertButton()}
       </div>
     )
