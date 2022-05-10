@@ -143,7 +143,7 @@ const RegionsList = () => {
 
   const renderCreateButton = () => (
     <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('add', { entity: t('regions', { count: 1 }) })}
+      {t('create', { entity: t('regions', { count: 1 }) })}
     </button>
   );
 
@@ -167,13 +167,13 @@ const RegionsList = () => {
     ),
     actions: (
       <div className="space-x-4">
-        <button
+        {/* <button
           type="button"
           className="px-6 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}
-        </button>
+        </button>*/}
         {renderCreateButton()}
       </div>
     )
