@@ -26,7 +26,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(isLoading);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
@@ -52,7 +52,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
     return query;
   }, [filterValues, page, sort]);
 
-  const { data: travels } = useTravels({
+  const { data: travels, isLoading } = useTravels({
     args: params,
     options: {
       keepPreviousData: true
@@ -209,13 +209,13 @@ const TravelsList = ({ hiddenColumns, userId }) => {
     ),
     actions: (
       <div className="space-x-4">
-        <button
+        {/*<button
           type="button"
           className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}
-        </button>
+    </button>*/}
         {renderCreateButton()}
       </div>
     )

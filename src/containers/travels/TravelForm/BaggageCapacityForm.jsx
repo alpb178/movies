@@ -128,7 +128,6 @@ const BaggageCapacityForm = ({
 
   return (
     <div className="relative flex flex-col w-full space-y-4">
-      {console.log(selectedOptions, 'Articulo')}
       <AutocompleteField
         name="shipmentItems"
         placeholder={

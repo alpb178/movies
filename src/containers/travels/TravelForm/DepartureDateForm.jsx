@@ -4,10 +4,11 @@ import { CalendarIcon, XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
-import React, { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
+import React, { Fragment, useMemo, useState } from 'react';
 import Calendar from 'react-calendar';
 
-function DepartureDateForm() {
+function DepartureDateForm({ travel }) {
   const { t, lang } = useTranslation('common');
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -16,6 +17,12 @@ function DepartureDateForm() {
   const locale = {
     ...locales[lang]
   };
+
+  useMemo(() => {
+    if (travel) {
+      setSelectedDate(new Date(travel?.departureAt));
+    }
+  }, [travel]);
 
   return (
     <div className="space-y-2">
@@ -87,8 +94,6 @@ function DepartureDateForm() {
                           setOpenCalendar(false);
                         }}
                         value={values?.departureAt || selectedDate}
-                        // defaultValue={values?.departureAt}
-                        // tileDisabled={disablePastDates}
                       />
                     </>
                   )}
@@ -101,5 +106,9 @@ function DepartureDateForm() {
     </div>
   );
 }
+
+DepartureDateForm.propTypes = {
+  travel: PropTypes.object
+};
 
 export default DepartureDateForm;

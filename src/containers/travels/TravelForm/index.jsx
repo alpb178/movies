@@ -5,10 +5,8 @@ import useAirlines from '@/hooks/airline/useAirlines';
 import useFlights from '@/hooks/flight/useFlights';
 import useRegions from '@/hooks/location/region/useRegions';
 import useTravels, { saveTravels } from '@/hooks/travel/useTravels';
-// import InputMask from 'react-input-mask';
-// import useMediaContext from '@/hooks/useMediaContext';
 import useUsers from '@/hooks/user/useUsers';
-import { POST } from '@/lib/constants';
+import { POST, PUT } from '@/lib/constants';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import router from 'next/router';
@@ -25,6 +23,7 @@ const TravelForm = ({ travelId }) => {
   const [destination, setDestination] = useState();
   const [airline, setAirline] = useState();
   const [baggageCapacity, setBaggageCapacity] = useState();
+  const [loading, setLoading] = useState(isLoadingTravels);
 
   const { data: users } = useUsers({
     args: {},
@@ -64,23 +63,26 @@ const TravelForm = ({ travelId }) => {
   });
 
   const validationSchema = Yup.object().shape({
-    /*  traveler: Yup.object().nullable().required(t('form.common.required.traveler')),
+    traveler: Yup.object().nullable().required(t('form.common.required.traveler')),
     origin: Yup.object().required(t('form.common.required.origin')).nullable(),
     destination: Yup.object().required(t('form.common.required.destination')).nullable(),
     airline: Yup.object().required(t('form.common.required.airline')).nullable(),
     flight: Yup.object().required(t('form.common.required.flight')).nullable(),
-    // shipmentItems: Yup.object().required(t('form.common.required.shipmentItems')).nullable(),
-    departureAt: Yup.string(),
-    shipmentItems: Yup.object()
-      .required(t('form.common.required.shipmentItems'))
-      .nullable()
-      .shape({
-        price: Yup.string().nullable().max(9, 'Telefono Invalido').min(0, 'Telefono Invalido')
-      })*/
+    shipmentItems: Yup.object().required(t('form.common.required.shipmentItems')).nullable(),
+    departureAt: Yup.date().required()
   });
 
   const onSubmit = async (values) => {
+    let method = POST;
+    let message = t('inserted.male', { entity: t('shipment-items', { count: 1 }) });
+    if (travel) {
+      method = PUT;
+      values.id = travel.id;
+      message = t('updated.male', { entity: t('shipment-items', { count: 1 }) });
+    }
+
     try {
+      setLoading(true);
       delete values.shipmentItem;
       values.shipmentItems = baggageCapacity;
       values.traveler = values.traveler.id;
@@ -92,34 +94,17 @@ const TravelForm = ({ travelId }) => {
       await saveTravels({
         args: values,
         options: {
-          method: POST
+          method
         }
       });
-    } catch (error) {
-      let _messageErrors = '';
-      if (error.response) {
-        const { status } = error.response;
-        switch (status) {
-          case 400:
-            _messageErrors = t('error.400');
-            break;
-          case 401:
-            _messageErrors = t('error.401');
-            break;
-          case 500:
-            _messageErrors = t('error.500');
-            break;
-          default:
-            _messageErrors = error.toString();
-            break;
-        }
-      }
 
-      toast.error(_messageErrors, { variant: 'error' });
+      toast(message);
+    } catch (error) {
+      toast.error(error.toString());
     } finally {
+      setLoading(false);
       router.back();
     }
-    console.log(values);
   };
 
   const initialValues = {
@@ -127,7 +112,7 @@ const TravelForm = ({ travelId }) => {
     origin: travel?.origin || '',
     destination: travel?.destination || '',
     departureAt: travel?.departureAt || new Date(),
-    airline: travel?.airline || '',
+    airline: travel?.flight?.airline || '',
     flight: travel?.flight || '',
     shipmentItems: travel?.shipments || '',
     observations: travel?.observations || ''
@@ -135,7 +120,7 @@ const TravelForm = ({ travelId }) => {
 
   useMemo(() => {
     if (!isNaN(travelId) && travel) {
-      setDestination(regions?.rows.find((element) => element?.id === travel?.destination?.id));
+      setDestination(travel?.destination);
     }
   }, [travel]);
 
@@ -146,131 +131,124 @@ const TravelForm = ({ travelId }) => {
       ) : (
         <Formik
           initialValues={initialValues}
-          enableReinitialize
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ errors, touched }) => {
-            return (
-              <Form className="p-6 space-y-6 text-lg">
-                <p className="mb-8 form-header">
-                  {isNaN(travelId) ? t('form.travel.title.create') : t('form.travel.title.update')}
-                </p>
+          {({ errors, touched }) => (
+            <Form className="p-6 space-y-6 text-lg">
+              <p className="mb-8 form-header">
+                {isNaN(travelId) ? t('form.travel.title.create') : t('form.travel.title.update')}
+              </p>
 
-                <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
-                  <div className="flex flex-col w-full space-y-6">
+              <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
+                <div className="flex flex-col w-full space-y-6">
+                  <div className="w-full">
+                    <AutocompleteField
+                      name="traveler"
+                      placeholder={t('form.travel.placeholder.traveler')}
+                      options={users ? users.rows : []}
+                      optionLabels={['firstName', 'lastName']}
+                      keysToMatch={['firstName', 'lastName', 'username']}
+                      className="autocomplete-field"
+                      defaultValue={travel?.traveler}
+                    />
+                  </div>
+
+                  <div className="flex flex-col items-center w-full space-y-6">
                     <div className="w-full">
                       <AutocompleteField
-                        name="traveler"
-                        placeholder={t('form.travel.placeholder.traveler')}
-                        options={users ? users.rows : []}
-                        optionLabels={['firstName', 'lastName']}
-                        keysToMatch={['firstName', 'lastName', 'username']}
+                        name="origin"
+                        placeholder={t('form.travel.placeholder.origin')}
+                        options={regions ? regions.rows : []}
+                        optionLabels={['name', 'country.name']}
+                        keysToMatch={['name', 'code', 'country.name']}
                         className="autocomplete-field"
-                        defaultValue={travel?.traveler}
+                        defaultValue={travel?.origin}
                       />
                     </div>
 
-                    <div className="flex flex-col items-center w-full space-y-6">
-                      <div className="w-full">
-                        <AutocompleteField
-                          name="origin"
-                          placeholder={t('form.travel.placeholder.origin')}
-                          options={regions ? regions.rows : []}
-                          optionLabels={['name', 'country.name']}
-                          keysToMatch={['name', 'code', 'country.name']}
-                          className="autocomplete-field"
-                          defaultValue={regions?.rows.find(
-                            (element) => element?.id === travel?.origin?.id
-                          )}
-                        />
-                      </div>
-
-                      <div className="w-full">
-                        <AutocompleteField
-                          name="destination"
-                          placeholder={t('form.travel.placeholder.destination')}
-                          options={regions ? regions.rows : []}
-                          optionLabels={['name', 'country.name']}
-                          keysToMatch={['name', 'code', 'country.name']}
-                          className="autocomplete-field"
-                          onSelectionChange={setDestination}
-                          defaultValue={regions?.rows.find(
-                            (element) => element?.id === travel?.destination?.id
-                          )}
-                        />
-                      </div>
-                    </div>
-
-                    <DepartureDateForm />
-
-                    <div className="flex">
-                      <div className="w-full">
-                        <AutocompleteField
-                          name="airline"
-                          placeholder={t('form.travel.placeholder.airline')}
-                          options={airlines ? airlines.rows : []}
-                          onSelectionChange={setAirline}
-                          className="w-full p-4 py-3 border rounded-l-md"
-                          defaultValue={travel?.flight?.airline}
-                        />
-                      </div>
-                      <div className="w-full">
-                        <AutocompleteField
-                          name="flight"
-                          placeholder={t('form.travel.placeholder.flight')}
-                          options={flights ? flights.rows : []}
-                          optionLabels={['number']}
-                          keysToMatch={['number']}
-                          className="w-full p-4 py-3 border border-l-0 rounded-r-md"
-                          aria-describedby="flight"
-                          defaultValue={travel?.flight}
-                          disabled={!airline}
-                        />
-                      </div>
+                    <div className="w-full">
+                      <AutocompleteField
+                        name="destination"
+                        placeholder={t('form.travel.placeholder.destination')}
+                        options={regions ? regions.rows : []}
+                        optionLabels={['name', 'country.name']}
+                        keysToMatch={['name', 'code', 'country.name']}
+                        className="autocomplete-field"
+                        onSelectionChange={setDestination}
+                        defaultValue={travel?.destination}
+                      />
                     </div>
                   </div>
 
-                  <BaggageCapacityForm
-                    destination={destination}
-                    travel={travel}
-                    errors={errors}
-                    onShipmentItemsChange={setBaggageCapacity}
-                    touched={touched}
-                  />
+                  <DepartureDateForm travel={travel} />
+
+                  <div className="flex">
+                    <div className="w-full">
+                      <AutocompleteField
+                        name="airline"
+                        placeholder={t('form.travel.placeholder.airline')}
+                        options={airlines ? airlines.rows : []}
+                        onSelectionChange={setAirline}
+                        className="w-full p-4 py-3 border rounded-l-md"
+                        defaultValue={travel?.flight?.airline}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <AutocompleteField
+                        name="flight"
+                        placeholder={t('form.travel.placeholder.flight')}
+                        options={flights ? flights.rows : []}
+                        optionLabels={['number']}
+                        keysToMatch={['number']}
+                        className="w-full p-4 py-3 border border-l-0 rounded-r-md"
+                        aria-describedby="flight"
+                        defaultValue={travel?.flight}
+                        disabled={!airline}
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                <div className="w-full">
-                  <Field
-                    as="textarea"
-                    name="observations"
-                    id="observations"
-                    rows={3}
-                    defaultValue={travel?.observations}
-                    placeholder={t('form.travel.placeholder.comments')}
-                    className="text-lg text-field"
-                    aria-describedby="observations"
-                  />
-                </div>
+                <BaggageCapacityForm
+                  destination={destination}
+                  travel={travel}
+                  errors={errors}
+                  onShipmentItemsChange={setBaggageCapacity}
+                  touched={touched}
+                />
+              </div>
 
-                <div className="flex justify-end space-x-8">
-                  <button
-                    type="button"
-                    className="px-8 py-3 mt-6 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
-                    onClick={() => router.back()}
-                  >
-                    {t('cancel')}
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-8 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
-                  >
-                    {t('save')}
-                  </button>
-                </div>
-              </Form>
-            );
-          }}
+              <div className="w-full">
+                <Field
+                  as="textarea"
+                  name="observations"
+                  id="observations"
+                  rows={3}
+                  defaultValue={travel?.observations}
+                  placeholder={t('form.travel.placeholder.comments')}
+                  className="text-lg text-field"
+                  aria-describedby="observations"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-8">
+                <button
+                  type="button"
+                  className="px-8 py-3 mt-6 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
+                  onClick={() => router.back()}
+                >
+                  {t('cancel')}
+                </button>
+                <button
+                  type="submit"
+                  className="px-8 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
+                >
+                  {t('save')}
+                </button>
+              </div>
+            </Form>
+          )}
         </Formik>
       )}
     </>
