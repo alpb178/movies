@@ -1,25 +1,23 @@
+import { API_FLIGHTS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
-import { apiFetcher } from '@/lib/apiFetcher';
-import { API_FLIGHTS_URL, POST } from '@/lib/constants';
-
-const getFlights = async ({ queryKey }) => {
-  const [path, params] = queryKey;
-  const { data } = await apiFetcher(path, { params });
-  return data;
-};
-
-const createFlight = async (args) => {
-  const { path, data: values, method } = args;
-  const { data } = await apiFetcher(path, { data: values, method });
-  return data;
-};
+import { deleteData, getData, saveData } from '..';
 
 export default function useFlights({ args = {}, options = {} } = {}) {
-  if (options?.method === POST) {
-    createFlight({ path: API_FLIGHTS_URL, data: args, method: POST });
-  } else {
-    return useQuery([API_FLIGHTS_URL, { ...args }], getFlights, {
-      ...options
-    });
-  }
+  return useQuery([API_FLIGHTS_URL, { ...args }], getData, {
+    ...options
+  });
 }
+
+export const saveFlight = async ({ args = {}, options = {} } = {}) => {
+  switch (options?.method) {
+    case POST:
+      await saveData({ path: API_FLIGHTS_URL, data: args, method: POST });
+      break;
+    case DELETE:
+      await deleteData({ path: API_FLIGHTS_URL + `/${args.id}`, method: DELETE });
+      break;
+    case PUT:
+      await saveData({ path: API_FLIGHTS_URL + `/${args.id}`, data: args, method: PUT });
+      break;
+  }
+};
