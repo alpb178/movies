@@ -87,6 +87,7 @@ function DepartureDateForm() {
                           setOpenCalendar(false);
                         }}
                         value={values?.departureAt || selectedDate}
+                        // defaultValue={values?.departureAt}
                         // tileDisabled={disablePastDates}
                       />
                     </>

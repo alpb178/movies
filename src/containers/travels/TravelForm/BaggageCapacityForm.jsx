@@ -13,7 +13,14 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 
-const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender, errors, touched }) => {
+const BaggageCapacityForm = ({
+  destination,
+  onShipmentItemsChange,
+  isSender,
+  errors,
+  touched,
+  travel
+}) => {
   const { t } = useTranslation('common');
 
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -113,8 +120,15 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender, err
     setShipmentPrice(total);
   };
 
+  useMemo(() => {
+    if (travel) {
+      setSelectedOptions(travel?.payload);
+    }
+  }, [travel]);
+
   return (
     <div className="relative flex flex-col w-full space-y-4">
+      {console.log(selectedOptions, 'Articulo')}
       <AutocompleteField
         name="shipmentItems"
         placeholder={
@@ -129,6 +143,9 @@ const BaggageCapacityForm = ({ destination, onShipmentItemsChange, isSender, err
         onSelectionChange={handleSelection}
         disabled={!destination}
         noOptionsLabel={t('form.common.empty-options')}
+        defaultValue={regulations?.rows.find(
+          (element) => element?.shipmentItem.id === travel?.payload[0]?.id
+        )}
       />
       <div>
         {errors?.shipmentItems && touched?.shipmentItems ? (
@@ -259,7 +276,8 @@ BaggageCapacityForm.propTypes = {
   onShipmentItemsChange: PropTypes.func.isRequired,
   isSender: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  touched: PropTypes.object.isRequired
+  touched: PropTypes.object.isRequired,
+  travel: PropTypes.object
 };
 
 export default BaggageCapacityForm;

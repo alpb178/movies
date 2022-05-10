@@ -16,12 +16,6 @@ const getAvailablePayload = async ({ queryKey }) => {
   return data;
 };
 
-export default function useTravels({ args = {}, options = {} } = {}) {
-  return useQuery([API_TRAVELS_URL, { ...args }], getData, {
-    ...options
-  });
-}
-
 export const saveTravels = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
@@ -35,3 +29,9 @@ export const saveTravels = async ({ args = {}, options = {} } = {}) => {
       break;
   }
 };
+
+export default function useTravels({ args = {}, options = {} } = {}) {
+  return useQuery([API_TRAVELS_URL, { ...args }], getData, {
+    ...options
+  });
+}
