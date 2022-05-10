@@ -54,15 +54,33 @@ const RegulationsForm = ({ data, open, onOpen, setLoading }) => {
     maxAmount: data?.maxAmount || 0,
     minPrice: data?.minPrice || 0,
     maxPrice: data?.maxPrice || 0,
-    shipmentItem: data?.shipmentItem || {},
-    country: data?.country || {}
+    shipmentItem: data?.shipmentItem || '',
+    country: data?.country || ''
   };
 
-  const validationSchema = Yup.object().shape({
-    maxAmount: Yup.string(),
-    shipmentItem: Yup.object().shape({ name: Yup.string() }),
-    country: Yup.object().shape({ name: Yup.string() })
-  });
+  const validationSchema = Yup.object().shape(
+    {
+      maxAmount: Yup.number()
+        .positive(t('form.common.amount.maxAmount'))
+        .integer('Must be more than 0')
+        .required(t('form.common.required.maxAmount')),
+      shipmentItem: Yup.object().nullable().required(t('form.common.required.shipmentItems')),
+      country: Yup.object().nullable().required(t('form.region.required.country')),
+      maxPrice: Yup.number().when('minPrice', {
+        is: (minPrice) => minPrice > 0,
+        then: Yup.number()
+          .required(t('form.common.required.maxPrice'))
+          .moreThan(Yup.ref('minPrice'), t('form.common.amount.maxPrice')),
+        otherwise: Yup.number()
+      }),
+      minPrice: Yup.number().when('maxPrice', {
+        is: (maxPrice) => maxPrice > 0,
+        then: Yup.number().required(t('form.common.required.minPrice')),
+        otherwise: Yup.number()
+      })
+    },
+    [['maxPrice', 'minPrice']]
+  );
 
   const onSubmit = async (values) => {
     values.shipmentItem = values.shipmentItem.id;
@@ -133,7 +151,7 @@ const RegulationsForm = ({ data, open, onOpen, setLoading }) => {
       <div className="space-y-2">
         <label htmlFor="maxAmount">{t('form.regulation.label.permited-amount')}</label>
         <Field
-          type="text"
+          type="number"
           name="maxAmount"
           id="maxAmount"
           className={`text-field ${
@@ -179,7 +197,7 @@ const RegulationsForm = ({ data, open, onOpen, setLoading }) => {
           <label htmlFor="maxAmount">{t('form.regulation.label.price-range')}</label>
           <div className="flex space-x-6">
             <Field
-              type="text"
+              type="number"
               name="minPrice"
               id="minPrice"
               className={`text-field ${
@@ -194,7 +212,7 @@ const RegulationsForm = ({ data, open, onOpen, setLoading }) => {
             ) : null}
 
             <Field
-              type="text"
+              type="number"
               name="maxPrice"
               id="maxPrice"
               className={`text-field ${
