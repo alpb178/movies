@@ -42,9 +42,9 @@ const CountryForm = ({ data, onOpen, open, setLoading }) => {
         }
       });
 
+      await queryClient.invalidateQueries([API_COUNTRIES_URL]);
       setLoading(false);
       onOpen(false);
-      queryClient.invalidateQueries([API_COUNTRIES_URL]);
       toast(message);
     } catch (error) {
       toast.error(error);

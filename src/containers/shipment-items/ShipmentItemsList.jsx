@@ -67,8 +67,8 @@ const ShipmentItemsList = () => {
           method: DELETE
         }
       });
+      await queryClient.refetchQueries([API_SHIPMENT_ITEMS_URL]);
       toast(t('deleted.male', { entity: t('shipment-items', { count: 1 }) }));
-      queryClient.refetchQueries([API_SHIPMENT_ITEMS_URL]);
     } catch (error) {
       toast.error(error);
     } finally {

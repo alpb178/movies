@@ -73,8 +73,8 @@ const AirlinesForm = ({ data, onOpen, open, setLoading }) => {
         }
       });
 
+      await queryClient.refetchQueries([API_AIRLINES_URL]);
       setLoading(false);
-      queryClient.refetchQueries([API_AIRLINES_URL]);
       toast(message);
       onOpen(false);
     } catch (error) {

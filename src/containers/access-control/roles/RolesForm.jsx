@@ -88,7 +88,7 @@ const RolesForm = ({ roleId }) => {
           method
         }
       });
-      queryClient.invalidateQueries([API_ROLES_URL]);
+      await queryClient.invalidateQueries([API_ROLES_URL]);
       toast(message);
       router.back();
     } catch (error) {

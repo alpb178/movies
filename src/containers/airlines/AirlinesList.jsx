@@ -66,8 +66,8 @@ const AirlinesList = () => {
           method: DELETE
         }
       });
+      await queryClient.refetchQueries([API_AIRLINES_URL]);
       toast(t('deleted.female', { entity: t('airlines', { count: 1 }) }));
-      queryClient.refetchQueries([API_AIRLINES_URL]);
     } catch (error) {
       toast.error(error);
     } finally {

@@ -62,8 +62,8 @@ const MeasureUnitsList = () => {
           method: DELETE
         }
       });
+      await queryClient.refetchQueries([API_MEASURE_UNITS_URL]);
       toast(t('deleted.male', { entity: t('measure-units', { count: 1 }) }));
-      queryClient.refetchQueries([API_MEASURE_UNITS_URL]);
     } catch (error) {
       toast.error(error);
     } finally {

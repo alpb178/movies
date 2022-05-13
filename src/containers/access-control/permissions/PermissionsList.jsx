@@ -61,8 +61,8 @@ const Permissions = () => {
           method: DELETE
         }
       });
+      await queryClient.refetchQueries([API_PERMISSIONS_URL]);
       toast(t('deleted.male', { entity: t('permission', { count: 1 }) }));
-      queryClient.refetchQueries([API_PERMISSIONS_URL]);
     } catch (error) {
       toast.error(error);
     } finally {

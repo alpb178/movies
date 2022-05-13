@@ -67,7 +67,7 @@ const RegionsList = () => {
           method: DELETE
         }
       });
-      queryClient.refetchQueries([API_REGIONS_URL]);
+      await queryClient.refetchQueries([API_REGIONS_URL]);
       toast(t('deleted.male', { entity: t('regions', { count: 1 }) }));
     } catch (error) {
       toast.error(error);

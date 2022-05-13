@@ -100,7 +100,7 @@ const RegulationsForm = ({ data, open, onOpen, setLoading }) => {
           method: method
         }
       });
-      queryClient.invalidateQueries([API_REGULATIONS_URL]);
+      await queryClient.invalidateQueries([API_REGULATIONS_URL]);
       toast(message);
     } catch (error) {
       toast.error(error);

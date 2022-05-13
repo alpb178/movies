@@ -43,7 +43,7 @@ const MeasureUnitsForm = ({ data, onOpen, open, setLoading }) => {
           method: method
         }
       });
-      queryClient.refetchQueries([API_MEASURE_UNITS_URL]);
+      await queryClient.refetchQueries([API_MEASURE_UNITS_URL]);
       toast(message);
     } catch (error) {
       toast.error(error);

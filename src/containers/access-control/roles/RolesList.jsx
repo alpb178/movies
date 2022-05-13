@@ -62,8 +62,8 @@ const RolesList = () => {
     try {
       setLoading(true);
       await deleteRole({ id: deleteConfirmation.id });
+      await queryClient.refetchQueries([API_ROLES_URL]);
       toast(t('deleted.male', { entity: t('roles', { count: 1 }) }));
-      queryClient.refetchQueries([API_ROLES_URL]);
     } catch (error) {
       toast.error(error.toString());
     } finally {

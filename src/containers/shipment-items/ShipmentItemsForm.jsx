@@ -59,7 +59,7 @@ const ShipmentItemsForm = ({ data, open, onOpen, setLoading }) => {
         }
       });
 
-      queryClient.invalidateQueries([API_SHIPMENT_ITEMS_URL]);
+      await queryClient.invalidateQueries([API_SHIPMENT_ITEMS_URL]);
       toast(message);
     } catch (error) {
       toast.error(error.toString());

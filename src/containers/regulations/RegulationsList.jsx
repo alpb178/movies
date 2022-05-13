@@ -76,8 +76,8 @@ const RegulationsList = () => {
           method: DELETE
         }
       });
+      await queryClient.refetchQueries([API_REGULATIONS_URL]);
       toast(t('deleted.female', { entity: t('regulations', { count: 1 }) }));
-      queryClient.refetchQueries([API_REGULATIONS_URL]);
     } catch (error) {
       toast.error(error);
     } finally {

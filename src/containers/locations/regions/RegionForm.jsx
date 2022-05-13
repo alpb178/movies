@@ -56,8 +56,8 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
           method
         }
       });
+      await queryClient.refetchQueries([API_REGIONS_URL]);
       toast(message);
-      queryClient.refetchQueries([API_REGIONS_URL]);
     } catch (error) {
       toast.error(error);
     } finally {

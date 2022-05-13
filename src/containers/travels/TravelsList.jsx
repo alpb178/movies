@@ -84,8 +84,8 @@ const TravelsList = ({ hiddenColumns, userId }) => {
           method: DELETE
         }
       });
+      await queryClient.refetchQueries([API_TRAVELS_URL]);
       toast(t('deleted.male', { entity: t('travels', { count: 1 }) }));
-      queryClient.refetchQueries([API_TRAVELS_URL]);
     } catch (error) {
       toast.error(error);
     } finally {

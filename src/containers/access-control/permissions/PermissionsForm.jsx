@@ -55,8 +55,8 @@ const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
         options: { method }
       });
 
+      await queryClient.refetchQueries([API_PERMISSIONS_URL]);
       onLoading(false);
-      queryClient.refetchQueries([API_PERMISSIONS_URL]);
       // toast(message);
       onOpen(false);
     } catch (error) {
