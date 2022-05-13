@@ -83,17 +83,17 @@ function DepartureDateForm({ travel }) {
                 </div>
 
                 <Field name="departureAt" id="departureAt">
-                  {({ form: { setFieldValue, values } }) => (
+                  {({ form: { setFieldValue } }) => (
                     <>
                       <Calendar
                         className="text-base lg:text-xl"
                         name="departureAt"
                         onChange={(newValue) => {
+                          console.log(newValue);
                           setSelectedDate(new Date(newValue));
                           setFieldValue('departureAt', newValue);
                           setOpenCalendar(false);
                         }}
-                        value={values?.departureAt || selectedDate}
                       />
                     </>
                   )}

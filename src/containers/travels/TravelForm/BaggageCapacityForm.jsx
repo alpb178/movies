@@ -122,6 +122,13 @@ const BaggageCapacityForm = ({
 
   useMemo(() => {
     if (travel) {
+      for (var i = 0; i < travel.payload.length; i++) {
+        let shipmentItem = regulations?.rows.find(
+          (element) => element?.shipmentItem.id === travel?.payload[i]?.ShipmentItemId
+        ).shipmentItem;
+        travel.payload[i].measureUnit = shipmentItem?.measureUnit;
+        travel.payload[i].name = shipmentItem?.name;
+      }
       setSelectedOptions(travel?.payload);
     }
   }, [travel]);
@@ -156,11 +163,12 @@ const BaggageCapacityForm = ({
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
           {selectedOptions.map((option, idx) => (
             <div key={option.name} className="flex flex-col">
+              {console.log(option)}
               <p className="w-full px-4 pt-4 space-x-2 text-sm text-gray-400">
                 <span>{option?.amount}</span>
-                <span>{option?.measureUnit.name}</span>
+                <span>{option?.measureUnit?.name}</span>
                 {!isSender ? (
-                  <span>{`· ${formatPrice(option?.price)} / ${option?.measureUnit.symbol}`}</span>
+                  <span>{`· ${formatPrice(option?.price)} / ${option?.measureUnit?.symbol}`}</span>
                 ) : null}
               </p>
               <div className="flex items-center w-full p-4 pt-0 space-x-8">
