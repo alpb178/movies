@@ -74,11 +74,11 @@ const TravelForm = ({ travelId }) => {
 
   const onSubmit = async (values) => {
     let method = POST;
-    let message = t('inserted.male', { entity: t('shipment-items', { count: 1 }) });
+    let message = t('inserted.male', { entity: t('travels', { count: 1 }) });
     if (travel) {
       method = PUT;
       values.id = travel.id;
-      message = t('updated.male', { entity: t('shipment-items', { count: 1 }) });
+      message = t('updated.male', { entity: t('travels', { count: 1 }) });
     }
 
     try {
@@ -99,11 +99,11 @@ const TravelForm = ({ travelId }) => {
       });
 
       toast(message);
+      router.back();
     } catch (error) {
       toast.error(error.toString());
     } finally {
       setLoading(false);
-      router.back();
     }
   };
 
