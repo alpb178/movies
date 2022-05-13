@@ -1,12 +1,12 @@
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useRoles, { saveRole } from '@/hooks/role/useRoles';
+import useRoles, { deleteRole } from '@/hooks/role/useRoles';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
-import { API_ROLES_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
+import { API_ROLES_URL, DEFAULT_PAGE_SIZE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -61,12 +61,7 @@ const RolesList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await saveRole({
-        args: { id: deleteConfirmation.id },
-        options: {
-          method: DELETE
-        }
-      });
+      await deleteRole({ id: deleteConfirmation.id });
       toast(t('deleted.male', { entity: t('roles', { count: 1 }) }));
       queryClient.refetchQueries([API_ROLES_URL]);
     } catch (error) {

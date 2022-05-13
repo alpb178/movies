@@ -7,13 +7,14 @@ export const saveRole = async ({ args = {}, options = {} } = {}) => {
     case POST:
       await saveData({ path: API_ROLES_URL, data: args, method: POST });
       break;
-    case DELETE:
-      await deleteData({ path: API_ROLES_URL + `/${args.id}`, method: DELETE });
-      break;
     case PUT:
       await saveData({ path: API_ROLES_URL + `/${args.id}`, data: args, method: PUT });
       break;
   }
+};
+
+export const deleteRole = async ({ id }) => {
+  await deleteData({ path: API_ROLES_URL + `/${id}`, method: DELETE });
 };
 
 export default function useRoles({ args = {}, options = {} } = {}) {
