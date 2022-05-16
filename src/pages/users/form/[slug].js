@@ -1,4 +1,4 @@
-import UsersForm from '@/containers/users/UsersForm';
+import UsersForm from '@/containers/users/UserForm/UsersForm';
 import { ROLE_ADMIN } from 'lib/constants';
 import dynamic from 'next/dynamic';
 import React from 'react';
