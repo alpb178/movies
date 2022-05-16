@@ -79,7 +79,7 @@ const UserDetails = ({ userId }) => {
 
                   <div className="sm:col-span-2">
                     <dt className="text-sm font-medium text-gray-500">{t('about')}</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{user.description || '-'}</dd>
+                    <dd className="mt-1 text-sm text-gray-900">{user?.bio || '-'}</dd>
                   </div>
 
                   <div className="sm:col-span-2">
@@ -87,14 +87,16 @@ const UserDetails = ({ userId }) => {
                       {t('roles', { count: 2 })}
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900">
-                      {user.roles.map((role) => (
-                        <span
-                          key={role.id}
-                          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-100"
-                        >
-                          {t(role.name.replace(/_/g, '-').toLowerCase())}
-                        </span>
-                      )) || '-'}
+                      {(user?.roles &&
+                        user?.roles.map((role) => (
+                          <span
+                            key={role.id}
+                            className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-100"
+                          >
+                            {t(role.name.replace(/_/g, '-').toLowerCase())}
+                          </span>
+                        ))) ||
+                        '-'}
                     </dd>
                   </div>
                 </dl>

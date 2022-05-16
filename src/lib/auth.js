@@ -1,7 +1,7 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import { authFetcher } from './apiFetcher';
-import { API_LOGIN_URL, API_REFRESH_TOKEN_URL, TOKEN_KEY } from './constants';
+import { API_LOGIN_URL, API_REFRESH_TOKEN_URL } from './constants';
 
 const loggedOutResponse = { isLoggedIn: false };
 
@@ -36,7 +36,7 @@ export const getTokenUser = async () => {
     return Promise.resolve(loggedOutResponse);
   }
   // eslint-disable-next-line no-unused-vars
-  const { exp, iat, nbf, iss, ...userData } = jwt_decode(currToken[TOKEN_KEY]);
+  const { exp, iat, nbf, iss, ...userData } = jwt_decode(currToken);
   let user = userData;
   const currDate = new Date().getTime();
   const duration = exp * 1000;
@@ -44,7 +44,7 @@ export const getTokenUser = async () => {
     try {
       const newToken = await refreshToken(currToken);
       // eslint-disable-next-line no-unused-vars
-      const { exp, iat, nbf, iss, ...userData } = jwt_decode(newToken[TOKEN_KEY]);
+      const { exp, iat, nbf, iss, ...userData } = jwt_decode(newToken);
       user = userData;
     } catch (error) {
       return logout();

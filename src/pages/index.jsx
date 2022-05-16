@@ -25,7 +25,7 @@ export async function getServerSideProps({ req, res }) {
 
   if (accessToken) {
     const newToken = JSON.parse(accessToken);
-    const { exp, ...userData } = jwt_decode(newToken[TOKEN_KEY]);
+    const { exp, ...userData } = jwt_decode(newToken);
     const currDate = new Date().getTime();
     const duration = exp * 1000;
     if (currDate < duration) {
