@@ -107,12 +107,14 @@ const BaggageCapacityForm = ({
     );
   };
 
+  function getSumPrice(total, num) {
+    return (total += num?.amount * num?.price);
+  }
+
   const calculateShipmentPrice = () => {
     let total = 0;
     if (selectedOptions.length > 1) {
-      total = selectedOptions.reduce(
-        (prev, curr) => prev.amount * prev.price + curr.amount * curr.price
-      );
+      total = selectedOptions.reduce(getSumPrice, 0);
     } else {
       total = selectedOptions[0].amount * selectedOptions[0].price;
     }
@@ -163,7 +165,6 @@ const BaggageCapacityForm = ({
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
           {selectedOptions.map((option, idx) => (
             <div key={option.name} className="flex flex-col">
-              {console.log(option)}
               <p className="w-full px-4 pt-4 space-x-2 text-sm text-gray-400">
                 <span>{option?.amount}</span>
                 <span>{option?.measureUnit?.name}</span>
@@ -272,10 +273,6 @@ const BaggageCapacityForm = ({
       ) : null}
     </div>
   );
-};
-
-BaggageCapacityForm.defaultProps = {
-  destination: null
 };
 
 BaggageCapacityForm.propTypes = {
