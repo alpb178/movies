@@ -47,6 +47,7 @@
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
   "date-delivery": " Fecha Entrega",
+  "deactivate": "Desactivar",
   "delete": "Eliminar",
   "delete-filter": "Borrar Filtro",
   "deleted": {
@@ -110,14 +111,14 @@
         "origin": "El origen es requerido",
         "region": "El País es Requerido",
         "shipmentItems": "Los Articulos son requeridos",
-        "maxAmount":"La Cantidad Permitida es requerida",
+        "maxAmount": "La Cantidad Permitida es requerida",
         "traveler": "El viajero es requerido",
-        "maxPrice":"El precio Máximo es requerido",
-        "minPrice":"El precio Minimo es requerido"
+        "maxPrice": "El precio Máximo es requerido",
+        "minPrice": "El precio Minimo es requerido"
       },
       "amount": {
-        "maxAmount":"La Cantidad Permitida debe ser mayor que 0" ,
-        "maxPrice":"El precio Máximo debe ser mayor que el Mínimo"
+        "maxAmount": "La Cantidad Permitida debe ser mayor que 0",
+        "maxPrice": "El precio Máximo debe ser mayor que el Mínimo"
       }
     },
     "measure-unit": {
@@ -313,6 +314,8 @@
     "other": "Recursos"
   },
   "reviews": {
+    "1": "Reseña",
+    "other": "Reseñas",
     "left": {
       "0": "Aún no ha recibido reseñas",
       "1": "Reseña recibida",
@@ -354,6 +357,11 @@
     "rows-per-page": "Filas por página"
   },
   "total": "Total",
+  "traces": {
+    "0": "Aún no existen trazas",
+    "1": "Traza",
+    "other": "Trazas"
+  },
   "travelers": {
     "0": "Aún no existen viajeros registrados",
     "1": "Viajero",

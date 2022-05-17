@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import useTranslation from 'next-translate/useTranslation';
+import React, { Fragment } from 'react';
 
 function DeleteConfirmationDialog({ content, onOpen, open, title, onDeleteConfirmation }) {
   const { t } = useTranslation('common');

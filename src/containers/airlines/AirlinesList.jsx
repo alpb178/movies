@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
-import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
+import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useAirlines, { saveAirlines } from '@/hooks/airline/useAirlines';

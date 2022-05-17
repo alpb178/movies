@@ -1,8 +1,8 @@
+import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useUsers from '@/hooks/user/useUsers';
 import { CheckCircleIcon, ClockIcon, XCircleIcon } from '@heroicons/react/outline';
-import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
 import UserFilter from 'containers/users/UserFilter';

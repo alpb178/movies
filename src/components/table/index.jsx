@@ -55,11 +55,11 @@ const DataTable = ({
         <div className="flex flex-col">
           <div
             className={clsx(
-              'flex items-center w-full p-6 pb-0 text-gray-600 mb-8',
+              'flex items-center w-full p-6 pb-0 text-gray-700 mb-8',
               name ? 'justify-between' : 'justify-end'
             )}
           >
-            {name ? <h3 className="text-xl font-medium lg:text-3xl">{name}</h3> : null}
+            {name ? <h3 className="text-xl font-medium lg:text-2xl">{name}</h3> : null}
             <div className="flex justify-end w-ful">{actions}</div>
           </div>
           {onFilter}

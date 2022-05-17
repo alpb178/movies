@@ -7,8 +7,8 @@ import { PAYMENT_ADD, PAYMENT_DETAIL_PAGE, PAYMENT_EDIT } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
 import EmptyState from '../../components/common/EmptyState';
+import DeleteConfirmationDialog from '../../components/dialog/DeleteConfirmationDialog';
 
 const PaymentsList = () => {
   const { t } = useTranslation('common');

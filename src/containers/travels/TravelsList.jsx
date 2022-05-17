@@ -1,6 +1,6 @@
-import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
+import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/travels/TravelsFilter';

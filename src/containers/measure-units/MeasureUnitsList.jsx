@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
-import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loading';
+import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useMeasureUnits, { saveMeasureUnits } from '@/hooks/measure-unit/useMeasureUnits';

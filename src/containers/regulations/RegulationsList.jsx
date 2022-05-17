@@ -1,5 +1,5 @@
-import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import EmptyState from '@/components/common/EmptyState';
+import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRegulations, { saveRegulations } from '@/hooks/regulation/useRegulations';

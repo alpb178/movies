@@ -1,9 +1,9 @@
+import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRoles, { deleteRole } from '@/hooks/role/useRoles';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import DeleteConfirmationDialog from 'components/common/DeleteConfirmationDialog';
 import EmptyState from 'components/common/EmptyState';
 import Loading from 'components/common/Loading';
 import { API_ROLES_URL, DEFAULT_PAGE_SIZE } from 'lib/constants';
