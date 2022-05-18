@@ -30,21 +30,26 @@ export const getTokenUser = async () => {
   if (typeof window === 'undefined') {
     path = process.env.NEXT_HOST_URL + path;
   }
+
   const { data: currToken } = await axios.get(path);
+
   if (!currToken) {
     // if no user in cookies then the user must enter their credentials to proceed
     return Promise.resolve(loggedOutResponse);
   }
   // eslint-disable-next-line no-unused-vars
-  const { exp, iat, nbf, iss, ...userData } = jwt_decode(currToken);
+  const { exp, iat, nbf, iss, ...userData } = jwt_decode(currToken['auth-token']);
+
   let user = userData;
+
   const currDate = new Date().getTime();
   const duration = exp * 1000;
+
   if (currDate > duration) {
     try {
       const newToken = await refreshToken(currToken);
       // eslint-disable-next-line no-unused-vars
-      const { exp, iat, nbf, iss, ...userData } = jwt_decode(newToken);
+      const { exp, iat, nbf, iss, ...userData } = jwt_decode(newToken['auth-token']);
       user = userData;
     } catch (error) {
       return logout();
