@@ -25,7 +25,8 @@ const BaggageCapacityForm = ({
 
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [shipmentPrice, setShipmentPrice] = useState(0);
-
+  const [regulations, setRegulations] = useState([]);
+  const [items, setItems] = useState([]);
   const administrationFee = shipmentPrice * 0.12;
   const iva = shipmentPrice * 0.21;
 
@@ -46,14 +47,19 @@ const BaggageCapacityForm = ({
     return filters;
   }, [destination]);
 
-  const { data: regulations } = useRegulations({
+  const { data: regulationsApi } = useRegulations({
     args: regulationsParams,
     options: {
-      keepPreviousData: true
+      keepPreviousData: true,
+      enabled: !!destination
     }
   });
 
   const handleRemoveItem = (item) => {
+    item.shipmentItem = {};
+    item.shipmentItem.name = item.name;
+    item.shipmentItem.measureUnit = item.measureUnit;
+    regulations.push(item);
     setSelectedOptions(
       selectedOptions.filter((c) => c.name !== item.name),
       setSelectedOptions((oldArray) => [...oldArray, item])
@@ -63,14 +69,17 @@ const BaggageCapacityForm = ({
   const handleSelection = (item) => {
     if (item) {
       const selectedItem = item.shipmentItem;
+
       selectedItem.maxAmount = item.maxAmount;
       selectedItem.amount = 1;
       selectedItem.price = 1;
+      var index = regulations.findIndex((e) => e.id === item.id);
+      regulations.splice(index, 1);
 
       if (!selectedOptions.includes(selectedItem)) {
         setSelectedOptions(
           (oldArray) => [...oldArray, selectedItem],
-          regulations.rows.filter((c) => c.shipmentItem.name !== selectedItem.name)
+          regulations.filter((c) => c.shipmentItem.name !== selectedItem.name)
         );
       }
     }
@@ -122,18 +131,27 @@ const BaggageCapacityForm = ({
     setShipmentPrice(total);
   };
 
-  useMemo(() => {
-    if (travel) {
+  useMemo(async () => {
+    if (regulationsApi && !travel?.payload) setRegulations(regulationsApi.rows);
+
+    if (travel?.payload && regulationsApi) {
+      await setItems(regulationsApi.rows);
+      let regulation = regulationsApi?.rows;
       for (var i = 0; i < travel.payload.length; i++) {
-        let shipmentItem = regulations?.rows.find(
+        let shipmentItem = regulationsApi?.rows.find(
           (element) => element?.shipmentItem.id === travel?.payload[i]?.ShipmentItemId
-        ).shipmentItem;
+        )?.shipmentItem;
         travel.payload[i].measureUnit = shipmentItem?.measureUnit;
         travel.payload[i].name = shipmentItem?.name;
+        var index = regulation.findIndex(
+          (e) => e.shipmentItem.id === travel.payload[i].ShipmentItemId
+        );
+        index !== -1 && regulation.splice(index, 1);
       }
       setSelectedOptions(travel?.payload);
+      setRegulations(regulation);
     }
-  }, [travel]);
+  }, [regulationsApi]);
 
   return (
     <div className="relative flex flex-col w-full space-y-4">
@@ -144,16 +162,13 @@ const BaggageCapacityForm = ({
             ? t('form.shipment.placeholder.payload')
             : t('form.travel.placeholder.baggage-capacity')
         }
-        options={regulations ? regulations.rows : []}
+        options={regulations ? regulations : []}
         className="autocomplete-field"
         optionLabels={['shipmentItem.name']}
         keysToMatch={['shipmentItem.name']}
         onSelectionChange={handleSelection}
         disabled={!destination}
         noOptionsLabel={t('form.common.empty-options')}
-        defaultValue={regulations?.rows.find(
-          (element) => element?.shipmentItem.id === travel?.payload[0]?.id
-        )}
       />
       <div>
         {errors?.shipmentItems && touched?.shipmentItems ? (
@@ -276,12 +291,12 @@ const BaggageCapacityForm = ({
 };
 
 BaggageCapacityForm.propTypes = {
-  destination: PropTypes.object.isRequired,
-  onShipmentItemsChange: PropTypes.func.isRequired,
-  isSender: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  touched: PropTypes.object.isRequired,
-  travel: PropTypes.object
+  errors: PropTypes.objects,
+  travel: PropTypes.objects,
+  touched: PropTypes.objects,
+  destination: PropTypes.objects,
+  onShipmentItemsChange: PropTypes.objects,
+  isSender: PropTypes.func
 };
 
 export default BaggageCapacityForm;
