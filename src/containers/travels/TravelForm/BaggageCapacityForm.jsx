@@ -55,7 +55,6 @@ const BaggageCapacityForm = ({
   });
 
   const handleRemoveItem = (item) => {
-    console.log(item, regulationsApi);
     item.shipmentItem = {};
     item.shipmentItem.name = item.name;
     item.shipmentItem.measureUnit = item.measureUnit;

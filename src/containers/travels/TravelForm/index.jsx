@@ -68,7 +68,6 @@ const TravelForm = ({ travelId }) => {
     destination: Yup.object().required(t('form.common.required.destination')).nullable(),
     airline: Yup.object().required(t('form.common.required.airline')).nullable(),
     flight: Yup.object().required(t('form.common.required.flight')).nullable(),
-    shipmentItems: Yup.object().required(t('form.common.required.shipmentItems')).nullable(),
     departureAt: Yup.date().required()
   });
 
@@ -80,25 +79,25 @@ const TravelForm = ({ travelId }) => {
       values.id = travel.id;
       message = t('updated.male', { entity: t('travels', { count: 1 }) });
     }
-
     try {
       setLoading(true);
-      console.log(values, baggageCapacity, 'edit');
+
       delete values.shipmentItem;
       values.shipmentItems = baggageCapacity;
-      values.traveler = values.traveler.id;
+      values.traveler = values.traveler.id
+        ? values.traveler.id
+        : users.rows.find((element) => element?.email === values.traveler.email)?.id;
       values.origin = values.origin.id;
       values.destination = values.destination.id;
       delete values.airline;
       values.flight = values.flight.id;
-
+      console.log(values.shipmentItems, values, 'edit');
       await saveTravels({
         args: values,
         options: {
           method
         }
       });
-
       toast(message);
       router.back();
     } catch (error) {
