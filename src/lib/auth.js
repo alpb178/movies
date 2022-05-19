@@ -38,7 +38,7 @@ export const getTokenUser = async () => {
     return Promise.resolve(loggedOutResponse);
   }
   // eslint-disable-next-line no-unused-vars
-  const { exp, iat, nbf, iss, ...userData } = jwt_decode(currToken['auth-token']);
+  const { exp, iat, nbf, iss, ...userData } = jwt_decode(currToken);
 
   let user = userData;
 
@@ -49,7 +49,7 @@ export const getTokenUser = async () => {
     try {
       const newToken = await refreshToken(currToken);
       // eslint-disable-next-line no-unused-vars
-      const { exp, iat, nbf, iss, ...userData } = jwt_decode(newToken['auth-token']);
+      const { exp, iat, nbf, iss, ...userData } = jwt_decode(newToken);
       user = userData;
     } catch (error) {
       return logout();
