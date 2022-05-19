@@ -2,6 +2,7 @@
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useRegions from '@/hooks/location/region/useRegions';
 import { saveShipments } from '@/hooks/shipment/useShipments';
+import { useAvailablePayload } from '@/hooks/travel/useTravels';
 import useUsers from '@/hooks/user/useUsers';
 import { apiFetcher } from '@/lib/apiFetcher';
 import { API_TRAVELS_URL, POST } from '@/lib/constants';
@@ -31,7 +32,11 @@ const ShipmentsForm = ({ onOpen }) => {
   const initialValues = {
     sender: '',
     travel: {},
-    shipmentItems: []
+    origin: '',
+    destination: '',
+    amount: 1,
+    shipmentItems: [],
+    departureAt: new Date()
   };
 
   const { data: users } = useUsers({
@@ -40,7 +45,6 @@ const ShipmentsForm = ({ onOpen }) => {
       keepPreviousData: true
     }
   });
-
   const { data: regions } = useRegions({
     args: {},
     options: {
@@ -65,11 +69,14 @@ const ShipmentsForm = ({ onOpen }) => {
 
   const onSearch = async (values) => {
     delete values.sender;
-    delete values.shipmentItem;
     delete values.travel;
-    values.shipmentItems = baggageCapacity;
-    values.origin = values.origin.id;
-    values.destination = values.destination.id;
+    delete values.shipmentItems;
+    values.shipmentItem = baggageCapacity;
+    values.originId = values.origin.id;
+    values.destinationId = values.destination.id;
+    delete values.origin;
+    delete values.destination;
+    console.log(values);
     const { data } = await apiFetcher(`${API_TRAVELS_URL}/available-payload`, {
       data: values,
       keepPreviousData: true,
@@ -77,11 +84,11 @@ const ShipmentsForm = ({ onOpen }) => {
     });
 
     setAvailablePayload(data);
-    // useAvailablePayload({
-    //   args: values,
-    //   options: {}
-    // });
-    // onOpen(false);
+    useAvailablePayload({
+      args: values,
+      options: {}
+    });
+    onOpen(false);
   };
 
   const calculateTotalPrice = (amount, price) => {
@@ -100,7 +107,7 @@ const ShipmentsForm = ({ onOpen }) => {
                 <AutocompleteField
                   name="sender"
                   placeholder={t('form.shipment.placeholder.sender')}
-                  options={users ? users : []}
+                  options={users ? users.rows : []}
                   className="autocomplete-field"
                   optionLabels={['firstName', 'lastName']}
                   keysToMatch={['firstName', 'lastName', 'username']}

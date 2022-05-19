@@ -26,7 +26,6 @@ const BaggageCapacityForm = ({
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [shipmentPrice, setShipmentPrice] = useState(0);
   const [regulations, setRegulations] = useState([]);
-  const [items, setItems] = useState([]);
   const administrationFee = shipmentPrice * 0.12;
   const iva = shipmentPrice * 0.21;
 
@@ -56,6 +55,7 @@ const BaggageCapacityForm = ({
   });
 
   const handleRemoveItem = (item) => {
+    console.log(item, regulationsApi);
     item.shipmentItem = {};
     item.shipmentItem.name = item.name;
     item.shipmentItem.measureUnit = item.measureUnit;
@@ -135,20 +135,21 @@ const BaggageCapacityForm = ({
     if (regulationsApi && !travel?.payload) setRegulations(regulationsApi.rows);
 
     if (travel?.payload && regulationsApi) {
-      await setItems(regulationsApi.rows);
-      let regulation = regulationsApi?.rows;
+      const regulation = [];
       for (var i = 0; i < travel.payload.length; i++) {
-        let shipmentItem = regulationsApi?.rows.find(
+        const shipmentItem = regulationsApi?.rows.find(
           (element) => element?.shipmentItem.id === travel?.payload[i]?.ShipmentItemId
         )?.shipmentItem;
         travel.payload[i].measureUnit = shipmentItem?.measureUnit;
         travel.payload[i].name = shipmentItem?.name;
-        var index = regulation.findIndex(
-          (e) => e.shipmentItem.id === travel.payload[i].ShipmentItemId
-        );
-        index !== -1 && regulation.splice(index, 1);
       }
       setSelectedOptions(travel?.payload);
+      for (var r = 0; r < regulationsApi.rows.length; r++) {
+        var index = travel.payload.find(
+          (e) => e.ShipmentItemId === regulationsApi.rows[r].shipmentItem.id
+        );
+        !index && regulation.push(regulationsApi.rows[r]);
+      }
       setRegulations(regulation);
     }
   }, [regulationsApi]);

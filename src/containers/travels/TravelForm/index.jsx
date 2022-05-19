@@ -83,6 +83,7 @@ const TravelForm = ({ travelId }) => {
 
     try {
       setLoading(true);
+      console.log(values, baggageCapacity, 'edit');
       delete values.shipmentItem;
       values.shipmentItems = baggageCapacity;
       values.traveler = values.traveler.id;
