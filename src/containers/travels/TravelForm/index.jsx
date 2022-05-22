@@ -91,15 +91,15 @@ const TravelForm = ({ travelId }) => {
       values.destination = values.destination.id;
       delete values.airline;
       values.flight = values.flight.id;
-      console.log(values.shipmentItems, values, 'edit');
       await saveTravels({
         args: values,
         options: {
           method
         }
       });
-      toast(message);
-      router.back();
+
+      await toast(message);
+      await router.back();
     } catch (error) {
       toast.error(error.toString());
     } finally {

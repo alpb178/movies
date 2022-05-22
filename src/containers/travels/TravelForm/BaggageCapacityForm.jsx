@@ -167,6 +167,7 @@ const BaggageCapacityForm = ({
         optionLabels={['shipmentItem.name']}
         keysToMatch={['shipmentItem.name']}
         onSelectionChange={handleSelection}
+        shipmentItems={true}
         disabled={!destination}
         noOptionsLabel={t('form.common.empty-options')}
       />

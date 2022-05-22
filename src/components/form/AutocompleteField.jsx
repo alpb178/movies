@@ -29,6 +29,8 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
         : i.name
       : '';
 
+  const itemToStringSelect = () => {};
+
   return (
     <Field name={name} id={name}>
       {({ field: { value: fieldValue }, form: { setFieldValue }, meta: { error, touched } }) => (
@@ -37,7 +39,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
             onSelectionChange(selection);
             setFieldValue(name, selection);
           }}
-          itemToString={itemToString}
+          itemToString={props.shipmentItems ? itemToStringSelect : itemToString}
           initialSelectedItem={defaultValue}
         >
           {({
@@ -66,7 +68,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                     )}
                     disabled={disabled}
                   />
-                  {selectedItem ? (
+                  {selectedItem && !props.shipmentItems ? (
                     <button
                       type="button"
                       className="absolute p-1 rounded-full right-2 hover:bg-gray-100"
@@ -155,7 +157,9 @@ AutocompleteField.propTypes = {
   optionLabels: PropTypes.arrayOf(PropTypes.string),
   optionValue: PropTypes.string,
   placeholder: PropTypes.string,
-  props: PropTypes.object
+  props: PropTypes.object,
+  defaultValue: PropTypes.object,
+  shipmentItems: PropTypes.bool
 };
 
 export default AutocompleteField;
