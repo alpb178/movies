@@ -53,16 +53,6 @@ const UserDetails = ({ userId }) => {
                       <p className="text-2xl font-bold text-gray-900">
                         {`${user?.firstName} ${user?.lastName}`}
                       </p>
-                      <p className="mt-2 text-sm text-gray-500">
-                        #400 opened by{' '}
-                        <a href="#" className="font-medium text-gray-900">
-                          Hilary Mahy
-                        </a>{' '}
-                        in{' '}
-                        <a href="#" className="font-medium text-gray-900">
-                          Customer Portal
-                        </a>
-                      </p>
                     </div>
                   </div>
                   <div className="flex h-full mt-6 space-x-4 md:mt-0">

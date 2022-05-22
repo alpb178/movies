@@ -15,30 +15,26 @@ const UserProfile = ({ data }) => {
     about: `
     <div className="prose max-w-none">
     <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita, hic? Commodi cumque
-      similique id tempora molestiae deserunt at suscipit, dolor voluptatem, numquam, harum
-      consequatur laboriosam voluptas tempore aut voluptatum alias?
+     ${data?.bio || t('no-data')}
     </p>
-    <ul role="list">
-      <li>
-        Tempor ultrices proin nunc fames nunc ut auctor vitae sed. Eget massa parturient
-        vulputate fermentum id facilisis nam pharetra. Aliquet leo tellus.
-      </li>
-      <li>Turpis ac nunc adipiscing adipiscing metus tincidunt senectus tellus.</li>
-      <li>
-        Semper interdum porta sit tincidunt. Dui suspendisse scelerisque amet metus eget sed. Ut
-        tellus in sed dignissim.
-      </li>
-    </ul>
   </div>
+   
+
     `,
     roles: data?.roles,
     fields: {
-      phone: data?.phone,
+      status: data?.status,
       email: data?.email,
+      phone: data?.mobile,
       location: 'San Francisco',
       birthdate: data?.birthdate
         ? format(new Date(data?.birthdate), 'PPP', { locale: { ...locales[lang] } })
+        : null,
+      createdAt: data?.createdAt
+        ? format(new Date(data?.createdAt), 'PPP', { locale: { ...locales[lang] } })
+        : null,
+      updatedAt: data?.updatedAt
+        ? format(new Date(data?.updatedAt), 'PPP', { locale: { ...locales[lang] } })
         : null
     }
   };
@@ -57,18 +53,18 @@ const UserProfile = ({ data }) => {
           ))}
 
           <div className="sm:col-span-3">
+            <dt className="font-medium text-gray-600">{t('roles', { count: 2 })}</dt>
+            {profile?.roles
+              ? profile?.roles.map((role) => <dd className="mt-1 text-gray-900">{role}</dd>)
+              : t('no-data', { field: 'roles' })}
+          </div>
+
+          <div className="sm:col-span-3">
             <dt className="font-medium text-gray-600">Bio</dt>
             <dd
               className="mt-1 space-y-5 text-gray-900"
               dangerouslySetInnerHTML={{ __html: profile.about }}
             />
-          </div>
-
-          <div className="sm:col-span-3">
-            <dt className="font-medium text-gray-600">{t('roles', { count: 2 })}</dt>
-            {profile?.roles
-              ? profile?.roles.map((role) => <dd className="mt-1 text-gray-900">{role}</dd>)
-              : t('no-data', { field: 'roles' })}
           </div>
         </dl>
       </div>
