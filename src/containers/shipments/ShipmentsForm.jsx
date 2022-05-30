@@ -5,7 +5,7 @@ import { saveShipments } from '@/hooks/shipment/useShipments';
 import { useAvailablePayload } from '@/hooks/travel/useTravels';
 import useUsers from '@/hooks/user/useUsers';
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_TRAVELS_URL, POST } from '@/lib/constants';
+import { POST, TRAVELS_PAGE } from '@/lib/constants';
 import { formatPrice, locales } from '@/lib/utils';
 import { Disclosure, Transition } from '@headlessui/react';
 import { ChevronDownIcon, PaperAirplaneIcon, UserIcon } from '@heroicons/react/outline';
@@ -77,13 +77,11 @@ const ShipmentsForm = ({ onOpen }) => {
     delete values.origin;
     delete values.destination;
     console.log(values);
-    const { data } = await apiFetcher(`${API_TRAVELS_URL}/available-payload`, {
-      data: values,
-      keepPreviousData: true,
-      method: POST
+    const { data } = await apiFetcher(`${TRAVELS_PAGE}/`, {
+      keepPreviousData: true
     });
 
-    setAvailablePayload(data);
+    setAvailablePayload(data.rows);
     useAvailablePayload({
       args: values,
       options: {}
@@ -193,10 +191,10 @@ const ShipmentsForm = ({ onOpen }) => {
                                 </div>
 
                                 <div className="flex flex-col justify-between">
-                                  <p>{`${format(new Date(payload.travel.departureAt), 'PPP', {
+                                  <p>{`${format(new Date(payload?.departureAt), 'PPP', {
                                     locale: { ...locales[lang] }
                                   })}`}</p>
-                                  <p className="text-gray-500">{`${payload.travel.origin.code} - ${payload.travel.destination.code}`}</p>
+                                  <p className="text-gray-500">{`${payload?.origin?.code} - ${payload?.travel?.destination?.code}`}</p>
                                 </div>
 
                                 <p className="text-lg font-medium">
@@ -250,11 +248,8 @@ const ShipmentsForm = ({ onOpen }) => {
                                       </div>
                                     </div>
                                     <div className="">
-                                      <p>{`${format(
-                                        new Date(payload.travel.departureAt),
-                                        'PP'
-                                      )}`}</p>
-                                      <p className="text-gray-500">{`${payload.travel.origin.code} - ${payload.travel.destination.code}`}</p>
+                                      <p>{`${format(new Date(payload?.departureAt), 'PP')}`}</p>
+                                      <p className="text-gray-500">{`${payload?.travel?.origin.code} - ${payload?.travel?.destination?.code}`}</p>
                                     </div>
                                   </div>
 
