@@ -1,6 +1,7 @@
-import UsersForm from '@/containers/users/UserForm/UsersForm';
+import UsersForm from '@/containers/users/UserForm';
 import { ROLE_ADMIN } from 'lib/constants';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
@@ -8,7 +9,10 @@ const Admin = dynamic(() => import('layouts/Admin'), {
 });
 
 const UsersFormCreatePage = () => {
-  return <UsersForm />;
+  const router = useRouter();
+  const userId = router.query.slug;
+
+  return <UsersForm userId={userId} />;
 };
 
 UsersFormCreatePage.layout = Admin;

@@ -32,6 +32,8 @@
     "other": "Facturas"
   },
   "business-name": "Razón social",
+  "birthdate": "Fecha de Nacimiento",
+  "bio":"Biografía",
   "cancel": "Cancelar",
   "client": "Cliente",
   "client-number": "Número del Cliente",
@@ -214,7 +216,39 @@
         "origin": "El origen del viaje es requerido",
         "traveler": "El viajero es requerido"
       }
+    },
+    "user": {
+      "label": {
+        "baggage-capacity": "Capacidad de Equipaje",
+        "comments": "Comentarios",
+        "date": "Fecha de viaje",
+        "destination": "Destino",
+        "origin": "Origen",
+        "traveler": "Viajero"
+      },
+      "placeholder": {
+        "firstName": "Nombre",
+        "lastName": "Apellidos",
+        "email": "Correo Electrónico",
+        "mobile": "Celular",
+        "birthdate": "Fecha de Cumpleaños",
+        "roles": "Roles",
+        "password": "Contraseña",
+        "repeat-password": "Repetir Contraseña",
+        "bio": "Biografía",
+        "status": "Estado"
+      },
+      "title": {
+        "create": "Nuevo Usuario",
+        "update": "Actualizar Usuario"
+      },
+      "required": {
+        "destination": "El destino del viaje es requerido",
+        "origin": "El origen del viaje es requerido",
+        "traveler": "El viajero es requerido"
+      }
     }
+
   },
   "forgot-password": "¿Olvidaste la contraseña?",
   "go-back": "Volver",
