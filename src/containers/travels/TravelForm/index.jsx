@@ -100,7 +100,6 @@ const TravelForm = ({ travelId }) => {
       values.destination = values.destination.id;
       delete values.airline;
       values.flight = values.flight.id;
-      console.log(values);
       await saveTravels({
         args: values,
         options: {
