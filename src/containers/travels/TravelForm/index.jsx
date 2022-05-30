@@ -75,7 +75,7 @@ const TravelForm = ({ travelId }) => {
     let method = POST;
 
     let message = t('inserted.male', { entity: t('travels', { count: 1 }) });
-    values.shipmentItems = baggageCapacity;
+
     if (travel) {
       method = PUT;
       values.id = travel.id;
