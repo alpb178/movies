@@ -21,7 +21,7 @@ const handler = async (req, res) => {
     });
 
     if (!req.headers.referer.includes('register')) {
-      currUser = JSON.parse(cookieToken);
+      currUser = cookieToken;
       h.Authorization = 'Bearer ' + currUser;
     }
 

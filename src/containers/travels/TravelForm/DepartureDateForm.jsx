@@ -89,7 +89,6 @@ function DepartureDateForm({ travel }) {
                         className="text-base lg:text-xl"
                         name="departureAt"
                         onChange={(newValue) => {
-                          console.log(newValue);
                           setSelectedDate(new Date(newValue));
                           setFieldValue('departureAt', newValue);
                           setOpenCalendar(false);

@@ -1,6 +1,6 @@
-import { API_LOGIN_URL, API_REFRESH_TOKEN_URL, TOKEN_KEY } from 'lib/constants';
 import axios from 'axios';
 import Cookies from 'cookies';
+import { API_LOGIN_URL, API_REFRESH_TOKEN_URL, TOKEN_KEY } from 'lib/constants';
 import url from 'url';
 
 const handler = async (req, res) => {
@@ -28,7 +28,7 @@ const handler = async (req, res) => {
       apiRelativeUrl.startsWith(API_LOGIN_URL) || apiRelativeUrl.startsWith(API_REFRESH_TOKEN_URL);
 
     if (isLoginOrRefresh) {
-      cookies.set(TOKEN_KEY, JSON.stringify(result.data));
+      cookies.set(TOKEN_KEY, result.data['accessToken']);
     }
 
     res.json(result.data);

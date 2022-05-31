@@ -24,8 +24,7 @@ export async function getServerSideProps({ req, res }) {
   const accessToken = cookies.get(TOKEN_KEY);
 
   if (accessToken) {
-    const newToken = JSON.parse(accessToken);
-    const { exp, ...userData } = jwt_decode(newToken);
+    const { exp, ...userData } = jwt_decode(accessToken);
     const currDate = new Date().getTime();
     const duration = exp * 1000;
     if (currDate < duration) {
