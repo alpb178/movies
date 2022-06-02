@@ -1,6 +1,5 @@
 import Loading from '@/components/common/Loader';
 import AutocompleteField from '@/components/form/AutocompleteField';
-import useRoles from '@/hooks/role/useRoles';
 import useUsers, { saveUser } from '@/hooks/user/useUsers';
 import { Field, Form, Formik } from 'formik';
 import { POST, PUT, USERS_PAGE } from 'lib/constants';
@@ -18,11 +17,7 @@ const UsersForm = ({ userId }) => {
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [status] = useState([
-    { id: 'PENDING', name: 'PENDING' },
-    { id: 'ACTIVE', name: 'ACTIVE' },
-    { id: 'INACTIVE', name: 'INACTIVE' }
-  ]);
+  const [status] = useState([{ id: 'PENDING' }, { id: 'ACTIVE' }, { id: 'INACTIVE' }]);
 
   const validationSchema = Yup.object().shape({
     /* username: Yup.string().required(t('required.username')),
@@ -33,12 +28,6 @@ const UsersForm = ({ userId }) => {
     phone: Yup.string().required(t('required.phone'))*/
   });
 
-  const { data: roles } = useRoles({
-    options: {
-      keepPreviousData: true
-    }
-  });
-
   const { data: users, isLoading: isLoadingUsers } = useUsers({
     args: { id: userId },
     options: { keepPreviousData: true, enabled: userId !== 'create' }
@@ -46,16 +35,15 @@ const UsersForm = ({ userId }) => {
 
   const onSubmit = async (values) => {
     delete values['repeat-password'];
-    values.roles = [values.roles];
-
+    values.status = values.status.id;
     let method = POST;
 
-    let message = t('inserted.male', { entity: t('travels', { count: 1 }) });
+    let message = t('inserted.male', { entity: t('users', { count: 1 }) });
     if (users) {
       method = PUT;
       values.id = userId;
-
-      message = t('updated.male', { entity: t('travels', { count: 1 }) });
+      delete values['password'];
+      message = t('updated.male', { entity: t('users', { count: 1 }) });
     }
     try {
       setLoading(true);
@@ -83,9 +71,8 @@ const UsersForm = ({ userId }) => {
     mobile: users?.mobile || '',
     password: users?.password || '',
     birthdate: users?.birthdate || '',
-    bio: users?.bios || '',
-    status: users?.status || '',
-    roles: users?.roles || []
+    bio: users?.bio || '',
+    status: users?.status || ''
   };
 
   return (
@@ -150,84 +137,74 @@ const UsersForm = ({ userId }) => {
                   <label htmlFor="name">{t('birthdate')}</label>
                   <BirthDateForm user={users} />
                 </div>
-                <div className="w-full">
-                  <label htmlFor="name">{t('role', { count: 2 })}</label>
-                  <AutocompleteField
-                    name="roles"
-                    placeholder={t('form.user.placeholder.roles')}
-                    options={roles ? roles.rows : []}
-                    optionLabels={['name']}
-                    keysToMatch={['name']}
-                    className="w-full p-4 py-3 border border-l-0 rounded-r-md"
-                    aria-describedby="flight"
-                    defaultValue={users?.roles}
-                  />
-                </div>
-              </div>
 
-              <div className="flex  flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
                 <div className="w-full mt-8">
                   <label htmlFor="name">{t('status')}</label>
                   <AutocompleteField
                     name="status"
                     placeholder={t('form.user.placeholder.status')}
                     options={status}
-                    optionLabels={['name']}
-                    keysToMatch={['name']}
+                    optionLabels={['id']}
+                    keysToMatch={['id']}
                     className="w-full p-4 py-3 border border-l-0 rounded-r-md"
                     aria-describedby="flight"
                     defaultValue={status.find((item) => item.id === users?.status)}
                   />
                 </div>
-                <div className="w-full">
-                  <label htmlFor="name">{t('password')}</label>
-                  <div className="relative  rounded-md">
-                    <Field
-                      type={showPassword ? 'text' : 'password'}
-                      name="password"
-                      id="password"
-                      className={`block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
-                        errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3"
-                    >
-                      {showPassword ? (
-                        <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                      ) : (
-                        <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-                <div className="w-full">
-                  <label htmlFor="name">{t('repeat-password')}</label>
-                  <div className="relative  rounded-md ">
-                    <Field
-                      type={showPassword ? 'text' : 'password'}
-                      name="password"
-                      id="password"
-                      className={`block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
-                        errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3"
-                    >
-                      {showPassword ? (
-                        <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                      ) : (
-                        <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                      )}
-                    </button>
-                  </div>
-                </div>
               </div>
+
+              {!isNaN(userId) || (
+                <div className="flex  flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
+                  <div className="w-full mt-8">
+                    <label htmlFor="name">{t('password')}</label>
+                    <div className="relative  rounded-md">
+                      <Field
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        id="password"
+                        className={`block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
+                          errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3"
+                      >
+                        {showPassword ? (
+                          <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                        ) : (
+                          <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <label htmlFor="name">{t('repeat-password')}</label>
+                    <div className="relative  rounded-md ">
+                      <Field
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        id="password"
+                        className={`block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
+                          errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3"
+                      >
+                        {showPassword ? (
+                          <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                        ) : (
+                          <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="flex  flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
                 <div className="w-full mt-5">
@@ -237,10 +214,8 @@ const UsersForm = ({ userId }) => {
                     name="bio"
                     id="bio"
                     rows={3}
-                    defaultValue={users?.observations}
                     placeholder={t('form.user.placeholder.bio')}
                     className="text-lg text-field"
-                    aria-describedby="observations"
                   />
                 </div>
               </div>
@@ -266,7 +241,7 @@ UsersForm.defaultProps = {
 };
 
 UsersForm.propTypes = {
-  userId: PropTypes.number
+  userId: PropTypes.string
 };
 
 export default UsersForm;

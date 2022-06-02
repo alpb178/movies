@@ -1,4 +1,4 @@
-import UsersForm from '@/containers/users/UserForm';
+import UsersForm from '@/containers/users/user-form';
 import { ROLE_ADMIN } from 'lib/constants';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';

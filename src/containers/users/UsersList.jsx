@@ -2,15 +2,23 @@ import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useUsers from '@/hooks/user/useUsers';
+import useUsers, { saveUser } from '@/hooks/user/useUsers';
 import { CheckCircleIcon, ClockIcon, XCircleIcon } from '@heroicons/react/outline';
 import EmptyState from 'components/common/EmptyState';
 import UserFilter from 'containers/users/UserFilter';
-import { DEFAULT_PAGE_SIZE, USER_DETAIL_PAGE, USER_FORM_PAGE } from 'lib/constants';
+import {
+  API_USERS_URL,
+  DEFAULT_PAGE_SIZE,
+  DELETE,
+  USER_DETAIL_PAGE,
+  USER_FORM_PAGE
+} from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
 const UsersList = () => {
   const { t } = useTranslation('common');
@@ -21,6 +29,8 @@ const UsersList = () => {
   const [sort, setSort] = useState('');
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
   const [openFilters, setOpenFilters] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
@@ -47,13 +57,27 @@ const UsersList = () => {
     }
   });
 
-  const onDelete = (event, row) => {
+  const handleDelete = (event, row) => {
     event.stopPropagation();
     setDeleteConfirmation({ open: true, id: row.original.id });
   };
 
-  const onDeleteConfirmation = () => {
-    //  onDeleteUser(deleteConfirmation.id);
+  const onDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+      await saveUser({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+      await queryClient.refetchQueries([API_USERS_URL]);
+      toast(t('deleted.male', { entity: t('users', { count: 1 }) }));
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onUpdate = (event, row) => {
@@ -121,7 +145,7 @@ const UsersList = () => {
         return (
           <TableActions
             onEdit={(event) => onUpdate(event, row)}
-            onDelete={(event) => onDelete(event, row)}
+            onDelete={(event) => handleDelete(event, row)}
           />
         );
       }
@@ -230,7 +254,7 @@ const UsersList = () => {
 };
 
 UsersList.propTypes = {
-  row: PropTypes.object.isRequired
+  row: PropTypes.object
 };
 
 export default UsersList;
