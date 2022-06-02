@@ -175,10 +175,10 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   const renderCreateButton = () => (
     <button
       type="button"
-      className="btn-outlined"
+      className="btn-contained"
       onClick={() => router.push('travels/create/new')}
     >
-      {t('create', { entity: t('travels', { count: 1 }) })}
+      {t('create', { entity: t('travels', { count: 1 }).toLowerCase() })}
     </button>
   );
 

@@ -253,7 +253,7 @@ const ShipmentsForm = ({ onOpen }) => {
                                     </div>
                                   </div>
 
-                                  <button type="button" className="btn-outlined">
+                                  <button type="button" className="btn-contained">
                                     Reservar
                                   </button>
                                 </div>

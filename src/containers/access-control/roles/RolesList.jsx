@@ -153,7 +153,7 @@ const RolesList = () => {
   };
 
   const renderInsertButton = () => (
-    <button type="button" className="btn-outlined" onClick={() => router.push('roles/create')}>
+    <button type="button" className="btn-contained" onClick={() => router.push('roles/create')}>
       {t('create', { entity: t('roles', { count: 1 }).toLowerCase() })}
     </button>
   );

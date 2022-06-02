@@ -143,8 +143,8 @@ const CountriesList = () => {
   };
 
   const renderInsertButton = () => (
-    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('add')} {t('countries', { count: 1 }).toLowerCase()}
+    <button type="button" className="btn-contained" onClick={() => setOpenForm(true)}>
+      {t('create', { entity: t('countries', { count: 1 }).toLowerCase() })}
     </button>
   );
 
@@ -173,11 +173,7 @@ const CountriesList = () => {
     ),
     actions: (
       <div className="space-x-6">
-        <button
-          type="button"
-          className="px-6 py-2 font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => setOpenFilters(!openFilters)}
-        >
+        <button type="button" className="btn-outlined" onClick={() => setOpenFilters(!openFilters)}>
           {t('search')}
         </button>
         {renderInsertButton()}

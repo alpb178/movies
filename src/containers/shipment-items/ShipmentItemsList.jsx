@@ -141,8 +141,8 @@ const ShipmentItemsList = () => {
   };
 
   const renderInsertButton = () => (
-    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('create')} {t('shipment-items', { count: 1 }).toLowerCase()}
+    <button type="button" className="btn-contained" onClick={() => setOpenForm(true)}>
+      {t('create', { entity: t('shipment-items', { count: 1 }).toLowerCase() })}
     </button>
   );
 

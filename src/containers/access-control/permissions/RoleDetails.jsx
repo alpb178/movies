@@ -48,7 +48,7 @@ const Permissionsetails = ({ roleId }) => {
           </div>
         </div>
         <div className="flex space-x-4">
-          <button type="button" className="btn-outlined">
+          <button type="button" className="btn-contained">
             Disqualify
           </button>
           <button type="button" className="border btn-contained border-secondary-500">

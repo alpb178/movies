@@ -26,7 +26,7 @@ function ResourcesList() {
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-xl font-medium lg:text-3xl">{t('resources', { count: 2 })}</h3>
         <div className="">
-          <button type="button" className="btn-outlined">
+          <button type="button" className="btn-contained">
             {t('create', { entity: t('resources', { count: 1 }).toLowerCase() })}
           </button>
         </div>

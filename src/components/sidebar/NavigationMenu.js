@@ -26,7 +26,7 @@ const NavigationMenu = () => {
                 className={`
                 ${
                   router.pathname.includes(item.name)
-                    ? 'bg-primary-400 text-primary-500'
+                    ? 'bg-primary-700 text-primary-500'
                     : 'text-primary-100 hover:bg-primary-700'
                 } w-full flex justify-between items-center pl-2 pr-1 py-3 text-left text-sm font-medium rounded-md hover:text-white
               `}

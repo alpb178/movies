@@ -33,7 +33,7 @@
   },
   "business-name": "Razón social",
   "birthdate": "Fecha de Nacimiento",
-  "bio":"Biografía",
+  "bio": "Biografía",
   "cancel": "Cancelar",
   "client": "Cliente",
   "client-number": "Número del Cliente",
@@ -45,7 +45,7 @@
     "1": "País",
     "other": "Países"
   },
-  "create": "Crear",
+  "create": "Crear {{entity}}",
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
   "date-delivery": " Fecha Entrega",
@@ -248,7 +248,6 @@
         "traveler": "El viajero es requerido"
       }
     }
-
   },
   "forgot-password": "¿Olvidaste la contraseña?",
   "go-back": "Volver",
@@ -361,7 +360,7 @@
       "other": "Reseñas dejadas"
     }
   },
-  "roles": { "0": "Sin roles", "1": "Role", "other": "Roles" },
+  "roles": { "0": "Sin roles", "1": "Rol", "other": "Roles" },
   "role-admin": "Administrador",
   "role-user": "Usuario",
   "save": "Guardar",

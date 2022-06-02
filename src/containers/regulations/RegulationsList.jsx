@@ -180,8 +180,8 @@ const RegulationsList = () => {
   };
 
   const renderCreateButton = () => (
-    <button type="button" className="btn-outlined" onClick={() => setOpenForm(true)}>
-      {t('create', { entity: t('regulations', { count: 1 }) })}
+    <button type="button" className="btn-contained" onClick={() => setOpenForm(true)}>
+      {t('create', { entity: t('regulations', { count: 1 }).toLowerCase() })}
     </button>
   );
 

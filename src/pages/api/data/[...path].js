@@ -6,8 +6,6 @@ const qs = require('query-string');
 const handler = async (req, res) => {
   const { host, cookie, ...headers } = req.headers;
 
-  console.log(headers, !headers?.authorization && headers.referer.match(/auth/gi) === null);
-
   if (!headers?.authorization && headers.referer.match(/auth/gi) === null) {
     res.redirect('/api/logout');
   }

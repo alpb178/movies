@@ -126,8 +126,8 @@ const ShipmentsList = ({ loading, onDeletePayment }) => {
   };
 
   const renderInsertButton = () => (
-    <button type="button" className="btn-outlined" onClick={() => router.push('shipments/create')}>
-      {t('add', { entity: t('shipments', { count: 1 }) })}
+    <button type="button" className="btn-contained" onClick={() => router.push('shipments/create')}>
+      {t('create', { entity: t('shipments', { count: 1 }).toLowerCase() })}
     </button>
   );
 

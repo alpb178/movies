@@ -163,8 +163,8 @@ const UsersList = () => {
   };
 
   const renderInsertButton = () => (
-    <button type="button" className="btn-outlined" onClick={() => handleAdd()}>
-      {t('create')} {t('users', { count: 1 }).toLowerCase()}
+    <button type="button" className="btn-contained" onClick={() => handleAdd()}>
+      {t('create', { entity: t('users', { count: 1 }).toLowerCase() })}
     </button>
   );
 

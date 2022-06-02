@@ -39,7 +39,11 @@ button:focus {
 }
 
 .btn-contained {
-  @apply p-4 px-8 space-x-2 font-medium text-white duration-100 border border-transparent rounded-full hover:border-primary-500 w-max bg-primary-600 hover:text-primary-600 hover:bg-primary-200;
+  @apply py-3 px-8 space-x-2 font-medium text-white duration-100 border border-transparent rounded-full hover:border-primary-500 w-max bg-primary-600 hover:text-primary-600 hover:bg-primary-200;
+}
+
+.btn-outlined {
+  @apply py-3 px-8 space-x-2 font-medium text-gray-800 duration-100 border rounded-full hover:border-primary-500 w-max bg-white hover:text-primary-600 hover:bg-primary-200;
 }
 
 .react-numeric-input .wrap {
