@@ -8,11 +8,7 @@ const Sidebar = () => (
   <div className="hidden md:flex md:flex-shrink-0">
     <div className="flex flex-col w-64 xl:w-72">
       <div className="flex items-center flex-shrink-0 h-16 px-4 space-x-4 bg-gray-900">
-        <img
-          className="h-10 w-max"
-          src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-          alt={APP_NAME}
-        />
+        <img className="h-10 w-max" src="/images/logo.svg" alt={APP_NAME} />
         <span className="text-xl font-medium text-white">{APP_NAME}</span>
       </div>
       <div className="flex flex-col flex-1 overflow-y-auto bg-gray-800">

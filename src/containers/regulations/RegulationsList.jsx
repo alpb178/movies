@@ -1,4 +1,5 @@
 import EmptyState from '@/components/common/EmptyState';
+import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
@@ -7,7 +8,6 @@ import { API_REGULATIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants'
 import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
-import Loading from 'components/common/Loading';
 import RegulationsFilter from 'containers/regulations/RegulationsFilter';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';

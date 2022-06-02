@@ -1,7 +1,7 @@
-import useAuth from '@/hooks/auth/useAuth';
 import { NAVBAR_HEIGHT } from '@/lib/constants';
 import { Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
+import { signOut, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import { HiOutlineBell as BellIcon, HiOutlineMenuAlt2 as MenuAlt2Icon } from 're
 const Navbar = ({ onSidebarOpen }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { user, logoutUser } = useAuth();
+  const { data: session } = useSession();
 
   const userNavigation = [
     { name: t('profile'), action: () => router.push('/profile') },
@@ -19,7 +19,7 @@ const Navbar = ({ onSidebarOpen }) => {
     {
       name: t('account.logout'),
       action: async () => {
-        await logoutUser.mutateAsync();
+        await signOut();
       }
     }
   ];
@@ -70,7 +70,7 @@ const Navbar = ({ onSidebarOpen }) => {
                 <div>
                   <Menu.Button className="flex items-center w-10 h-10 max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     <span className="sr-only">Open user menu</span>
-                    {user?.imageUrl ? (
+                    {session?.user?.imageUrl ? (
                       <img
                         className=""
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -78,7 +78,7 @@ const Navbar = ({ onSidebarOpen }) => {
                       />
                     ) : (
                       <span className="flex items-center justify-center w-10 h-10 text-xl font-medium bg-gray-200 rounded-full">
-                        {user?.email ? user?.email[0].toUpperCase() : ''}
+                        {session?.user?.email ? session?.user?.email[0].toUpperCase() : ''}
                       </span>
                     )}
                   </Menu.Button>

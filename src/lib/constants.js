@@ -4,7 +4,7 @@ export const DEFAULT_PAGE_SIZE = 10;
 
 export const NAVBAR_HEIGHT = 64; // in pixels
 
-export const TOKEN_KEY = 'access-token';
+export const TOKEN_KEY = 'next-auth.session-token';
 export const API_REFRESH_TOKEN_URL = '/token'; // Refresh token action
 export const API_LOGIN_URL = '/auth/login'; // Login endpoint
 export const API_USERS_URL = '/users'; // User endpoint
@@ -23,7 +23,8 @@ export const API_SHIPMENTS_URL = '/shipments';
 export const API_TRAVELS_URL = '/travels';
 
 // App Routes
-export const LOGIN_PAGE = '/login';
+export const LOGIN_PAGE = '/auth/login';
+export const FORGOT_PASSWORD_PAGE = '/auth/forgot-password';
 export const HOME_PAGE = '/';
 export const AIRLINES_PAGE = '/airlines';
 export const COUNTRIES_PAGE = '/locations/countries';

@@ -1,5 +1,6 @@
 import { APP_NAME } from '@/lib/constants';
 import '@/styles/calendar.scss';
+import { SessionProvider } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import Router from 'next/router';
@@ -10,7 +11,7 @@ import { CookiesProvider } from 'react-cookie';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import 'styles/globals.css';
+import 'styles/globals.scss';
 import 'styles/nprogress.scss';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -21,7 +22,7 @@ NProgress.configure({ showSpinner: false });
 
 const queryClient = new QueryClient();
 
-const App = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }) => {
   const { lang } = useTranslation();
   const Layout = Component.layout || (({ children }) => <>{children}</>);
 
@@ -38,22 +39,24 @@ const App = ({ Component, pageProps }) => {
         <title>{APP_NAME}</title>
       </Head>
       <QueryClientProvider client={queryClient}>
-        <CookiesProvider>
-          <Layout roles={Component?.roles}>
-            <Component {...pageProps} />
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar
-              newestOnTop={false}
-              draggable={false}
-              pauseOnVisibilityChange
-              closeOnClick
-              pauseOnHover
-              theme="colored"
-            />
-          </Layout>
-        </CookiesProvider>
+        <SessionProvider session={session}>
+          <CookiesProvider>
+            <Layout roles={Component?.roles}>
+              <Component {...pageProps} />
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                draggable={false}
+                pauseOnVisibilityChange
+                closeOnClick
+                pauseOnHover
+                theme="colored"
+              />
+            </Layout>
+          </CookiesProvider>
+        </SessionProvider>
       </QueryClientProvider>
     </>
   );

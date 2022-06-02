@@ -1,30 +1,35 @@
-import React from 'react';
+import { APP_NAME } from '@/lib/constants';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
-import Navbar from 'components/navbars/AuthNavbar.js';
-// import FooterSmall from 'components/Footers/FooterSmall.js';
+import React from 'react';
+// import MainNavbar from '@/components/Navbar/MainNavbar';
 
-const Auth = ({ children }) => {
-  return (
-    <>
-      <Navbar transparent />
-      <main className="relative w-full h-screen bg-white sm:bg-gray-100">
-        <section>
-          <div
-            className="absolute top-0 w-full h-full bg-no-repeat bg-full"
-            // style={{
-            //   backgroundImage: 'url(' + require('/images/register_bg_2.png') + ')'
-            // }}
-          ></div>
-          {children}
-          {/* <FooterSmall absolute /> */}
-        </section>
+const Auth = ({ children }) => (
+  <div className="min-h-screen">
+    {/* <MainNavbar /> */}
+
+    <div className="flex-1 w-full overflow-auto focus:outline-none">
+      <main className="z-0 w-full h-full mb-auto overflow-y-auto bg-white">
+        <div className="relative flex-1 w-full h-full px-4 py-8 bg-white sm:rounded-lg lg:px-8">
+          <Link href="/">
+            <a className="flex items-center justify-center mb-6">
+              <span className="sr-only">{APP_NAME}</span>
+              <img
+                className="w-auto h-10 text-primary-500 sm:h-14"
+                src="/images/logo.svg"
+                alt={APP_NAME}
+              />
+            </a>
+          </Link>
+        </div>
+        {children}
       </main>
-    </>
-  );
-};
+    </div>
+  </div>
+);
 
 Auth.propTypes = {
-  children: PropTypes.object
+  children: PropTypes.node.isRequired
 };
 
 export default Auth;

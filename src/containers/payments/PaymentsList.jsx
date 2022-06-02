@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
+import Loading from '@/components/common/Loader';
 import DataTable from '@/components/table';
 import { CheckCircleIcon, PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/outline';
-import Loading from 'components/common/Loading';
 import PaymentFilter from 'containers/payments/PaymentsFilter';
 import { PAYMENT_ADD, PAYMENT_DETAIL_PAGE, PAYMENT_EDIT } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';

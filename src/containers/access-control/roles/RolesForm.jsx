@@ -1,4 +1,4 @@
-import Loading from '@/components/common/Loading';
+import Loading from '@/components/common/Loader';
 import DataTable from '@/components/table';
 import usePermissions from '@/hooks/permission/usePermissions';
 import useResources from '@/hooks/resource/useResources';

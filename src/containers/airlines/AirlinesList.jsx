@@ -1,12 +1,12 @@
 /* eslint-disable react/display-name */
 import EmptyState from '@/components/common/EmptyState';
+import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useAirlines, { saveAirlines } from '@/hooks/airline/useAirlines';
 import { API_AIRLINES_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
-import Loading from 'components/common/Loading';
 import PaymentFilter from 'containers/airlines/AirlinesFilter';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';

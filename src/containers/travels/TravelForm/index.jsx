@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import Loading from '@/components/common/Loading';
+import Loading from '@/components/common/Loader';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useAirlines from '@/hooks/airline/useAirlines';
 import useFlights from '@/hooks/flight/useFlights';

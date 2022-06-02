@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
@@ -6,7 +7,6 @@ import usePermissions, { savePermission } from '@/hooks/permission/usePermission
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import EmptyState from 'components/common/EmptyState';
-import Loading from 'components/common/Loading';
 import { API_PERMISSIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import React, { useCallback, useMemo, useState } from 'react';

@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import EmptyState from '@/components/common/EmptyState';
-import Loading from '@/components/common/Loading';
+import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import DataTable from '@/components/table';

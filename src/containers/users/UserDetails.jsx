@@ -1,4 +1,4 @@
-import Loading from '@/components/common/Loading';
+import Loading from '@/components/common/Loader';
 import useMediaContext from '@/hooks/useMediaContext';
 import useUsers from '@/hooks/user/useUsers';
 import { Tab } from '@headlessui/react';

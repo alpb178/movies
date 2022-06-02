@@ -1,10 +1,10 @@
+import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useUsers from '@/hooks/user/useUsers';
 import { CheckCircleIcon, ClockIcon, XCircleIcon } from '@heroicons/react/outline';
 import EmptyState from 'components/common/EmptyState';
-import Loading from 'components/common/Loading';
 import UserFilter from 'containers/users/UserFilter';
 import { DEFAULT_PAGE_SIZE, USER_DETAIL_PAGE, USER_FORM_PAGE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';

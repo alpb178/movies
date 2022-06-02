@@ -1,4 +1,4 @@
-import Loading from '@/components/common/Loading';
+import Loading from '@/components/common/Loader';
 import usePermissions from '@/hooks/permission/usePermissions';
 import { locales } from '@/lib/utils';
 import { format } from 'date-fns';

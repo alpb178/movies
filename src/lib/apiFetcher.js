@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getSession, signOut } from 'next-auth/react';
 
 const API_BASE_PATH = '/api/data';
 const AUTH_BASE_PATH = '/api/auth';
@@ -9,40 +10,33 @@ export const apiFetcher = async (url, options = {}) => {
     .filter((v) => !!v)
     .join('/');
 
+  const session = await getSession();
+  const { headers = {}, ...config } = options;
+
   try {
     let path = API_BASE_PATH;
     if (typeof window === 'undefined') {
       path = process.env.NEXT_HOST_URL + path;
     }
+
+    if (session) {
+      headers.Authorization = `Bearer ${session.accessToken}`;
+    }
+
     const response = await axios(`${path}/${sanitizedUrl}`, {
-      ...options
+      headers,
+      ...config
     });
+
     if (response.data?.data === null) {
       response.data = null;
     }
     return response;
   } catch (error) {
-    console.log(error.config);
-    throw error;
-  }
-};
-
-export const authFetcher = async (url, options = {}) => {
-  const sanitizedUrl = url
-    .split('/')
-    .filter((v) => !!v)
-    .join('/');
-  try {
-    let path = AUTH_BASE_PATH;
-    if (typeof window === 'undefined') {
-      path = process.env.NEXT_HOST_URL + path;
+    if (error?.response?.status === 401 || isTokenExpired(session)) {
+      await signOut();
+      throw new Error('Session expired');
     }
-    const response = await axios(`${path}/${sanitizedUrl}`, {
-      ...options
-    });
-    return response;
-  } catch (error) {
-    console.error(error.config);
     throw error;
   }
 };

@@ -1,4 +1,4 @@
-import Loading from '@/components/common/Loading';
+import Loading from '@/components/common/Loader';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useRoles from '@/hooks/role/useRoles';
 import useUsers, { saveUser } from '@/hooks/user/useUsers';

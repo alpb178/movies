@@ -1,5 +1,5 @@
 import EmptyState from '@/components/common/EmptyState';
-import Loading from '@/components/common/Loading';
+import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';

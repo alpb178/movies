@@ -1,6 +1,6 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
-import useAuth from 'hooks/auth/useAuth';
+import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -10,10 +10,11 @@ import navigation from './navigation';
 const NavigationMenu = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
-  const { user } = useAuth();
+  const { data: session } = useSession();
 
   const canAccess = (item) =>
-    item?.roles.length === 0 || item?.roles.some((role) => user?.roles?.includes(role));
+    item?.roles.length === 0 ||
+    session?.user?.roles?.some((role) => item?.roles.includes(role.name));
 
   return navigation.map((item, idx) =>
     canAccess(item) ? (
@@ -25,8 +26,8 @@ const NavigationMenu = () => {
                 className={`
                 ${
                   router.pathname.includes(item.name)
-                    ? 'bg-primary-600 text-primary-500'
-                    : 'text-primary-100 hover:bg-primary-600'
+                    ? 'bg-primary-400 text-primary-500'
+                    : 'text-primary-100 hover:bg-primary-700'
                 } w-full flex justify-between items-center pl-2 pr-1 py-3 text-left text-sm font-medium rounded-md hover:text-white
               `}
               >
