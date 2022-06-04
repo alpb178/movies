@@ -19,15 +19,6 @@ const UsersForm = ({ userId }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [status] = useState([{ id: 'PENDING' }, { id: 'ACTIVE' }, { id: 'INACTIVE' }]);
 
-  const validationSchema = Yup.object().shape({
-    /* username: Yup.string().required(t('required.username')),
-    name: Yup.string().required(t('required.name')),
-    surname: Yup.string().required(t('required.surname')),
-    password: Yup.string().required(t('required.password')),
-    email: Yup.string().required(t('required.email')),
-    phone: Yup.string().required(t('required.phone'))*/
-  });
-
   const { data: users, isLoading: isLoadingUsers } = useUsers({
     args: { id: userId },
     options: { keepPreviousData: true, enabled: userId !== 'create' }
@@ -64,6 +55,13 @@ const UsersForm = ({ userId }) => {
     }
   };
 
+  const validateBirthdate = (value) => {
+    const currentYear = new Date().getFullYear();
+    const selectYear = new Date(value).getFullYear();
+    if (currentYear - selectYear > 18) return true;
+    else return false;
+  };
+
   const initialValues = {
     firstName: users?.firstName || '',
     lastName: users?.lastName || '',
@@ -74,6 +72,16 @@ const UsersForm = ({ userId }) => {
     bio: users?.bio || '',
     status: users?.status || ''
   };
+
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string().required(t('required.name')),
+    lastName: Yup.string().required(t('required.surname')),
+    password: Yup.string().required(t('required.password')),
+    email: Yup.string().required(t('required.email')),
+    mobile: Yup.string().required(t('required.phone')),
+    status: Yup.object().nullable().required(t('required.status')),
+    birthdate: Yup.date().nullable().test('birthdate', 'Fecha Invalida', validateBirthdate)
+  });
 
   return (
     <>
@@ -90,63 +98,83 @@ const UsersForm = ({ userId }) => {
               <p className="mb-8 form-header">
                 {isNaN(userId) ? t('form.user.title.create') : t('form.user.title.update')}
               </p>
-
               <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
                 <div className="w-full">
-                  <label htmlFor="name">{t('form.common.label.name')}</label>
+                  <label htmlFor="firstName">{t('form.common.label.name')}</label>
                   <Field
                     name="firstName"
                     id="firstName"
                     placeholder={t('form.user.placeholder.firstName')}
-                    className="autocomplete-field"
+                    className={`autocomplete-field ${
+                      errors?.firstName && touched?.firstName ? 'border-red-400' : 'border-gray-300'
+                    }`}
                   />
+                  {errors?.firstName && touched?.firstName ? (
+                    <p className="mt-4 text-red-600">{errors?.firstName}</p>
+                  ) : null}
                 </div>
 
                 <div className="w-full">
-                  <label htmlFor="name">{t('surname')}</label>
+                  <label htmlFor="surname">{t('surname')}</label>
                   <Field
                     name="lastName"
                     placeholder={t('form.user.placeholder.lastName')}
-                    defaultValue={users?.lastName}
-                    className="autocomplete-field"
+                    className={`autocomplete-field ${
+                      errors?.lastName && touched?.lastName ? 'border-red-400' : 'border-gray-300'
+                    }`}
                   />
+                  {errors?.lastName && touched?.lastName ? (
+                    <p className="mt-4 text-red-600">{errors?.lastName}</p>
+                  ) : null}
                 </div>
 
                 <div className="w-full">
-                  <label htmlFor="name">{t('email')}</label>
+                  <label htmlFor="email">{t('email')}</label>
                   <Field
                     name="email"
                     placeholder={t('form.user.placeholder.email')}
-                    className="autocomplete-field"
+                    className={`autocomplete-field ${
+                      errors?.email && touched?.email ? 'border-red-400' : 'border-gray-300'
+                    }`}
                   />
+                  {errors?.email && touched?.email ? (
+                    <p className="mt-4 text-red-600">{errors?.email}</p>
+                  ) : null}
                 </div>
               </div>
 
               <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
                 <div className="w-full mt-8 ">
-                  <label htmlFor="name">{t('phone')}</label>
+                  <label htmlFor="mobile">{t('phone')}</label>
                   <Field
-                    label="mobile"
                     name="mobile"
                     placeholder={t('form.user.placeholder.mobile')}
-                    className="autocomplete-field"
+                    className={`autocomplete-field ${
+                      errors?.mobile && touched?.mobile ? 'border-red-400' : 'border-gray-300'
+                    }`}
                   />
+                  {errors?.mobile && touched?.mobile ? (
+                    <p className="mt-4 text-red-600">{errors?.mobile}</p>
+                  ) : null}
                 </div>
 
                 <div className="w-full ">
                   <label htmlFor="name">{t('birthdate')}</label>
                   <BirthDateForm user={users} />
+                  {errors?.birthdate && touched?.birthdate ? (
+                    <p className="mt-4 text-red-600">{errors?.birthdate}</p>
+                  ) : null}
                 </div>
 
                 <div className="w-full mt-8">
-                  <label htmlFor="name">{t('status')}</label>
+                  <label htmlFor="status">{t('status')}</label>
                   <AutocompleteField
                     name="status"
                     placeholder={t('form.user.placeholder.status')}
                     options={status}
                     optionLabels={['id']}
                     keysToMatch={['id']}
-                    className="w-full p-4 py-3 border border-l-0 rounded-r-md"
+                    className="autocomplete-field"
                     aria-describedby="flight"
                     defaultValue={status.find((item) => item.id === users?.status)}
                   />
@@ -162,10 +190,11 @@ const UsersForm = ({ userId }) => {
                         type={showPassword ? 'text' : 'password'}
                         name="password"
                         id="password"
-                        className={`block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
+                        className={`autocomplete-field w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
                           errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
                         }`}
                       />
+
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
@@ -178,18 +207,22 @@ const UsersForm = ({ userId }) => {
                         )}
                       </button>
                     </div>
+                    {errors?.password && touched?.password ? (
+                      <p className="mt-4 text-red-600">{errors?.password}</p>
+                    ) : null}
                   </div>
                   <div className="w-full">
                     <label htmlFor="name">{t('repeat-password')}</label>
                     <div className="relative  rounded-md ">
                       <Field
                         type={showPassword ? 'text' : 'password'}
-                        name="password"
-                        id="password"
-                        className={`block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
+                        name="repeat-password"
+                        id="repeat-password"
+                        className={`autocomplete-field w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
                           errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
                         }`}
                       />
+
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
@@ -202,6 +235,9 @@ const UsersForm = ({ userId }) => {
                         )}
                       </button>
                     </div>
+                    {errors?.password && touched?.password ? (
+                      <p className="mt-4 text-red-600">{errors?.password}</p>
+                    ) : null}
                   </div>
                 </div>
               )}

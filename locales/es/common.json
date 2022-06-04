@@ -332,14 +332,15 @@
   },
   "remember-me": "Recuérdame",
   "required": {
-    "username": "El nombre de usuario es requerido",
-    "password": "La contraseña es requerida",
-    "name": "El nombre es requerido",
-    "surname": "Los Apellidos son requeridos",
     "email": "El correo electrónico es requerido",
+    "measure-unit": "La Unidad de Medida es Requerida",
+    "name": "El nombre es requerido",
+    "password": "La contraseña es requerida",
     "phone": "El número de telefóno es requerido",
+    "surname": "Los Apellidos son requeridos",
     "symbol": "El símbolo es requerido",
-    "measure-unit": "La Unidad de Medida es Requerida"
+    "status":"El estado es requerido",
+    "username": "El nombre de usuario es requerido"
   },
   "resources": {
     "0": "Aún no existen recursos",
