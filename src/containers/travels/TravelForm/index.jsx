@@ -79,12 +79,6 @@ const TravelForm = ({ travelId }) => {
     if (travel) {
       method = PUT;
       values.id = travel.id;
-      /* values.shipmentItems.map((option) => {
-        option.id = option.ShipmentItemId || option.id;
-        option.maxAmount = 2;
-        option.createdAt = '2022-05-17T02:07:58.348Z';
-        option.updatedAt = '2022-05-17T02:07:58.348Z';
-      });*/
 
       message = t('updated.male', { entity: t('travels', { count: 1 }) });
     }
@@ -105,9 +99,8 @@ const TravelForm = ({ travelId }) => {
           method
         }
       });
-
-      await toast(message);
       await router.back();
+      toast(message);
     } catch (error) {
       toast.error(error.toString());
     } finally {
@@ -147,7 +140,7 @@ const TravelForm = ({ travelId }) => {
               <p className="mb-8 form-header">
                 {isNaN(travelId) ? t('form.travel.title.create') : t('form.travel.title.update')}
               </p>
-
+              {console.log(baggageCapacity)}
               <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
                 <div className="flex flex-col w-full space-y-6">
                   <div className="w-full">
