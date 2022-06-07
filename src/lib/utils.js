@@ -1,6 +1,7 @@
 import { ROLE_ADMIN, ROLE_USER } from '@/lib/constants';
-import { differenceInMilliseconds, subYears } from 'date-fns';
+import { differenceInMilliseconds, isBefore, subYears } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
+import jwtDecode from 'jwt-decode';
 
 export const locales = { es, en: enGB };
 
@@ -53,3 +54,12 @@ export const valuesFromString = (obj, keysArr) =>
   keysArr.split('.').reduce(function (result, key) {
     return result?.[key];
   }, obj);
+
+export const isTokenExpired = (session) => {
+  let isExpired = true;
+  if (session?.accessToken) {
+    const { exp } = jwtDecode(session.accessToken);
+    isExpired = session.expires ? isBefore(new Date(exp * 1000), new Date()) : true;
+  }
+  return isExpired;
+};
