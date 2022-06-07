@@ -66,6 +66,7 @@ const BaggageCapacityForm = ({
   };
 
   const handleSelection = (item) => {
+    console.log(item);
     if (item) {
       const selectedItem = item.shipmentItem;
 
@@ -82,6 +83,7 @@ const BaggageCapacityForm = ({
         );
       }
     }
+    console.log(selectedOptions);
   };
 
   const decrementAmount = (item) => {

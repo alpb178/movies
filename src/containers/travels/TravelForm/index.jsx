@@ -79,20 +79,18 @@ const TravelForm = ({ travelId }) => {
     if (travel) {
       method = PUT;
       values.id = travel.id;
-      values.shipmentItems.map((option) => {
+      /* values.shipmentItems.map((option) => {
         option.id = option.ShipmentItemId || option.id;
         option.maxAmount = 2;
         option.createdAt = '2022-05-17T02:07:58.348Z';
         option.updatedAt = '2022-05-17T02:07:58.348Z';
-      });
+      });*/
 
       message = t('updated.male', { entity: t('travels', { count: 1 }) });
     }
     try {
       setLoading(true);
-
-      delete values.shipmentItem;
-
+      values.shipmentItems = baggageCapacity;
       values.traveler = values.traveler.id
         ? values.traveler.id
         : users.rows.find((element) => element?.email === values.traveler.email)?.id;
@@ -100,6 +98,7 @@ const TravelForm = ({ travelId }) => {
       values.destination = values.destination.id;
       delete values.airline;
       values.flight = values.flight.id;
+      console.log(values);
       await saveTravels({
         args: values,
         options: {
