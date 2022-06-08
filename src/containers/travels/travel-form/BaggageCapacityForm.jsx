@@ -109,7 +109,7 @@ const BaggageCapacityForm = ({
   const onPriceChange = (e, item) => {
     setSelectedOptions(
       selectedOptions.map((option) => {
-        if (option.id === item.id) return { ...option, price: e.target.value };
+        if (option.id === item.id) return { ...option, price: parseFloat(e.target.value) };
         return option;
       })
     );
@@ -131,24 +131,25 @@ const BaggageCapacityForm = ({
   };
 
   useMemo(async () => {
-    regulationsApi && !travel?.payload
-      ? setRegulations(regulationsApi.rows)
-      : travel?.payload?.map((item) => {
-          const regulationSelected = regulationsApi?.rows.find(
-            (element) => element?.shipmentItem.id === item.ShipmentItemId
-          );
-          item.id = item.ShipmentItemId;
-          item.measureUnit = regulationSelected?.shipmentItem?.measureUnit;
-          item.name = regulationSelected?.shipmentItem?.name;
-          item.maxAmount = regulationSelected?.maxAmount;
-          item.maxPrice = regulationSelected?.maxPrice;
-          item.minPrice = regulationSelected?.maxPrice;
-        });
-    setSelectedOptions(travel?.payload);
-    regulationsApi?.rows?.map((item) => {
-      var index = travel.payload.find((e) => e.id === item.shipmentItem.id);
-      !index && regulations.push(item);
-    });
+    if (regulationsApi && !travel?.payload) setRegulations(regulationsApi.rows);
+    if (regulationsApi && travel?.payload) {
+      travel?.payload?.map((item) => {
+        const regulationSelected = regulationsApi?.rows.find(
+          (element) => element?.shipmentItem.id === item.ShipmentItemId
+        );
+        item.id = item.ShipmentItemId;
+        item.measureUnit = regulationSelected?.shipmentItem?.measureUnit;
+        item.name = regulationSelected?.shipmentItem?.name;
+        item.maxAmount = regulationSelected?.maxAmount;
+        item.maxPrice = regulationSelected?.maxPrice;
+        item.minPrice = regulationSelected?.maxPrice;
+      });
+      setSelectedOptions(travel?.payload);
+      regulationsApi?.rows?.map((item) => {
+        var index = travel.payload.find((e) => e.id === item.shipmentItem.id);
+        !index && regulations.push(item);
+      });
+    }
   }, [regulationsApi]);
 
   return (
@@ -175,7 +176,7 @@ const BaggageCapacityForm = ({
         ) : null}
       </div>
 
-      {selectedOptions.length > 0 ? (
+      {selectedOptions?.length > 0 ? (
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
           {selectedOptions.map((option, idx) => (
             <div key={option.name} className="flex flex-col">
