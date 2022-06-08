@@ -72,28 +72,41 @@ const TravelForm = ({ travelId }) => {
   });
 
   const onSubmit = async (values) => {
+    let travelSendApi = {};
+    let payload = [];
     let method = POST;
 
     let message = t('inserted.male', { entity: t('travels', { count: 1 }) });
 
     if (travel) {
       method = PUT;
-      values.id = travel.id;
+      travelSendApi.id = travel.id;
 
       message = t('updated.male', { entity: t('travels', { count: 1 }) });
     }
     try {
       setLoading(true);
-      values.shipmentItems = baggageCapacity;
-      values.traveler = values.traveler.id
+      baggageCapacity.map((item) => {
+        let shipmentItemSelected = {};
+        shipmentItemSelected.id = item.id;
+        shipmentItemSelected.price = item.price;
+        shipmentItemSelected.amount = item.amount;
+        payload.push(shipmentItemSelected);
+      });
+      travelSendApi.shipmentItems = payload;
+      travelSendApi.departureAt = values.departureAt;
+      travelSendApi.traveler = values.traveler.id
         ? values.traveler.id
         : users.rows.find((element) => element?.email === values.traveler.email)?.id;
-      values.origin = values.origin.id;
-      values.destination = values.destination.id;
-      delete values.airline;
-      values.flight = values.flight.id;
+      travelSendApi.origin = values.origin.id;
+      travelSendApi.destination = values.destination.id;
+      travelSendApi.flight = values.flight.id;
+      travelSendApi.observations = values.observations;
+
+      console.log(travelSendApi);
+
       await saveTravels({
-        args: values,
+        args: travelSendApi,
         options: {
           method
         }
@@ -139,7 +152,6 @@ const TravelForm = ({ travelId }) => {
               <p className="mb-8 form-header">
                 {isNaN(travelId) ? t('form.travel.title.create') : t('form.travel.title.update')}
               </p>
-              {console.log(baggageCapacity)}
               <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
                 <div className="flex flex-col w-full space-y-6">
                   <div className="w-full">
