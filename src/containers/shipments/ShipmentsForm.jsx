@@ -17,8 +17,8 @@ import Image from 'next/image';
 import PropTypes from 'prop-types';
 import React, { Fragment, useState } from 'react';
 import * as Yup from 'yup';
-import BaggageCapacityForm from '../travels/TravelForm/BaggageCapacityForm';
-import DepartureDateForm from '../travels/TravelForm/DepartureDateForm';
+import BaggageCapacityForm from '../travels/travel-form/BaggageCapacityForm';
+import DepartureDateForm from '../travels/travel-form/DepartureDateForm';
 
 const ShipmentsForm = ({ onOpen }) => {
   const { t, lang } = useTranslation('common');
