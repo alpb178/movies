@@ -1,4 +1,4 @@
-import TravelForm from '@/containers/travels/TravelForm';
+import TravelForm from '@/containers/travels/travel-form';
 import { ROLE_ADMIN } from 'lib/constants';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
