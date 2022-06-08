@@ -35,6 +35,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
     <Field name={name} id={name}>
       {({ field: { value: fieldValue }, form: { setFieldValue }, meta: { error, touched } }) => (
         <Downshift
+          id={name}
           onChange={(selection) => {
             onSelectionChange(selection);
             setFieldValue(name, selection);
