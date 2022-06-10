@@ -1,12 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment } from 'react';
 
 const DialogWrapper = ({ children, open, onOpen, title }) => {
   const { t } = useTranslation('common');
-
-  const dialogTitle = useMemo(() => (title ? `form.${title}.title.details` : null), [title]);
 
   return (
     <Transition appear show={open} as={Fragment}>
@@ -35,9 +33,9 @@ const DialogWrapper = ({ children, open, onOpen, title }) => {
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-lg p-6 overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-lg">
-                {dialogTitle ? (
+                {title ? (
                   <Dialog.Title as="h3" className="form-header">
-                    {t(dialogTitle)}
+                    {t(title)}
                   </Dialog.Title>
                 ) : null}
 
