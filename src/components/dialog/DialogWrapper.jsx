@@ -1,41 +1,30 @@
 import { Dialog, Transition } from '@headlessui/react';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useMemo } from 'react';
 
-const DetailsDialogWrapper = ({ children, open, onOpen, formName }) => {
+const DialogWrapper = ({ children, open, onOpen, title }) => {
   const { t } = useTranslation('common');
-  const [title, setTitle] = useState();
 
-  useEffect(() => {
-    setTitle(`form.${formName}.title.details`);
-  }, []);
+  const dialogTitle = useMemo(() => (title ? `form.${title}.title.details` : null), [title]);
 
   return (
-    <>
-      <Transition appear show={open} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => onOpen(false)}
+    <Transition appear show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={() => onOpen(false)}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0 bg-black opacity-50" />
-            </Transition.Child>
+          <div className="fixed inset-0 bg-black bg-opacity-25" />
+        </Transition.Child>
 
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span className="inline-block h-screen align-middle" aria-hidden="true">
-              &#8203;
-            </span>
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-full p-4 text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -45,8 +34,13 @@ const DetailsDialogWrapper = ({ children, open, onOpen, formName }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-lg p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-lg">
-                <p className="form-header">{t(title)}</p>
+              <Dialog.Panel className="w-full max-w-lg p-6 overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-lg">
+                {dialogTitle ? (
+                  <Dialog.Title as="h3" className="form-header">
+                    {t(dialogTitle)}
+                  </Dialog.Title>
+                ) : null}
+
                 {React.Children.map(children, (child) => {
                   if (React.isValidElement(child)) {
                     return React.cloneElement(child, { onOpen });
@@ -62,24 +56,24 @@ const DetailsDialogWrapper = ({ children, open, onOpen, formName }) => {
                     {t('close')}
                   </button>
                 </div>
-              </div>
+              </Dialog.Panel>
             </Transition.Child>
           </div>
-        </Dialog>
-      </Transition>
-    </>
+        </div>
+      </Dialog>
+    </Transition>
   );
 };
 
-DetailsDialogWrapper.defaultProps = {
+DialogWrapper.defaultProps = {
   formName: 'common'
 };
 
-DetailsDialogWrapper.propTypes = {
+DialogWrapper.propTypes = {
   children: PropTypes.array.isRequired,
-  formName: PropTypes.string,
+  title: PropTypes.string,
   onOpen: PropTypes.func.isRequired,
   open: PropTypes.bool
 };
 
-export default DetailsDialogWrapper;
+export default DialogWrapper;
