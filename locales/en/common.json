@@ -154,6 +154,8 @@
   "required": {
     "username": "Username is required",
     "password": "Password is required",
+    "password-confirm": "Confirm Password is required", 
+    "password-compare": "Passwords don't match",
     "name": "Name is required",
     "surname": "Surname is required",
     "email": "Email is required",

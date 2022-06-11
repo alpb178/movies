@@ -337,6 +337,8 @@
     "measure-unit": "La Unidad de Medida es Requerida",
     "name": "El nombre es requerido",
     "password": "La contraseña es requerida",
+    "password-confirm": "La contraseña de confirmación es requerida", 
+    "password-compare": "Las contraseñas deben ser iguales",
     "phone": "El número de telefóno es requerido",
     "surname": "Los Apellidos son requeridos",
     "symbol": "El símbolo es requerido",
