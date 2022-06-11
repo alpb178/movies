@@ -25,6 +25,7 @@
   "amount": "Amount",
   "business-name": "Business name",
   "cancel": "Cancel",
+  "close":"Close",
   "catalogs": {
     "0": "No Catalogs",
     "one": "Catalogs",
