@@ -24,42 +24,16 @@ const UsersForm = ({ userId }) => {
     options: { keepPreviousData: true, enabled: userId !== 'create' }
   });
 
-  const onSubmit = async (values) => {
-    delete values['repeat-password'];
-    values.status = values.status.id;
-    let method = POST;
-
-    let message = t('inserted.male', { entity: t('users', { count: 1 }) });
-    if (users) {
-      method = PUT;
-      values.id = userId;
-      delete values['password'];
-      message = t('updated.male', { entity: t('users', { count: 1 }) });
-    }
-    try {
-      setLoading(true);
-
-      await saveUser({
-        args: values,
-        options: {
-          method
-        }
-      });
-
-      await toast(message);
-      router.push(USERS_PAGE);
-    } catch (error) {
-      toast.error(error.toString());
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const validateBirthdate = (value) => {
     const currentYear = new Date().getFullYear();
     const selectYear = new Date(value).getFullYear();
-    if (currentYear - selectYear > 18) return true;
+    if (currentYear - selectYear >= 18) return true;
     else return false;
+  };
+
+  const validatePassword = () => {
+    if (users) return false;
+    else return true;
   };
 
   const initialValues = {
@@ -68,20 +42,73 @@ const UsersForm = ({ userId }) => {
     email: users?.email || '',
     mobile: users?.mobile || '',
     password: users?.password || '',
+    repeatPassword: '',
     birthdate: users?.birthdate || '',
     bio: users?.bio || '',
-    status: users?.status || ''
+    status: { id: users?.status } || ''
   };
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required(t('required.name')),
     lastName: Yup.string().required(t('required.surname')),
-    password: Yup.string().required(t('required.password')),
     email: Yup.string().required(t('required.email')),
     mobile: Yup.string().required(t('required.phone')),
     status: Yup.object().nullable().required(t('required.status')),
-    birthdate: Yup.date().nullable().test('birthdate', 'Fecha Invalida', validateBirthdate)
+    //  birthdate: Yup.date().nullable().test('birthdate', 'Fecha Invalida', validateBirthdate),
+    password: Yup.string()
+      .ensure()
+      .when('create', {
+        is: validatePassword,
+        then: Yup.string()
+          .oneOf([Yup.ref('repeatPassword'), null], t('required.password-compare'))
+          .required(t('required.password'))
+      }),
+    repeatPassword: Yup.string()
+      .ensure()
+      .when('create', {
+        is: validatePassword,
+        then: Yup.string()
+          .oneOf([Yup.ref('password'), null], t('required.password-compare'))
+          .required(t('required.password-confirm'))
+      })
   });
+
+  const onSubmit = async (values) => {
+    let usersSendApi = {};
+    let method = POST;
+
+    try {
+      usersSendApi.bio = values.bio;
+      usersSendApi.birthdate = values.birthdate;
+      usersSendApi.email = values.email;
+      usersSendApi.firstName = values.firstName;
+      usersSendApi.lastName = values.lastName;
+      usersSendApi.mobile = values.mobile;
+      usersSendApi.status = values.status.id;
+      let message = t('inserted.male', { entity: t('users', { count: 1 }) });
+      if (!users) {
+        usersSendApi.password = values.password;
+      } else {
+        method = PUT;
+        usersSendApi.id = userId;
+        message = t('updated.male', { entity: t('users', { count: 1 }) });
+      }
+      setLoading(true);
+      await saveUser({
+        args: usersSendApi,
+        options: {
+          method
+        }
+      });
+
+      toast(message);
+      router.push(USERS_PAGE);
+    } catch (error) {
+      toast.error(error.toString());
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -95,6 +122,7 @@ const UsersForm = ({ userId }) => {
         >
           {({ errors, touched }) => (
             <Form className="p-6 space-y-6 text-lg">
+              {console.log(errors)}
               <p className="mb-8 form-header">
                 {isNaN(userId) ? t('form.user.title.create') : t('form.user.title.update')}
               </p>
@@ -142,7 +170,6 @@ const UsersForm = ({ userId }) => {
                   ) : null}
                 </div>
               </div>
-
               <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
                 <div className="w-full mt-8 ">
                   <label htmlFor="mobile">{t('phone')}</label>
@@ -180,7 +207,6 @@ const UsersForm = ({ userId }) => {
                   />
                 </div>
               </div>
-
               {!isNaN(userId) || (
                 <div className="flex  flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
                   <div className="w-full mt-8">
@@ -215,11 +241,13 @@ const UsersForm = ({ userId }) => {
                     <label htmlFor="name">{t('repeat-password')}</label>
                     <div className="relative  rounded-md ">
                       <Field
-                        type={showPassword ? 'text' : 'password'}
-                        name="repeat-password"
-                        id="repeat-password"
+                        type={showPassword ? 'text' : 'repeatPassword'}
+                        name="repeatPassword"
+                        id="repeatPassword"
                         className={`autocomplete-field w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
-                          errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
+                          errors.repeatPassword && touched.repeatPassword
+                            ? 'border-red-400'
+                            : 'border-gray-300'
                         }`}
                       />
 
@@ -235,13 +263,12 @@ const UsersForm = ({ userId }) => {
                         )}
                       </button>
                     </div>
-                    {errors?.password && touched?.password ? (
-                      <p className="mt-4 text-red-600">{errors?.password}</p>
+                    {errors?.repeatPassword && touched?.repeatPassword ? (
+                      <p className="mt-4 text-red-600">{errors?.repeatPassword}</p>
                     ) : null}
                   </div>
                 </div>
               )}
-
               <div className="flex  flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
                 <div className="w-full mt-5">
                   <label htmlFor="name">{t('bio')}</label>
@@ -255,7 +282,6 @@ const UsersForm = ({ userId }) => {
                   />
                 </div>
               </div>
-
               <div className="flex justify-end space-x-8">
                 <button
                   type="submit"
