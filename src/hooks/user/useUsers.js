@@ -5,13 +5,13 @@ import { deleteData, getData, saveData } from '..';
 export const saveUser = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
-      saveData({ path: API_USERS_URL, data: args, method: POST });
+      await saveData({ path: API_USERS_URL, data: args, method: POST });
       break;
     case DELETE:
-      deleteData({ path: API_USERS_URL + `/${args.id}`, method: DELETE });
+      await deleteData({ path: API_USERS_URL + `/${args.id}`, method: DELETE });
       break;
     case PUT:
-      saveData({ path: API_USERS_URL + `/${args.id}`, data: args, method: PUT });
+      await saveData({ path: API_USERS_URL + `/${args.id}`, data: args, method: PUT });
       break;
   }
 };
