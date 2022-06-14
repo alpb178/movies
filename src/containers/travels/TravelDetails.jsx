@@ -1,13 +1,16 @@
+/* eslint-disable react/react-in-jsx-scope */
+import useRegulations from '@/hooks/regulation/useRegulations';
 import useTravels from '@/hooks/travel/useTravels';
 import { formatPrice, locales } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import React from 'react';
+import { useMemo, useState } from 'react';
 const TravelDetail = ({ travelId }) => {
   const { t, lang } = useTranslation('common');
-
+  let regulationSelected = {};
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const { data: travel, isLoading } = useTravels({
     args: { id: travelId },
     options: {
@@ -15,8 +18,34 @@ const TravelDetail = ({ travelId }) => {
     }
   });
 
+  const { data: regulations } = useRegulations({
+    args: {},
+    options: {
+      keepPreviousData: true,
+      enabled: !!travel
+    }
+  });
+
+  useMemo(async () => {
+    {
+      travel?.payload?.map((item) => {
+        const regulationSelected = regulations?.rows.find(
+          (element) => element?.shipmentItem.id === item.ShipmentItemId
+        );
+        item.id = item.ShipmentItemId;
+        item.measureUnit = regulationSelected?.shipmentItem?.measureUnit;
+        item.name = regulationSelected?.shipmentItem?.name;
+        item.maxAmount = regulationSelected?.maxAmount;
+        item.maxPrice = regulationSelected?.maxPrice;
+        item.minPrice = regulationSelected?.maxPrice;
+      });
+      setSelectedOptions(travel?.payload);
+    }
+  }, [travel]);
+
   return (
     <div className="min-h-full bg-white">
+      {console.log(selectedOptions)}
       <main className="p-6">
         <div className="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
           <button
@@ -72,10 +101,6 @@ const TravelDetail = ({ travelId }) => {
                       <dd className="mt-1 text-sm text-gray-900">{travel?.traveler?.mobile}</dd>
                     </div>
                   ) : null}
-                  {/* <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Salary expectation</dt>
-                        <dd className="mt-1 text-sm text-gray-900">$120,000</dd>
-                      </div> */}
                 </dl>
               </div>
             </section>
@@ -88,19 +113,19 @@ const TravelDetail = ({ travelId }) => {
 
             <div className="flow-root mt-6">
               <ul role="list" className="border divide-y rounded-lg">
-                {travel?.payload &&
-                  travel?.payload.length > 0 &&
-                  travel?.payload.map((item, itemIdx) => (
+                {selectedOptions &&
+                  selectedOptions.length > 0 &&
+                  selectedOptions.map((item) => (
                     <li key={item.id} className="grid w-full grid-cols-3 p-6">
                       <div className="space-y-1">
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-400">{item.measureUnit.name}</p>
+                        <p className="font-medium">{item?.name}</p>
+                        <p className="text-sm text-gray-400">{item?.measureUnit?.name}</p>
                       </div>
                       <div className="space-y-1">
-                        <p className="font-medium">{`- / ${item.Payload.amount}`}</p>
-                        <p className="text-sm text-gray-400">{`Disponibilidad (${item.measureUnit.name})`}</p>
+                        <p className="font-medium">{`- / ${item?.amount}`}</p>
+                        <p className="text-sm text-gray-400">{`Disponibilidad (${item?.measureUnit?.name})`}</p>
                       </div>
-                      <p className="text-right">{formatPrice(item.Payload.price)}</p>
+                      <p className="text-right">{formatPrice(item?.price)}</p>
                     </li>
                   ))}
               </ul>

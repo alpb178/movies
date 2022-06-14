@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
 import Loading from '@/components/common/Loader';
 import AutocompleteField from '@/components/form/AutocompleteField';
@@ -11,7 +12,7 @@ import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import router from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import BaggageCapacityForm from './BaggageCapacityForm';
@@ -102,8 +103,6 @@ const TravelForm = ({ travelId }) => {
       travelSendApi.destination = values.destination.id;
       travelSendApi.flight = values.flight.id;
       travelSendApi.observations = values.observations;
-
-      console.log(travelSendApi);
 
       await saveTravels({
         args: travelSendApi,
