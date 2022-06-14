@@ -45,7 +45,7 @@ const TravelDetail = ({ travelId }) => {
 
   return (
     <div className="min-h-full bg-white">
-      {console.log(selectedOptions)}
+      {console.log(travel)}
       <main className="p-6">
         <div className="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
           <button
@@ -92,16 +92,36 @@ const TravelDetail = ({ travelId }) => {
               <div className="py-5 border-t border-gray-200">
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                   <div className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">{t('email')}</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{travel?.traveler?.email}</dd>
+                    <dt className="text-lg font-medium text-gray-500">{t('origin')}</dt>
+                    <dd className="mt-1 text-lm text-gray-900">
+                      {travel?.origin?.code} - {travel?.origin?.name}
+                    </dd>
                   </div>
-                  {travel?.traveler?.mobile ? (
-                    <div className="sm:col-span-1">
-                      <dt className="text-sm font-medium text-gray-500">{t('mobile')}</dt>
-                      <dd className="mt-1 text-sm text-gray-900">{travel?.traveler?.mobile}</dd>
-                    </div>
-                  ) : null}
+                  <div className="sm:col-span-1">
+                    <dt className="text-lg font-medium text-gray-500">{t('destination')}</dt>
+                    <dd className="mt-1 text-lm text-gray-900">
+                      {travel?.destination?.code} - {travel?.destination?.name}
+                    </dd>
+                  </div>
                 </dl>
+
+                <div className="sm:col-span-1 mt-5">
+                  <dt className="text-lg font-medium text-gray-500">{t('date-flight')}</dt>
+                  <dd className="mt-1 text-lm text-gray-900">
+                    {format(new Date(travel?.departureAt || null), 'PPP', {
+                      locale: { ...locales[lang] }
+                    })}
+                  </dd>
+                </div>
+
+                <div className="sm:col-span-1 mt-5">
+                  <dt className="text-lg font-medium text-gray-500">
+                    {t('flights', { count: 1 })}
+                  </dt>
+                  <dd className="mt-1 text-lm text-gray-900">
+                    {travel?.flight?.airline?.name} - {travel?.flight?.number}
+                  </dd>
+                </div>
               </div>
             </section>
           </div>
