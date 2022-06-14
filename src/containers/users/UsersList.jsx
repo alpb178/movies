@@ -2,8 +2,8 @@ import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useUsers, { saveUser } from '@/hooks/user/useUsers';
-import { CheckCircleIcon, ClockIcon, XCircleIcon } from '@heroicons/react/outline';
+import useUsers, { saveUser, userActivatedDesactivated } from '@/hooks/user/useUsers';
+import { XCircleIcon } from '@heroicons/react/outline';
 import EmptyState from 'components/common/EmptyState';
 import UserFilter from 'containers/users/UserFilter';
 import {
@@ -33,6 +33,7 @@ const UsersList = () => {
   const [loading, setLoading] = useState(false);
   const [openFilters, setOpenFilters] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  const [checkedRow, setCheckedRow] = useState(false);
 
   const [filterValues, setFilterValues] = useState({
     username: '',
@@ -104,15 +105,43 @@ const UsersList = () => {
     </div>
   );
 
-  const renderStatus = (status) => {
-    switch (status) {
-      case 'ACTIVE':
-        return <CheckCircleIcon className="w-6 h-6 text-green-700" />;
-      case 'PENDING':
-        return <ClockIcon className="w-6 h-6 text-green-700" />;
+  const onActiveInactiveUsers = async (event, row) => {
+    event.stopPropagation();
+    console.log(row.id);
+    try {
+      await userActivatedDesactivated({
+        args: row,
+        actions: row.status == 'ACTIVE' ? 'deactivate' : 'activate'
+      });
+      toast(t('updated.male', { entity: t('users', { count: 1 }) }));
+      await queryClient.refetchQueries([API_USERS_URL]);
+    } catch (error) {
+      toast.error(error.toString());
+    }
+  };
 
+  const renderStatus = (status, row) => {
+    console.log(row);
+    switch (status) {
+      case 'PENDING':
+        return (
+          <span
+            key={row.id}
+            className="px-4 py-1 float-center font-medium rounded-full text-secondary-700 bg-secondary-100"
+          >
+            {'PENDING'.replace(/_/g, '-').toLowerCase()}
+          </span>
+        );
       default:
-        return <XCircleIcon className="w-6 h-6 text-red-600" />;
+        return (
+          <input
+            id="inactive"
+            className="w-6 h-6 ml-5 text-green-700"
+            type="checkbox"
+            defaultChecked={status == 'ACTIVE' ? true : false}
+            onClick={(event) => onActiveInactiveUsers(event, row)}
+          />
+        );
     }
   };
   const columns = React.useMemo(() => [
@@ -131,7 +160,7 @@ const UsersList = () => {
     {
       Header: t('status'),
       accessor: 'status',
-      Cell: ({ cell }) => renderStatus(cell.row.original.status)
+      Cell: ({ cell }) => renderStatus(cell.row.original.status, cell.row.original)
     },
     {
       Header: t('roles', { count: 2 }),

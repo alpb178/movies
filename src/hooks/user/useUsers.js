@@ -16,6 +16,10 @@ export const saveUser = async ({ args = {}, options = {} } = {}) => {
   }
 };
 
+export const userActivatedDesactivated = async ({ args = {}, actions = {} } = {}) => {
+  await saveData({ path: API_USERS_URL + `/${args.id}/${actions}`, data: {}, method: PUT });
+};
+
 export default function useUsers({ args = {}, options = {} } = {}) {
   return useQuery([API_USERS_URL, { ...args }], getData, {
     ...options
