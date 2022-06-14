@@ -161,7 +161,7 @@ const TravelForm = ({ travelId }) => {
                       optionLabels={['firstName', 'lastName']}
                       keysToMatch={['firstName', 'lastName', 'username']}
                       className="autocomplete-field"
-                      disabled={true}
+                      disabled={isNaN(travelId) ? false : true}
                       defaultValue={travel?.traveler}
                     />
                   </div>
