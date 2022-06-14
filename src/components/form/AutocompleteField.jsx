@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { valuesFromString } from '@/lib/utils';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, XIcon } from '@heroicons/react/outline';
@@ -6,7 +7,6 @@ import Downshift from 'downshift';
 import { Field } from 'formik';
 import { matchSorter } from 'match-sorter';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }) => {
   const { defaultValue, disabled, noOptionsLabel, keysToMatch, optionLabels, placeholder } = props;
@@ -75,6 +75,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                       className="absolute p-1 rounded-full right-2 hover:bg-gray-100"
                       onClick={clearSelection}
                       aria-label="clear selection"
+                      disabled={disabled}
                     >
                       <XIcon className="w-6 h-6 text-gray-500" />
                     </button>
