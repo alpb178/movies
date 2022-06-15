@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useRegions from '@/hooks/location/region/useRegions';
@@ -12,10 +13,11 @@ import { ChevronDownIcon, PaperAirplaneIcon, UserIcon } from '@heroicons/react/o
 import { StarIcon } from '@heroicons/react/solid';
 import { format } from 'date-fns';
 import { Form, Formik } from 'formik';
+import moment from 'moment';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import React, { Fragment, useState } from 'react';
+import { Fragment, useState } from 'react';
 import * as Yup from 'yup';
 import BaggageCapacityForm from '../travels/travel-form/BaggageCapacityForm';
 import DepartureDateForm from '../travels/travel-form/DepartureDateForm';
@@ -68,22 +70,19 @@ const ShipmentsForm = ({ onOpen }) => {
   };
 
   const onSearch = async (values) => {
-    delete values.sender;
-    delete values.travel;
-    delete values.shipmentItems;
-    values.shipmentItem = baggageCapacity;
-    values.originId = values.origin.id;
-    values.destinationId = values.destination.id;
-    delete values.origin;
-    delete values.destination;
-    console.log(values);
-    const { data } = await apiFetcher(`${TRAVELS_PAGE}/`, {
+    const paramToSend = {
+      origin: values.origin.id,
+      destination: values.destination.id,
+      date: moment(values.departureAt).format('YYYY-MM-DD')
+    };
+    const { data } = await apiFetcher(`${TRAVELS_PAGE}/search`, {
+      params: paramToSend,
       keepPreviousData: true
     });
 
-    setAvailablePayload(data.rows);
+    setAvailablePayload(data);
     useAvailablePayload({
-      args: values,
+      args: paramToSend,
       options: {}
     });
     onOpen(false);
@@ -169,6 +168,7 @@ const ShipmentsForm = ({ onOpen }) => {
                               } flex items-center border justify-between w-full p-4 space-x-8 hover:bg-secondary-50 `}
                             >
                               <div className="flex justify-between w-full text-left">
+                                {console.log(payload?.departureAt)}
                                 <div className="flex space-x-6">
                                   {payload?.traveler?.profileImage ? (
                                     <Image
@@ -191,10 +191,10 @@ const ShipmentsForm = ({ onOpen }) => {
                                 </div>
 
                                 <div className="flex flex-col justify-between">
-                                  <p>{`${format(new Date(payload?.departureAt), 'PPP', {
+                                  <p>{`${format(new Date(payload?.travel?.departureAt), 'PPP', {
                                     locale: { ...locales[lang] }
                                   })}`}</p>
-                                  <p className="text-gray-500">{`${payload?.origin?.code} - ${payload?.travel?.destination?.code}`}</p>
+                                  <p className="text-gray-500">{`${payload?.travel?.origin?.code} - ${payload?.travel?.destination?.code}`}</p>
                                 </div>
 
                                 <p className="text-lg font-medium">
@@ -248,7 +248,10 @@ const ShipmentsForm = ({ onOpen }) => {
                                       </div>
                                     </div>
                                     <div className="">
-                                      <p>{`${format(new Date(payload?.departureAt), 'PP')}`}</p>
+                                      <p>{`${format(
+                                        new Date(payload?.travel?.departureAt),
+                                        'PP'
+                                      )}`}</p>
                                       <p className="text-gray-500">{`${payload?.travel?.origin.code} - ${payload?.travel?.destination?.code}`}</p>
                                     </div>
                                   </div>

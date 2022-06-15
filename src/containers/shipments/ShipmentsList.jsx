@@ -138,7 +138,7 @@ const ShipmentsList = ({ loading, onDeletePayment }) => {
     onRowClick: (row) => {
       const value = row.original.email;
       const path = PAYMENT_DETAIL_PAGE(value);
-      onSelectPayment(row.original);
+      //  onSelectPayment(row.original);
       router.push(path);
     },
     onFilter: (

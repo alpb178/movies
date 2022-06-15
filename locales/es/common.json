@@ -49,6 +49,7 @@
   "create": "Crear {{entity}}",
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
+  "date-flight": "Fecha de Vuelo",
   "date-delivery": " Fecha Entrega",
   "deactivate": "Desactivar",
   "delete": "Eliminar",

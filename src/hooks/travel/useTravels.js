@@ -35,3 +35,8 @@ export default function useTravels({ args = {}, options = {} } = {}) {
     ...options
   });
 }
+
+export const getSearchTravels = async (params) => {
+  const { data } = getData({ queryKey: [API_TRAVELS_URL + '/search', params] });
+  return data;
+};
