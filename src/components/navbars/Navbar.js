@@ -25,7 +25,11 @@ const Navbar = ({ onSidebarOpen }) => {
   ];
 
   return (
-    <div className={`relative z-10 flex flex-shrink-0 bg-white border-b  h-${NAVBAR_HEIGHT / 4}`}>
+    <div
+      className={`relative z-10 flex flex-shrink-0 bg-white border-b  h-${
+        (NAVBAR_HEIGHT - 28) / 4
+      }`}
+    >
       <button
         type="button"
         className="px-4 text-gray-500 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 xl:hidden"
