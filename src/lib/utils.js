@@ -3,9 +3,11 @@ import { differenceInMilliseconds, isBefore, subYears } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
 import jwtDecode from 'jwt-decode';
 
+export const languages = [
+  { code: 'es', name: 'Español' },
+  { code: 'en', name: 'English' }
+];
 export const locales = { es, en: enGB };
-
-export const lang = { es: 'Español', en: 'English' };
 
 export const getHomePageFromUser = (user) => {
   let to;

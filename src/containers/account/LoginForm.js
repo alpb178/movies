@@ -63,19 +63,13 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="container w-full h-full max-w-md mx-auto mb-4">
-      <div className="relative flex-1 w-full h-full px-8 pb-4 bg-white sm:px-4 sm:rounded-lg">
-        <h4 className="mb-8 text-3xl font-medium text-gray-700 2xl:text-4xl">
-          {t('account.access')}
-        </h4>
+    <div className="relative flex-1 w-full h-full px-8 pb-4 bg-white sm:px-4 sm:rounded-lg">
+      <h3 className="text-center form-header">{t('account.access')}</h3>
 
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {({ errors, touched }) => (
-            <Form className="space-y-10">
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+        {({ errors, touched }) => (
+          <Form className="space-y-10">
+            <div className="space-y-10">
               <div className="space-y-6">
                 <div className="w-full">
                   <Field
@@ -145,16 +139,15 @@ const LoginForm = () => {
                 </Link>
               </div>
 
-              <button
-                type="submit"
-                className="justify-center w-full p-4 mt-6 text-lg font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-600 hover:bg-primary-500"
-              >
-                {loading ? '...' : t('account.login')}
-              </button>
-            </Form>
-          )}
-        </Formik>
-      </div>
+              <div className="flex justify-center pt-4">
+                <button type="submit" className="btn-contained">
+                  {loading ? '...' : t('account.login')}
+                </button>
+              </div>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

@@ -2,7 +2,8 @@ export const APP_NAME = 'Zendinit';
 
 export const DEFAULT_PAGE_SIZE = 10;
 
-export const NAVBAR_HEIGHT = 64; // in pixels
+export const NAVBAR_HEIGHT = 92; // in pixels
+export const FOOTER_HEIGHT = 80;
 
 export const TOKEN_KEY = 'next-auth.session-token';
 export const API_REFRESH_TOKEN_URL = '/token'; // Refresh token action
