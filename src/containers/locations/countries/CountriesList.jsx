@@ -5,12 +5,7 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import CountriesSearch from '@/containers/locations/countries/CountriesSearch';
 import useCountries, { saveCountry } from '@/hooks/location/country/useCountries';
-import {
-  API_COUNTRIES_URL,
-  DEFAULT_PAGE_SIZE,
-  DELETE,
-  LOCATION_DETAILS_PAGE
-} from '@/lib/constants';
+import { API_COUNTRIES_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -159,8 +154,6 @@ const CountriesList = () => {
     name: t('countries', { count: 2 }),
     onRowClick: (row) => {
       const value = row.original.id;
-      const path = LOCATION_DETAILS_PAGE(value);
-      router.push(path);
     },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
