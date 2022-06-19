@@ -2,14 +2,13 @@ import Loading from '@/components/common/Loader';
 import DataTable from '@/components/table';
 import usePermissions from '@/hooks/permission/usePermissions';
 import useResources from '@/hooks/resource/useResources';
-import { saveRole } from '@/hooks/role/useRoles';
-import { apiFetcher } from '@/lib/apiFetcher';
+import { getRoles, saveRole } from '@/hooks/role/useRoles';
 import { actions, API_ROLES_URL, POST, PUT } from '@/lib/constants';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -23,24 +22,18 @@ const RolesForm = ({ roleId }) => {
   const [rolePermissions, setRolePermissions] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [isNewData, setIsNewData] = useState(true);
+  const [initialValues, setInitialValues] = useState();
 
   useEffect(() => {
     const fetchRole = async () => {
       if (!isNaN(roleId)) {
-        const { data } = await apiFetcher(`${API_ROLES_URL}/${roleId}`, {
-          params: {},
-          keepPreviousData: true
-        });
-        setRole(data);
+        const data = await getRoles({ id: roleId });
+        setInitialValues(data);
       }
     };
 
     fetchRole();
   }, [roleId]);
-
-  const initialValues = {
-    name: role?.name || ''
-  };
 
   const { data: resources, isLoading: isLoadingResources } = useResources({
     options: {
@@ -211,56 +204,55 @@ const RolesForm = ({ roleId }) => {
 
   return (
     <>
-      {isLoading || isLoadingResources || isLoadingPermissions ? <Loading /> : null}
-
-      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-        {({ errors, setFieldValue, touched }) => {
-          useEffect(() => {
-            Object.keys(initialValues).forEach((field) => {
-              setFieldValue(field, initialValues[field], false);
-            });
-          }, [role]);
-
-          return (
-            <Form className="p-6 space-y-6 text-lg">
-              <div className="flex items-center justify-between mb-8">
-                <p className="form-header">
-                  {isNaN(roleId) ? t('form.role.title.create') : t('form.role.title.update')}
-                </p>
-                <div className="flex justify-end space-x-8">
-                  <button
-                    type="button"
-                    className="px-8 py-3 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
-                    onClick={() => router.back()}
-                  >
-                    {t('cancel')}
-                  </button>
-                  <button type="submit" className="btn-contained">
-                    {t('save')}
-                  </button>
+      {isLoading || isLoadingResources || isLoadingPermissions ? (
+        <Loading />
+      ) : (
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+          enableReinitialize
+        >
+          {({ errors, touched }) => (
+              <Form className="p-6 space-y-6 text-lg">
+                <div className="flex items-center justify-between mb-8">
+                  <p className="form-header">
+                    {isNaN(roleId) ? t('form.role.title.create') : t('form.role.title.update')}
+                  </p>
+                  <div className="flex justify-end space-x-8">
+                    <button
+                      type="button"
+                      className="px-8 py-3 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
+                      onClick={() => router.back()}
+                    >
+                      {t('cancel')}
+                    </button>
+                    <button type="submit" className="btn-contained">
+                      {t('save')}
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <label htmlFor="name">{t('form.common.label.name')}</label>
-                <div className="relative w-full max-w-md">
-                  <Field
-                    id="name"
-                    name="name"
-                    className={`text-field ${
-                      errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
-                    }`}
-                  />
-                  {errors?.name && touched?.name ? (
-                    <p className="mt-4 text-red-600">{errors?.name}</p>
-                  ) : null}
+                <div className="space-y-2">
+                  <label htmlFor="name">{t('form.common.label.name')}</label>
+                  <div className="relative w-full max-w-md">
+                    <Field
+                      id="name"
+                      name="name"
+                      className={`text-field ${
+                        errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
+                      }`}
+                    />
+                    {errors?.name && touched?.name ? (
+                      <p className="mt-4 text-red-600">{errors?.name}</p>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                {/* <label htmlFor="code">{t('permissions', { count: 2 })}</label>
+                <div className="space-y-2">
+                  {/* <label htmlFor="code">{t('permissions', { count: 2 })}</label>
             <div className="relative w-full mx-auto"> */}
-                {/* <MultipleSelectionAutcompleteField
+                  {/* <MultipleSelectionAutcompleteField
                 name="permissions"
                 options={resources?.rows ? resources.rows : []}
                 optionLabels={['action', 'resource.name']}
@@ -268,13 +260,13 @@ const RolesForm = ({ roleId }) => {
                 labelSeparator=" "
                 className="autocomplete-field"
               /> */}
-                <DataTable {...options} />
-                {/* </div> */}
-              </div>
-            </Form>
-          );
-        }}
-      </Formik>
+                  <DataTable {...options} />
+                  {/* </div> */}
+                </div>
+              </Form>
+        )}
+        </Formik>
+
     </>
   );
 };

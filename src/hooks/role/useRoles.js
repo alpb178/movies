@@ -17,6 +17,11 @@ export const deleteRole = async ({ id }) => {
   await deleteData({ path: API_ROLES_URL + `/${id}`, method: DELETE });
 };
 
+export const getRoles = async ({ id }) => {
+  const { data } = await getData({ queryKey: [API_ROLES_URL, { id }] });
+  return data;
+};
+
 export default function useRoles({ args = {}, options = {} } = {}) {
   return useQuery([API_ROLES_URL, { ...args }], getData, {
     ...options
