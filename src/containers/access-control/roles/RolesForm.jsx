@@ -214,45 +214,45 @@ const RolesForm = ({ roleId }) => {
           enableReinitialize
         >
           {({ errors, touched }) => (
-              <Form className="p-6 space-y-6 text-lg">
-                <div className="flex items-center justify-between mb-8">
-                  <p className="form-header">
-                    {isNaN(roleId) ? t('form.role.title.create') : t('form.role.title.update')}
-                  </p>
-                  <div className="flex justify-end space-x-8">
-                    <button
-                      type="button"
-                      className="px-8 py-3 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
-                      onClick={() => router.back()}
-                    >
-                      {t('cancel')}
-                    </button>
-                    <button type="submit" className="btn-contained">
-                      {t('save')}
-                    </button>
-                  </div>
+            <Form className="p-6 space-y-6 text-lg">
+              <div className="flex items-center justify-between mb-8">
+                <p className="form-header">
+                  {isNaN(roleId) ? t('form.role.title.create') : t('form.role.title.update')}
+                </p>
+                <div className="flex justify-end space-x-8">
+                  <button
+                    type="button"
+                    className="px-8 py-3 font-medium leading-5 transition duration-300 ease-in-out border border-gray-300 rounded-md hover:bg-red-100 hover:text-red-500 hover:border-red-500"
+                    onClick={() => router.back()}
+                  >
+                    {t('cancel')}
+                  </button>
+                  <button type="submit" className="btn-contained">
+                    {t('save')}
+                  </button>
                 </div>
+              </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="name">{t('form.common.label.name')}</label>
-                  <div className="relative w-full max-w-md">
-                    <Field
-                      id="name"
-                      name="name"
-                      className={`text-field ${
-                        errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
-                      }`}
-                    />
-                    {errors?.name && touched?.name ? (
-                      <p className="mt-4 text-red-600">{errors?.name}</p>
-                    ) : null}
-                  </div>
+              <div className="space-y-2">
+                <label htmlFor="name">{t('form.common.label.name')}</label>
+                <div className="relative w-full max-w-md">
+                  <Field
+                    id="name"
+                    name="name"
+                    className={`text-field ${
+                      errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
+                    }`}
+                  />
+                  {errors?.name && touched?.name ? (
+                    <p className="mt-4 text-red-600">{errors?.name}</p>
+                  ) : null}
                 </div>
+              </div>
 
-                <div className="space-y-2">
-                  {/* <label htmlFor="code">{t('permissions', { count: 2 })}</label>
+              <div className="space-y-2">
+                {/* <label htmlFor="code">{t('permissions', { count: 2 })}</label>
             <div className="relative w-full mx-auto"> */}
-                  {/* <MultipleSelectionAutcompleteField
+                {/* <MultipleSelectionAutcompleteField
                 name="permissions"
                 options={resources?.rows ? resources.rows : []}
                 optionLabels={['action', 'resource.name']}
@@ -260,13 +260,13 @@ const RolesForm = ({ roleId }) => {
                 labelSeparator=" "
                 className="autocomplete-field"
               /> */}
-                  <DataTable {...options} />
-                  {/* </div> */}
-                </div>
-              </Form>
-        )}
+                <DataTable {...options} />
+                {/* </div> */}
+              </div>
+            </Form>
+          )}
         </Formik>
-
+      )}
     </>
   );
 };

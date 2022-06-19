@@ -13,7 +13,6 @@ import { ChevronDownIcon, PaperAirplaneIcon, UserIcon } from '@heroicons/react/o
 import { StarIcon } from '@heroicons/react/solid';
 import { format } from 'date-fns';
 import { Form, Formik } from 'formik';
-import moment from 'moment';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
@@ -73,7 +72,7 @@ const ShipmentsForm = ({ onOpen }) => {
     const paramToSend = {
       origin: values.origin.id,
       destination: values.destination.id,
-      date: moment(values.departureAt).format('YYYY-MM-DD')
+      date: values.departureAt
     };
     const { data } = await apiFetcher(`${TRAVELS_PAGE}/search`, {
       params: paramToSend,

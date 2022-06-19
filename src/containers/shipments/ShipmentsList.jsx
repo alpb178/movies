@@ -6,16 +6,14 @@ import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import DataTable from '@/components/table';
 import PaymentFilter from '@/containers/shipments/ShipmentsFilter';
 import useShipments from '@/hooks/shipment/useShipments';
-import { PAYMENT_DETAIL_PAGE } from '@/lib/constants';
 import { PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
 import ShipmentsForm from './ShipmentsForm';
 
-const ShipmentsList = ({ loading, onDeletePayment }) => {
+const ShipmentsList = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
   // const [page, setPage] = useState(0);
@@ -39,13 +37,7 @@ const ShipmentsList = ({ loading, onDeletePayment }) => {
     }
   });
 
-  const handleDelete = (event, row) => {
-    event.preventDefault();
-    const answer = window.confirm(t('message.payment-delete') + ' ' + row.original.paymentname);
-    if (answer) {
-      onDeletePayment(row.original.paymentname);
-    }
-  };
+  const handleDelete = (event, row) => {};
 
   const handleEdit = (event, row) => {
     event.stopPropagation();
@@ -135,12 +127,7 @@ const ShipmentsList = ({ loading, onDeletePayment }) => {
     columns,
     data: shipments?.rows,
     name: t('shipments', { count: 2 }),
-    onRowClick: (row) => {
-      const value = row.original.email;
-      const path = PAYMENT_DETAIL_PAGE(value);
-      //  onSelectPayment(row.original);
-      router.push(path);
-    },
+    onRowClick: (row) => {},
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
         <PaymentFilter open={openFilters} onSubmit={handleFilters} />
@@ -188,13 +175,6 @@ const ShipmentsList = ({ loading, onDeletePayment }) => {
   );
 };
 
-ShipmentsList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetShipments: PropTypes.func.isRequired,
-  onSelectPayment: PropTypes.func.isRequired,
-  onDeletePayment: PropTypes.func.isRequired
-};
+ShipmentsList.propTypes = {};
 
 export default ShipmentsList;
