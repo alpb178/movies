@@ -58,14 +58,22 @@ const ShipmentsForm = ({ onOpen }) => {
   });
 
   const onSubmit = (values) => {
-    values.measureUnit = values.measureUnit.id;
+    let shipment = {
+      sender: 1,
+      payload: {
+        travel: values?.travel_id,
+        shipmentItem: values?.shipment_item_id
+      },
+      status: 'PENDING',
+      amount: values.amount
+    };
+
     saveShipments({
-      args: values,
+      args: shipment,
       options: {
         method: POST
       }
     });
-    onOpen(false);
   };
 
   const onSearch = async (values) => {
@@ -167,7 +175,6 @@ const ShipmentsForm = ({ onOpen }) => {
                               } flex items-center border justify-between w-full p-4 space-x-8 hover:bg-secondary-50 `}
                             >
                               <div className="flex justify-between w-full text-left">
-                                {console.log(payload?.departureAt)}
                                 <div className="flex space-x-6">
                                   {payload?.traveler?.profileImage ? (
                                     <Image
@@ -255,7 +262,11 @@ const ShipmentsForm = ({ onOpen }) => {
                                     </div>
                                   </div>
 
-                                  <button type="button" className="btn-contained">
+                                  <button
+                                    type="button"
+                                    className="btn-contained"
+                                    onClick={() => onSubmit(payload)}
+                                  >
                                     Reservar
                                   </button>
                                 </div>

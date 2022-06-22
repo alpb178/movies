@@ -1,16 +1,18 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import DataTable from '@/components/table';
+import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/shipments/ShipmentsFilter';
 import useShipments from '@/hooks/shipment/useShipments';
-import { PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/outline';
+import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import ShipmentsForm from './ShipmentsForm';
 
 const ShipmentsList = () => {
@@ -39,47 +41,56 @@ const ShipmentsList = () => {
 
   const handleDelete = (event, row) => {};
 
-  const handleEdit = (event, row) => {
+  const onUpdate = (event) => {
     event.stopPropagation();
+  };
+
+  const locale = {
+    //...locales[lang]
   };
 
   const rednerMeasureUnit = (value) => <div>{value?.name}</div>;
 
-  const columns = React.useMemo(() => [
+  const columns = useMemo(() => [
     {
-      Header: t('name'),
-      accessor: 'name'
+      Header: t('travelers', { count: 1 }),
+      accessor: 'traveler'
+      //  Cell: ({ value }) => formatTraveler(value)
     },
     {
-      Header: t('measure-units', { count: 1 }),
-      accessor: 'measureUnit',
-      Cell: ({ value }) => rednerMeasureUnit(value)
+      Header: t('flights', { count: 1 }),
+      accessor: 'flight'
+      //  Cell: ({ value }) => formatFlight(value)
     },
     {
-      id: 'optionsShipments',
-      displayName: 'optionsShipments',
-      Cell: ({ row }) => {
-        return (
-          <div className="flex items-center space-x-4">
-            <button
-              className="p-1 rounded-full hover:bg-blue-100 hover:text-blue-500"
-              type="button"
-              id="buttonEdit"
-              onClick={(event) => handleEdit(event, row)}
-            >
-              <PencilIcon className="w-6 h-6" />
-            </button>
-            <button
-              className="p-1 rounded-full hover:bg-red-100 hover:text-red-500"
-              type="button"
-              id="buttonDelete"
-              onClick={() => setOpenDeleteConfirmation(true)}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
-        );
-      }
+      Header: t('origin'),
+      accessor: 'origin'
+      // Cell: ({ value }) => formatPlace(value)
+    },
+    {
+      Header: t('departure-at'),
+      accessor: 'departureAt'
+      // Cell: ({ value }) => formatDate(value)
+    },
+    {
+      Header: t('destination'),
+      accessor: 'destination'
+      //  Cell: ({ value }) => formatPlace(value)
+    },
+    {
+      Header: t('objeto'),
+      accessor: 'objeto'
+      // Cell: ({ value }) => formatPlace(value)
+    },
+    {
+      id: 'optionsRegulations',
+      displayName: 'optionsRegulations',
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={(event) => handleDelete(event, row)}
+        />
+      )
     }
   ]);
 
@@ -153,7 +164,7 @@ const ShipmentsList = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {<Loading />}
 
       {shipments && shipments.rows.length > 0 ? (
         <DataTable {...options} />
@@ -164,6 +175,8 @@ const ShipmentsList = () => {
       <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
         <ShipmentsForm />
       </FormDialogWrapper>
+
+      {console.log(shipments)}
 
       <DeleteConfirmationDialog
         open={openDeleteConfirmation}
