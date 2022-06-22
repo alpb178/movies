@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import AutocompleteField from '@/components/form/AutocompleteField';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import { savePermission } from '@/hooks/permission/usePermissions';
@@ -5,7 +6,7 @@ import useResources from '@/hooks/resource/useResources';
 import { actions, API_PERMISSIONS_URL, POST, PUT } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -76,7 +77,7 @@ const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
       validationSchema={validationSchema}
     >
       <div className="space-y-2">
-        <label htmlFor="action">{t('form.permissions.action.label')}</label>
+        <label htmlFor="action">{t('form.permissions.label.action')}</label>
         <div className="relative w-full mx-auto">
           <AutocompleteField
             name="action"
@@ -88,7 +89,7 @@ const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="observations">{t('form.permission.resource.label')}</label>
+        <label htmlFor="observations">{t('form.permissions.label.resource')}</label>
         <div className="relative w-full mx-auto">
           <AutocompleteField
             name="resource"

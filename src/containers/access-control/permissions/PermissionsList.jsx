@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
 import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
@@ -9,7 +10,7 @@ import clsx from 'clsx';
 import EmptyState from 'components/common/EmptyState';
 import { API_PERMISSIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import ResourcesList from '../resources/ResourcesList';
@@ -186,7 +187,7 @@ const Permissions = () => {
           )}
         </div>
 
-        <div className="w-1/3 max-w-md">
+        <div className="w-1/2 max-w-md">
           <ResourcesList />
         </div>
       </div>

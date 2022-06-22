@@ -88,14 +88,7 @@
         "update": "Actualizar Aerolínea"
       }
     },
-    "role": {
-      "title": {
-        "create": "Nuevo Rol",
-        "update": "Actualizar Rol"
-      }
-    },
-
-    "common": {
+     "common": {
       "empty-options": "No se encontraron resultados",
       "label": {
         "code": "Código",
@@ -125,17 +118,27 @@
         "maxPrice": "El precio Máximo debe ser mayor que el Mínimo"
       }
     },
+      "country": {
+      "title": {
+        "create": "Nuevo País",
+        "update": "Editar País"
+      }
+    },
     "measure-unit": {
       "title": {
         "create": "Nueva Unidad de Medida",
         "update": "Editar Unidad de Medida"
       }
     },
-    "country": {
+    "permissions": {
       "title": {
-        "create": "Nuevo País",
-        "update": "Editar País"
-      }
+        "create": "Nuevo Permiso",
+        "update": "Actualizar Permiso"
+      },
+      "label": {
+        "resource": "Recurso",
+        "action": "Acción"
+      } 
     },
     "region": {
       "title": {
@@ -152,6 +155,7 @@
         "create": "Nueva Regulación",
         "update": "Actualizar Regulación"
       },
+    
       "label": {
         "country": "País",
         "permited-amount": "Cantidad permitida (Máx.)",
@@ -163,6 +167,18 @@
         "country": "País",
         "shipment-item": "Artículo",
         "permited-amount": "Cantidad permitida (Máx.)"
+      }
+    },
+    "role": {
+      "title": {
+        "create": "Nuevo Rol",
+        "update": "Actualizar Rol"
+      }
+    },
+    "resources": {
+      "title": {
+        "create": "Nuevo Recurso",
+        "update": "Actualizar Recurso"
       }
     },
     "shipment": {
