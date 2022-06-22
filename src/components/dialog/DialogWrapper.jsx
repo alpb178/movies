@@ -45,15 +45,6 @@ const DialogWrapper = ({ children, open, onOpen, title }) => {
                   }
                   return child;
                 })}
-                <div className="flex space-x-6">
-                  <button
-                    type="button"
-                    className="justify-center w-full px-4 py-3 mt-6 font-medium leading-5 text-gray-700 transition duration-300 ease-in-out bg-white border rounded-md hover:bg-gray-100"
-                    onClick={() => onOpen(false)}
-                  >
-                    {t('close')}
-                  </button>
-                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
