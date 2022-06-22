@@ -1,11 +1,42 @@
+/* eslint-disable react/react-in-jsx-scope */
+import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
+import { saveResource } from '@/hooks/resource/useResources';
+import { API_RESOURCES_URL, DELETE } from '@/lib/constants';
 import { Menu, Transition } from '@headlessui/react';
 import { DotsVerticalIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import { Fragment, useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
-export default function ListItemActions({ actions }) {
+export default function ListItemActions({ actions, resource }) {
   const { t } = useTranslation('common');
+
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  const queryClient = useQueryClient();
+
+  const onDeleteConfirmation = async () => {
+    try {
+      //  setLoading(true);
+      await saveResource({
+        args: { id: deleteConfirmation.id },
+        options: {
+          method: DELETE
+        }
+      });
+      await queryClient.refetchQueries([API_RESOURCES_URL]);
+      toast(t('deleted.male', { entity: t('resources', { count: 1 }) }));
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      //setLoading(false);
+    }
+  };
+
+  const onDelete = (resource) => {
+    setDeleteConfirmation({ open: true, id: resource.id });
+  };
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -33,6 +64,7 @@ export default function ListItemActions({ actions }) {
                       className={`${
                         active ? 'bg-secondary-100 text-secondary-600' : 'text-gray-800'
                       } group flex w-full items-center rounded-md px-2 py-4 space-x-4`}
+                      onClick={() => (action.id == 'delete' ? onDelete(resource) : '')}
                     >
                       <action.icon className="w-6 h-6" />
                       <p>{action.name}</p>
@@ -46,10 +78,19 @@ export default function ListItemActions({ actions }) {
           </div>
         </Menu.Items>
       </Transition>
+
+      <DeleteConfirmationDialog
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('resources', { count: 1 }).toLowerCase() })}
+        content={t('delete-message.male', { entity: t('resources', { count: 1 }).toLowerCase() })}
+      />
     </Menu>
   );
 }
 
 ListItemActions.propTypes = {
-  actions: PropTypes.array.isRequired
+  actions: PropTypes.array.isRequired,
+  resource: PropTypes.object.isRequired
 };
