@@ -40,26 +40,27 @@ const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
   });
 
   const onSubmit = async (values) => {
+    values.action = values.action.name;
+    values.resource = values.resource.id;
+    let method = POST;
+    let message = t('inserted.male', { entity: t('permissions', { count: 1 }) });
+
+    if (data) {
+      method = PUT;
+      values.id = data.id;
+      message = t('updated.male', { entity: t('permissions', { count: 1 }) });
+    }
     try {
       onLoading(true);
-      values.action = values.action.name;
-      values.resource = values.resource.id;
-      let method = POST;
-
-      if (data) {
-        method = PUT;
-        values.id = data.id;
-      }
 
       await savePermission({
         args: values,
         options: { method }
       });
-
       await queryClient.refetchQueries([API_PERMISSIONS_URL]);
       onLoading(false);
-      // toast(message);
       onOpen(false);
+      toast(message);
     } catch (error) {
       toast.error(error.toString());
     }

@@ -10,7 +10,7 @@ import { Fragment, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
-export default function ListItemActions({ actions, resource }) {
+export default function ListItemActions({ actions, resource, setLoading }) {
   const { t } = useTranslation('common');
 
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
@@ -18,7 +18,7 @@ export default function ListItemActions({ actions, resource }) {
 
   const onDeleteConfirmation = async () => {
     try {
-      //  setLoading(true);
+      setLoading(true);
       await saveResource({
         args: { id: deleteConfirmation.id },
         options: {
@@ -27,10 +27,11 @@ export default function ListItemActions({ actions, resource }) {
       });
       await queryClient.refetchQueries([API_RESOURCES_URL]);
       toast(t('deleted.male', { entity: t('resources', { count: 1 }) }));
+      setLoading(false);
     } catch (error) {
       toast.error(error);
     } finally {
-      //setLoading(false);
+      setLoading(false);
     }
   };
 

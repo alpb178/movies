@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import EmptyState from 'components/common/EmptyState';
 import { API_PERMISSIONS_URL, DEFAULT_PAGE_SIZE, DELETE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -27,7 +28,7 @@ const Permissions = () => {
   const [filterValues, setFilterValues] = useState({
     actions: ''
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(isLoading);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
@@ -176,7 +177,7 @@ const Permissions = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {loading && <Loading />}
 
       <div className="flex space-x-8">
         <div className="w-full">
@@ -208,6 +209,10 @@ const Permissions = () => {
       />
     </>
   );
+};
+
+Permissions.propTypes = {
+  row: PropTypes.object
 };
 
 export default Permissions;
