@@ -43,6 +43,11 @@ export const SHIPMENTS_PAGE = '/shipments';
 export const TRAVELS_PAGE = '/travels';
 export const PAYLOADS_PAGE = '/payloads';
 
+//Shipments
+export const SHIPMENTS_DETAILS_PAGE = (value) => `${SHIPMENTS_PAGE}/detail/${value}`;
+export const SHIPMENTS_FORM_PAGE = (value) => `${SHIPMENTS_PAGE}/${value}`;
+
+// Travels
 export const TRAVEL_DETAILS_PAGE = (value) => `${TRAVELS_PAGE}/detail/${value}`;
 export const TRAVEL_FORM_PAGE = (value) => `${TRAVELS_PAGE}/${value}`;
 

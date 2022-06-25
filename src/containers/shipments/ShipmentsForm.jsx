@@ -21,14 +21,11 @@ import * as Yup from 'yup';
 import BaggageCapacityForm from '../travels/travel-form/BaggageCapacityForm';
 import DepartureDateForm from '../travels/travel-form/DepartureDateForm';
 
-const ShipmentsForm = ({ onOpen }) => {
+const ShipmentsForm = ({ onOpen, shipmentId }) => {
   const { t, lang } = useTranslation('common');
   const [destination, setDestination] = useState();
   const [baggageCapacity, setBaggageCapacity] = useState();
   const [availablePayload, setAvailablePayload] = useState();
-
-  // const administrationFee = shipmentPrice * 0.12;
-  // const iva = shipmentPrice * 0.21;
 
   const initialValues = {
     sender: '',
@@ -54,7 +51,9 @@ const ShipmentsForm = ({ onOpen }) => {
   });
 
   const validationSchema = Yup.object().shape({
-    // sender: Yup.string().required()
+    sender: Yup.object().nullable().required(t('form.common.required.traveler')),
+    origin: Yup.object().required(t('form.common.required.origin')).nullable(),
+    destination: Yup.object().required(t('form.common.required.destination')).nullable()
   });
 
   const onSubmit = (values) => {
@@ -80,7 +79,7 @@ const ShipmentsForm = ({ onOpen }) => {
     const paramToSend = {
       origin: values.origin.id,
       destination: values.destination.id,
-      date: values.departureAt
+      date: format(values.departureAt, 'yyyy-MM-dd')
     };
     const { data } = await apiFetcher(`${TRAVELS_PAGE}/search`, {
       params: paramToSend,
@@ -116,14 +115,11 @@ const ShipmentsForm = ({ onOpen }) => {
                   optionLabels={['firstName', 'lastName']}
                   keysToMatch={['firstName', 'lastName', 'username']}
                   icon={UserIcon}
-                  // defaultValue={travel?.sender}
                 />
               </div>
 
               <div className="flex flex-col w-full space-y-6">
                 <div className="flex flex-col w-full pt-6 space-y-6 lg:pt-0">
-                  {/* <p className="text-xl font-medium text-gray-700">{t('Buscar viajero')}</p> */}
-
                   <div className="flex items-center w-full space-x-4">
                     <div className="w-full">
                       <AutocompleteField
@@ -133,7 +129,6 @@ const ShipmentsForm = ({ onOpen }) => {
                         optionLabels={['name', 'country.name']}
                         keysToMatch={['name', 'code', 'country.name']}
                         className="autocomplete-field"
-                        // defaultValue={travel?.origin}
                       />
                     </div>
 
@@ -146,7 +141,6 @@ const ShipmentsForm = ({ onOpen }) => {
                         keysToMatch={['name', 'code', 'country.name']}
                         className="autocomplete-field"
                         onSelectionChange={setDestination}
-                        // defaultValue={travel?.destination}
                       />
                     </div>
                   </div>
@@ -164,8 +158,8 @@ const ShipmentsForm = ({ onOpen }) => {
                   {t('search')}
                 </button>
 
-                {availablePayload
-                  ? availablePayload.map((payload) => (
+                {availablePayload && availablePayload?.count !== 0
+                  ? availablePayload?.rows.map((payload) => (
                       <Disclosure key={payload.id} as="div" className="bg-white rounded-b-md">
                         {({ open }) => (
                           <>
@@ -287,7 +281,8 @@ const ShipmentsForm = ({ onOpen }) => {
 };
 
 ShipmentsForm.propTypes = {
-  onOpen: PropTypes.func.isRequired
+  onOpen: PropTypes.func.isRequired,
+  shipmentId: PropTypes.number
 };
 
 export default ShipmentsForm;
