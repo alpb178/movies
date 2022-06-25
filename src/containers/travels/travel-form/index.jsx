@@ -138,7 +138,7 @@ const TravelForm = ({ travelId }) => {
 
   return (
     <>
-      {isLoadingTravels ? (
+      {loading ? (
         <Loading />
       ) : (
         <Formik

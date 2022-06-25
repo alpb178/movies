@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
@@ -18,7 +19,7 @@ import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
@@ -32,7 +33,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   const [sort, setSort] = useState('');
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
-  const [openFilters, setOpenFilters] = useState(false);
+  const [openFilters] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
   const [filterValues, setFilterValues] = useState({

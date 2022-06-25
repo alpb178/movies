@@ -9,9 +9,8 @@ import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 const TravelDetail = ({ travelId }) => {
   const { t, lang } = useTranslation('common');
-  let regulationSelected = {};
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const { data: travel, isLoading } = useTravels({
+  const { data: travel } = useTravels({
     args: { id: travelId },
     options: {
       keepPreviousData: true
@@ -45,7 +44,6 @@ const TravelDetail = ({ travelId }) => {
 
   return (
     <div className="min-h-full bg-white">
-      {console.log(travel)}
       <main className="p-6">
         <div className="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
           <button
