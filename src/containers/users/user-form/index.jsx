@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useUsers, { saveUser } from '@/hooks/user/useUsers';
@@ -6,7 +7,7 @@ import { POST, PUT, USERS_PAGE } from 'lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import router from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -15,7 +16,7 @@ import BirthDateForm from './BirthDateForm';
 const UsersForm = ({ userId }) => {
   const { t } = useTranslation('common');
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(isLoadingUsers);
   const [showPassword, setShowPassword] = useState(false);
   const [status] = useState([{ id: 'PENDING' }, { id: 'ACTIVE' }, { id: 'INACTIVE' }]);
 
@@ -54,7 +55,7 @@ const UsersForm = ({ userId }) => {
     email: Yup.string().required(t('required.email')),
     mobile: Yup.string().required(t('required.phone')),
     status: Yup.object().nullable().required(t('required.status')),
-    //  birthdate: Yup.date().nullable().test('birthdate', 'Fecha Invalida', validateBirthdate),
+    birthdate: Yup.date().nullable().test('birthdate', 'Fecha Invalida', validateBirthdate),
     password: Yup.string()
       .ensure()
       .when('create', {
@@ -112,7 +113,7 @@ const UsersForm = ({ userId }) => {
 
   return (
     <>
-      {isLoadingUsers ? (
+      {loading ? (
         <Loading />
       ) : (
         <Formik
@@ -122,7 +123,6 @@ const UsersForm = ({ userId }) => {
         >
           {({ errors, touched }) => (
             <Form className="p-6 space-y-6 text-lg">
-              {console.log(errors)}
               <p className="mb-8 form-header">
                 {isNaN(userId) ? t('form.user.title.create') : t('form.user.title.update')}
               </p>

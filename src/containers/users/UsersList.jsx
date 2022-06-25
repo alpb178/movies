@@ -30,10 +30,9 @@ const UsersList = () => {
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
   const queryClient = useQueryClient();
-  const [loading, setLoading] = useState(false);
-  const [openFilters, setOpenFilters] = useState(false);
+  const [loading, setLoading] = useState(isLoading);
+  const [openFilters] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
-  const [checkedRow, setCheckedRow] = useState(false);
 
   const [filterValues, setFilterValues] = useState({
     username: '',
@@ -107,7 +106,6 @@ const UsersList = () => {
 
   const onActiveInactiveUsers = async (event, row) => {
     event.stopPropagation();
-    console.log(row.id);
     try {
       await userActivatedDesactivated({
         args: row,
@@ -121,7 +119,6 @@ const UsersList = () => {
   };
 
   const renderStatus = (status, row) => {
-    console.log(row);
     switch (status) {
       case 'PENDING':
         return (
@@ -263,7 +260,7 @@ const UsersList = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {loading && <Loading />}
 
       {users && users.rows.length > 0 ? (
         <DataTable {...options} />
