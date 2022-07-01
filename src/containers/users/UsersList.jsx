@@ -30,7 +30,7 @@ const UsersList = () => {
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
   const queryClient = useQueryClient();
-  const [loading, setLoading] = useState(isLoading);
+  const [loading, setLoading] = useState(false);
   const [openFilters] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
@@ -260,7 +260,7 @@ const UsersList = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {(isLoading || loading) && <Loading />}
 
       {users && users.rows.length > 0 ? (
         <DataTable {...options} />

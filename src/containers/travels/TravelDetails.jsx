@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import Loading from '@/components/common/Loader';
 import useRegulations from '@/hooks/regulation/useRegulations';
 import useTravels from '@/hooks/travel/useTravels';
 import { formatPrice, locales } from '@/lib/utils';
@@ -17,7 +18,7 @@ const TravelDetail = ({ travelId }) => {
     }
   });
 
-  const { data: regulations } = useRegulations({
+  const { data: regulations, isLoading } = useRegulations({
     args: {},
     options: {
       keepPreviousData: true,
@@ -44,6 +45,7 @@ const TravelDetail = ({ travelId }) => {
 
   return (
     <div className="min-h-full bg-white">
+      {isLoading && <Loading />}
       <main className="p-6">
         <div className="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
           <button

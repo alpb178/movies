@@ -46,7 +46,7 @@ const ShipmentItemsList = () => {
     return query;
   }, [filterValues, page, sort]);
 
-  const { data: shipmentItems } = useShipmentItems({
+  const { data: shipmentItems, isLoading } = useShipmentItems({
     args: params,
     options: {
       keepPreviousData: true
@@ -180,7 +180,7 @@ const ShipmentItemsList = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {(isLoading || loading) && <Loading />}
 
       {shipmentItems && shipmentItems.rows.length > 0 ? (
         <DataTable {...options} />

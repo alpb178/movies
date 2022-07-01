@@ -45,7 +45,7 @@ const AirlinesList = () => {
     }
   }, [openForm]);
 
-  const { data: airlines } = useAirlines({
+  const { data: airlines, isloading } = useAirlines({
     args: params,
     options: {
       keepPreviousData: true
@@ -176,7 +176,7 @@ const AirlinesList = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {(isloading || loading) && <Loading />}
 
       {airlines && airlines.rows.length > 0 ? (
         <DataTable {...options} />

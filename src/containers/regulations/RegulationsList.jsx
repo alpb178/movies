@@ -221,7 +221,7 @@ const RegulationsList = () => {
 
   return (
     <>
-      {isLoading || (loading && <Loading />)}
+      {(isLoading || loading) && <Loading />}
 
       {regulations && regulations?.rows.length > 0 ? (
         <DataTable {...options} />

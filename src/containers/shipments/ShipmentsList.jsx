@@ -28,7 +28,7 @@ const ShipmentsList = () => {
   const [sort, setSort] = useState('');
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
-  const [loading, setLoading] = useState(isLoading);
+  const [loading, setLoading] = useState(false);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   // const queryClient = useQueryClient();
@@ -247,7 +247,7 @@ const ShipmentsList = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {(isLoading || loading) && <Loading />}
 
       {shipments && shipments.rows.length > 0 ? (
         <DataTable {...options} />

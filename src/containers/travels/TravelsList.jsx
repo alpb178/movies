@@ -17,8 +17,6 @@ import { useCallback, useMemo, useState } from 'react';
 const TravelsList = ({ hiddenColumns, userId }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
-  // const queryClient = useQueryClient();
-  const [loading, setLoading] = useState(isLoading);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
@@ -26,6 +24,8 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters] = useState(false);
   // const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  //const [loading, setLoading] = useState(false);
+  // const queryClient = useQueryClient();
 
   const [filterValues, setFilterValues] = useState({
     paymentname: '',
@@ -226,7 +226,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
 
   return (
     <>
-      {loading && <Loading />}
+      {isLoading && <Loading />}
 
       {travels && travels.rows.length > 0 ? (
         <DataTable {...options} />

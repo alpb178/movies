@@ -12,7 +12,7 @@ function ResourcesList() {
   const { t } = useTranslation('common');
   const [openForm, setOpenForm] = useState(false);
   const [selectedItem] = useState();
-  const [loading, setLoading] = useState(isloading);
+  const [loading, setLoading] = useState(false);
 
   const { data: resources, isloading } = useResources();
 
@@ -37,7 +37,7 @@ function ResourcesList() {
 
   return (
     <div className="p-5">
-      {loading && <Loading />}
+      {(isloading || loading) && <Loading />}
       <div className="flow-root mt-12">
         <div>
           {resources?.rows?.length < 0 || (

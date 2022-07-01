@@ -118,7 +118,7 @@ const MeasureUnitsList = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {(isLoading || loading) && <Loading />}
 
       {measureunits && measureunits.rows.length > 0 ? (
         <DataTable {...options} />

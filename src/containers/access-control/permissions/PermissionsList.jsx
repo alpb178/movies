@@ -28,7 +28,7 @@ const Permissions = () => {
   const [filterValues, setFilterValues] = useState({
     actions: ''
   });
-  const [loading, setLoading] = useState(isLoading);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
@@ -177,7 +177,7 @@ const Permissions = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {(isLoading || loading) && <Loading />}
 
       <div className="flex space-x-8">
         <div className="w-full">

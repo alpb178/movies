@@ -8,7 +8,6 @@ import useCountries, { saveCountry } from '@/hooks/location/country/useCountries
 import { API_COUNTRIES_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
@@ -17,7 +16,6 @@ import CountryForm from './CountryForm';
 
 const CountriesList = () => {
   const { t } = useTranslation('common');
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const [openFilters, setOpenFilters] = useState(false);
@@ -47,7 +45,7 @@ const CountriesList = () => {
     return query;
   }, [filterValues, page, sort]);
 
-  const { data: countries } = useCountries({
+  const { data: countries, isLoading } = useCountries({
     args: params,
     options: {
       keepPreviousData: true
@@ -176,7 +174,7 @@ const CountriesList = () => {
 
   return (
     <>
-      {loading && <Loading />}
+      {(isLoading || loading) && <Loading />}
 
       {countries && countries.rows.length > 0 ? (
         <DataTable {...options} />
