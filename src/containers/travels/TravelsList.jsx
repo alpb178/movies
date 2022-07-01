@@ -1,18 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
-import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
-import useTravels, { saveTravels } from '@/hooks/travel/useTravels';
-import {
-  API_TRAVELS_URL,
-  DEFAULT_PAGE_SIZE,
-  DELETE,
-  TRAVEL_DETAILS_PAGE,
-  TRAVEL_FORM_PAGE
-} from '@/lib/constants';
+import useTravels from '@/hooks/travel/useTravels';
+import { DEFAULT_PAGE_SIZE, TRAVEL_DETAILS_PAGE, TRAVEL_FORM_PAGE } from '@/lib/constants';
 import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
@@ -20,13 +13,11 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
-import { useQueryClient } from 'react-query';
-import { toast } from 'react-toastify';
 
 const TravelsList = ({ hiddenColumns, userId }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const [loading, setLoading] = useState(isLoading);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
@@ -34,7 +25,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  // const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
   const [filterValues, setFilterValues] = useState({
     paymentname: '',
@@ -64,6 +55,8 @@ const TravelsList = ({ hiddenColumns, userId }) => {
     ...locales[lang]
   };
 
+  /*
+
   const onUpdate = (event, row) => {
     event.stopPropagation();
     const value = row.id;
@@ -92,6 +85,14 @@ const TravelsList = ({ hiddenColumns, userId }) => {
     } finally {
       setLoading(false);
     }
+  };
+*/
+
+  const onViewDetails = (event, row) => {
+    event.stopPropagation();
+    const value = row.id;
+    const path = TRAVEL_FORM_PAGE(`edit/${value}`);
+    router.push(path);
   };
 
   const formatTraveler = (value) => <div>{`${value?.firstName} ${value?.lastName}`}</div>;
@@ -133,8 +134,9 @@ const TravelsList = ({ hiddenColumns, userId }) => {
       displayName: 'optionsRegulations',
       Cell: ({ row }) => (
         <TableActions
-          onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={(event) => handleDelete(event, row)}
+          /*onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={(event) => handleDelete(event, row)}*/
+          onViewDetails={(event) => onViewDetails(event, row)}
         />
       )
     }
@@ -173,16 +175,6 @@ const TravelsList = ({ hiddenColumns, userId }) => {
     setFilterValues(updatedFilters);
   };
 
-  const renderCreateButton = () => (
-    <button
-      type="button"
-      className="btn-contained"
-      onClick={() => router.push('travels/create/new')}
-    >
-      {t('create', { entity: t('travels', { count: 1 }).toLowerCase() })}
-    </button>
-  );
-
   const options = {
     name: t('travels', { count: 2 }),
     columns,
@@ -217,10 +209,20 @@ const TravelsList = ({ hiddenColumns, userId }) => {
         >
           {t('filter')}
     </button>*/}
-        {renderCreateButton()}
+        {/*renderCreateButton()*/}
       </div>
     )
   };
+
+  /* const renderCreateButton = () => (
+    <button
+      type="button"
+      className="btn-contained"
+      onClick={() => router.push('travels/create/new')}
+    >
+      {t('create', { entity: t('travels', { count: 1 }).toLowerCase() })}
+    </button>
+  );*/
 
   return (
     <>
@@ -229,16 +231,16 @@ const TravelsList = ({ hiddenColumns, userId }) => {
       {travels && travels.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('travels', { count: 0 })}>{renderCreateButton()}</EmptyState>
+        <EmptyState text={t('travels', { count: 0 })}>{/*renderCreateButton()*/}</EmptyState>
       )}
 
-      <DeleteConfirmationDialog
+      {/*<DeleteConfirmationDialog
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
         title={t('delete-title', { entity: t('travels', { count: 1 }) })}
         content={t('delete-message.male', { entity: t('travels', { count: 1 }) })}
-      />
+      />*/}
     </>
   );
 };

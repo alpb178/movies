@@ -27,7 +27,7 @@ const TravelDetail = ({ travelId }) => {
 
   useMemo(async () => {
     {
-      travel?.payload?.map((item) => {
+      travel?.Payloads?.map((item) => {
         const regulationSelected = regulations?.rows.find(
           (element) => element?.shipmentItem.id === item.ShipmentItemId
         );

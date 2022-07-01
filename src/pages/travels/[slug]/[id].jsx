@@ -1,8 +1,8 @@
-import TravelForm from '@/containers/travels/travel-form';
+/* eslint-disable react/react-in-jsx-scope */
+import TravelForm from '@/containers/travels/TravelForm';
 import { ROLE_ADMIN } from 'lib/constants';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false

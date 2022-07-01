@@ -1,6 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
+import BaggageCapacityForm from '@/components/baggageCapacityForm';
 import Loading from '@/components/common/Loader';
+import DateForm from '@/components/date';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useAirlines from '@/hooks/airline/useAirlines';
 import useFlights from '@/hooks/flight/useFlights';
@@ -15,8 +17,6 @@ import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import BaggageCapacityForm from './BaggageCapacityForm';
-import DepartureDateForm from './DepartureDateForm';
 
 const TravelForm = ({ travelId }) => {
   const { t } = useTranslation('common');
@@ -193,7 +193,7 @@ const TravelForm = ({ travelId }) => {
                     </div>
                   </div>
 
-                  <DepartureDateForm travel={travel} />
+                  <DateForm entity={travel} fieldValue="departureAt" />
 
                   <div className="flex">
                     <div className="w-full">
