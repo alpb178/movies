@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useRegulations from '@/hooks/regulation/useRegulations';
 import { formatPrice } from '@/lib/utils';
@@ -11,7 +12,7 @@ import {
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 
 const BaggageCapacityForm = ({
   destination,
@@ -30,7 +31,7 @@ const BaggageCapacityForm = ({
   const iva = shipmentPrice * 0.21;
 
   useEffect(() => {
-    if (selectedOptions.length > 0) {
+    if (selectedOptions?.length > 0) {
       calculateShipmentPrice();
     }
     onShipmentItemsChange(selectedOptions);
@@ -135,8 +136,9 @@ const BaggageCapacityForm = ({
     if (regulationsApi && travel?.payload) {
       travel?.payload?.map((item) => {
         const regulationSelected = regulationsApi?.rows.find(
-          (element) => element?.shipmentItem.id === item.ShipmentItemId
+          (element) => element?.shipmentItem.id === item.shipmentItems.id
         );
+        console.log(regulationSelected);
         item.id = item.ShipmentItemId;
         item.measureUnit = regulationSelected?.shipmentItem?.measureUnit;
         item.name = regulationSelected?.shipmentItem?.name;
