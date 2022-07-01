@@ -2,28 +2,22 @@
 /* eslint-disable react/display-name */
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
-import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/shipments/ShipmentsFilter';
-import useShipments, { saveShipments } from '@/hooks/shipment/useShipments';
-import {
-  API_SHIPMENTS_URL,
-  DEFAULT_PAGE_SIZE,
-  DELETE,
-  SHIPMENTS_DETAILS_PAGE,
-  SHIPMENTS_FORM_PAGE
-} from '@/lib/constants';
+import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
+import useShipments from '@/hooks/shipment/useShipments';
+import useTravels from '@/hooks/travel/useTravels';
+import { DEFAULT_PAGE_SIZE, SHIPMENTS_DETAILS_PAGE, SHIPMENTS_FORM_PAGE } from '@/lib/constants';
 import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
+import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
-import { useQueryClient } from 'react-query';
-import { toast } from 'react-toastify';
 import ShipmentsForm from './ShipmentsForm';
 
 const ShipmentsList = () => {
@@ -34,11 +28,11 @@ const ShipmentsList = () => {
   const [sort, setSort] = useState('');
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
-  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(isLoading);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  // const queryClient = useQueryClient();
+  // const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
 
   const [filterValues, setFilterValues] = useState({
     measureUnit: ''
@@ -55,12 +49,39 @@ const ShipmentsList = () => {
     ...locales[lang]
   };
 
-  const { data: shipments, isLoading } = useShipments({
-    args: params,
+  const { data: travel } = useTravels({
     options: {
       keepPreviousData: true
     }
   });
+
+  const { data: shipmentItem } = useShipmentItems({
+    options: {
+      keepPreviousData: true
+    }
+  });
+
+  const { data: shipments, isLoading } = useShipments({
+    args: params,
+    options: {
+      keepPreviousData: true,
+      enabled: !!travel && !!shipmentItem
+    }
+  });
+
+  useMemo(async () => {
+    {
+      shipments?.rows?.map((item) => {
+        const travelSelected = travel?.rows.find((element) => element?.id === item.travelId);
+        item.traveler = `${travelSelected?.traveler?.firstName} ${travelSelected?.traveler?.lastName}`;
+        item.origin = `${travelSelected?.origin?.code}-${travelSelected?.destination?.code}`;
+        item.flight = `${travelSelected?.flight?.number}-${travelSelected?.destination?.code}`;
+        item.departureAtTravel = travelSelected?.departureAt;
+      });
+    }
+  }, [shipments]);
+
+  /*
 
   const handleDelete = (event, row) => {
     event.stopPropagation();
@@ -90,6 +111,14 @@ const ShipmentsList = () => {
     const value = row.id;
     const path = SHIPMENTS_FORM_PAGE(`edit/${value}`);
     router.push(path);
+  };*/
+
+  const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
+
+  const formatShipmentItem = (value) => {
+    const shipmentItemSelected = shipmentItem?.rows.find((element) => element?.id === value);
+
+    return <div>{shipmentItemSelected?.name}</div>;
   };
 
   const columns = useMemo(() => [
@@ -102,28 +131,31 @@ const ShipmentsList = () => {
       accessor: 'flight'
     },
     {
-      Header: t('origin'),
+      Header: `${t('origin')} - ${t('destination')}`,
       accessor: 'origin'
     },
     {
       Header: t('departure-at'),
-      accessor: 'departureAt'
+      accessor: 'departureAtTravel',
+      Cell: ({ value }) => formatDate(value)
     },
     {
-      Header: t('destination'),
-      accessor: 'destination'
+      Header: `${t('shipment-items', { count: 1 })}`,
+      accessor: 'shipmentItemId',
+      Cell: ({ value }) => formatShipmentItem(value)
     },
     {
-      Header: t('shipments'),
-      accessor: 'objeto'
+      Header: t('status'),
+      accessor: 'status'
     },
     {
       id: 'optionsShipments',
       displayName: 'optionsShipments',
       Cell: ({ row }) => (
         <TableActions
-          onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={(event) => handleDelete(event, row)}
+          /*  onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={(event) => handleDelete(event, row)}*/
+          onViewDetails={(event) => onViewDetails(event, row)}
         />
       )
     }
@@ -163,11 +195,18 @@ const ShipmentsList = () => {
     setFilterValues(updatedFilters);
   };
 
-  const renderInsertButton = () => (
+  /* const renderInsertButton = () => (
     <button type="button" className="btn-contained" onClick={() => router.push('shipments/create')}>
       {t('create', { entity: t('shipments', { count: 1 }).toLowerCase() })}
     </button>
-  );
+  );*/
+
+  const onViewDetails = (event, row) => {
+    event.stopPropagation();
+    const value = row.id;
+    const path = SHIPMENTS_FORM_PAGE(`edit/${value}`);
+    router.push(path);
+  };
 
   const options = {
     name: t('shipments', { count: 2 }),
@@ -194,14 +233,14 @@ const ShipmentsList = () => {
     ),
     actions: (
       <div className="space-x-4">
-        <button
+        {/*  <button
           type="button"
           className="px-8 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}
         </button>
-        {renderInsertButton()}
+       renderInsertButton()*/}
       </div>
     )
   };
@@ -213,20 +252,19 @@ const ShipmentsList = () => {
       {shipments && shipments.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('shipments', { count: 0 })}>{renderInsertButton()}</EmptyState>
+        <EmptyState text={t('shipments', { count: 0 })}>{/*renderInsertButton()*/}</EmptyState>
       )}
 
       <FormDialogWrapper open={openForm} onOpen={setOpenForm}>
-        <ShipmentsForm />
+        <ShipmentsForm setLoading={setLoading} />
       </FormDialogWrapper>
-
-      <DeleteConfirmationDialog
+      {/* <DeleteConfirmationDialog
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
         title={t('delete-title', { entity: t('shipments', { count: 1 }) })}
         content={t('delete-message.male', { entity: t('shipments', { count: 1 }) })}
-      />
+      />*/}
     </>
   );
 };

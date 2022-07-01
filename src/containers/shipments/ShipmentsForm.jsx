@@ -1,9 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
+import BaggageCapacityForm from '@/components/baggageCapacityForm';
+import Loading from '@/components/common/Loader';
+import DateForm from '@/components/date';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useRegions from '@/hooks/location/region/useRegions';
 import { saveShipments } from '@/hooks/shipment/useShipments';
-import { useAvailablePayload } from '@/hooks/travel/useTravels';
 import useUsers from '@/hooks/user/useUsers';
 import { apiFetcher } from '@/lib/apiFetcher';
 import { POST, TRAVELS_PAGE } from '@/lib/constants';
@@ -15,24 +17,26 @@ import { format } from 'date-fns';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
+import router from 'next/router';
 import PropTypes from 'prop-types';
 import { Fragment, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import BaggageCapacityForm from '../travels/travel-form/BaggageCapacityForm';
-import DepartureDateForm from '../travels/travel-form/DepartureDateForm';
 
-const ShipmentsForm = ({ onOpen, shipmentId }) => {
+const ShipmentsForm = ({ onOpen }) => {
   const { t, lang } = useTranslation('common');
   const [destination, setDestination] = useState();
   const [baggageCapacity, setBaggageCapacity] = useState();
   const [availablePayload, setAvailablePayload] = useState();
+  const [usersData, setUsersData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     sender: '',
     travel: {},
     origin: '',
     destination: '',
-    amount: 1,
+    amount: '',
     shipmentItems: [],
     departureAt: new Date()
   };
@@ -56,42 +60,60 @@ const ShipmentsForm = ({ onOpen, shipmentId }) => {
     destination: Yup.object().required(t('form.common.required.destination')).nullable()
   });
 
-  const onSubmit = (values) => {
-    let shipment = {
-      sender: 1,
-      payload: {
-        travel: values?.travel_id,
-        shipmentItem: values?.shipment_item_id
-      },
-      status: 'PENDING',
-      amount: values.amount
-    };
-
-    saveShipments({
-      args: shipment,
-      options: {
-        method: POST
-      }
-    });
-  };
-
   const onSearch = async (values) => {
     const paramToSend = {
       origin: values.origin.id,
       destination: values.destination.id,
-      date: format(values.departureAt, 'yyyy-MM-dd')
+      date: values.departureAt,
+      shipping_items: `${baggageCapacity[0].id},${baggageCapacity[0].amount}`
     };
-    const { data } = await apiFetcher(`${TRAVELS_PAGE}/search`, {
-      params: paramToSend,
-      keepPreviousData: true
-    });
 
-    setAvailablePayload(data);
-    useAvailablePayload({
-      args: paramToSend,
-      options: {}
-    });
-    onOpen(false);
+    try {
+      setLoading(true);
+      const { data } = await apiFetcher(`${TRAVELS_PAGE}/search`, {
+        params: paramToSend,
+        keepPreviousData: true
+      });
+
+      setAvailablePayload(data);
+      setUsersData(values);
+      onOpen(false);
+      setLoading(false);
+    } catch (error) {
+      toast.message(error.toString());
+    }
+  };
+
+  const onSubmit = async (values) => {
+    let shipment = {
+      sender: usersData.sender.id,
+      payload: {
+        travel: values?.travel.id,
+        shipmentItem: usersData.shipmentItems.ShipmentItemId
+      },
+      status: 'PENDING',
+      amount: values.amount
+    };
+    let method = POST;
+    let message = t('inserted.male', { entity: t('shipments', { count: 1 }) });
+
+    try {
+      setLoading(true);
+      await saveShipments({
+        args: shipment,
+        options: {
+          method
+        }
+      });
+
+      toast(message);
+      setLoading(false);
+      router.back();
+    } catch (error) {
+      toast.error(error.toString());
+    } finally {
+      setLoading(false);
+    }
   };
 
   const calculateTotalPrice = (amount, price) => {
@@ -101,6 +123,7 @@ const ShipmentsForm = ({ onOpen, shipmentId }) => {
 
   return (
     <>
+      {loading && <Loading />}
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSearch}>
         {({ errors, touched }) => (
           <Form className="p-6 space-y-6">
@@ -144,7 +167,7 @@ const ShipmentsForm = ({ onOpen, shipmentId }) => {
                       />
                     </div>
                   </div>
-                  <DepartureDateForm />
+                  <DateForm fieldValue="departureAt" />
                   <BaggageCapacityForm
                     destination={destination}
                     errors={errors}
@@ -182,7 +205,7 @@ const ShipmentsForm = ({ onOpen, shipmentId }) => {
                                     <UserIcon className="p-2 text-gray-400 bg-gray-200 rounded-full w-14 h-14" />
                                   )}
                                   <div className="flex flex-col justify-between">
-                                    <p>{`${payload.traveler.firstName} ${payload.traveler.lastName}`}</p>
+                                    <p>{`${payload?.travel?.traveler?.firstName} ${payload?.travel?.traveler?.lastName}`}</p>
                                     <div className="flex items-center space-x-2">
                                       <p>{`4,8`}</p>
                                       <StarIcon className="w-5 h-5 text-gray-500" />
@@ -196,18 +219,6 @@ const ShipmentsForm = ({ onOpen, shipmentId }) => {
                                   })}`}</p>
                                   <p className="text-gray-500">{`${payload?.travel?.origin?.code} - ${payload?.travel?.destination?.code}`}</p>
                                 </div>
-
-                                <p className="text-lg font-medium">
-                                  {formatPrice(
-                                    baggageCapacity
-                                      ? calculateTotalPrice(
-                                          baggageCapacity[0]?.amount,
-                                          payload.price
-                                        )
-                                      : 0,
-                                    0
-                                  )}
-                                </p>
                               </div>
                               <ChevronDownIcon
                                 className={`${
@@ -243,8 +254,18 @@ const ShipmentsForm = ({ onOpen, shipmentId }) => {
                                         <PaperAirplaneIcon className="p-2 text-gray-400 bg-gray-200 rounded-full w-14 h-14" />
                                       )}
                                       <div className="">
-                                        <p className="font-medium">{`${payload?.airline?.flight?.number}`}</p>
-                                        <p className="text-gray-500">{`${payload?.airline?.name}`}</p>
+                                        <p className="font-medium">Precio</p>
+                                        <p className="text-gray-500">
+                                          {formatPrice(
+                                            baggageCapacity
+                                              ? calculateTotalPrice(
+                                                  baggageCapacity[0]?.amount,
+                                                  payload.price
+                                                )
+                                              : 0,
+                                            0
+                                          )}
+                                        </p>
                                       </div>
                                     </div>
                                     <div className="">
@@ -282,7 +303,8 @@ const ShipmentsForm = ({ onOpen, shipmentId }) => {
 
 ShipmentsForm.propTypes = {
   onOpen: PropTypes.func.isRequired,
-  shipmentId: PropTypes.number
+  shipmentId: PropTypes.number,
+  setLoading: PropTypes.func.isRequired
 };
 
 export default ShipmentsForm;
