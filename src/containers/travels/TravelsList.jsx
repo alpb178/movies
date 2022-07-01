@@ -5,7 +5,7 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
 import useTravels from '@/hooks/travel/useTravels';
-import { DEFAULT_PAGE_SIZE, TRAVEL_DETAILS_PAGE, TRAVEL_FORM_PAGE } from '@/lib/constants';
+import { DEFAULT_PAGE_SIZE, TRAVEL_DETAILS_PAGE } from '@/lib/constants';
 import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
@@ -91,7 +91,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   const onViewDetails = (event, row) => {
     event.stopPropagation();
     const value = row.id;
-    const path = TRAVEL_FORM_PAGE(`edit/${value}`);
+    const path = TRAVEL_DETAILS_PAGE(value);
     router.push(path);
   };
 
