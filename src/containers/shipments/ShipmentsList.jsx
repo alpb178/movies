@@ -9,7 +9,7 @@ import PaymentFilter from '@/containers/shipments/ShipmentsFilter';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import useShipments from '@/hooks/shipment/useShipments';
 import useTravels from '@/hooks/travel/useTravels';
-import { DEFAULT_PAGE_SIZE, SHIPMENTS_DETAILS_PAGE, SHIPMENTS_FORM_PAGE } from '@/lib/constants';
+import { DEFAULT_PAGE_SIZE, SHIPMENTS_DETAILS_PAGE } from '@/lib/constants';
 import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
@@ -204,7 +204,7 @@ const ShipmentsList = () => {
   const onViewDetails = (event, row) => {
     event.stopPropagation();
     const value = row.id;
-    const path = SHIPMENTS_FORM_PAGE(`edit/${value}`);
+    const path = SHIPMENTS_DETAILS_PAGE(value);
     router.push(path);
   };
 
@@ -218,7 +218,7 @@ const ShipmentsList = () => {
     pageSize,
     onPageSizeChange: setPageSize,
     onRowClick: (row) => {
-      const value = row.original.id;
+      const value = row.id;
       const path = SHIPMENTS_DETAILS_PAGE(value);
       router.push(path);
     },
