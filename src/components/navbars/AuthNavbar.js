@@ -1,8 +1,7 @@
-import { APP_NAME, HOME_PAGE, NAVBAR_HEIGHT } from '@/lib/constants';
+import { APP_NAME, DASHBOARD_PAGE, NAVBAR_HEIGHT } from '@/lib/constants';
 import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -15,7 +14,7 @@ export default function AuthNavbar() {
           style={{ height: NAVBAR_HEIGHT }}
         >
           <div className="flex justify-center w-full h-full">
-            <Link href={HOME_PAGE}>
+            <Link href={DASHBOARD_PAGE}>
               <a className="flex items-center space-x-4 w-max">
                 <Image
                   className="w-auto h-14"

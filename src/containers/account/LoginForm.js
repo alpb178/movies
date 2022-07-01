@@ -1,11 +1,12 @@
-import { FORGOT_PASSWORD_PAGE, HOME_PAGE } from '@/lib/constants';
+/* eslint-disable react/react-in-jsx-scope */
+import { DASHBOARD_PAGE, FORGOT_PASSWORD_PAGE } from '@/lib/constants';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -33,9 +34,9 @@ const LoginForm = () => {
         username: values.username,
         password: values.password,
         rememberMe: values.rememberMe,
-        callbackUrl: HOME_PAGE
+        callbackUrl: DASHBOARD_PAGE
       });
-      if (res.ok) router.push(HOME_PAGE);
+      if (res.ok) router.push(DASHBOARD_PAGE);
     } catch (error) {
       let _messageErrors = '';
       if (error.response) {
