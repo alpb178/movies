@@ -2,8 +2,8 @@
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DataTable from '@/components/table';
-import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
+import useAirlines from '@/hooks/airline/useAirlines';
 import useTravels from '@/hooks/travel/useTravels';
 import { DEFAULT_PAGE_SIZE, TRAVEL_DETAILS_PAGE } from '@/lib/constants';
 import { locales } from '@/lib/utils';
@@ -44,10 +44,17 @@ const TravelsList = ({ hiddenColumns, userId }) => {
     return query;
   }, [filterValues, page, sort]);
 
+  const { data: airlines } = useAirlines({
+    options: {
+      keepPreviousData: true
+    }
+  });
+
   const { data: travels, isLoading } = useTravels({
     args: params,
     options: {
-      keepPreviousData: true
+      keepPreviousData: true,
+      enabled: !!airlines
     }
   });
 
@@ -86,7 +93,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
       setLoading(false);
     }
   };
-*/
+
 
   const onViewDetails = (event, row) => {
     event.stopPropagation();
@@ -94,14 +101,21 @@ const TravelsList = ({ hiddenColumns, userId }) => {
     const path = TRAVEL_DETAILS_PAGE(value);
     router.push(path);
   };
+  */
 
   const formatTraveler = (value) => <div>{`${value?.firstName} ${value?.lastName}`}</div>;
 
-  const formatFlight = (value) => <div>{value?.number}</div>;
+  const formatFlight = (value) => {
+    const selected = airlines?.rows.find((element) => element?.id === value.airlineId);
+    return <div>{`${selected?.name} - ${value?.number}`}</div>;
+  };
 
-  const formatPlace = (value) => <div>{value?.name}</div>;
+  const formatPlace = (value) => {
+    const travelSelected = travels?.rows.find((element) => element?.id === value);
+    return <div>{`${travelSelected?.origin.name} - ${travelSelected?.destination.name}`}</div>;
+  };
 
-  const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
+  const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
 
   const columns = useMemo(() => [
     {
@@ -110,13 +124,13 @@ const TravelsList = ({ hiddenColumns, userId }) => {
       Cell: ({ value }) => formatTraveler(value)
     },
     {
-      Header: t('flights', { count: 1 }),
+      Header: `${t('airlines', { count: 1 })}  -  ${t('flights', { count: 1 })}`,
       accessor: 'flight',
       Cell: ({ value }) => formatFlight(value)
     },
     {
-      Header: t('origin'),
-      accessor: 'origin',
+      Header: `${t('origin')} - ${t('destination')}`,
+      accessor: 'id',
       Cell: ({ value }) => formatPlace(value)
     },
     {
@@ -125,20 +139,15 @@ const TravelsList = ({ hiddenColumns, userId }) => {
       Cell: ({ value }) => formatDate(value)
     },
     {
-      Header: t('destination'),
-      accessor: 'destination',
-      Cell: ({ value }) => formatPlace(value)
-    },
-    {
       id: 'optionsRegulations',
-      displayName: 'optionsRegulations',
-      Cell: ({ row }) => (
+      displayName: 'optionsRegulations'
+      /* Cell: ({ row }) => (
         <TableActions
-          /*onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={(event) => handleDelete(event, row)}*/
+       onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={(event) => handleDelete(event, row)}
           onViewDetails={(event) => onViewDetails(event, row)}
         />
-      )
+      )*/
     }
   ]);
 
