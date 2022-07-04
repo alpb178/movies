@@ -160,6 +160,10 @@ const UsersList = () => {
       Cell: ({ cell }) => renderStatus(cell.row.original.status, cell.row.original)
     },
     {
+      Header: t('phone'),
+      accessor: 'mobile'
+    },
+    {
       Header: t('roles', { count: 2 }),
       accessor: 'roles',
       Cell: ({ value: roles }) => renderRoles(roles)
