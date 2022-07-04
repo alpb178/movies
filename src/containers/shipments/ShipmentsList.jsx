@@ -4,11 +4,12 @@ import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import DataTable from '@/components/table';
-import TableActions from '@/components/table/TableActions';
 import PaymentFilter from '@/containers/shipments/ShipmentsFilter';
+import useAirlines from '@/hooks/airline/useAirlines';
 import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import useShipments from '@/hooks/shipment/useShipments';
 import useTravels from '@/hooks/travel/useTravels';
+import useUsers from '@/hooks/user/useUsers';
 import { DEFAULT_PAGE_SIZE, SHIPMENTS_DETAILS_PAGE } from '@/lib/constants';
 import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
@@ -61,11 +62,23 @@ const ShipmentsList = () => {
     }
   });
 
+  const { data: user } = useUsers({
+    options: {
+      keepPreviousData: true
+    }
+  });
+
+  const { data: airline } = useAirlines({
+    options: {
+      keepPreviousData: true
+    }
+  });
+
   const { data: shipments, isLoading } = useShipments({
     args: params,
     options: {
       keepPreviousData: true,
-      enabled: !!travel && !!shipmentItem
+      enabled: !!travel && !!shipmentItem && !!airline
     }
   });
 
@@ -74,8 +87,10 @@ const ShipmentsList = () => {
       shipments?.rows?.map((item) => {
         const travelSelected = travel?.rows.find((element) => element?.id === item.travelId);
         item.traveler = `${travelSelected?.traveler?.firstName} ${travelSelected?.traveler?.lastName}`;
-        item.origin = `${travelSelected?.origin?.code}-${travelSelected?.destination?.code}`;
-        item.flight = `${travelSelected?.flight?.number}-${travelSelected?.destination?.code}`;
+        item.origin = `${travelSelected?.origin?.name} - ${travelSelected?.destination?.name}`;
+        item.flight = `${
+          airline?.rows.find((element) => element?.id === travelSelected?.flight?.id).name
+        } - ${travelSelected?.flight?.number}`;
         item.departureAtTravel = travelSelected?.departureAt;
       });
     }
@@ -113,7 +128,13 @@ const ShipmentsList = () => {
     router.push(path);
   };*/
 
-  const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
+  const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
+
+  const formatSender = (value) => {
+    const selected = user?.rows.find((element) => element?.id === value);
+
+    return <div>{`${selected?.firstName} ${selected?.lastName}`}</div>;
+  };
 
   const formatShipmentItem = (value) => {
     const shipmentItemSelected = shipmentItem?.rows.find((element) => element?.id === value);
@@ -127,7 +148,7 @@ const ShipmentsList = () => {
       accessor: 'traveler'
     },
     {
-      Header: t('flights', { count: 1 }),
+      Header: `${t('airlines', { count: 1 })}  -  ${t('flights', { count: 1 })}`,
       accessor: 'flight'
     },
     {
@@ -145,19 +166,20 @@ const ShipmentsList = () => {
       Cell: ({ value }) => formatShipmentItem(value)
     },
     {
-      Header: t('status'),
-      accessor: 'status'
+      Header: t('sender'),
+      accessor: 'userId',
+      Cell: ({ value }) => formatSender(value)
     },
     {
       id: 'optionsShipments',
-      displayName: 'optionsShipments',
-      Cell: ({ row }) => (
+      displayName: 'optionsShipments'
+      /* Cell: ({ row }) => (
         <TableActions
-          /*  onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={(event) => handleDelete(event, row)}*/
+            onEdit={(event) => onUpdate(event, row.original)}
+          onDelete={(event) => handleDelete(event, row)}
           onViewDetails={(event) => onViewDetails(event, row)}
         />
-      )
+      )*/
     }
   ]);
 
@@ -199,14 +221,14 @@ const ShipmentsList = () => {
     <button type="button" className="btn-contained" onClick={() => router.push('shipments/create')}>
       {t('create', { entity: t('shipments', { count: 1 }).toLowerCase() })}
     </button>
-  );*/
+  );
 
   const onViewDetails = (event, row) => {
     event.stopPropagation();
     const value = row.id;
     const path = SHIPMENTS_DETAILS_PAGE(value);
     router.push(path);
-  };
+  };*/
 
   const options = {
     name: t('shipments', { count: 2 }),
