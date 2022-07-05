@@ -140,7 +140,7 @@ const UsersList = () => {
         return (
           <input
             id="inactive"
-            className="w-6 h-6 ml-5 text-green-700"
+            className="w-5 h-5 transition-all duration-150 ease-linear text-secondary-600 form-checkbox"
             type="checkbox"
             defaultChecked={status == 'ACTIVE' ? true : false}
             onClick={(event) => onActiveInactiveUsers(event, row)}
