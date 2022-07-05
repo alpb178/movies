@@ -16,7 +16,7 @@ import BirthDateForm from './BirthDateForm';
 const UsersForm = ({ userId }) => {
   const { t } = useTranslation('common');
 
-  const [loading, setLoading] = useState(isLoadingUsers);
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [status] = useState([{ id: 'PENDING' }, { id: 'ACTIVE' }, { id: 'INACTIVE' }]);
 
@@ -113,7 +113,7 @@ const UsersForm = ({ userId }) => {
 
   return (
     <>
-      {loading ? (
+      {loading || isLoadingUsers ? (
         <Loading />
       ) : (
         <Formik
