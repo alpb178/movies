@@ -3,9 +3,11 @@ import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDial
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useUsers, { saveUser, userActivatedDesactivated } from '@/hooks/user/useUsers';
+import { locales } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import EmptyState from 'components/common/EmptyState';
 import UserFilter from 'containers/users/UserFilter';
+import { format } from 'date-fns';
 import {
   API_USERS_URL,
   DEFAULT_PAGE_SIZE,
@@ -21,7 +23,7 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
 const UsersList = () => {
-  const { t } = useTranslation('common');
+  const { t, lang } = useTranslation('common');
   const router = useRouter();
 
   const [page, setPage] = useState(1);
@@ -42,6 +44,10 @@ const UsersList = () => {
     email: '',
     roles: ''
   });
+
+  const locale = {
+    ...locales[lang]
+  };
 
   const params = useMemo(() => {
     const query = {};
@@ -118,6 +124,7 @@ const UsersList = () => {
     }
   };
 
+  const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
   const renderStatus = (status, row) => {
     switch (status) {
       case 'PENDING':
@@ -167,6 +174,11 @@ const UsersList = () => {
       Header: t('roles', { count: 2 }),
       accessor: 'roles',
       Cell: ({ value: roles }) => renderRoles(roles)
+    },
+    {
+      Header: t('create-at'),
+      accessor: 'createdAt',
+      Cell: ({ value }) => formatDate(value)
     },
     {
       id: 'optionsUsers',

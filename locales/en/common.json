@@ -33,6 +33,7 @@
   },
   "client": "Client",
   "client-number": "Client Number",
+  "create-at": "Create date",
   "certificate": {
     "0": "No Certificate 347",
     "one": "Certificate 347",
