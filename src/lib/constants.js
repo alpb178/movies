@@ -7,7 +7,6 @@ export const FOOTER_HEIGHT = 80;
 
 export const TOKEN_KEY = 'next-auth.session-token';
 export const API_REFRESH_TOKEN_URL = '/token'; // Refresh token action
-export const API_LOGIN_URL = '/auth/login'; // Login endpoint
 export const API_USERS_URL = '/users'; // User endpoint
 export const API_AIRLINES_URL = '/airlines';
 export const API_COUNTRIES_URL = '/countries';
@@ -21,6 +20,8 @@ export const API_RESOURCES_URL = '/resources';
 export const API_ROLES_URL = '/roles';
 export const API_SHIPMENT_ITEMS_URL = '/shipment-items';
 export const API_SHIPMENTS_URL = '/shipments';
+export const API_STATISTICS_URL_USERS = '/statistics/users';
+export const API_STATISTICS_URL_USERS_COUNT = '/statistics/users/count';
 export const API_TRAVELS_URL = '/travels';
 
 // App Routes
@@ -42,6 +43,16 @@ export const SHIPMENT_ITEMS_PAGE = '/shipment-items';
 export const SHIPMENTS_PAGE = '/shipments';
 export const TRAVELS_PAGE = '/travels';
 export const PAYLOADS_PAGE = '/payloads';
+
+// Auth
+export const API_AUTH_URL = '/auth';
+export const API_CONFIRM_SIGNUP_URL = `${API_AUTH_URL}/confirm/email`;
+export const API_CHANGE_PASSWORD_URL = `${API_AUTH_URL}/confirm/password`;
+export const API_RESET_PASSWORD_URL = `${API_AUTH_URL}/reset/password`;
+export const API_LOGIN_URL = `${API_AUTH_URL}/login`;
+export const API_SIGNUP_URL = `${API_AUTH_URL}/signup`;
+export const API_FACEBOOK_AUTH_URL = `${API_AUTH_URL}/signin/facebook`;
+export const API_GOOGLE_AUTH_URL = `${API_AUTH_URL}/signin/google`;
 
 //Shipments
 export const SHIPMENTS_DETAILS_PAGE = (value) => `${SHIPMENTS_PAGE}/detail/${value}`;

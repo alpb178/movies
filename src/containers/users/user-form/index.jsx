@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
 import AutocompleteField from '@/components/form/AutocompleteField';
+import { signupUser } from '@/hooks/auth/useAuth';
 import useUsers, { saveUser } from '@/hooks/user/useUsers';
 import { Field, Form, Formik } from 'formik';
 import { POST, PUT, USERS_PAGE } from 'lib/constants';
@@ -8,7 +9,6 @@ import useTranslation from 'next-translate/useTranslation';
 import router from 'next/router';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import BirthDateForm from './BirthDateForm';
@@ -17,7 +17,7 @@ const UsersForm = ({ userId }) => {
   const { t } = useTranslation('common');
 
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+
   const [status] = useState([{ id: 'PENDING' }, { id: 'ACTIVE' }, { id: 'INACTIVE' }]);
 
   const { data: users, isLoading: isLoadingUsers } = useUsers({
@@ -32,18 +32,11 @@ const UsersForm = ({ userId }) => {
     else return false;
   };
 
-  const validatePassword = () => {
-    if (users) return false;
-    else return true;
-  };
-
   const initialValues = {
     firstName: users?.firstName || '',
     lastName: users?.lastName || '',
     email: users?.email || '',
     mobile: users?.mobile || '',
-    password: users?.password || '',
-    repeatPassword: '',
     birthdate: users?.birthdate || '',
     bio: users?.bio || '',
     status: { id: users?.status } || ''
@@ -55,23 +48,7 @@ const UsersForm = ({ userId }) => {
     email: Yup.string().required(t('required.email')),
     mobile: Yup.string().required(t('required.phone')),
     status: Yup.object().nullable().required(t('required.status')),
-    birthdate: Yup.date().nullable().test('birthdate', 'Fecha Invalida', validateBirthdate),
-    password: Yup.string()
-      .ensure()
-      .when('create', {
-        is: validatePassword,
-        then: Yup.string()
-          .oneOf([Yup.ref('repeatPassword'), null], t('required.password-compare'))
-          .required(t('required.password'))
-      }),
-    repeatPassword: Yup.string()
-      .ensure()
-      .when('create', {
-        is: validatePassword,
-        then: Yup.string()
-          .oneOf([Yup.ref('password'), null], t('required.password-compare'))
-          .required(t('required.password-confirm'))
-      })
+    birthdate: Yup.date().nullable().test('birthdate', 'Fecha Invalida', validateBirthdate)
   });
 
   const onSubmit = async (values) => {
@@ -79,6 +56,7 @@ const UsersForm = ({ userId }) => {
     let method = POST;
 
     try {
+      setLoading(true);
       usersSendApi.bio = values.bio;
       usersSendApi.birthdate = values.birthdate;
       usersSendApi.email = values.email;
@@ -87,20 +65,20 @@ const UsersForm = ({ userId }) => {
       usersSendApi.mobile = values.mobile;
       usersSendApi.status = values.status.id;
       let message = t('inserted.male', { entity: t('users', { count: 1 }) });
-      if (!users) {
-        usersSendApi.password = values.password;
-      } else {
+
+      if (users) {
         method = PUT;
         usersSendApi.id = userId;
         message = t('updated.male', { entity: t('users', { count: 1 }) });
+        await saveUser({
+          args: usersSendApi,
+          options: {
+            method
+          }
+        });
+      } else {
+        await signupUser({ data: values });
       }
-      setLoading(true);
-      await saveUser({
-        args: usersSendApi,
-        options: {
-          method
-        }
-      });
 
       toast(message);
       router.push(USERS_PAGE);
@@ -207,68 +185,7 @@ const UsersForm = ({ userId }) => {
                   />
                 </div>
               </div>
-              {!isNaN(userId) || (
-                <div className="flex  flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
-                  <div className="w-full mt-8">
-                    <label htmlFor="name">{t('password')}</label>
-                    <div className="relative  rounded-md">
-                      <Field
-                        type={showPassword ? 'text' : 'password'}
-                        name="password"
-                        id="password"
-                        className={`autocomplete-field w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
-                          errors.password && touched.password ? 'border-red-400' : 'border-gray-300'
-                        }`}
-                      />
 
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 flex items-center pr-3"
-                      >
-                        {showPassword ? (
-                          <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                        ) : (
-                          <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                        )}
-                      </button>
-                    </div>
-                    {errors?.password && touched?.password ? (
-                      <p className="mt-4 text-red-600">{errors?.password}</p>
-                    ) : null}
-                  </div>
-                  <div className="w-full">
-                    <label htmlFor="name">{t('repeat-password')}</label>
-                    <div className="relative  rounded-md ">
-                      <Field
-                        type={showPassword ? 'text' : 'repeatPassword'}
-                        name="repeatPassword"
-                        id="repeatPassword"
-                        className={`autocomplete-field w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm ${
-                          errors.repeatPassword && touched.repeatPassword
-                            ? 'border-red-400'
-                            : 'border-gray-300'
-                        }`}
-                      />
-
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 flex items-center pr-3"
-                      >
-                        {showPassword ? (
-                          <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                        ) : (
-                          <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                        )}
-                      </button>
-                    </div>
-                    {errors?.repeatPassword && touched?.repeatPassword ? (
-                      <p className="mt-4 text-red-600">{errors?.repeatPassword}</p>
-                    ) : null}
-                  </div>
-                </div>
-              )}
               <div className="flex  flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
                 <div className="w-full mt-5">
                   <label htmlFor="name">{t('bio')}</label>
