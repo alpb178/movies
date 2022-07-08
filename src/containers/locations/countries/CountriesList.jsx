@@ -150,9 +150,6 @@ const CountriesList = () => {
     pageSize,
     onPageSizeChange: setPageSize,
     name: t('countries', { count: 2 }),
-    onRowClick: (row) => {
-      const value = row.original.id;
-    },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <CountriesSearch open={openFilters} onSubmit={handleFilters} />
