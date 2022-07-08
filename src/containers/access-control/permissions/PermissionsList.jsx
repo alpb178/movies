@@ -151,10 +151,9 @@ const Permissions = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
-    onRowClick: () => null, // TODO: Here we show details view
     onFilter: (
       <div className={clsx('w-full px-6', openFilters && 'flex flex-col')}>
-        <PermissionsFilter open={openFilters} onSubmit={handleFilters} />
+        {<PermissionsFilter open={openFilters} onSubmit={handleFilters} />}
 
         <div className="flex">
           <FilterCriteria />
@@ -163,13 +162,13 @@ const Permissions = () => {
     ),
     actions: (
       <div className="space-x-4">
-        <button
+        {/* <button
           type="button"
           className="px-8 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}
-        </button>
+        </button>*/}
         {renderInsertButton()}
       </div>
     )

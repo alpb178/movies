@@ -6,7 +6,7 @@ import useResources from '@/hooks/resource/useResources';
 import { actions, API_PERMISSIONS_URL, POST, PUT } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -14,13 +14,14 @@ import * as Yup from 'yup';
 const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
+  const [isNewData, setIsNewData] = useState(true);
 
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
   const initialValues = {
-    action: data?.action,
-    resource: data?.resource
+    action: { id: data?.id, name: data?.action } || '',
+    resource: data?.resource || ''
   };
 
   const params = useMemo(() => {
@@ -52,19 +53,24 @@ const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
     }
     try {
       onLoading(true);
-
       await savePermission({
         args: values,
         options: { method }
       });
       await queryClient.refetchQueries([API_PERMISSIONS_URL]);
-      onLoading(false);
       onOpen(false);
       toast(message);
+      onLoading(false);
     } catch (error) {
       toast.error(error.toString());
+    } finally {
+      onLoading(false);
     }
   };
+
+  useEffect(() => {
+    data?.id ? setIsNewData(false) : setIsNewData(true);
+  }, [data?.id]);
 
   return (
     <FormDialogWrapper
@@ -75,8 +81,10 @@ const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
       onSubmit={onSubmit}
       setErrorsForm={setErrors}
       setTouchedForm={setTouched}
+      isNewData={isNewData}
       validationSchema={validationSchema}
     >
+      {console.log(initialValues, data)}
       <div className="space-y-2">
         <label htmlFor="action">{t('form.permissions.label.action')}</label>
         <div className="relative w-full mx-auto">
@@ -84,7 +92,7 @@ const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
             name="action"
             options={Object.values(actions).map((action) => action)}
             className="autocomplete-field"
-            defaultValue={data?.action}
+            defaultValue={initialValues.action}
           />
         </div>
       </div>
