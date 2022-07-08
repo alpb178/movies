@@ -9,12 +9,15 @@ import PropTypes from 'prop-types';
 import { Fragment, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
+import ResourceForm from './ResourceForm';
 
 export default function ListItemActions({ actions, resource, setLoading }) {
   const { t } = useTranslation('common');
 
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const queryClient = useQueryClient();
+  const [openForm, setOpenForm] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
 
   const onDeleteConfirmation = async () => {
     try {
@@ -35,8 +38,15 @@ export default function ListItemActions({ actions, resource, setLoading }) {
     }
   };
 
-  const onDelete = (resource) => {
+  const onDelete = (event, resource) => {
+    event.stopPropagation();
     setDeleteConfirmation({ open: true, id: resource.id });
+  };
+
+  const onEdit = (event, resource) => {
+    event.stopPropagation();
+    setOpenForm(true);
+    setSelectedItem(resource);
   };
 
   return (
@@ -63,9 +73,11 @@ export default function ListItemActions({ actions, resource, setLoading }) {
                   {({ active }) => (
                     <button
                       className={`${
-                        active ? 'bg-secondary-100 text-secondary-600' : 'text-gray-800'
+                        active ? 'bg-secondary-100 z-20 text-secondary-600' : 'text-gray-800'
                       } group flex w-full items-center rounded-md px-2 py-4 space-x-4`}
-                      onClick={() => (action.id == 'delete' ? onDelete(resource) : '')}
+                      onClick={(event) =>
+                        action.id == 'delete' ? onDelete(event, resource) : onEdit(event, resource)
+                      }
                     >
                       <action.icon className="w-6 h-6" />
                       <p>{action.name}</p>
@@ -86,6 +98,13 @@ export default function ListItemActions({ actions, resource, setLoading }) {
         onDeleteConfirmation={onDeleteConfirmation}
         title={t('delete-title', { entity: t('resources', { count: 1 }).toLowerCase() })}
         content={t('delete-message.male', { entity: t('resources', { count: 1 }).toLowerCase() })}
+      />
+
+      <ResourceForm
+        data={selectedItem}
+        setLoading={setLoading}
+        onOpen={setOpenForm}
+        open={openForm}
       />
     </Menu>
   );

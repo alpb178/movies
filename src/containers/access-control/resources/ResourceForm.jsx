@@ -27,7 +27,7 @@ const ResourceForm = ({ data, onOpen, open, setLoading }) => {
   const onSubmit = async (values) => {
     let method = POST;
     let message = t('inserted.male', { entity: t('resources', { count: 1 }) });
-    if (values?.id) {
+    if (data?.id) {
       method = PUT;
       values.id = data.id;
       message = t('updated.male', { entity: t('resources', { count: 1 }) });
@@ -40,8 +40,8 @@ const ResourceForm = ({ data, onOpen, open, setLoading }) => {
           method
         }
       });
-      setLoading(false);
       await queryClient.invalidateQueries([API_RESOURCES_URL]);
+      setLoading(false);
       onOpen(false);
       toast(message);
     } catch (error) {

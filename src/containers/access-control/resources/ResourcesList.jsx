@@ -54,7 +54,7 @@ function ResourcesList() {
                 <ul role="list" className="-my-5 divide-y divide-gray-200">
                   <li key={resource.id} className="py-5 mt-3 cursor-pointer">
                     <div className="relative flex items-center justify-between">
-                      <p className="font-semibold text-gray-800">
+                      <p className=" text-gray-800">
                         <span className="absolute inset-0" aria-hidden="true" />
                         {t(resource.name, { count: 2 })}
                       </p>
