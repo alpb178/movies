@@ -1,14 +1,15 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
 import DataTable from '@/components/table';
 import usePermissions from '@/hooks/permission/usePermissions';
 import useResources from '@/hooks/resource/useResources';
-import { getRoles, saveRole } from '@/hooks/role/useRoles';
+import useRoles, { saveRole } from '@/hooks/role/useRoles';
 import { actions, API_ROLES_URL, POST, PUT } from '@/lib/constants';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -17,27 +18,26 @@ const RolesForm = ({ roleId }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation('common');
-
-  const [role, setRole] = useState();
-  const [rolePermissions, setRolePermissions] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [isNewData, setIsNewData] = useState(true);
-  const [initialValues, setInitialValues] = useState();
 
-  useEffect(() => {
-    const fetchRole = async () => {
-      if (!isNaN(roleId)) {
-        const data = await getRoles({ id: roleId });
-        setInitialValues(data);
-      }
-    };
-
-    fetchRole();
-  }, [roleId]);
-
-  const { data: resources, isLoading: isLoadingResources } = useResources({
+  const { data: resources } = useResources({
     options: {
       keepPreviousData: true
+    }
+  });
+
+  const { data: permissions } = usePermissions({
+    args: permissionsParams,
+    options: {
+      keepPreviousData: true
+    }
+  });
+
+  const { data: roles, isLoading: isLoadingRoles } = useRoles({
+    args: { id: roleId },
+    options: {
+      keepPreviousData: true,
+      enabled: roleId !== 'create' && !!resources && !!permissions
     }
   });
 
@@ -47,13 +47,6 @@ const RolesForm = ({ roleId }) => {
       return { size: resources.count * 4 };
     }
   }, [resources]);
-
-  const { data: permissions, isLoading: isLoadingPermissions } = usePermissions({
-    args: permissionsParams,
-    options: {
-      keepPreviousData: true
-    }
-  });
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required()
@@ -67,9 +60,9 @@ const RolesForm = ({ roleId }) => {
     let method = POST;
     let message = t('inserted.male', { entity: t('roles', { count: 1 }) });
 
-    if (role) {
+    if (roleId !== 'create') {
       method = PUT;
-      body.id = role.id;
+      body.id = roleId;
       message = t('updated.male', { entity: t('roles', { count: 1 }) });
     }
 
@@ -90,10 +83,6 @@ const RolesForm = ({ roleId }) => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    role?.id ? setIsNewData(false) : setIsNewData(true);
-  }, [role?.id]);
 
   const columns = useMemo(() => [
     {
@@ -122,10 +111,17 @@ const RolesForm = ({ roleId }) => {
                 className="inline-flex items-center cursor-pointer"
               >
                 <Field
-                  // id={`permissions.${action.name}.${row.original.name}`}
                   className="w-5 h-5 transition-all duration-150 ease-linear text-secondary-600 form-checkbox"
                   type="checkbox"
                   name={`${existentPermissions.id}`}
+                  /* checked={
+                    initialValues.permissions.find((item) => item.id === existentPermissions.id)?.id
+                      ? true
+                      : false
+                  }
+                  onChange={(e) => {
+                    console.log(e.target.checked);
+                  }}*/
                 />
                 <span className="ml-2 font-medium text-gray-700">{t(action.name)}</span>
               </label>
@@ -202,9 +198,14 @@ const RolesForm = ({ roleId }) => {
     )*/
   };
 
+  const initialValues = {
+    name: roles?.name || '',
+    permissions: roles?.permissions || []
+  };
+
   return (
     <>
-      {isLoading || isLoadingResources || isLoadingPermissions ? (
+      {isLoading || isLoadingRoles ? (
         <Loading />
       ) : (
         <Formik

@@ -197,7 +197,7 @@ const RolesList = () => {
       {roles && roles.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
+        <EmptyState text={t('roles', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
       <DeleteConfirmationDialog

@@ -12,11 +12,9 @@ import { useMemo, useState } from 'react';
 
 const Dashboard = () => {
   const { t, lang } = useTranslation('common');
-
-  const [page, setPage] = useState(1);
-
-  const [sort, setSort] = useState('');
+  const [filterValues, setFilterValues] = useState('day');
   const [data, setData] = useState({});
+  const [dataStatics, setDataStatics] = useState({});
 
   const locale = {
     ...locales[lang]
@@ -24,10 +22,9 @@ const Dashboard = () => {
 
   const params = useMemo(() => {
     const query = {};
-    if (page !== 0) query.page = page;
-    if (sort) query.sort = sort;
+    if (filterValues !== '') query.tf = filterValues;
     return query;
-  }, [page, sort]);
+  }, [filterValues]);
 
   const { data: statisticsUsers, isLoading } = useStaticsUsers({
     args: params,
@@ -36,35 +33,57 @@ const Dashboard = () => {
     }
   });
 
+  const { data: statistics, isLoadingStaticts } = useStaticsUsers({
+    options: {
+      keepPreviousData: true
+    }
+  });
+
+  const onSubmit = (event, value) => {
+    event.stopPropagation();
+    setFilterValues(value);
+  };
+
   useMemo(async () => {
     if (statisticsUsers) {
       let count = [];
       let labels = [];
       statisticsUsers?.map((item) => {
         count.push(item?.count);
-        labels.push(format(new Date(item?.time_frame), 'PP', { locale }));
+        switch (filterValues) {
+          case 'months':
+            return labels.push(new Date(item?.time_frame).getMonth());
+          case 'day':
+            return labels.push(format(new Date(item?.time_frame), 'PP', { locale }));
+          case 'year':
+            labels.push(new Date(item?.time_frame).getFullYear());
+        }
       });
       setData({ labels: labels, count: count });
+    }
+    if (statistics) {
+      let count = [];
+      let labels = [];
+      statistics?.map((item) => {
+        count.push(item?.count);
+        labels.push(format(new Date(item?.time_frame), 'PP', { locale }));
+      });
+      setDataStatics({ labels: labels, count: count });
     }
   }, [statisticsUsers]);
 
   return (
     <>
-      {isLoading && <Loading />}
-      <div className="flex space-y-4">
-        <CardBarChartUsers data={data} />
-      </div>
-      {/*<div className="flex space-y-4">
-        <CardPageVisits />
-      </div>
+      {(isLoading || isLoadingStaticts) && <Loading />}
       <div className="flex space-x-4">
+        {console.log(filterValues)}
         <div className="w-full xl:w-1/2">
-          <CardSocialTraffic />
+          <CardBarChartUsers data={data} actions={['months', 'day', 'year']} onSubmit={onSubmit} />
         </div>
         <div className="w-full h-full xl:w-1/2">
-          <CardBarChart />
+          <CardBarChartUsers data={dataStatics} />
         </div>
-      </div>*/}
+      </div>
     </>
   );
 };

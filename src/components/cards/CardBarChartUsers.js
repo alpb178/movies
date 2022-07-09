@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import CardChart from './Card';
 
-const BarChart = ({ data }) => {
+const BarChart = ({ data, actions, onSubmit }) => {
   const { t } = useTranslation('common');
 
   const info = {
@@ -11,16 +11,17 @@ const BarChart = ({ data }) => {
     datasets: [
       {
         label: 'Cantidad',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
         data: data?.count,
-        fill: false,
-        barThickness: 8
+        fill: true,
+        barThickness: 8,
+        backgroundColor: 'rgba(75,192,192,0.2)',
+        borderColor: 'rgba(75,192,192,1)'
       }
     ]
   };
 
   const options = {
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     responsive: true,
     title: {
       display: false,
@@ -36,7 +37,7 @@ const BarChart = ({ data }) => {
     },
     legend: {
       labels: {
-        fontColor: '#000000'
+        fontColor: 'rgb(0,0,255)'
       },
       align: 'end',
       position: 'bottom'
@@ -46,12 +47,14 @@ const BarChart = ({ data }) => {
         {
           display: true,
           gridLines: {
-            borderDash: [2],
-            borderDashOffset: [2],
-            color: 'rgba(33, 37, 41, 0.3)',
-            zeroLineColor: 'rgba(33, 37, 41, 0.3)',
-            zeroLineBorderDash: [2],
-            zeroLineBorderDashOffset: [2]
+            borderDash: [5],
+            borderDashOffset: [5],
+            color: 'rgb(0,0,255)',
+            backgroundColor: 'rgb(0,0,255)',
+            zeroLineColor: 'rgb(0,0,255)',
+            zeroLineBorderDash: [5],
+            zeroLineBorderDashOffset: [5],
+            borderColor: 'rgba(75,192,192,1)'
           }
         }
       ],
@@ -59,17 +62,17 @@ const BarChart = ({ data }) => {
         {
           display: true,
           scaleLabel: {
-            display: false,
+            display: true,
             labelString: ''
           },
           gridLines: {
-            borderDash: [2],
+            borderDash: [5],
             drawBorder: true,
             borderDashOffset: [2],
-            color: 'rgba(33, 37, 41, 0.2)',
-            zeroLineColor: 'rgba(33, 37, 41, 0.15)',
-            zeroLineBorderDash: [2],
-            zeroLineBorderDashOffset: [2]
+            color: 'rgb(0, 0, 0)',
+            zeroLineColor: 'rgb(0, 0, 0)',
+            zeroLineBorderDash: [5],
+            zeroLineBorderDashOffset: [5]
           }
         }
       ]
@@ -80,8 +83,10 @@ const BarChart = ({ data }) => {
     <div className="relative flex flex-col w-full mt-5 min-w-0 mb-4 break-words bg-white rounded shadow">
       <CardChart
         title={`${t('users', { count: 2 })} ${new Date().getFullYear()}`}
-        type="bar"
+        type="line"
         data={info}
+        actions={actions}
+        onSubmit={onSubmit}
         options={options}
       />
     </div>
