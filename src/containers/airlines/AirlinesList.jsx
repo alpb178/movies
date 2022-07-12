@@ -184,13 +184,14 @@ const AirlinesList = () => {
         <EmptyState text={t('airlines', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <AirlinesForm
-        data={selectedItem}
-        open={openForm}
-        onOpen={setOpenForm}
-        setLoading={setLoading}
-      />
-
+      {openForm && (
+        <AirlinesForm
+          data={selectedItem}
+          open={openForm}
+          onOpen={setOpenForm}
+          setLoading={setLoading}
+        />
+      )}
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}

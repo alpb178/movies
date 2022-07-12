@@ -1,10 +1,11 @@
+/* eslint-disable react/react-in-jsx-scope */
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import { saveCountry } from '@/hooks/location/country/useCountries';
 import { API_COUNTRIES_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -54,6 +55,10 @@ const CountryForm = ({ data, onOpen, open, setLoading }) => {
   useEffect(() => {
     data?.id ? setIsNewData(false) : setIsNewData(true);
   }, [data?.id]);
+
+  useEffect(() => {
+    onOpen(true);
+  });
 
   return (
     <FormDialogWrapper

@@ -126,12 +126,14 @@ const MeasureUnitsList = () => {
         <EmptyState text={t('measure-units', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <MeasureUnitsForm
-        data={selectedItem}
-        open={openForm}
-        onOpen={setOpenForm}
-        setLoading={setLoading}
-      />
+      {openForm && (
+        <MeasureUnitsForm
+          data={selectedItem}
+          open={openForm}
+          onOpen={setOpenForm}
+          setLoading={setLoading}
+        />
+      )}
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
@@ -145,9 +147,9 @@ const MeasureUnitsList = () => {
 };
 
 MeasureUnitsList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired
+  row: PropTypes.object,
+  data: PropTypes.object,
+  loading: PropTypes.bool
 };
 
 export default MeasureUnitsList;

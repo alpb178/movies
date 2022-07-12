@@ -2,7 +2,6 @@ import { Menu, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const DataFilter = ({ children, initialValues, onSubmit, open }) => {
   const { t } = useTranslation('common');
@@ -41,7 +40,7 @@ DataFilter.defaultProps = {
 };
 
 DataFilter.propTypes = {
-  children: PropTypes.object.isRequired,
+  children: PropTypes.array,
   initialValues: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   open: PropTypes.bool

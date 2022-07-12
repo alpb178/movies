@@ -59,9 +59,9 @@ DialogWrapper.defaultProps = {
 };
 
 DialogWrapper.propTypes = {
-  children: PropTypes.array.isRequired,
+  children: PropTypes.object,
   title: PropTypes.string,
-  onOpen: PropTypes.func.isRequired,
+  onOpen: PropTypes.func,
   open: PropTypes.bool
 };
 

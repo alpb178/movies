@@ -229,12 +229,14 @@ const RegulationsList = () => {
         <EmptyState text={t('regulations', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
-      <RegulationsForm
-        data={selectedItem}
-        open={openForm}
-        onOpen={setOpenForm}
-        setLoading={setLoading}
-      />
+      {openForm && (
+        <RegulationsForm
+          data={selectedItem}
+          open={openForm}
+          onOpen={setOpenForm}
+          setLoading={setLoading}
+        />
+      )}
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
@@ -250,7 +252,7 @@ const RegulationsList = () => {
 };
 
 RegulationsList.propTypes = {
-  row: PropTypes.object.isRequired
+  row: PropTypes.object
 };
 
 export default RegulationsList;

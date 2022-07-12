@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import { saveMeasureUnits } from '@/hooks/measure-unit/useMeasureUnits';
@@ -5,7 +6,7 @@ import { API_MEASURE_UNITS_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -57,6 +58,10 @@ const MeasureUnitsForm = ({ data, onOpen, open, setLoading }) => {
     data?.id ? setIsNewData(false) : setIsNewData(true);
   }, [data?.id]);
 
+  useEffect(() => {
+    onOpen(true);
+  });
+
   return (
     <FormDialogWrapper
       formName="measure-unit"
@@ -105,14 +110,14 @@ const MeasureUnitsForm = ({ data, onOpen, open, setLoading }) => {
 };
 
 MeasureUnitsForm.propTypes = {
-  data: PropTypes.object.isRequired,
-  touched: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  symbol: PropTypes.object.isRequired,
-  name: PropTypes.object.isRequired,
-  onOpen: PropTypes.func.isRequired,
-  setLoading: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired
+  data: PropTypes.object,
+  touched: PropTypes.object,
+  errors: PropTypes.object,
+  symbol: PropTypes.object,
+  name: PropTypes.object,
+  onOpen: PropTypes.func,
+  setLoading: PropTypes.func,
+  open: PropTypes.bool
 };
 
 export default MeasureUnitsForm;

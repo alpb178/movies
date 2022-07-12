@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
 import AutocompleteField from '@/components/form/AutocompleteField';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
@@ -7,7 +8,7 @@ import { API_SHIPMENT_ITEMS_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -73,6 +74,10 @@ const ShipmentItemsForm = ({ data, open, onOpen, setLoading }) => {
     data?.id ? setIsNewData(false) : setIsNewData(true);
   }, [data?.id]);
 
+  useEffect(() => {
+    onOpen(true);
+  });
+
   return (
     <FormDialogWrapper
       formName="shipment-item"
@@ -118,13 +123,13 @@ const ShipmentItemsForm = ({ data, open, onOpen, setLoading }) => {
 };
 
 ShipmentItemsForm.propTypes = {
-  data: PropTypes.object.isRequired,
-  touched: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  name: PropTypes.object.isRequired,
-  onOpen: PropTypes.func.isRequired,
-  setLoading: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired
+  data: PropTypes.object,
+  touched: PropTypes.object,
+  errors: PropTypes.object,
+  name: PropTypes.object,
+  onOpen: PropTypes.func,
+  setLoading: PropTypes.func,
+  open: PropTypes.bool
 };
 
 export default ShipmentItemsForm;

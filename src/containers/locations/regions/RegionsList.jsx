@@ -189,12 +189,14 @@ const RegionsList = () => {
         <EmptyState text={t('regions', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
-      <RegionForm
-        data={selectedItem}
-        open={openForm}
-        onOpen={setOpenForm}
-        setLoading={setLoading}
-      />
+      {openForm && (
+        <RegionForm
+          data={selectedItem}
+          open={openForm}
+          onOpen={setOpenForm}
+          setLoading={setLoading}
+        />
+      )}
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
@@ -208,12 +210,12 @@ const RegionsList = () => {
 };
 
 RegionsList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  onGetRegions: PropTypes.func.isRequired,
-  onSelectPayment: PropTypes.func.isRequired,
-  onDeletePayment: PropTypes.func.isRequired
+  row: PropTypes.object,
+  data: PropTypes.object,
+  loading: PropTypes.bool,
+  onGetRegions: PropTypes.func,
+  onSelectPayment: PropTypes.func,
+  onDeletePayment: PropTypes.func
 };
 
 export default RegionsList;

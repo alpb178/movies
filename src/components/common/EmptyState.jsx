@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const EmptyState = ({ children, text }) => {
   return (
@@ -11,7 +10,7 @@ const EmptyState = ({ children, text }) => {
 };
 
 EmptyState.propTypes = {
-  children: PropTypes.array,
+  children: PropTypes.object,
   text: PropTypes.string
 };
 

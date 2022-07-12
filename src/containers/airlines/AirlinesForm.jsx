@@ -1,10 +1,11 @@
+/* eslint-disable react/react-in-jsx-scope */
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import { saveAirlines } from '@/hooks/airline/useAirlines';
 import { API_AIRLINES_URL, POST, PUT } from '@/lib/constants';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -85,6 +86,10 @@ const AirlinesForm = ({ data, onOpen, open, setLoading }) => {
   useEffect(() => {
     data?.id ? setIsNewData(false) : setIsNewData(true);
   }, [data?.id]);
+
+  useEffect(() => {
+    onOpen(true);
+  });
 
   return (
     <FormDialogWrapper

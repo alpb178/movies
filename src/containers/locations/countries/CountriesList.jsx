@@ -181,12 +181,14 @@ const CountriesList = () => {
         )
       )}
 
-      <CountryForm
-        data={selectedItem}
-        open={openForm}
-        onOpen={setOpenForm}
-        setLoading={setLoading}
-      />
+      {openForm && (
+        <CountryForm
+          data={selectedItem}
+          open={openForm}
+          onOpen={setOpenForm}
+          setLoading={setLoading}
+        />
+      )}
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}

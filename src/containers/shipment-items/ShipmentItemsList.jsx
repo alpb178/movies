@@ -188,12 +188,14 @@ const ShipmentItemsList = () => {
         <EmptyState text={t('shipment-items', { count: 0 })}>{renderInsertButton()}</EmptyState>
       )}
 
-      <ShipmentItemsForm
-        data={selectedItem}
-        open={openForm}
-        onOpen={setOpenForm}
-        setLoading={setLoading}
-      />
+      {openForm && (
+        <ShipmentItemsForm
+          data={selectedItem}
+          open={openForm}
+          onOpen={setOpenForm}
+          setLoading={setLoading}
+        />
+      )}
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}
@@ -207,9 +209,9 @@ const ShipmentItemsList = () => {
 };
 
 ShipmentItemsList.propTypes = {
-  row: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired
+  row: PropTypes.object,
+  data: PropTypes.object,
+  loading: PropTypes.bool
 };
 
 export default ShipmentItemsList;

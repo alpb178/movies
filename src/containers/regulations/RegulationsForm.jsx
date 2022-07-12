@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
 import AutocompleteField from '@/components/form/AutocompleteField';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
@@ -11,7 +12,7 @@ import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import 'rc-slider/assets/index.css';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -31,6 +32,10 @@ const RegulationsForm = ({ data, open, onOpen, setLoading }) => {
   useEffect(() => {
     data?.id ? setIsNewData(false) : setIsNewData(true);
   }, [data?.id]);
+
+  useEffect(() => {
+    onOpen(true);
+  });
 
   const params = useMemo(() => {
     return {};
