@@ -53,6 +53,7 @@
   "date-order": "Fecha Pedido",
   "date-flight": "Fecha de Vuelo",
   "date-delivery": " Fecha Entrega",
+  "day": "Día",
   "deactivate": "Desactivar",
   "delete": "Eliminar",
   "delete-filter": "Borrar Filtro",
@@ -304,6 +305,7 @@
   },
   "mobile": "Móvil",
   "municipality": "Municipio",
+  "months": "Mes",
   "name": "Nombre",
   "surname": "Apellidos",
   "none": "Ninguno",
@@ -417,6 +419,10 @@
   },
   "send": "Enviar",
   "status": "Estado",
+  "statistics": {
+    "users-count": "Cantidad Usuarios Registrados vs Tiempo",
+    "user-activate-desactivate": "Cantidad Usuarios Activos e Inactivos"
+  },
   "symbol": "Símbolo",
   "table": {
     "page-count": "Página {{currentPage}} de {{lastPage}}",
@@ -452,5 +458,6 @@
     "other": "Usuarios"
   },
   "unregulated": "No regulado",
-  "voucher": "Justificante"
+  "voucher": "Justificante",
+  "year": "Año"
 }

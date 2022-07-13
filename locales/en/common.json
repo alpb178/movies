@@ -67,6 +67,7 @@
   "demo": "Demo",
   "date-order": " Date Order",
   "date-delivery": " Date Delivery",
+  "day": "Day",
   "date-flight": "Date Flight",
   "delete": "Delete",
   "delete-filter": "Clear Filter",
@@ -298,6 +299,7 @@
     "message-customer-care": "I have read and accept the Data Protection clause."
   },
   "municipality": "Municipality",
+  "months": "Months",
   "name": "Name",
   "surname": "Surname",
   "none": "None",
@@ -394,6 +396,10 @@
   },
   "showing": "Showing",
   "status": "Status",
+  "statistics": {
+    "users-count": "Number of Registered Users vs. Time",
+    "user-activate-desactivate": "Number of Active and Inactive users"
+  },
   "type": "Type",
   "trade-name": "Trade name",
   "update": "Update",
@@ -408,5 +414,6 @@
     "one": "User",
     "other": "Users"
   },
-  "voucher": "Voucher"
+  "voucher": "Voucher",
+  "year": "Year"
 }

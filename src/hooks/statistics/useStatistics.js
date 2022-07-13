@@ -13,3 +13,9 @@ export function useStaticsUsersCount({ args = {}, options = {} } = {}) {
     ...options
   });
 }
+
+export function useStaticsUsersActiveDesactive({ args = {}, options = {} } = {}) {
+  return useQuery([API_STATISTICS_URL_USERS_COUNT, { ...args }], getData, {
+    ...options
+  });
+}

@@ -76,12 +76,21 @@ const Dashboard = () => {
     <>
       {(isLoading || isLoadingStaticts) && <Loading />}
       <div className="flex space-x-4">
-        {console.log(filterValues)}
         <div className="w-full xl:w-1/2">
-          <CardBarChartUsers data={data} actions={['months', 'day', 'year']} onSubmit={onSubmit} />
+          <CardBarChartUsers
+            data={data}
+            actions={['day', 'months', 'year']}
+            onSubmit={onSubmit}
+            title={t('statistics.users-count')}
+            type="line"
+          />
         </div>
         <div className="w-full h-full xl:w-1/2">
-          <CardBarChartUsers data={dataStatics} />
+          <CardBarChartUsers
+            data={dataStatics}
+            type="bar"
+            title={t('statistics.user-activate-desactivate')}
+          />
         </div>
       </div>
     </>

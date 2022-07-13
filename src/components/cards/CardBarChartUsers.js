@@ -3,7 +3,7 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import CardChart from './Card';
 
-const BarChart = ({ data, actions, onSubmit }) => {
+const BarChart = ({ data, actions, onSubmit, title, type }) => {
   const { t } = useTranslation('common');
 
   const info = {
@@ -82,8 +82,8 @@ const BarChart = ({ data, actions, onSubmit }) => {
   return (
     <div className="relative flex flex-col w-full mt-5 min-w-0 mb-4 break-words bg-white rounded shadow">
       <CardChart
-        title={`${t('users', { count: 2 })} ${new Date().getFullYear()}`}
-        type="line"
+        title={title}
+        type={type}
         data={info}
         actions={actions}
         onSubmit={onSubmit}
