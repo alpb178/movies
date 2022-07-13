@@ -14,7 +14,8 @@ const customJestConfig = {
     '^@/containers/(.*)$': '<rootDir>/src/containers/$1',
     '^@/hooks/(.*)$': '<rootDir>/src/hooks/$1',
     '^@/lib/(.*)$': '<rootDir>/src/lib/$1',
-    '^@/pages/(.*)$': '<rootDir>/src/pages/$1'
+    '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
+    '^@/public/(.*)$': '<rootDir>/public/$1'
   },
   testEnvironment: 'jest-environment-jsdom'
 };
