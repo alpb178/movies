@@ -1,5 +1,5 @@
 import { apiFetcher } from '@/lib/apiFetcher';
-import { API_TRAVELS_URL, DELETE, POST, PUT } from '@/lib/constants';
+import { API_TRAVELS_URL, API_TRAVELS_USERS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { deleteData, getData, saveData } from '..';
 
@@ -29,6 +29,12 @@ export const saveTravels = async ({ args = {}, options = {} } = {}) => {
       break;
   }
 };
+
+export function useSearchTravel({ args = {}, options = {} } = {}) {
+  return useQuery([API_TRAVELS_USERS_URL, { ...args }], getData, {
+    ...options
+  });
+}
 
 export default function useTravels({ args = {}, options = {} } = {}) {
   return useQuery([API_TRAVELS_URL, { ...args }], getData, {

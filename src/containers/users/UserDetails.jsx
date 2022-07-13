@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
 import useMediaContext from '@/hooks/useMediaContext';
 import useUsers from '@/hooks/user/useUsers';
@@ -7,7 +8,6 @@ import { PencilIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React from 'react';
 import UserProfile from './user-sections/UserProfile';
 import UserReviews from './user-sections/UserReviews';
 import UserShipments from './user-sections/UserShipments';
@@ -28,7 +28,7 @@ const UserDetails = ({ userId }) => {
 
   const sections = {
     profile: <UserProfile data={user} />,
-    travels: <UserTravels userId={1} />,
+    travels: <UserTravels userId={userId} />,
     shipments: <UserShipments />,
     reviews: <UserReviews userId={user?.id} />
   };

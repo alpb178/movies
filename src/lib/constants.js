@@ -23,6 +23,7 @@ export const API_SHIPMENTS_URL = '/shipments';
 export const API_STATISTICS_URL_USERS = '/statistics/users';
 export const API_STATISTICS_URL_USERS_COUNT = '/statistics/users/count';
 export const API_TRAVELS_URL = '/travels';
+export const API_TRAVELS_USERS_URL = '/travels/user';
 
 // App Routes
 export const LOGIN_PAGE = '/auth/login';

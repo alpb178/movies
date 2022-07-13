@@ -1,4 +1,11 @@
 import { ROLE_ADMIN, ROLE_USER } from '@/lib/constants';
+import reviewsAnimationData from '@/public/lottie/checkboard-reviews.json';
+import emailSentAnimationData from '@/public/lottie/email-sent.json';
+import notificationsAnimationData from '@/public/lottie/empty-notifications.json';
+import loadingAnimationData from '@/public/lottie/loading-spinner.json';
+import offlineAnimationData from '@/public/lottie/offline.json';
+import spinnerAnimationData from '@/public/lottie/simple-spinner.json';
+import travelsAnimationData from '@/public/lottie/travelers-find-location.json';
 import { differenceInMilliseconds, isBefore, subYears } from 'date-fns';
 import { enGB, es } from 'date-fns/locale';
 import jwtDecode from 'jwt-decode';
@@ -65,3 +72,31 @@ export const isTokenExpired = (session) => {
   }
   return isExpired;
 };
+
+const getAnimationData = (view) => {
+  switch (view) {
+    case 'reviews':
+      return reviewsAnimationData;
+    case 'travels':
+      return travelsAnimationData;
+    case 'notifications':
+      return notificationsAnimationData;
+    case 'email-sent':
+      return emailSentAnimationData;
+    case 'simple':
+      return spinnerAnimationData;
+    case 'offline':
+      return offlineAnimationData;
+    default:
+      return loadingAnimationData;
+  }
+};
+
+export const lottieOptions = (view) => ({
+  loop: true,
+  autoplay: true,
+  animationData: getAnimationData(view),
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+});
