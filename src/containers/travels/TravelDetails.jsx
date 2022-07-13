@@ -1,164 +1,269 @@
 /* eslint-disable react/react-in-jsx-scope */
+import Error from '@/components/common/Error';
 import Loading from '@/components/common/Loader';
-import useRegulations from '@/hooks/regulation/useRegulations';
 import useTravels from '@/hooks/travel/useTravels';
 import { formatPrice, locales } from '@/lib/utils';
+import { CurrencyEuroIcon } from '@heroicons/react/outline';
+import { ArrowNarrowRightIcon, CalendarIcon, ChatAltIcon } from '@heroicons/react/solid';
+import clsx from 'clsx';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
-import Image from 'next/image';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
-const TravelDetail = ({ travelId }) => {
-  const { t, lang } = useTranslation('common');
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const { data: travel } = useTravels({
-    args: { id: travelId },
-    options: {
-      keepPreviousData: true
-    }
-  });
+import { useMemo } from 'react';
 
-  const { data: regulations, isLoading } = useRegulations({
-    args: {},
-    options: {
-      keepPreviousData: true,
-      enabled: !!travel
-    }
-  });
+const calculateSavings = (reservations) =>
+  reservations.reduce((partialsum, item) => partialsum + item?.amount * item?.payload.price, 0);
 
-  useMemo(async () => {
-    {
-      travel?.Payloads?.map((item) => {
-        const regulationSelected = regulations?.rows.find(
-          (element) => element?.shipmentItem.id === item.ShipmentItemId
-        );
-        item.id = item.ShipmentItemId;
-        item.measureUnit = regulationSelected?.shipmentItem?.measureUnit;
-        item.name = regulationSelected?.shipmentItem?.name;
-        item.maxAmount = regulationSelected?.maxAmount;
-        item.maxPrice = regulationSelected?.maxPrice;
-        item.minPrice = regulationSelected?.maxPrice;
-      });
-      setSelectedOptions(travel?.payload);
-    }
-  }, [travel]);
+const Status = ({ data }) => {
+  const { t } = useTranslation('common');
 
+  const colorize = () => {
+    switch (data) {
+      case 'PENDING':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'ACCEPTED':
+        return 'bg-red-300 text-red-700';
+      case 'REJECTED':
+        return 'bg-red-200 text-red-700';
+    }
+  };
   return (
-    <div className="min-h-full bg-white">
-      {isLoading && <Loading />}
-      <main className="p-6">
-        <div className="flex flex-col-reverse mt-6 space-y-4 space-y-reverse justify-stretch sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
-          >
-            Disqualify
-          </button>
-          <button
-            type="button"
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500"
-          >
-            Advance to offer
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 gap-12 mx-auto mt-8 lg:grid-flow-col-dense lg:grid-cols-3">
-          <div className="space-y-6 lg:col-start-1">
-            <section aria-labelledby="applicant-information-title">
-              <div className="flex items-center space-x-5">
-                <div className="flex-shrink-0">
-                  <Image
-                    layout="intrinsic"
-                    width={72}
-                    height={72}
-                    className="rounded-full"
-                    src="/images/photo-1463453091185-61582044d556.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    {`${travel?.traveler?.firstName} ${travel?.traveler?.lastName}`}
-                  </h1>
-                  <p className="text-sm font-medium text-gray-500">{`${t('registered-at')} ${format(
-                    new Date(travel?.traveler?.createdAt || null),
-                    'PPP',
-                    {
-                      locale: { ...locales[lang] }
-                    }
-                  )}`}</p>
-                </div>
-              </div>
-              <div className="py-5 border-t border-gray-200">
-                <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                  <div className="sm:col-span-1">
-                    <dt className="text-lg font-medium text-gray-500">{t('origin')}</dt>
-                    <dd className="mt-1 text-lm text-gray-900">
-                      {travel?.origin?.code} - {travel?.origin?.name}
-                    </dd>
-                  </div>
-                  <div className="sm:col-span-1">
-                    <dt className="text-lg font-medium text-gray-500">{t('destination')}</dt>
-                    <dd className="mt-1 text-lm text-gray-900">
-                      {travel?.destination?.code} - {travel?.destination?.name}
-                    </dd>
-                  </div>
-                </dl>
-
-                <div className="sm:col-span-1 mt-5">
-                  <dt className="text-lg font-medium text-gray-500">{t('date-flight')}</dt>
-                  <dd className="mt-1 text-lm text-gray-900">
-                    {format(new Date(travel?.departureAt || null), 'PPP', {
-                      locale: { ...locales[lang] }
-                    })}
-                  </dd>
-                </div>
-
-                <div className="sm:col-span-1 mt-5">
-                  <dt className="text-lg font-medium text-gray-500">
-                    {t('flights', { count: 1 })}
-                  </dt>
-                  <dd className="mt-1 text-lm text-gray-900">
-                    {travel?.flight?.airline?.name} - {travel?.flight?.number}
-                  </dd>
-                </div>
-              </div>
-            </section>
-          </div>
-
-          <section aria-labelledby="timeline-title" className="lg:col-start-2 lg:col-span-2">
-            <h2 id="timeline-title" className="text-lg font-medium text-gray-900">
-              {t('shipment-items', { count: 2 })}
-            </h2>
-
-            <div className="flow-root mt-6">
-              <ul role="list" className="border divide-y rounded-lg">
-                {selectedOptions &&
-                  selectedOptions.length > 0 &&
-                  selectedOptions.map((item) => (
-                    <li key={item.id} className="grid w-full grid-cols-3 p-6">
-                      <div className="space-y-1">
-                        <p className="font-medium">{item?.name}</p>
-                        <p className="text-sm text-gray-400">{item?.measureUnit?.name}</p>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="font-medium">{`- / ${item?.amount}`}</p>
-                        <p className="text-sm text-gray-400">{`Disponibilidad (${item?.measureUnit?.name})`}</p>
-                      </div>
-                      <p className="text-right">{formatPrice(item?.price)}</p>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          </section>
-        </div>
-      </main>
-    </div>
+    <dib className={clsx(colorize(), 'rounded-full px-3 p-1 text-sm')}>
+      {t(`shipments.status.${data.toLowerCase()}`)}
+    </dib>
   );
 };
 
-TravelDetail.propTypes = {
-  travelId: PropTypes.number.isRequired
+const MetaData = ({ travel }) => {
+  const { t, lang } = useTranslation('common');
+
+  const sum = useMemo(() => {
+    return travel.payload.reduce((partialsum, item) => partialsum + item?.amount * item?.price, 0);
+  }, [travel]);
+
+  const rsum = useMemo(() => {
+    return calculateSavings(travel.reservations);
+  }, [travel]);
+
+  return (
+    <>
+      <h2 className="sr-only">Details</h2>
+      <div className="space-y-5">
+        <div className="flex items-center space-x-2">
+          <CurrencyEuroIcon className="w-5 h-5 text-green-600" aria-hidden="true" />
+          <span className="text-sm font-medium text-green-700">
+            Estás ahorrando {rsum} / {formatPrice(sum)}
+          </span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <ChatAltIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+          <span className="text-sm font-medium text-gray-900">{`${travel?.reservations?.length} ${t(
+            'reservations.reservations',
+            {
+              count: travel?.reservations?.length
+            }
+          ).toLowerCase()}`}</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <CalendarIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+          <span className="text-sm font-medium text-gray-900">
+            {`${t('departure-at')} ${format(new Date(travel?.departureAt), 'PPP', {
+              locale: {
+                ...locales[lang]
+              }
+            })}`}
+          </span>
+        </div>
+      </div>
+
+      <div className="py-6 mt-6 space-y-8 border-t border-b border-gray-200 xl:border-b-0">
+        <div>
+          <h2 className="font-medium text-gray-500">{t('reservations.confirmed')}</h2>
+          <ul role="list" className="mt-3 space-y-3">
+            <li className="flex justify-start">
+              <a href="#" className="flex items-center space-x-3">
+                <div className="flex-shrink-0">
+                  <img
+                    className="w-5 h-5 rounded-full"
+                    src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                    alt=""
+                  />
+                </div>
+                <div className="text-sm font-medium text-gray-900">Eduardo Benz</div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        {/* <div>
+          <h2 className="text-sm font-medium text-gray-500">Tags</h2>
+          <ul role="list" className="mt-2 leading-8">
+            <li className="inline">
+              <a
+                href="#"
+                className="relative inline-flex items-center rounded-full border border-gray-300 px-3 py-0.5"
+              >
+                <div className="absolute flex items-center justify-center flex-shrink-0">
+                  <span className="h-1.5 w-1.5 rounded-full bg-rose-500" aria-hidden="true" />
+                </div>
+                <div className="text-sm font-medium text-gray-900">Bug</div>
+              </a>{' '}
+            </li>
+            <li className="inline">
+              <a
+                href="#"
+                className="relative inline-flex items-center rounded-full border border-gray-300 px-3 py-0.5"
+              >
+                <div className="absolute flex items-center justify-center flex-shrink-0">
+                  <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" aria-hidden="true" />
+                </div>
+                <div className="text-sm font-medium text-gray-900">Accessibility</div>
+              </a>{' '}
+            </li>
+          </ul>
+        </div> */}
+      </div>
+    </>
+  );
 };
 
-export default TravelDetail;
+export default function Example() {
+  const { t } = useTranslation('common');
+  const router = useRouter();
+
+  const {
+    data: travel,
+    error,
+    isLoading
+  } = useTravels({
+    args: { id: router.query.slug },
+    options: {
+      enabled: !!router.query.slug
+    }
+  });
+
+  if (error) return <Error />;
+
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <div className="flex min-h-full">
+      <div className="flex flex-col flex-1 w-0">
+        <main className="flex-1">
+          <div className="px-6 py-8 xl:py-10">
+            <div className="max-w-5xl mx-auto xl:max-w-5xl xl:grid xl:grid-cols-3">
+              <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
+                <div>
+                  <div className="items-start md:flex md:justify-between md:space-x-4 xl:border-b xl:pb-6">
+                    <div>
+                      <div className="flex items-center space-x-2 text-2xl font-bold text-gray-900">
+                        <h1>{travel?.origin?.name}</h1>
+                        <ArrowNarrowRightIcon className="w-6 h-6" />
+                        <h1>{travel?.destination?.name}</h1>
+                      </div>
+                      <p className="mt-2 text-gray-500">
+                        {t('travelers', { count: 1 })}{' '}
+                        <a href="#" className="font-medium text-gray-900">
+                          {travel?.traveler?.firstName} {travel?.traveler?.lastName}
+                        </a>
+                      </p>
+                      <p className="mt-2 text-gray-500">
+                        {t('flights', { count: 1 })}{' '}
+                        <a href="#" className="font-medium text-gray-900">
+                          {travel?.flight?.number}
+                        </a>{' '}
+                        {t('of')}{' '}
+                        <a href="#" className="font-medium text-gray-900">
+                          {travel?.flight?.airline.name}
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+
+                  <aside className="mt-8 xl:hidden">
+                    <MetaData travel={travel} />
+                  </aside>
+
+                  <div className="py-3 xl:pt-6 xl:pb-0">
+                    <h2 className="sr-only">Observations</h2>
+                    <div className="prose max-w-none">
+                      <p>{travel?.observations}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <section aria-labelledby="payload-title" className="mt-8 xl:mt-10">
+                  <div className="divide-y divide-gray-200">
+                    <h2 id="activity-title" className="pb-4 text-lg font-medium text-gray-900">
+                      {t('payload.available')}
+                    </h2>
+
+                    <div className="flow-root pt-2">
+                      <ul role="list" className="-mb-8">
+                        {travel?.payload.map((item) => (
+                          <li key={item.id}>
+                            <div className="flex justify-between w-full py-4 space-x-4">
+                              <div className="flex flex-col h-full space-y-2">
+                                <p className="font-medium">{item?.shipmentItem?.name}</p>
+                                <p className="text-sm text-gray-800">
+                                  <span className="text-gray-600">{`${t('availability')}: `}</span>
+                                  {item?.amount}
+                                </p>
+                              </div>
+                              <p className="font-medium">{formatPrice(item?.price)}</p>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+
+                <section aria-labelledby="activity-title" className="mt-16 xl:mt-20">
+                  <div className="divide-y divide-gray-200">
+                    <h2
+                      id="activity-title"
+                      className="flex justify-between pb-4 text-lg font-medium text-gray-900"
+                    >
+                      <span>{t('reservations.requests')}</span>
+                      <span>{formatPrice(calculateSavings(travel?.reservations))}</span>
+                    </h2>
+
+                    <div className="pt-6">
+                      <ul role="list" className="divide-y">
+                        {travel?.reservations.map((item) => (
+                          <li key={item.id} className="py-6">
+                            <div className="flex justify-between">
+                              {`${item.sender.firstName} ${item.sender.lastName}`}
+                              <Status data={item.status} />
+                            </div>
+                            <div className="flex space-x-1 text-sm prose">
+                              <span>{item.amount}</span>
+                              <span>{item.payload?.shipmentItem?.name}</span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+              </div>
+
+              <aside className="hidden xl:block xl:pl-8">
+                <MetaData travel={travel} />
+              </aside>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+Status.propTypes = {
+  data: PropTypes.object
+};
+
+MetaData.propTypes = {
+  travel: PropTypes.object
+};
