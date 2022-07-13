@@ -1,11 +1,13 @@
-import { NAVBAR_HEIGHT } from '@/lib/constants';
+/* eslint-disable react/react-in-jsx-scope */
+import { NAVBAR_HEIGHT, USER_DETAIL_PAGE } from '@/lib/constants';
 import { Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
+import jwtDecode from 'jwt-decode';
 import { signOut, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { HiOutlineBell as BellIcon, HiOutlineMenuAlt2 as MenuAlt2Icon } from 'react-icons/hi';
 
 const Navbar = ({ onSidebarOpen }) => {
@@ -13,8 +15,21 @@ const Navbar = ({ onSidebarOpen }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
+  const { id } = useMemo(() => {
+    if (session?.accessToken) {
+      return jwtDecode(session?.accessToken);
+    }
+
+    return {};
+  }, [session]);
+
+  const onProfile = () => {
+    const path = USER_DETAIL_PAGE(id);
+    router.push(path);
+  };
+
   const userNavigation = [
-    { name: t('profile'), action: () => router.push('/profile') },
+    { name: t('profile'), action: () => onProfile() },
     { name: t('settings'), action: () => router.push('/settings') },
     {
       name: t('account.logout'),
