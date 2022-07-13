@@ -31,6 +31,7 @@
     "1": "Facturas",
     "other": "Facturas"
   },
+  "availability": "Disponibilidad",
   "business-name": "Razón social",
   "birthdate": "Fecha de Nacimiento",
   "bio": "Biografía",
@@ -38,7 +39,7 @@
   "client": "Cliente",
   "client-number": "Número del Cliente",
   "create-at": "Fecha de Creación",
-  "close":"Cerrar",
+  "close": "Cerrar",
   "code": "Código",
   "contact-person": "Persona de contacto",
   "company": "Empresa",
@@ -89,7 +90,7 @@
         "update": "Actualizar Aerolínea"
       }
     },
-     "common": {
+    "common": {
       "empty-options": "No se encontraron resultados",
       "label": {
         "code": "Código",
@@ -119,12 +120,13 @@
         "maxPrice": "El precio Máximo debe ser mayor que el Mínimo"
       }
     },
-      "country": {
+    "country": {
       "title": {
         "create": "Nuevo País",
         "update": "Editar País"
       }
     },
+
     "measure-unit": {
       "title": {
         "create": "Nueva Unidad de Medida",
@@ -139,7 +141,7 @@
       "label": {
         "resource": "Recurso",
         "action": "Acción"
-      } 
+      }
     },
     "region": {
       "title": {
@@ -156,7 +158,7 @@
         "create": "Nueva Regulación",
         "update": "Actualizar Regulación"
       },
-    
+
       "label": {
         "country": "País",
         "permited-amount": "Cantidad permitida (Máx.)",
@@ -326,6 +328,9 @@
     "1": "Pago",
     "other": "Pagos"
   },
+  "payload": {
+    "available": "Carga Disponible"
+  },
   "permissions": {
     "0": "Sin permisos",
     "1": "Permiso",
@@ -343,6 +348,11 @@
     "1": "Región",
     "other": "Regiones"
   },
+  "reservations": {
+    "reservations": "Petición",
+    "requests": "Peticiones de Envío",
+    "confirmed": "Peticiones Confirmadas"
+  },
   "registered-at": "Registrado el",
   "regulations": {
     "0": "Aún no existen regulaciones registradas.",
@@ -355,12 +365,12 @@
     "measure-unit": "La Unidad de Medida es Requerida",
     "name": "El nombre es requerido",
     "password": "La contraseña es requerida",
-    "password-confirm": "La contraseña de confirmación es requerida", 
+    "password-confirm": "La contraseña de confirmación es requerida",
     "password-compare": "Las contraseñas deben ser iguales",
     "phone": "El número de telefóno es requerido",
     "surname": "Los Apellidos son requeridos",
     "symbol": "El símbolo es requerido",
-    "status":"El estado es requerido",
+    "status": "El estado es requerido",
     "username": "El nombre de usuario es requerido"
   },
   "resources": {
@@ -402,7 +412,8 @@
   "shipments": {
     "0": "Aún no existen envíos",
     "1": "Envío",
-    "other": "Envíos"
+    "other": "Envíos",
+    "status": { "pending": "Pendiente", "acepted": "Aceptado", "reject": "rechazado" }
   },
   "send": "Enviar",
   "status": "Estado",
