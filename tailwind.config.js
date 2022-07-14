@@ -11,22 +11,27 @@ module.exports = {
   darkMode: 'media', // or 'class'
   theme: {
     colors: {
+      black: colors.black,
+      blue: colors.blue,
+      gray: colors.gray,
+      green: colors.green,
+      primary: colors.sky,
+      red: colors.red,
+      secondary: colors.indigo,
+      slate: colors.slate,
+      teal: colors.teal,
       transparent: 'transparent',
       white: colors.white,
-      black: colors.black,
-      gray: colors.gray,
-      yellow: colors.amber,
-      blue: colors.blue,
-      red: colors.red,
-      primary: colors.sky,
-      secondary: colors.indigo,
-      slate: colors.slate
+      yellow: colors.amber
     },
     extend: {
       spacing: {
         72: '18rem',
         84: '21rem',
         96: '24rem'
+      },
+      screens: {
+        xs: '480px'
       }
     }
   },

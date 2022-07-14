@@ -6,7 +6,6 @@ import {
 } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 function Pagination({ tableInstance, pageSizes, onPageSizeChange }) {
   const { t } = useTranslation('common');

@@ -3,7 +3,7 @@
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import Pagination from './Pagination';
 
@@ -18,7 +18,8 @@ const DataTable = ({
   onFilter,
   onPageSizeChange,
   pageSize,
-  setSortBy
+  setSortBy,
+  setPage
 }) => {
   const tableInstance = useTable(
     {
@@ -45,7 +46,9 @@ const DataTable = ({
   } = tableInstance;
 
   useEffect(() => {
-    const sortStr = sortBy.map((c) => `${c.id},${c.desc ? 'desc' : 'asc'}`).join(',');
+    if (setPage) setPage(pageIndex);
+
+    const sortStr = sortBy.map((c) => `sort=${c.id},${c.desc ? 'desc' : 'asc'}`).join('&');
     setSortBy(sortStr);
   }, [pageIndex, sortBy]);
 

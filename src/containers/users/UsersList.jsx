@@ -50,11 +50,22 @@ const UsersList = () => {
   };
 
   const params = useMemo(() => {
-    const query = {};
-    if (page !== 0) query.page = page;
-    if (sort) query.sort = sort;
-    return query;
-  }, [filterValues, page, sort]);
+    let queryParams = {};
+    if (Object.keys(filterValues).length > 0) {
+      queryParams = Object.fromEntries(Object.entries(filterValues).filter(([_, v]) => v));
+    }
+
+    if (page) {
+      queryParams.page = page;
+    }
+    if (pageSize) {
+      queryParams.size = pageSize;
+    }
+    if (sort) {
+      queryParams.sort = sort;
+    }
+    return queryParams;
+  }, [filterValues, page, pageSize, sort]);
 
   const { data: users, isLoading } = useUsers({
     args: params,
@@ -131,7 +142,7 @@ const UsersList = () => {
         return (
           <span
             key={row.id}
-            className="px-4 py-1 float-center font-medium rounded-full text-secondary-700 bg-secondary-100"
+            className="px-4 py-1 font-medium rounded-full float-center text-secondary-700 bg-secondary-100"
           >
             {'PENDING'.replace(/_/g, '-').toLowerCase()}
           </span>

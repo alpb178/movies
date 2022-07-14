@@ -3,7 +3,7 @@ import Navbar from '@/components/navbars/Navbar';
 import useMediaContext from 'hooks/useMediaContext';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const MobileSidebar = dynamic(() => import('components/sidebar/MobileSidebar'), {
   ssr: false
