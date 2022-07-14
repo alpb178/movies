@@ -288,7 +288,7 @@ const UsersList = () => {
   return (
     <>
       {(isLoading || loading) && <Loading />}
-
+      {console.log(page, params)}
       {users && users.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (

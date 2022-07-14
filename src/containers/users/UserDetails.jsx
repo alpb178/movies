@@ -29,7 +29,7 @@ const UserDetails = ({ userId }) => {
   const sections = {
     profile: <UserProfile data={user} />,
     travels: <UserTravels userId={userId} />,
-    shipments: <UserShipments />,
+    shipments: <UserShipments userId={userId} />,
     reviews: <UserReviews userId={user?.id} />
   };
 

@@ -1,4 +1,4 @@
-import { API_SHIPMENTS_URL, DELETE, POST, PUT } from '@/lib/constants';
+import { API_SHIPMENTS_URL, API_SHIPMENTS_USERS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { deleteData, getData, saveData } from '..';
 
@@ -21,3 +21,9 @@ export const saveShipments = async ({ args = {}, options = {} } = {}) => {
       break;
   }
 };
+
+export function useSearchShipment({ args = {}, options = {} } = {}) {
+  return useQuery([API_SHIPMENTS_USERS_URL, { ...args }], getData, {
+    ...options
+  });
+}

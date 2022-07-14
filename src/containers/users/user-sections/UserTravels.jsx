@@ -7,11 +7,11 @@ import useMediaContext from '@/hooks/useMediaContext';
 import { locales, lottieOptions } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
+import PropTypes from 'prop-types';
 import Lottie from 'react-lottie';
 
 const UserTravels = ({ userId }) => {
   const { t, lang } = useTranslation('common');
-  // const { user } = useAppContext();
   const { isSmallScreen } = useMediaContext();
 
   const { data: travels, isLoading } = useSearchTravel({
@@ -69,6 +69,10 @@ const UserTravels = ({ userId }) => {
       </div>
     </div>
   );
+};
+
+UserTravels.propTypes = {
+  userId: PropTypes.object
 };
 
 export default UserTravels;

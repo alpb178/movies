@@ -128,7 +128,7 @@ const ShipmentsList = () => {
     router.push(path);
   };*/
 
-  const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
+  const formatDate = (value) => <div>{format(new Date(), 'PP', { locale })}</div>;
 
   const formatSender = (value) => {
     const selected = user?.rows.find((element) => element?.id === value);
