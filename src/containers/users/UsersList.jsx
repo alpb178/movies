@@ -26,7 +26,7 @@ const UsersList = () => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
   const onPageChangeCallback = useCallback(setPage, []);
@@ -50,10 +50,7 @@ const UsersList = () => {
   };
 
   const params = useMemo(() => {
-    let queryParams = {};
-    if (Object.keys(filterValues).length > 0) {
-      queryParams = Object.fromEntries(Object.entries(filterValues).filter(([_, v]) => v));
-    }
+    const queryParams = {};
 
     if (page) {
       queryParams.page = page;
@@ -142,9 +139,9 @@ const UsersList = () => {
         return (
           <span
             key={row.id}
-            className="px-4 py-1 font-medium rounded-full float-center text-secondary-700 bg-secondary-100"
+            className="px-4 py-1 font-medium text-yellow-700 bg-yellow-100 rounded-full float-center"
           >
-            {'PENDING'.replace(/_/g, '-').toLowerCase()}
+            {t('users.status.PENDING'.toLowerCase())}
           </span>
         );
       default:
