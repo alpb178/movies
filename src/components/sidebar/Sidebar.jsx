@@ -1,7 +1,6 @@
 import { APP_NAME } from 'lib/constants';
 import getConfig from 'next/config';
 import Image from 'next/image';
-import React from 'react';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 import NavigationMenu from './NavigationMenu';

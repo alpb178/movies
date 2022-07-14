@@ -26,6 +26,7 @@ module.exports = {
   },
   plugins: ['react', 'unused-imports', 'simple-import-sort'],
   rules: {
+    'react/react-in-jsx-scope': 'off',
     'unused-imports/no-unused-imports-ts': 2
   }
 };

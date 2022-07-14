@@ -2,7 +2,6 @@ import Footer from '@/components/footer';
 import AuthNavbar from '@/components/navbars/AuthNavbar';
 import { FOOTER_HEIGHT, NAVBAR_HEIGHT } from '@/lib/constants';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const Auth = ({ children }) => (
   <div className="h-full">

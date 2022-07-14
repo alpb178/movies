@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
 import navigation from './navigation';
 
 const NavigationMenu = () => {
