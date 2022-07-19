@@ -455,7 +455,8 @@
   "users": {
     "0": "Sin usuarios",
     "1": "Usuario",
-    "other": "Usuarios"
+    "other": "Usuarios",
+    "status": { "pending": "Pendiente", "activated": "Activado", "inactive": "Desactivado" }
   },
   "unregulated": "No regulado",
   "voucher": "Justificante",

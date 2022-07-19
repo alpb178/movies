@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable react/jsx-props-no-spreading */
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -18,8 +16,8 @@ const DataTable = ({
   onFilter,
   onPageSizeChange,
   pageSize,
-  setSortBy,
-  setPage
+  setPage,
+  setSortBy
 }) => {
   const tableInstance = useTable(
     {
@@ -48,12 +46,12 @@ const DataTable = ({
   useEffect(() => {
     if (setPage) setPage(pageIndex);
 
-    const sortStr = sortBy.map((c) => `sort=${c.id},${c.desc ? 'desc' : 'asc'}`).join('&');
+    const sortStr = sortBy.map((c) => `${c.id},${c.desc ? 'desc' : 'asc'}`).join('&');
     setSortBy(sortStr);
   }, [pageIndex, sortBy]);
 
   return (
-    <div className="w-full ">
+    <div className="w-full pb-4">
       {name || actions ? (
         <div className="flex flex-col">
           <div
@@ -155,6 +153,7 @@ DataTable.propTypes = {
   onPageSizeChange: PropTypes.func,
   onRowClick: PropTypes.func,
   pageSize: PropTypes.number,
+  setPage: PropTypes.func,
   setSortBy: PropTypes.func
 };
 

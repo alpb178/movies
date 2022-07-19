@@ -163,7 +163,7 @@ const UsersForm = ({ userId }) => {
                   ) : null}
                 </div>
 
-                <div className="w-full ">
+                <div className="w-full">
                   <label htmlFor="name">{t('birthdate')}</label>
                   <BirthDateForm user={users} />
                   {errors?.birthdate && touched?.birthdate ? (
@@ -186,7 +186,7 @@ const UsersForm = ({ userId }) => {
                 </div>
               </div>
 
-              <div className="flex  flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
+              <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
                 <div className="w-full mt-5">
                   <label htmlFor="name">{t('bio')}</label>
                   <Field
