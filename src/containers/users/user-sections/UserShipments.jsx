@@ -15,7 +15,7 @@ const UserShipments = ({ userId }) => {
   const { isSmallScreen } = useMediaContext();
 
   const { data: shipment, isLoading } = useSearchShipment({
-    args: { id: userId, sort: 'departureAt,desc' },
+    args: { id: userId },
     options: {
       enabled: !!userId
     }
