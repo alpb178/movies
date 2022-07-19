@@ -11,7 +11,7 @@ import useShipments from '@/hooks/shipment/useShipments';
 import useTravels from '@/hooks/travel/useTravels';
 import useUsers from '@/hooks/user/useUsers';
 import { DEFAULT_PAGE_SIZE, SHIPMENTS_DETAILS_PAGE } from '@/lib/constants';
-import { locales } from '@/lib/utils';
+import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import { format } from 'date-fns';
@@ -19,12 +19,13 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
+import Lottie from 'react-lottie';
 import ShipmentsForm from './ShipmentsForm';
 
 const ShipmentsList = () => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
   const onPageChangeCallback = useCallback(setPage, []);
@@ -78,7 +79,7 @@ const ShipmentsList = () => {
     args: params,
     options: {
       keepPreviousData: true,
-      enabled: !!travel && !!shipmentItem && !!airline
+      enabled: !!travel && !!shipmentItem && !!airline && !!user
     }
   });
 
@@ -89,7 +90,7 @@ const ShipmentsList = () => {
         item.traveler = `${travelSelected?.traveler?.firstName} ${travelSelected?.traveler?.lastName}`;
         item.origin = `${travelSelected?.origin?.name} - ${travelSelected?.destination?.name}`;
         item.flight = `${
-          airline?.rows.find((element) => element?.id === travelSelected?.flight?.id).name
+          airline?.rows.find((element) => element?.id === travelSelected?.flight?.id)?.name
         } - ${travelSelected?.flight?.number}`;
         item.departureAtTravel = travelSelected?.departureAt;
       });
@@ -128,18 +129,11 @@ const ShipmentsList = () => {
     router.push(path);
   };*/
 
-  const formatDate = (value) => <div>{format(new Date(), 'PP', { locale })}</div>;
+  const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
 
   const formatSender = (value) => {
     const selected = user?.rows.find((element) => element?.id === value);
-
     return <div>{`${selected?.firstName} ${selected?.lastName}`}</div>;
-  };
-
-  const formatShipmentItem = (value) => {
-    const shipmentItemSelected = shipmentItem?.rows.find((element) => element?.id === value);
-
-    return <div>{shipmentItemSelected?.name}</div>;
   };
 
   const columns = useMemo(() => [
@@ -157,17 +151,16 @@ const ShipmentsList = () => {
     },
     {
       Header: t('departure-at'),
-      accessor: 'departureAtTravel',
+      accessor: 'createdAt',
       Cell: ({ value }) => formatDate(value)
     },
     {
-      Header: `${t('shipment-items', { count: 1 })}`,
-      accessor: 'shipmentItemId',
-      Cell: ({ value }) => formatShipmentItem(value)
+      Header: t('status'),
+      accessor: 'status'
     },
     {
       Header: t('sender'),
-      accessor: 'userId',
+      accessor: 'UserId',
       Cell: ({ value }) => formatSender(value)
     },
     {
@@ -274,7 +267,12 @@ const ShipmentsList = () => {
       {shipments && shipments.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('shipments', { count: 0 })}>{/*renderInsertButton()*/}</EmptyState>
+        <EmptyState text={t('shipments', { count: 0 })}>
+          {' '}
+          <div className="flex items-center justify-center h-64 w-max">
+            <Lottie options={lottieOptions('travels')} />
+          </div>
+        </EmptyState>
       )}
 
       <FormDialogWrapper open={openForm} onOpen={setOpenForm}>

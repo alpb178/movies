@@ -6,18 +6,19 @@ import PaymentFilter from '@/containers/travels/TravelsFilter';
 import useAirlines from '@/hooks/airline/useAirlines';
 import useTravels from '@/hooks/travel/useTravels';
 import { DEFAULT_PAGE_SIZE, TRAVEL_DETAILS_PAGE } from '@/lib/constants';
-import { locales } from '@/lib/utils';
+import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useCallback, useMemo, useState } from 'react';
+import Lottie from 'react-lottie';
 
 const TravelsList = ({ hiddenColumns, userId }) => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
   const onPageChangeCallback = useCallback(setPage, []);
@@ -240,7 +241,11 @@ const TravelsList = ({ hiddenColumns, userId }) => {
       {travels && travels.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('travels', { count: 0 })}>{/*renderCreateButton()*/}</EmptyState>
+        <EmptyState text={t('travels', { count: 0 })}>
+          <div className="flex items-center justify-center h-64 w-max">
+            <Lottie options={lottieOptions('travels')} />
+          </div>
+        </EmptyState>
       )}
 
       {/*<DeleteConfirmationDialog
