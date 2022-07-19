@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';

@@ -108,7 +108,7 @@ function Pagination({ tableInstance, pageSizes, onPageSizeChange }) {
 }
 
 Pagination.defaultProps = {
-  pageSizes: [10, 20, 30, 40, 50]
+  pageSizes: [10, 25, 50, 100]
 };
 
 Pagination.propTypes = {
