@@ -29,21 +29,23 @@ const UserShipments = ({ userId }) => {
 
       <div className="py-2 space-y-2">
         {shipment && shipment?.rows.length > 0 ? (
-          shipment.rows.map((travel) => (
+          shipment.rows.map((shipment) => (
             <a className="flex justify-between w-full p-4 space-x-4 transition duration-200 ease-in-out border rounded-md hover:shadow-lg">
               <div className="">
-                <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">{`${travel?.origin?.name} - ${travel?.destination?.name}`}</p>
-                <p className="max-w-2xl mt-1 text-sm text-gray-500">{t('itinerary')}</p>
+                <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">{`${shipment?.payload?.travel?.traveler?.firstName} - ${shipment?.payload?.travel?.traveler?.lastName}`}</p>
+                <p className="max-w-2xl mt-1 text-sm text-gray-500">
+                  {t('travelers', { count: 1 })}
+                </p>
               </div>
 
               <div className="">
-                <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">{`${travel?.flight?.number}`}</p>
-                <p className="max-w-2xl mt-1 text-sm text-gray-500">{t('flights', { count: 1 })}</p>
+                <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">{`${shipment?.payload?.travel?.origin?.code}-${shipment?.payload?.travel?.destination?.code}`}</p>
+                <p className="max-w-2xl mt-1 text-sm text-gray-500">{`${shipment?.payload?.travel?.flight?.airline?.name}-${shipment?.payload?.travel?.flight?.number}`}</p>
               </div>
 
               <div className="text-right">
                 <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">{`${format(
-                  new Date(travel?.createdAt),
+                  new Date(shipment?.createdAt),
                   'PPP',
                   {
                     locale: {
@@ -51,7 +53,7 @@ const UserShipments = ({ userId }) => {
                     }
                   }
                 )}`}</p>
-                <p className="max-w-2xl mt-1 text-sm text-gray-500">{t('departure-at')}</p>
+                <p className="max-w-2xl mt-1 text-sm text-gray-500">{shipment?.status}</p>
               </div>
             </a>
           ))

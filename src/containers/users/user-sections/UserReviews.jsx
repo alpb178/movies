@@ -1,8 +1,9 @@
-import ShipmentsList from '@/containers/shipments/ShipmentsList';
+import EmptyState from '@/components/common/EmptyState';
+import { lottieOptions } from '@/lib/utils';
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
-import React from 'react';
+import Lottie from 'react-lottie';
 
 function UserReviews() {
   const { t } = useTranslation('common');
@@ -32,7 +33,11 @@ function UserReviews() {
             'focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60'
           )}
         >
-          <ShipmentsList />
+          <EmptyState title={t('reviews', { count: 0 })}>
+            <div className="flex items-center justify-center h-64 w-max">
+              <Lottie options={lottieOptions('reviews')} />
+            </div>
+          </EmptyState>
         </Tab.Panel>
         <Tab.Panel
           className={clsx(
@@ -40,7 +45,11 @@ function UserReviews() {
             'focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60'
           )}
         >
-          <ShipmentsList />
+          <EmptyState title={t('reviews', { count: 0 })}>
+            <div className="flex items-center justify-center h-64 w-max">
+              <Lottie options={lottieOptions('reviews')} />
+            </div>
+          </EmptyState>
         </Tab.Panel>
       </Tab.Panels>
     </Tab.Group>

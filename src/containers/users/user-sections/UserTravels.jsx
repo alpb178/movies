@@ -39,7 +39,7 @@ const UserTravels = ({ userId }) => {
       {travels && travels?.rows.length > 0 ? (
         travels.rows.map((travel) => (
           <div
-            className="flex justify-between w-full p-4 m-4 space-x-4"
+            className="flex m-4 justify-between w-full p-4 space-x-4 transition duration-200 ease-in-out border rounded-md hover:shadow-lg"
             onClick={() => onDetailsTravel(travel)}
           >
             <div className="">
@@ -48,8 +48,10 @@ const UserTravels = ({ userId }) => {
             </div>
 
             <div className="">
-              <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">{`${travel?.flight?.number}`}</p>
-              <p className="max-w-2xl mt-1 text-sm text-gray-500">{t('flights', { count: 1 })}</p>
+              <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">{`${travel?.flight?.airline?.name}-${travel?.flight?.number}`}</p>
+              <p className="max-w-2xl mt-1 text-sm text-gray-500">
+                {t('airlines', { count: 1 })} - {t('flights', { count: 1 })}
+              </p>
             </div>
 
             <div className="text-right">
