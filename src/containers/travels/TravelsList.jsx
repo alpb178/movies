@@ -3,7 +3,6 @@ import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DataTable from '@/components/table';
 import PaymentFilter from '@/containers/travels/TravelsFilter';
-import useAirlines from '@/hooks/airline/useAirlines';
 import useTravels from '@/hooks/travel/useTravels';
 import { DEFAULT_PAGE_SIZE, TRAVEL_DETAILS_PAGE } from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
@@ -45,17 +44,10 @@ const TravelsList = ({ hiddenColumns, userId }) => {
     return query;
   }, [filterValues, page, sort]);
 
-  const { data: airlines } = useAirlines({
-    options: {
-      keepPreviousData: true
-    }
-  });
-
   const { data: travels, isLoading } = useTravels({
     args: params,
     options: {
-      keepPreviousData: true,
-      enabled: !!airlines
+      keepPreviousData: true
     }
   });
 
@@ -107,8 +99,7 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   const formatTraveler = (value) => <div>{`${value?.firstName} ${value?.lastName}`}</div>;
 
   const formatFlight = (value) => {
-    const selected = airlines?.rows.find((element) => element?.id === value.airlineId);
-    return <div>{`${selected?.name} - ${value?.number}`}</div>;
+    return <div>{`${value?.airline?.name} - ${value?.number}`}</div>;
   };
 
   const formatPlace = (value) => {

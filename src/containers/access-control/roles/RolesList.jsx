@@ -21,7 +21,7 @@ const RolesList = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
   const [openFilters, setOpenFilters] = useState(false);

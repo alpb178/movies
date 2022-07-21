@@ -7,6 +7,7 @@ import { BanIcon } from '@heroicons/react/outline';
 import { PencilIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
+import Image from 'next/image';
 import PropTypes from 'prop-types';
 import UserProfile from './user-sections/UserProfile';
 import UserReviews from './user-sections/UserReviews';
@@ -44,11 +45,14 @@ const UserDetails = ({ userId }) => {
               <div className="xl:col-span-2 xl:pr-8 xl:border-r xl:border-gray-200">
                 <div className="md:flex md:justify-between md:space-x-4 xl:pb-6">
                   <div className="flex space-x-8">
-                    <img
-                      className="w-20 h-20 rounded-full ring-4 ring-white sm:h-24 sm:w-24"
-                      src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80"
-                      alt=""
-                    />
+                    <div className="relative w-20 h-20">
+                      <Image
+                        layout="fill"
+                        className="rounded-full object-cover"
+                        src={user?.profilePicture}
+                        alt=""
+                      />
+                    </div>
                     <div>
                       <p className="text-2xl font-bold text-gray-900">
                         {`${user?.firstName} ${user?.lastName}`}
@@ -107,13 +111,15 @@ const UserDetails = ({ userId }) => {
                         </Tab>
                       ) : null}
                     </Tab.List>
-                    <Tab.Panels className="mt-2">
+                    <Tab.Panels className="mt-2 border-transparent">
                       {Object.values(sections).map((section, idx) => (
-                        <Tab.Panel key={idx}>{section}</Tab.Panel>
+                        <Tab.Panel className=" focus:outline-none focus:ring-0" key={idx}>
+                          {section}
+                        </Tab.Panel>
                       ))}
 
                       {isSmall ? (
-                        <Tab.Panel>
+                        <Tab.Panel className="border-transparent">
                           <UserTraces key={4} />
                         </Tab.Panel>
                       ) : null}

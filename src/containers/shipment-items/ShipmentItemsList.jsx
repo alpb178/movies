@@ -18,7 +18,7 @@ import ShipmentItemsForm from './ShipmentItemsForm';
 const ShipmentItemsList = () => {
   const { t } = useTranslation('common');
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState('');
   const onPageChangeCallback = useCallback(setPage, []);

@@ -5,11 +5,7 @@ import Loading from '@/components/common/Loader';
 import FormDialogWrapper from '@/components/form/FormDialogWrapper';
 import DataTable from '@/components/table';
 import PaymentFilter from '@/containers/shipments/ShipmentsFilter';
-import useAirlines from '@/hooks/airline/useAirlines';
-import useShipmentItems from '@/hooks/shipment-item/useShipmentItems';
 import useShipments from '@/hooks/shipment/useShipments';
-import useTravels from '@/hooks/travel/useTravels';
-import useUsers from '@/hooks/user/useUsers';
 import { DEFAULT_PAGE_SIZE, SHIPMENTS_DETAILS_PAGE } from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
@@ -51,51 +47,12 @@ const ShipmentsList = () => {
     ...locales[lang]
   };
 
-  const { data: travel } = useTravels({
-    options: {
-      keepPreviousData: true
-    }
-  });
-
-  const { data: shipmentItem } = useShipmentItems({
-    options: {
-      keepPreviousData: true
-    }
-  });
-
-  const { data: user } = useUsers({
-    options: {
-      keepPreviousData: true
-    }
-  });
-
-  const { data: airline } = useAirlines({
-    options: {
-      keepPreviousData: true
-    }
-  });
-
   const { data: shipments, isLoading } = useShipments({
     args: params,
     options: {
-      keepPreviousData: true,
-      enabled: !!travel && !!shipmentItem && !!airline && !!user
+      keepPreviousData: true
     }
   });
-
-  useMemo(async () => {
-    {
-      shipments?.rows?.map((item) => {
-        const travelSelected = travel?.rows.find((element) => element?.id === item.travelId);
-        item.traveler = `${travelSelected?.traveler?.firstName} ${travelSelected?.traveler?.lastName}`;
-        item.origin = `${travelSelected?.origin?.name} - ${travelSelected?.destination?.name}`;
-        item.flight = `${
-          airline?.rows.find((element) => element?.id === travelSelected?.flight?.id)?.name
-        } - ${travelSelected?.flight?.number}`;
-        item.departureAtTravel = travelSelected?.departureAt;
-      });
-    }
-  }, [shipments]);
 
   /*
 
@@ -129,25 +86,47 @@ const ShipmentsList = () => {
     router.push(path);
   };*/
 
-  const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
+  const formatDate = (value) => <div>{format(new Date(value), 'PPP', { locale })}</div>;
+  const formatTraveler = (value) => (
+    <div>
+      {value?.firstName} {value?.lastName}
+    </div>
+  );
+  const formatAirlineNumber = (value) => (
+    <div>
+      {value?.airline?.name} - {value?.number}
+    </div>
+  );
+
+  const formatOriginDestination = (value) => (
+    <div>
+      {value?.origin?.name} - {value?.destination?.name}
+    </div>
+  );
 
   const formatSender = (value) => {
-    const selected = user?.rows.find((element) => element?.id === value);
-    return <div>{`${selected?.firstName} ${selected?.lastName}`}</div>;
+    return (
+      <div>
+        {value?.firstName} {value?.lastName}
+      </div>
+    );
   };
 
   const columns = useMemo(() => [
     {
       Header: t('travelers', { count: 1 }),
-      accessor: 'traveler'
+      accessor: 'payload.travel.traveler',
+      Cell: ({ value }) => formatTraveler(value)
     },
     {
       Header: `${t('airlines', { count: 1 })}  -  ${t('flights', { count: 1 })}`,
-      accessor: 'flight'
+      accessor: 'payload.travel.flight',
+      Cell: ({ value }) => formatAirlineNumber(value)
     },
     {
       Header: `${t('origin')} - ${t('destination')}`,
-      accessor: 'origin'
+      accessor: 'payload.travel',
+      Cell: ({ value }) => formatOriginDestination(value)
     },
     {
       Header: t('departure-at'),
@@ -160,7 +139,7 @@ const ShipmentsList = () => {
     },
     {
       Header: t('sender'),
-      accessor: 'UserId',
+      accessor: 'sender',
       Cell: ({ value }) => formatSender(value)
     },
     {
