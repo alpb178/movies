@@ -32,18 +32,26 @@ const AirlinesList = () => {
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
 
-  const params = useMemo(() => {
-    const query = {};
-    if (page !== 0) query.page = page;
-    if (sort) query.sort = sort;
-    return query;
-  }, [filterValues, page, sort]);
-
   useEffect(() => {
     if (!openForm) {
       setSelectedItem(null);
     }
   }, [openForm]);
+
+  const params = useMemo(() => {
+    const queryParams = {};
+
+    if (page) {
+      queryParams.page = page;
+    }
+    if (pageSize) {
+      queryParams.size = pageSize;
+    }
+    if (sort) {
+      queryParams.sort = sort;
+    }
+    return queryParams;
+  }, [filterValues, page, pageSize, sort]);
 
   const { data: airlines, isloading } = useAirlines({
     args: params,

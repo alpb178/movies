@@ -40,11 +40,19 @@ const RegionsList = () => {
   }, [openForm]);
 
   const params = useMemo(() => {
-    const query = {};
-    if (page !== 0) query.page = page;
-    if (sort) query.sort = sort;
-    return query;
-  }, [filterValues, page, sort]);
+    const queryParams = {};
+
+    if (page) {
+      queryParams.page = page;
+    }
+    if (pageSize) {
+      queryParams.size = pageSize;
+    }
+    if (sort) {
+      queryParams.sort = sort;
+    }
+    return queryParams;
+  }, [filterValues, page, pageSize, sort]);
 
   const { data: regions, isLoading } = useRegions({
     args: params,

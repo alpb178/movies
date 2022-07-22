@@ -37,12 +37,19 @@ const TravelsList = ({ hiddenColumns, userId }) => {
   });
 
   const params = useMemo(() => {
-    const query = {};
-    if (userId) return { traveler: userId };
-    if (page !== 0) query.page = page;
-    if (sort) query.sort = sort;
-    return query;
-  }, [filterValues, page, sort]);
+    const queryParams = {};
+
+    if (page) {
+      queryParams.page = page;
+    }
+    if (pageSize) {
+      queryParams.size = pageSize;
+    }
+    if (sort) {
+      queryParams.sort = sort;
+    }
+    return queryParams;
+  }, [filterValues, page, pageSize, sort]);
 
   const { data: travels, isLoading } = useTravels({
     args: params,

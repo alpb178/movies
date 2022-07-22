@@ -7,7 +7,6 @@ import TableActions from '@/components/table/TableActions';
 import useMeasureUnits, { saveMeasureUnits } from '@/hooks/measure-unit/useMeasureUnits';
 import { API_MEASURE_UNITS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
@@ -16,7 +15,6 @@ import MeasureUnitsForm from './MeasureUnitForm';
 
 const MeasureUnitsList = () => {
   const { t } = useTranslation('common');
-  const router = useRouter();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
@@ -27,6 +25,9 @@ const MeasureUnitsList = () => {
   const [selectedItem, setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [loading, setLoading] = useState(false);
+  const [filterValues, setFilterValues] = useState({
+    name: ''
+  });
 
   useEffect(() => {
     if (!openForm) {
@@ -35,11 +36,19 @@ const MeasureUnitsList = () => {
   }, [openForm]);
 
   const params = useMemo(() => {
-    const query = {};
-    if (page !== 0) query.page = page;
-    if (sort) query.sort = sort;
-    return query;
-  }, [page, sort]);
+    const queryParams = {};
+
+    if (page) {
+      queryParams.page = page;
+    }
+    if (pageSize) {
+      queryParams.size = pageSize;
+    }
+    if (sort) {
+      queryParams.sort = sort;
+    }
+    return queryParams;
+  }, [filterValues, page, pageSize, sort]);
 
   const { data: measureunits, isLoading } = useMeasureUnits({
     args: params,
