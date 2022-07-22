@@ -48,12 +48,6 @@ const RolesList = () => {
     return queryParams;
   }, [filterValues, page, pageSize, sort]);
 
-  // useEffect(() => {
-  //   if (!openForm) {
-  //     setSelectedItem(null);
-  //   }
-  // }, []);
-
   const { data: roles, isLoading } = useRoles({
     args: params,
     options: {

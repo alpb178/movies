@@ -19,6 +19,7 @@ const RolesForm = ({ roleId }) => {
   const router = useRouter();
   const { t } = useTranslation('common');
   const [isLoading, setIsLoading] = useState(false);
+  const [permissionsRole, setPermissionsRole] = useState([]);
 
   const { data: resources } = useResources({
     options: {
@@ -52,39 +53,7 @@ const RolesForm = ({ roleId }) => {
     name: Yup.string().required()
   });
 
-  const onSubmit = async (values) => {
-    const { name, ...rest } = values;
-    const body = { name };
-
-    body.permissions = Object.keys(rest).map((key) => ({ id: key }));
-    let method = POST;
-    let message = t('inserted.male', { entity: t('roles', { count: 1 }) });
-
-    if (roleId !== 'create') {
-      method = PUT;
-      body.id = roleId;
-      message = t('updated.male', { entity: t('roles', { count: 1 }) });
-    }
-
-    try {
-      setIsLoading(true);
-      await saveRole({
-        args: body,
-        options: {
-          method
-        }
-      });
-      await queryClient.invalidateQueries([API_ROLES_URL]);
-      toast(message);
-      router.back();
-    } catch (error) {
-      toast.error(error.toString());
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const columns = useMemo(() => [
+  const columns = [
     {
       Header: t('resources', { count: 1 }),
       accessor: 'name',
@@ -95,78 +64,39 @@ const RolesForm = ({ roleId }) => {
       accessor: 'permissions',
       className: 'w-full flex justify-between',
       displayName: 'permissions',
-      Cell: ({ row }) => (
-        <div aria-labelledby="checkbox-group" className="grid w-full grid-cols-4">
-          {actions.map((action) => {
-            const existentPermissions =
-              permissions?.rows &&
-              permissions.rows.find(
-                (item) => item.resource.name === row.original.name && item.action === action.name
-              );
-
-            return existentPermissions?.action ? (
-              <label
-                key={`permissions.${action.name}.${row.original.name}`}
-                htmlFor={`permissions.${action.name}.${row.original.name}`}
-                className="inline-flex items-center cursor-pointer"
-              >
-                <Field
-                  className="w-5 h-5 transition-all duration-150 ease-linear text-secondary-600 form-checkbox"
-                  type="checkbox"
-                  name={`${existentPermissions.id}`}
-                  /* checked={
-                    initialValues.permissions.find((item) => item.id === existentPermissions.id)?.id
-                      ? true
-                      : false
-                  }
-                  onChange={(e) => {
-                    console.log(e.target.checked);
-                  }}*/
-                />
-                <span className="ml-2 font-medium text-gray-700">{t(action.name)}</span>
-              </label>
-            ) : (
-              <p />
+      Cell: ({ row }) =>
+        actions.map((action) => {
+          const existentPermissions =
+            permissions?.rows &&
+            permissions.rows.find(
+              (item) => item.resource.name === row.original.name && item.action === action.name
             );
-          })}
-        </div>
-      )
+
+          return existentPermissions?.action ? (
+            <label
+              key={`permissions.${action.name}.${row.original.name}`}
+              htmlFor={`permissions.${action.name}.${row.original.name}`}
+              className="inline-flex items-center cursor-pointer"
+            >
+              <input
+                className="w-5 h-5 transition-all duration-150 ease-linear text-secondary-600 form-checkbox"
+                type="checkbox"
+                name={`${existentPermissions.id}`}
+                defaultChecked={
+                  permissionsRole?.find((item) => item.id === existentPermissions.id)?.id
+                    ? true
+                    : false
+                }
+                onClick={(event) => checkboxClick(event)}
+              />
+              <span className="ml-2 font-medium text-gray-700">{t(action.name)}</span>
+            </label>
+          ) : (
+            <p />
+          );
+        })
     }
-  ]);
-
-  // const FilterCriteria = () =>
-  //   Object.keys(filterValues).map(
-  //     (e) =>
-  //       filterValues[e] !== '' && (
-  //         <div className="flex items-center px-4 py-1 mr-4 text-sm font-medium bg-gray-100 rounded-full w-max">
-  //           <span key={filterValues[e]} className="font-medium">
-  //             {`${t(e)}: `}
-  //             <span className="font-normal">{filterValues[e]}</span>
-  //           </span>
-  //           <button type="button" id={filterValues[e]} onClick={(event) => handleClick(event, e)}>
-  //             <XCircleIcon className="w-6 h-6 ml-2 float-center" />
-  //           </button>
-  //         </div>
-  //       )
-  //   );
-
-  // const handleFilters = (values) => {
-  //   setFilterValues(values);
-  // };
-
-  // const handleClick = (event, value) => {
-  //   const updatedFilters = Object.keys(filterValues)
-  //     .filter((key) => value != key)
-  //     .reduce(
-  //       (obj, key) => ({
-  //         ...obj,
-  //         [key]: filterValues[key]
-  //       }),
-  //       {}
-  //     );
-
-  //   setFilterValues(updatedFilters);
-  // };
+  ];
 
   const options = {
     columns,
@@ -201,6 +131,53 @@ const RolesForm = ({ roleId }) => {
   const initialValues = {
     name: roles?.name || '',
     permissions: roles?.permissions || []
+  };
+
+  useMemo(() => {
+    if (roles) {
+      setPermissionsRole(roles?.permissions);
+    }
+  }, [roles]);
+
+  const checkboxClick = (event) => {
+    let index = permissionsRole.findIndex((e) => e.id == parseInt(event.target.name));
+    console.log(index);
+    index >= 0
+      ? permissionsRole.splice(index, 1)
+      : permissionsRole.push({ id: parseInt(event.target.name) });
+    console.log(permissionsRole);
+  };
+
+  const onSubmit = async (values) => {
+    const body = {};
+    body.name = values.name;
+    body.permissions = permissionsRole;
+
+    let method = POST;
+    let message = t('inserted.male', { entity: t('roles', { count: 1 }) });
+
+    if (roleId !== 'create') {
+      method = PUT;
+      body.id = roleId;
+      message = t('updated.male', { entity: t('roles', { count: 1 }) });
+    }
+
+    try {
+      setIsLoading(true);
+      await saveRole({
+        args: body,
+        options: {
+          method
+        }
+      });
+      await queryClient.invalidateQueries([API_ROLES_URL]);
+      toast(message);
+      router.back();
+    } catch (error) {
+      toast.error(error.toString());
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -251,18 +228,7 @@ const RolesForm = ({ roleId }) => {
               </div>
 
               <div className="space-y-2">
-                {/* <label htmlFor="code">{t('permissions', { count: 2 })}</label>
-            <div className="relative w-full mx-auto"> */}
-                {/* <MultipleSelectionAutcompleteField
-                name="permissions"
-                options={resources?.rows ? resources.rows : []}
-                optionLabels={['action', 'resource.name']}
-                keysToMatch={['action', 'resource.name']}
-                labelSeparator=" "
-                className="autocomplete-field"
-              /> */}
                 <DataTable {...options} />
-                {/* </div> */}
               </div>
             </Form>
           )}
