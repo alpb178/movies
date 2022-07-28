@@ -107,7 +107,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                   leaveTo="transform scale-95"
                 >
                   <Menu.Items className="absolute w-full mt-2 origin-top bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    {getItems(inputValue).length > 0 ? (
+                    {getItems(inputValue)?.length > 0 ? (
                       getItems(inputValue).map((item, index) => (
                         <Menu.Item
                           as="div"

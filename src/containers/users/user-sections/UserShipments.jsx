@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-/* eslint-disable react/react-in-jsx-scope */
+/* 
 import EmptyState from '@/components/common/EmptyState';
 import Loader from '@/components/common/Loader';
 import { useSearchShipment } from '@/hooks/shipment/useShipments';
@@ -74,3 +74,4 @@ const UserShipments = ({ userId }) => {
 };
 
 export default UserShipments;
+ */

@@ -26,12 +26,14 @@ const Dashboard = () => {
     return query;
   }, [filterValues]);
 
-  const { data: statisticsUsers, isLoading } = useStaticsUsers({
+  /* const { data: statisticsUsers, isLoading } = useStaticsUsers({
     args: params,
     options: {
       keepPreviousData: true
     }
-  });
+  });*/
+
+  const statisticsUsers = [];
 
   const { data: statistics, isLoadingStaticts } = useStaticsUsers({
     options: {

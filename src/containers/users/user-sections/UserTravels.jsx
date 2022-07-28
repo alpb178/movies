@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-key */
-/* eslint-disable react/react-in-jsx-scope */
+/*  
 import EmptyState from '@/components/common/EmptyState';
 import Loader from '@/components/common/Loader';
-import { useSearchTravel } from '@/hooks/travel/useTravels';
+import { useSearchTravel } from '@/hooks/table/useTravels';
 import useMediaContext from '@/hooks/useMediaContext';
 import { TRAVEL_DETAILS_PAGE } from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
@@ -88,3 +88,4 @@ UserTravels.propTypes = {
 };
 
 export default UserTravels;
+*/

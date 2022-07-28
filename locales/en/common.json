@@ -7,68 +7,17 @@
     "new": "¿New to Zendinit?"
   },
   "add": "Add",
-  "applications": {
-    "0": "No Applications",
-    "one": "Applications",
-    "other": "Applications"
+  "areas": {
+    "0": "No existen Áreas",
+    "1": "Área",
+    "other": "Áreas"
   },
-  "availability": "Availability",
 
-  "bills": {
-    "0": "No Bills",
-    "one": "Bills",
-    "other": "Bills"
-  },
-  "buy": {
-    "0": "No Buys",
-    "one": "Buys",
-    "other": "Buys"
-  },
   "amount": "Amount",
-  "business-name": "Business name",
+  "business": "Business",
   "cancel": "Cancel",
   "close": "Close",
-  "catalogs": {
-    "0": "No Catalogs",
-    "one": "Catalogs",
-    "other": "Catalogs"
-  },
-  "client": "Client",
-  "client-number": "Client Number",
   "create-at": "Create date",
-  "certificate": {
-    "0": "No Certificate 347",
-    "one": "Certificate 347",
-    "other": "Certificate 347"
-  },
-  "certificate-iso": {
-    "0": "No Certificate ISOS",
-    "one": "Certificate ISO",
-    "other": "Certificate ISO"
-  },
-  "current-payment": {
-    "0": "No Current Payment",
-    "one": "Current Payment",
-    "other": "Current Payment"
-  },
-  "customer-care": {
-    "0": "No Customer Care",
-    "one": "Customer Care",
-    "other": "Customer Care"
-  },
-  "customer-services": {
-    "0": "No Customer Services",
-    "one": "Customer Services",
-    "other": "Customer Services"
-  },
-  "contact-person": "Contact person",
-  "company": "Company",
-  "dashboard": "Dashboard",
-  "demo": "Demo",
-  "date-order": " Date Order",
-  "date-delivery": " Date Delivery",
-  "day": "Day",
-  "date-flight": "Date Flight",
   "delete": "Delete",
   "delete-filter": "Clear Filter",
   "deleted": {
@@ -81,7 +30,6 @@
   },
   "delete-title": "Delete {entity}",
   "description": "Description",
-  "drop-zone-text": "Drag and drop an image file here or click",
   "email": "Email",
   "error-with-status": "A {{statusCode}} error occurred on server",
   "error-without-status": "An error occurred on the server",
@@ -286,11 +234,7 @@
     "one": "Information",
     "other": "Information"
   },
-  "information-product": {
-    "0": "No Information del Product",
-    "one": "Information del Product",
-    "other": "Information Product"
-  },
+
   "issue": "Issue",
   "loading": "Loading...",
   "message": {
@@ -331,6 +275,11 @@
   },
   "phone": "Phone",
   "previous": "Previous",
+  "products": {
+    "0": "No  Products",
+    "one": "Product",
+    "other": "Products"
+  },
   "ppu": {
     "0": "PPU",
     "one": "PPU",
@@ -373,16 +322,12 @@
     "male": "{{entity}} saved successfully.",
     "female": "{{entity}} saved successfully."
   },
-  "record": {
-    "0": "No Record",
-    "one": "Record",
-    "other": "Record"
+  "sales": {
+    "0": "No Sales",
+    "one": "Sale",
+    "other": "Sales"
   },
-  "sales-history": {
-    "0": "No Sales History",
-    "one": "Sales History",
-    "other": "Sales History"
-  },
+
   "send": "Send",
   "search": "Search",
   "search-entity": "Search {{entity}}",
@@ -401,6 +346,11 @@
     "user-activate-desactivate": "Number of Active and Inactive users"
   },
   "type": "Type",
+  "tables": {
+    "0": "No Tables",
+    "one": "Tables",
+    "other": "Tables"
+  },
   "trade-name": "Trade name",
   "update": "Update",
   "updated": {

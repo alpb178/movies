@@ -16,7 +16,7 @@ const NavigationMenu = () => {
     session?.user?.roles?.some((role) => item?.roles.includes(role.name));
 
   return navigation.map((item, idx) =>
-    canAccess(item) ? (
+    !canAccess(item) ? (
       item.children ? (
         <Disclosure as="div" key={item.name} className="space-y-1">
           {({ open }) => (

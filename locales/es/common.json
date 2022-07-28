@@ -14,25 +14,14 @@
     "1": "Acción",
     "other": "Acciones"
   },
+  "areas": {
+    "0": "No existen Áreas",
+    "1": "Área",
+    "other": "Áreas"
+  },
   "add": "Añadir",
-  "airlines": {
-    "0": "Aún no existen aerolíneas registradas",
-    "1": "Aerolínea",
-    "other": "Aerolíneas"
-  },
-  "applications": {
-    "0": "Sin Aplicaciones",
-    "1": "Aplicaciones",
-    "other": "Aplicaciones"
-  },
+  "business": "Negocios",
   "amount": "Importe",
-  "bills": {
-    "0": "Sin Facturas",
-    "1": "Facturas",
-    "other": "Facturas"
-  },
-  "availability": "Disponibilidad",
-  "business-name": "Razón social",
   "birthdate": "Fecha de Nacimiento",
   "bio": "Biografía",
   "cancel": "Cancelar",
@@ -43,11 +32,6 @@
   "code": "Código",
   "contact-person": "Persona de contacto",
   "company": "Empresa",
-  "countries": {
-    "0": "Aún no existen países registrados",
-    "1": "País",
-    "other": "Países"
-  },
   "create": "Crear {{entity}}",
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
@@ -83,55 +67,42 @@
   },
   "filter": "Filtrar",
   "filters": "Filtros",
-  "flights": { "0": "Aún no existen vuelos registrados", "1": "Vuelo", "other": "Vuelos" },
   "form": {
-    "airline": {
+    "area": {
       "title": {
-        "create": "Nuevo Aerolínea",
-        "update": "Actualizar Aerolínea"
+        "create": "Nuevo Area",
+        "update": "Actualizar Area"
       }
     },
     "common": {
       "empty-options": "No se encontraron resultados",
       "label": {
         "code": "Código",
-        "name": "Nombre"
+        "name": "Nombre",
+        "price": "Precio",
+        "area": "Área"
       },
       "placeholder": {
         "search": "Buscar {{entity}}...."
       },
       "required": {
-        "airline": "La Aerolinea es requerida",
         "code": "El código es requerido",
-        "destination": "El destino es requerido",
         "departureAt": "La Fecha es requerida",
-        "flight": "El vuelo es requerido",
-        "measureUnit": "La Unidad de Medida es Requerida",
         "name": "El nombre es requerido",
-        "origin": "El origen es requerido",
-        "region": "El País es Requerido",
-        "shipmentItems": "Los Articulos son requeridos",
-        "maxAmount": "La Cantidad Permitida es requerida",
-        "traveler": "El viajero es requerido",
-        "maxPrice": "El precio Máximo es requerido",
+        "price": "El precio es requerido",
         "minPrice": "El precio Minimo es requerido"
-      },
-      "amount": {
-        "maxAmount": "La Cantidad Permitida debe ser mayor que 0",
-        "maxPrice": "El precio Máximo debe ser mayor que el Mínimo"
       }
     },
-    "country": {
+    "table": {
       "title": {
-        "create": "Nuevo País",
-        "update": "Editar País"
+        "create": "Nueva Mesa",
+        "update": "Editar Mesa"
       }
     },
-
-    "measure-unit": {
+    "business": {
       "title": {
-        "create": "Nueva Unidad de Medida",
-        "update": "Editar Unidad de Medida"
+        "create": "Nueva Negocio",
+        "update": "Editar Negocio"
       }
     },
     "permissions": {
@@ -144,33 +115,16 @@
         "action": "Acción"
       }
     },
-    "region": {
+    "products": {
       "title": {
-        "create": "Nueva Región",
-        "update": "Actualizar Región",
-        "details": "Detalles de una Región"
-      },
-      "required": {
-        "country": "El país es requerido"
+        "create": "Nuevo Producto",
+        "update": "Actualizar Producto"
       }
     },
-    "regulation": {
+    "sales": {
       "title": {
-        "create": "Nueva Regulación",
-        "update": "Actualizar Regulación"
-      },
-
-      "label": {
-        "country": "País",
-        "permited-amount": "Cantidad permitida (Máx.)",
-        "price-range": "Rango de precios",
-        "regulate-price": "Regular precio",
-        "shipment-item": "Artículo"
-      },
-      "placeholder": {
-        "country": "País",
-        "shipment-item": "Artículo",
-        "permited-amount": "Cantidad permitida (Máx.)"
+        "create": "Nueva Venta",
+        "update": "Actualizar Venta"
       }
     },
     "role": {
@@ -183,60 +137,6 @@
       "title": {
         "create": "Nuevo Recurso",
         "update": "Actualizar Recurso"
-      }
-    },
-    "shipment": {
-      "label": {
-        "measure-unit": "Unidad de medida"
-      },
-      "placeholder": {
-        "payload": "¿Qué deseas enviar?",
-        "sender": "Remitente"
-      },
-      "title": {
-        "create": "Nuevo Envío",
-        "update": "Actualizar Envío"
-      }
-    },
-    "shipment-item": {
-      "label": {
-        "measure-unit": "Unidad de medida"
-      },
-      "placeholder": {
-        "payload": "Seleccione una Unidad de Medida"
-      },
-      "title": {
-        "create": "Nuevo Artículo",
-        "update": "Editar Artículo"
-      }
-    },
-    "travel": {
-      "label": {
-        "baggage-capacity": "Capacidad de Equipaje",
-        "comments": "Comentarios",
-        "date": "Fecha de viaje",
-        "destination": "Destino",
-        "origin": "Origen",
-        "traveler": "Viajero"
-      },
-      "placeholder": {
-        "airline": "¿En qué aerolínea viaja?",
-        "baggage-capacity": "¿Qué artículos puede llevar?",
-        "departure-date": "¿Cuándo es el viaje?",
-        "destination": "¿Hacia dónde va?",
-        "flight": "¿Cuál es el número de vuelo?",
-        "origin": "¿De dónde sale?",
-        "traveler": "¿Quién viaja?",
-        "comments": "Comentarios sobre el viaje..."
-      },
-      "title": {
-        "create": "Nuevo viaje",
-        "update": "Actualizar viaje"
-      },
-      "required": {
-        "destination": "El destino del viaje es requerido",
-        "origin": "El origen del viaje es requerido",
-        "traveler": "El viajero es requerido"
       }
     },
     "user": {
@@ -278,26 +178,12 @@
     "male": "{{entity}} insertado exitosamente.",
     "female": "{{entity}} insertada exitosamente."
   },
-  "information-product": {
-    "0": "Sin Información del Producto",
-    "1": "Información del Producto",
-    "other": "Información Productos"
-  },
+
   "invalid-credentials": "Credenciales no válidas.",
   "issue": "Asunto",
   "loading": "Cargando...",
-  "locations": {
-    "0": "Aún no existen localizaciones registradas.",
-    "1": "Localización",
-    "other": "Localizaciones"
-  },
   "logo": "Logo",
   "max-amount": "Cantidad máxima",
-  "measure-units": {
-    "0": "Aún no existen unidades de medida registradas",
-    "1": "Unidad de medida",
-    "other": "Unidades de medida"
-  },
   "message": {
     "user-delete": "Desea Eliminar el Usuario",
     "message": "Mensaje",
@@ -313,26 +199,8 @@
   "next": "Siguiente",
   "no-match-found": "No se encontraron resultados",
   "observations": "Observaciones",
-  "offers": {
-    "0": "Sin ofertas",
-    "1": "Oferta",
-    "other": "Ofertas"
-  },
   "origin": "Origen",
-  "new-order": {
-    "0": "Sin Información",
-    "1": "Nuevo Pedido",
-    "other": "Nuevos Pedidos"
-  },
   "password": "Contraseña",
-  "payments": {
-    "0": "Aún no existen pagos",
-    "1": "Pago",
-    "other": "Pagos"
-  },
-  "payload": {
-    "available": "Carga Disponible"
-  },
   "permissions": {
     "0": "Sin permisos",
     "1": "Permiso",
@@ -341,26 +209,16 @@
   "phone": "Teléfono",
   "previous": "Anterior",
   "price-range": "Rango de precios (min - máx)",
+  "products": {
+    "0": "Sin  Producto",
+    "1": " Producto",
+    "other": "Productos"
+  },
   "profile": "Perfil",
   "population": "Población",
   "repeat-password": "Repetir contraseña",
   "read": "Leer",
-  "regions": {
-    "0": "Aún no existen regiones registradas.",
-    "1": "Región",
-    "other": "Regiones"
-  },
-  "reservations": {
-    "reservations": "Petición",
-    "requests": "Peticiones de Envío",
-    "confirmed": "Peticiones Confirmadas"
-  },
   "registered-at": "Registrado el",
-  "regulations": {
-    "0": "Aún no existen regulaciones registradas.",
-    "1": "Regulación",
-    "other": "Regulaciones"
-  },
   "remember-me": "Recuérdame",
   "required": {
     "email": "El correo electrónico es requerido",
@@ -398,6 +256,11 @@
   "role-admin": "Administrador",
   "role-user": "Usuario",
   "save": "Guardar",
+  "sales": {
+    "0": "No hay Ventas",
+    "one": "Venta",
+    "other": "Ventas"
+  },
   "saved": {
     "male": "{{entity}} guardado exitosamente.",
     "female": "{{entity}} guardada exitosamente."
@@ -406,17 +269,6 @@
   "search-entity": "Buscar {{entity}}",
   "select": "Seleccione",
   "settings": "Ajustes",
-  "shipment-items": {
-    "0": "Aún no existen artículos",
-    "1": "Artículo",
-    "other": "Artículos"
-  },
-  "shipments": {
-    "0": "Aún no existen envíos",
-    "1": "Envío",
-    "other": "Envíos",
-    "status": { "pending": "Pendiente", "acepted": "Aceptado", "reject": "rechazado" }
-  },
   "send": "Enviar",
   "status": "Estado",
   "statistics": {
@@ -424,6 +276,11 @@
     "user-activate-desactivate": "Cantidad Usuarios Activos e Inactivos"
   },
   "symbol": "Símbolo",
+  "tables": {
+    "0": "No hay Mesas",
+    "one": "Mesa",
+    "other": "Mesas"
+  },
   "table": {
     "page-count": "Página {{currentPage}} de {{lastPage}}",
     "rows-per-page": "Filas por página"
@@ -433,16 +290,6 @@
     "0": "Aún no existen trazas",
     "1": "Traza",
     "other": "Trazas"
-  },
-  "travelers": {
-    "0": "Aún no existen viajeros registrados",
-    "1": "Viajero",
-    "other": "Viajeros"
-  },
-  "travels": {
-    "0": "Aún no existen viajes registrados",
-    "1": "Viaje",
-    "other": "Viajes"
   },
   "type": "Tipo",
   "update": "Editar",
@@ -458,7 +305,5 @@
     "other": "Usuarios",
     "status": { "pending": "Pendiente", "activated": "Activado", "inactive": "Desactivado" }
   },
-  "unregulated": "No regulado",
-  "voucher": "Justificante",
   "year": "Año"
 }

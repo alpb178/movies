@@ -1,31 +1,24 @@
 import {
-  BriefcaseIcon,
   CogIcon,
   HomeIcon,
   KeyIcon,
-  LocationMarkerIcon,
   PaperAirplaneIcon,
   ScaleIcon,
   ShieldCheckIcon,
   TicketIcon,
-  // ArchiveIcon,
   UserGroupIcon
 } from '@heroicons/react/outline';
 import {
-  AIRLINES_PAGE,
-  COUNTRIES_PAGE,
+  AREA_PAGE,
+  BUSINESS_PAGE,
   DASHBOARD_PAGE,
-  MEASURE_UNITS_PAGE,
   PERMISSIONS_PAGE,
-  REGIONS_PAGE,
-  REGULATIONS_PAGE,
+  PRODUCT_PAGE,
   ROLES_PAGE,
   ROLE_ADMIN,
-  // REVENUES_PAGE,
+  SALES_PAGE,
   SETTINGS_PAGE,
-  SHIPMENTS_PAGE,
-  SHIPMENT_ITEMS_PAGE,
-  TRAVELS_PAGE,
+  TABLE_PAGE,
   USERS_PAGE
 } from 'lib/constants';
 
@@ -36,28 +29,12 @@ export default [
     icon: HomeIcon,
     roles: [ROLE_ADMIN]
   },
-  // {
-  //   name: 'revenues',
-  //   icon: ArchiveIcon,
-  //   link: REVENUES_PAGE,
-  //   roles: [ROLE_ADMIN]
-  // },
-  {
-    name: 'locations',
-    children: [
-      { name: 'countries', link: COUNTRIES_PAGE, roles: [ROLE_ADMIN] },
-      { name: 'regions', link: REGIONS_PAGE, roles: [ROLE_ADMIN] }
-    ],
-    icon: LocationMarkerIcon,
-    roles: [ROLE_ADMIN]
-  },
-  { name: 'measure-units', link: MEASURE_UNITS_PAGE, icon: ScaleIcon, roles: [ROLE_ADMIN] },
-  { name: 'shipment-items', link: SHIPMENT_ITEMS_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN] },
-  { name: 'airlines', link: AIRLINES_PAGE, icon: PaperAirplaneIcon, roles: [ROLE_ADMIN] },
-  { name: 'regulations', link: REGULATIONS_PAGE, icon: ShieldCheckIcon, roles: [ROLE_ADMIN] },
-  { name: 'travels', link: TRAVELS_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN] },
-  { name: 'shipments', link: SHIPMENTS_PAGE, icon: BriefcaseIcon, roles: [ROLE_ADMIN] },
-  // { name: 'payments', link: PAYMENTS_PAGE, icon: CurrencyDollarIcon, roles: [ROLE_ADMIN] },
+
+  { name: 'areas', link: AREA_PAGE, icon: ScaleIcon, roles: [ROLE_ADMIN] },
+  { name: 'tables', link: TABLE_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN] },
+  { name: 'products', link: PRODUCT_PAGE, icon: PaperAirplaneIcon, roles: [ROLE_ADMIN] },
+  { name: 'business', link: BUSINESS_PAGE, icon: ShieldCheckIcon, roles: [ROLE_ADMIN] },
+  { name: 'sales', link: SALES_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN] },
   { name: 'users', link: USERS_PAGE, icon: UserGroupIcon, roles: [ROLE_ADMIN] },
   {
     name: 'access-control',
