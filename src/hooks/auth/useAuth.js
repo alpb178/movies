@@ -2,12 +2,14 @@ import { apiFetcher } from '@/lib/apiFetcher';
 import {
   API_CHANGE_PASSWORD_URL,
   API_CONFIRM_SIGNUP_URL,
+  API_CREATE_ACCOUNT_SIGNUP_URL,
   API_FACEBOOK_AUTH_URL,
   API_GOOGLE_AUTH_URL,
   API_RESET_PASSWORD_URL,
   API_SIGNUP_URL,
   POST
 } from '@/lib/constants';
+import { saveData } from '..';
 
 export const signupUser = async (args) => {
   const { data: values, ...rest } = args;
@@ -23,6 +25,10 @@ export const verifyUser = async (args) => {
     rest
   });
   return data;
+};
+
+export const createAccount = async ({ args = {} } = {}) => {
+  await saveData({ path: API_CREATE_ACCOUNT_SIGNUP_URL, data: args, method: POST });
 };
 
 export const signinWithFacebook = async (args) => {

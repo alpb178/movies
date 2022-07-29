@@ -1,10 +1,12 @@
 import Wizard from '@/components/form/Wizards';
+import { createAccount } from '@/hooks/auth/useAuth';
+import { POST } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import * as Yup from 'yup';
 import BusinessFormPage from './BusinessFormPage';
 import UsersFormPage from './UsersFormPage';
 
-const PublishTravelForm = () => {
+const CreateAccountForm = () => {
   const { t } = useTranslation('common');
 
   const initialValues = {
@@ -41,12 +43,37 @@ const PublishTravelForm = () => {
   const validationSchemas = [busisnessValidationSchema, usersValidationSchema];
 
   const onSubmit = async (values) => {
-    console.log(values);
+    let method = POST;
+    let sendBody = {};
+    let business = {};
+    let user = {};
+
+    business.name = values.name;
+    business.address = values.address;
+    business.city = values.city;
+    business.phone = values.phone;
+    business.province = values.province;
+    business.zipCode = values.zipCode;
+
+    user.email = values.email;
+    user.firstName = values.firstName;
+    user.lastName = values.lastName;
+    user.mobile = values.mobile;
+    user.password = values.password;
+
+    sendBody.business = business;
+    sendBody.user = user;
+    createAccount({
+      args: sendBody,
+      options: {
+        method
+      }
+    });
   };
 
   const steps = [
-    <BusinessFormPage nextRoute="create-account" />,
-    <UsersFormPage nextRoute="users" />
+    <BusinessFormPage key="create-account" nextRoute="create-account" />,
+    <UsersFormPage key="users" nextRoute="users" />
   ];
 
   return (
@@ -63,4 +90,4 @@ const PublishTravelForm = () => {
   );
 };
 
-export default PublishTravelForm;
+export default CreateAccountForm;

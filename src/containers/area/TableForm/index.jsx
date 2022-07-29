@@ -59,10 +59,10 @@ const TableForm = ({ data, setTable }) => {
       </div>
 
       {selectedOptions?.length > 0 ? (
-        <div>
+        <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-3">
           {selectedOptions.map((option) => (
             <div key={option?.code} className="flex items-center w-full p-4 pt-0 space-x-8">
-              <p className="text-md">{option.code}:</p>
+              <p className="text-md">{option.code}</p>
               <button
                 type="button"
                 className="text-gray-600 rounded-full hover:text-red-500 hover:bg-red-100"
@@ -72,7 +72,7 @@ const TableForm = ({ data, setTable }) => {
               </button>
             </div>
           ))}
-        </div>
+        </dl>
       ) : null}
     </div>
   );

@@ -135,7 +135,7 @@ const UsersFormPage = ({ parentState }) => {
 };
 
 UsersFormPage.propTypes = {
-  parentState: PropTypes.object.isRequired
+  parentState: PropTypes.object
 };
 
 export default UsersFormPage;

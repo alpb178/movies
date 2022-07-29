@@ -103,7 +103,7 @@ const BusinessFormPage = ({ parentState }) => {
 };
 
 BusinessFormPage.propTypes = {
-  parentState: PropTypes.object.isRequired
+  parentState: PropTypes.object
 };
 
 export default BusinessFormPage;

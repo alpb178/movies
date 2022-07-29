@@ -38,6 +38,7 @@ export const TABLE_PAGE = '/table';
 
 // Auth
 export const API_AUTH_URL = '/auth';
+export const API_CREATE_ACCOUNT_SIGNUP_URL = `${API_AUTH_URL}/signup`;
 export const API_CONFIRM_SIGNUP_URL = `${API_AUTH_URL}/confirm/email`;
 export const API_CHANGE_PASSWORD_URL = `${API_AUTH_URL}/confirm/password`;
 export const API_RESET_PASSWORD_URL = `${API_AUTH_URL}/reset/password`;
