@@ -9,11 +9,6 @@ import clsx from 'clsx';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import PropTypes from 'prop-types';
-import UserProfile from './user-sections/UserProfile';
-import UserReviews from './user-sections/UserReviews';
-import UserShipments from './user-sections/UserShipments';
-import UserTraces from './user-sections/UserTraces';
-import UserTravels from './user-sections/UserTravels';
 
 const UserDetails = ({ userId }) => {
   const { t, lang } = useTranslation('common');
@@ -27,12 +22,7 @@ const UserDetails = ({ userId }) => {
     }
   });
 
-  const sections = {
-    profile: <UserProfile data={user} />,
-    travels: <UserTravels userId={userId} />,
-    shipments: <UserShipments userId={userId} />,
-    reviews: <UserReviews userId={user?.id} />
-  };
+  const sections = {};
 
   return isLoading ? (
     <Loading />
@@ -48,7 +38,7 @@ const UserDetails = ({ userId }) => {
                     <div className="relative w-20 h-20">
                       <Image
                         layout="fill"
-                        className="rounded-full object-cover"
+                        className="object-cover rounded-full"
                         src={user?.profilePicture}
                         alt=""
                       />
@@ -117,18 +107,10 @@ const UserDetails = ({ userId }) => {
                           {section}
                         </Tab.Panel>
                       ))}
-
-                      {isSmall ? (
-                        <Tab.Panel className="border-transparent">
-                          <UserTraces key={4} />
-                        </Tab.Panel>
-                      ) : null}
                     </Tab.Panels>
                   </Tab.Group>
                 </div>
               </div>
-
-              {isLarge ? <UserTraces /> : null}
             </div>
           </main>
         </div>

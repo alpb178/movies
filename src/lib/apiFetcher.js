@@ -16,7 +16,7 @@ export const apiFetcher = async (url, options = {}) => {
   try {
     let path = API_BASE_PATH;
     if (typeof window === 'undefined') {
-      path = process.env.NEXT_HOST_URL + path;
+      path = process.env.NEXT_PUBLIC_HOST_URL + path;
     }
 
     if (session) {

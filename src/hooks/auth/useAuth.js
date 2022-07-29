@@ -2,8 +2,8 @@ import { apiFetcher } from '@/lib/apiFetcher';
 import {
   API_CHANGE_PASSWORD_URL,
   API_CONFIRM_SIGNUP_URL,
-  API_FACEBOOK_AUTH_URL,
-  API_GOOGLE_AUTH_URL,
+  // API_FACEBOOK_AUTH_URL,
+  // API_GOOGLE_AUTH_URL,
   API_RESET_PASSWORD_URL,
   API_SIGNUP_URL,
   POST
@@ -25,15 +25,15 @@ export const verifyUser = async (args) => {
   return data;
 };
 
-export const signinWithFacebook = async (args) => {
-  const { data } = args;
-  return apiFetcher(API_FACEBOOK_AUTH_URL, { data, method: POST });
-};
+// export const signinWithFacebook = async (args) => {
+//   const { data } = args;
+//   return apiFetcher(API_FACEBOOK_AUTH_URL, { data, method: POST });
+// };
 
-export const signinWithGoogle = async (args) => {
-  const { data } = args;
-  return apiFetcher(API_GOOGLE_AUTH_URL, { data, method: POST });
-};
+// export const signinWithGoogle = async (args) => {
+//   const { data } = args;
+//   return apiFetcher(API_GOOGLE_AUTH_URL, { data, method: POST });
+// };
 
 export const resetPassword = async (args) => {
   const { email } = args;
