@@ -1,4 +1,4 @@
-export const APP_NAME = 'VEBRICS';
+export const APP_NAME = 'Vebrics';
 
 export const DEFAULT_PAGE_SIZE = 10;
 export const NAVBAR_HEIGHT = 92;
@@ -13,7 +13,7 @@ export const API_ROLES_URL = '/roles';
 export const API_STATISTICS_URL_USERS = '/statistics/users';
 export const API_STATISTICS_URL_USERS_COUNT = '/statistics/users/count';
 
-// Api Urls VEBRICS
+// Api Urls Vebrics
 export const API_AREA_URL = '/areas';
 export const API_BUSINESS_URL = '/business';
 export const API_PRODUCT_URL = '/products';
@@ -30,7 +30,7 @@ export const PERMISSIONS_PAGE = '/permissions';
 export const ROLES_PAGE = '/roles';
 export const SETTINGS_PAGE = '/settings';
 
-// App Routes VEBRICS
+// App Routes Vebrics
 export const AREA_PAGE = '/area';
 export const BUSINESS_PAGE = '/auth/create-account';
 export const SALES_PAGE = '/sales';

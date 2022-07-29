@@ -1,4 +1,3 @@
-import Footer from '@/components/footer';
 import AuthNavbar from '@/components/navbars/AuthNavbar';
 import { FOOTER_HEIGHT, NAVBAR_HEIGHT } from '@/lib/constants';
 import PropTypes from 'prop-types';
@@ -15,7 +14,7 @@ const Auth = ({ children }) => (
         {children}
       </main>
     </div>
-    <Footer />
+    {/* <Footer /> */}
   </div>
 );
 

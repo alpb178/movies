@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { BUSINESS_PAGE, DASHBOARD_PAGE, FORGOT_PASSWORD_PAGE } from '@/lib/constants';
+import { APP_NAME, BUSINESS_PAGE, DASHBOARD_PAGE, FORGOT_PASSWORD_PAGE } from '@/lib/constants';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
@@ -133,12 +133,6 @@ const LoginForm = () => {
                   <span className="ml-4 font-medium text-gray-700">{t('remember-me')}</span>
                 </label>
 
-                <Link href={BUSINESS_PAGE}>
-                  <a className="font-medium text-gray-700 duration-200 ease-in-out hover:text-primary-dark hover:text-blue-500">
-                    {t('create-account')}
-                  </a>
-                </Link>
-
                 <Link href={FORGOT_PASSWORD_PAGE}>
                   <a className="font-medium text-gray-700 duration-200 ease-in-out hover:text-primary-dark hover:text-blue-500">
                     {t('forgot-password')}
@@ -155,6 +149,18 @@ const LoginForm = () => {
           </Form>
         )}
       </Formik>
+
+      <div className="fixed inset-x-0 bottom-0 z-50 w-full mx-auto mt-8 bg-white border-t lg:max-w-2xl lg:mt-16 lg:relative">
+        <div className="relative flex flex-col items-center justify-center my-4 space-y-2 text-base md:flex-row md:text-lg md:space-y-0">
+          <span className="px-2 text-gray-700">{t('account.new', { app: APP_NAME })}</span>
+
+          <Link href={BUSINESS_PAGE}>
+            <a className="inline-flex justify-center px-1 font-medium">
+              <span className="text-primary-600">{t('account.create')}</span>
+            </a>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

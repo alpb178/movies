@@ -1,9 +1,8 @@
 import { APP_NAME } from '@/lib/constants';
 import Cookies from 'js-cookie';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
-import React from 'react';
 
-class ZendinitDocument extends Document {
+class VebricsDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
     return { ...initialProps };
@@ -43,4 +42,4 @@ class ZendinitDocument extends Document {
   }
 }
 
-export default ZendinitDocument;
+export default VebricsDocument;

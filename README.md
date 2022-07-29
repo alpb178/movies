@@ -33,11 +33,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 First we build the docker image from project root dir
 
-`docker build . -t zendinit-admin`
+`docker build . -t vebrics-admin`
 
 Once is finished, we need to run a docker container from the image previously created, to do so we execute
 
-`docker run -p 5000:3000 zendinit-admin`
+`docker run -p 5000:3000 vebrics-admin`
 
 To stop docker container we should check the docker container id
 
