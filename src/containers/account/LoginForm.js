@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { DASHBOARD_PAGE, FORGOT_PASSWORD_PAGE } from '@/lib/constants';
+import { BUSINESS_PAGE, DASHBOARD_PAGE, FORGOT_PASSWORD_PAGE } from '@/lib/constants';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
@@ -132,6 +132,12 @@ const LoginForm = () => {
                   />
                   <span className="ml-4 font-medium text-gray-700">{t('remember-me')}</span>
                 </label>
+
+                <Link href={BUSINESS_PAGE}>
+                  <a className="font-medium text-gray-700 duration-200 ease-in-out hover:text-primary-dark hover:text-blue-500">
+                    {t('create-account')}
+                  </a>
+                </Link>
 
                 <Link href={FORGOT_PASSWORD_PAGE}>
                   <a className="font-medium text-gray-700 duration-200 ease-in-out hover:text-primary-dark hover:text-blue-500">
