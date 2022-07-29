@@ -3,7 +3,7 @@ import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDial
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useUsers, { saveUser, userActivatedDesactivated } from '@/hooks/user/useUsers';
-import { locales } from '@/lib/utils';
+import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import EmptyState from 'components/common/EmptyState';
 import UserFilter from 'containers/users/UserFilter';
@@ -19,6 +19,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useState } from 'react';
+import Lottie from 'react-lottie';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
@@ -133,29 +134,7 @@ const UsersList = () => {
   };
 
   const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
-  const renderStatus = (status, row) => {
-    switch (status) {
-      case 'PENDING':
-        return (
-          <span
-            key={row.id}
-            className="px-4 py-1 font-medium text-yellow-700 bg-yellow-100 rounded-full float-center"
-          >
-            {t('users.status.PENDING'.toLowerCase())}
-          </span>
-        );
-      default:
-        return (
-          <input
-            id="inactive"
-            className="w-5 h-5 transition-all duration-150 ease-linear text-secondary-600 form-checkbox"
-            type="checkbox"
-            defaultChecked={status == 'ACTIVE' ? true : false}
-            onClick={(event) => onActiveInactiveUsers(event, row)}
-          />
-        );
-    }
-  };
+
   const columns = React.useMemo(() => [
     {
       Header: t('name'),
@@ -168,11 +147,6 @@ const UsersList = () => {
     {
       Header: t('email'),
       accessor: 'email'
-    },
-    {
-      Header: t('status'),
-      accessor: 'status',
-      Cell: ({ cell }) => renderStatus(cell.row.original.status, cell.row.original)
     },
     {
       Header: t('phone'),
@@ -252,7 +226,7 @@ const UsersList = () => {
     pageSize,
     onPageSizeChange: setPageSize,
     onRowClick: (row) => {
-      const value = row.original.id;
+      const value = row?.original?.id;
       const path = USER_DETAIL_PAGE(value);
       router.push(path);
     },
@@ -285,11 +259,15 @@ const UsersList = () => {
   return (
     <>
       {(isLoading || loading) && <Loading />}
-      {console.log(page, params)}
-      {users && users.rows.length > 0 ? (
+      {users && users?.rows?.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('users', { count: 0 })}>{renderInsertButton()}</EmptyState>
+        <EmptyState text={t('users', { count: 0 })}>
+          {renderInsertButton()}
+          <div className="flex items-center justify-center h-64 w-max">
+            <Lottie options={lottieOptions('offline')} />
+          </div>
+        </EmptyState>
       )}
 
       <DeleteConfirmationDialog

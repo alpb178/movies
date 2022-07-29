@@ -2,7 +2,6 @@ import { locales } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const UserProfile = ({ data }) => {
   const { t, lang } = useTranslation('common');
@@ -51,21 +50,6 @@ const UserProfile = ({ data }) => {
               </dd>
             </div>
           ))}
-
-          <div className="sm:col-span-3">
-            <dt className="font-medium text-gray-600">{t('roles', { count: 2 })}</dt>
-            {profile?.roles
-              ? profile?.roles.map((role) => <dd className="mt-1 text-gray-900">{role}</dd>)
-              : t('no-data', { field: 'roles' })}
-          </div>
-
-          <div className="sm:col-span-3">
-            <dt className="font-medium text-gray-600">Bio</dt>
-            <dd
-              className="mt-1 space-y-5 text-gray-900"
-              dangerouslySetInnerHTML={{ __html: profile.about }}
-            />
-          </div>
         </dl>
       </div>
     </div>
