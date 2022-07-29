@@ -28,6 +28,7 @@
   "client": "Cliente",
   "client-number": "Número del Cliente",
   "create-at": "Fecha de Creación",
+  "create-account": "Crear Nueva Cuenta",
   "close": "Cerrar",
   "code": "Código",
   "contact-person": "Persona de contacto",
@@ -80,17 +81,49 @@
         "code": "Código",
         "name": "Nombre",
         "price": "Precio",
-        "area": "Área"
+        "area": "Área",
+        "table": "Mesa",
+        "tableCount": "Cantidad de Mesas por Área",
+        "address": "Dirección",
+        "country": "País",
+        "phone": "Telefóno",
+        "province": "Provincia",
+        "city": "Ciudad",
+        "zipCode": "Zip Code",
+        "lastName": "Apellidos",
+        "email": "Correo Electrónico",
+        "password": "Contraseña",
+        "repeat-password": "Repetir Contraseña",
+        "data-business": "Datos del Negocio"
       },
       "placeholder": {
-        "search": "Buscar {{entity}}...."
+        "name": "Insertar Nombre....",
+        "address": "Insertar Dirección....",
+        "country": "Insertar País....",
+        "phone": "Insertar Telefóno....",
+        "province": "Insertar Provincia....",
+        "city": "Insertar Ciudad....",
+        "zipCode": "Insertar zipCode....",
+        "search": "Buscar {{entity}}....",
+        "lastName": "Insertar Apellidos....",
+        "email": "Insertar Correo Electrónico....",
+        "password": "Insertar Password...."
       },
       "required": {
         "code": "El código es requerido",
         "departureAt": "La Fecha es requerida",
-        "name": "El nombre es requerido",
+        "name": "Nombre es requerido",
         "price": "El precio es requerido",
-        "minPrice": "El precio Minimo es requerido"
+        "minPrice": "El precio Minimo es requerido",
+        "address": "Dirección  es requerido",
+        "country": " País  es requerido",
+        "phone": " Telefóno  es requerido",
+        "province": "Provincia  es requerida",
+        "city": "Ciudad  es requerida",
+        "zipCode": "Zip Code  es requerido",
+        "lastName": "Apellidos requeridos",
+        "email": "Correo Electrónico  es requerida",
+        "password": "Password  es requerido"
       }
     },
     "table": {
@@ -101,7 +134,7 @@
     },
     "business": {
       "title": {
-        "create": "Nueva Negocio",
+        "create": "Nuevo Negocio",
         "update": "Editar Negocio"
       }
     },
@@ -178,7 +211,6 @@
     "male": "{{entity}} insertado exitosamente.",
     "female": "{{entity}} insertada exitosamente."
   },
-
   "invalid-credentials": "Credenciales no válidas.",
   "issue": "Asunto",
   "loading": "Cargando...",
