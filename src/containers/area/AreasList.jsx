@@ -32,7 +32,7 @@ const AreasList = () => {
   const [openFilters] = useState(false);
   const [openForm] = useState(false);
   const queryClient = useQueryClient();
-  const [setSelectedItem] = useState();
+  const [selectedItem, setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [loading, setLoading] = useState(isLoading);
   const [filterValues, setFilterValues] = useState({

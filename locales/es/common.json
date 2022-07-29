@@ -99,7 +99,8 @@
         "data-business": "Datos del Negocio",
         "status": "Estado",
         "createdAt": "Fecha de Creación",
-        "updatedAt": "Última Actualización"
+        "updatedAt": "Última Actualización",
+        "size": "Cantidad"
       },
       "placeholder": {
         "name": "Insertar Nombre....",
