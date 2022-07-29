@@ -88,11 +88,11 @@ const SalesList = () => {
     },
     {
       Header: t('form.common.label.area'),
-      accessor: 'area'
+      accessor: 'table.area.name'
     },
     {
       Header: t('form.common.label.table'),
-      accessor: 'table'
+      accessor: 'table.code'
     },
     {
       Header: t('form.common.label.amount'),
