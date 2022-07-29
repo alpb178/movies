@@ -100,6 +100,10 @@ const ProductsList = () => {
       accessor: 'price'
     },
     {
+      Header: t('form.common.label.description'),
+      accessor: 'description'
+    },
+    {
       id: 'optionsProducts',
       displayName: 'optionsProducts',
       Cell: ({ row }) => (

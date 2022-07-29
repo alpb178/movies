@@ -2,7 +2,7 @@ import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useUsers, { saveUser, userActivatedDesactivated } from '@/hooks/user/useUsers';
+import useUsers, { saveUser } from '@/hooks/user/useUsers';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import EmptyState from 'components/common/EmptyState';
@@ -42,8 +42,7 @@ const UsersList = () => {
     surname: '',
     name: '',
     phone: '',
-    email: '',
-    roles: ''
+    email: ''
   });
 
   const locale = {
@@ -119,20 +118,6 @@ const UsersList = () => {
     </div>
   );
 
-  const onActiveInactiveUsers = async (event, row) => {
-    event.stopPropagation();
-    try {
-      await userActivatedDesactivated({
-        args: row,
-        actions: row.status == 'ACTIVE' ? 'deactivate' : 'activate'
-      });
-      toast(t('updated.male', { entity: t('users', { count: 1 }) }));
-      await queryClient.refetchQueries([API_USERS_URL]);
-    } catch (error) {
-      toast.error(error.toString());
-    }
-  };
-
   const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
 
   const columns = React.useMemo(() => [
@@ -151,11 +136,6 @@ const UsersList = () => {
     {
       Header: t('phone'),
       accessor: 'mobile'
-    },
-    {
-      Header: t('roles', { count: 2 }),
-      accessor: 'roles',
-      Cell: ({ value: roles }) => renderRoles(roles)
     },
     {
       Header: t('create-at'),

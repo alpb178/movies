@@ -1,13 +1,20 @@
+import Loading from '@/components/common/Loader';
 import Wizard from '@/components/form/Wizards';
 import { createAccount } from '@/hooks/auth/useAuth';
-import { POST } from '@/lib/constants';
+import { DASHBOARD_PAGE, POST } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import BusinessFormPage from './BusinessFormPage';
 import UsersFormPage from './UsersFormPage';
 
 const CreateAccountForm = () => {
   const { t } = useTranslation('common');
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     name: '',
@@ -53,6 +60,7 @@ const CreateAccountForm = () => {
     business.city = values.city;
     business.phone = values.phone;
     business.province = values.province;
+    business.country = 'CUBA';
     business.zipCode = values.zipCode;
 
     user.email = values.email;
@@ -63,12 +71,42 @@ const CreateAccountForm = () => {
 
     sendBody.business = business;
     sendBody.user = user;
-    createAccount({
-      args: sendBody,
-      options: {
-        method
+
+    try {
+      setLoading(true);
+      const res = await createAccount({
+        args: sendBody,
+        options: {
+          method
+        }
+      });
+      if (res.ok) router.push(DASHBOARD_PAGE);
+    } catch (error) {
+      toast('ERROR');
+
+      setLoading(false);
+      let _messageErrors = error;
+      if (error.response) {
+        const { status } = error.response;
+        switch (status) {
+          case 400:
+            _messageErrors = t('error.400');
+            break;
+          case 401:
+            _messageErrors = t('error.401');
+            break;
+          case 500:
+            _messageErrors = t('error.500');
+            break;
+          default:
+            _messageErrors = error.toString();
+            break;
+        }
+        toast(_messageErrors);
       }
-    });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const steps = [
@@ -78,6 +116,7 @@ const CreateAccountForm = () => {
 
   return (
     <div className="w-full h-full ">
+      {loading && <Loading />}
       <Wizard
         initialRoute="create-account"
         initialValues={initialValues}

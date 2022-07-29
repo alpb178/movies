@@ -1,26 +1,19 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
 import useUsers from '@/hooks/user/useUsers';
-import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import UserOrganization from './user-sections/UserOrganization';
 import UserProfile from './user-sections/UserProfile';
 
-const MetaData = ({ user }) => {
-  const { t } = useTranslation('common');
-
+const MetaData = ({ data }) => {
   return (
-    <>
-      <div className="border-t border-b border-gray-200 xl:border-b-0">
-        <UserOrganization data={user} />
-      </div>
-    </>
+    <div className="border-t border-b border-gray-200 xl:border-b-0">
+      <UserOrganization data={data} />
+    </div>
   );
 };
 
 export default function Example({ userId }) {
-  const { t } = useTranslation('common');
-
   const { data: user, isLoading } = useUsers({
     args: { id: userId },
     options: {
@@ -64,7 +57,7 @@ export default function Example({ userId }) {
             </div>
 
             <aside className="hidden xl:block xl:pl-8">
-              <MetaData travel={user} />
+              <MetaData data={user?.business} />
             </aside>
           </div>
         </main>

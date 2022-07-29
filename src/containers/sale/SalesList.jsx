@@ -2,31 +2,29 @@
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DataTable from '@/components/table';
-import TableActions from '@/components/table/TableActions';
 import useSales from '@/hooks/sales/useSales';
-import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
-import { lottieOptions } from '@/lib/utils';
+import { DEFAULT_PAGE_SIZE, SALES_DETAIL_PAGE } from '@/lib/constants';
+import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
+import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
-import { useQueryClient } from 'react-query';
 import SalesFilter from './SalesFilter';
 
 const SalesList = () => {
-  const { t } = useTranslation('common');
-
+  const { t, lang } = useTranslation('common');
+  const router = useRouter();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
-  const [openFilters, setOpenFilters] = useState(false);
-  const [openForm, setOpenForm] = useState(false);
-  const queryClient = useQueryClient();
-  const [selectedItem, setSelectedItem] = useState();
-  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
+  const [openFilters] = useState(false);
+  const [openForm] = useState(false);
+  const [SelectedItem, setSelectedItem] = useState();
   const [loading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
     country: ''
@@ -37,6 +35,10 @@ const SalesList = () => {
       setSelectedItem(null);
     }
   }, [openForm]);
+
+  const locale = {
+    ...locales[lang]
+  };
 
   const params = useMemo(() => {
     const queryParams = {};
@@ -60,25 +62,46 @@ const SalesList = () => {
     }
   });
 
-  const onUpdate = (event, item) => {
-    event.stopPropagation();
-    setSelectedItem(item);
-    setOpenForm(true);
+  const renderStatus = (status, row) => {
+    return (
+      <span
+        key={row.id}
+        className="px-4 py-1 font-medium text-yellow-700 bg-yellow-100 rounded-full float-center"
+      >
+        {status}
+      </span>
+    );
   };
+
+  const formatDate = (value) => <div>{format(new Date(value), 'PPPPP', { locale })}</div>;
 
   const columns = React.useMemo(() => [
     {
-      Header: t('code'),
-      accessor: 'code'
+      Header: t('form.common.label.createdAt'),
+      accessor: 'createdAt',
+      Cell: ({ value }) => formatDate(value)
     },
     {
-      Header: t('name'),
-      accessor: 'name'
+      Header: t('form.common.label.status'),
+      accessor: 'status',
+      Cell: ({ value, row }) => renderStatus(value, row)
     },
     {
-      id: 'optionsSales',
-      displayName: 'optionsSales',
-      Cell: ({ row }) => <TableActions onEdit={(event) => onUpdate(event, row.original)} />
+      Header: t('form.common.label.area'),
+      accessor: 'area'
+    },
+    {
+      Header: t('form.common.label.table'),
+      accessor: 'table'
+    },
+    {
+      Header: t('form.common.label.amount'),
+      accessor: 'amount'
+    },
+    {
+      Header: t('form.common.label.updatedAt'),
+      accessor: 'updatedAt',
+      Cell: ({ value }) => formatDate(value)
     }
   ]);
 
@@ -124,6 +147,11 @@ const SalesList = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
+    onRowClick: (row) => {
+      const value = row?.original?.id;
+      const path = SALES_DETAIL_PAGE(value);
+      router.push(path);
+    },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <SalesFilter open={openFilters} onSubmit={handleFilters} />

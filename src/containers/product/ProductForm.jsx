@@ -20,18 +20,21 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
 
   const initialValues = {
     name: data?.name || '',
-    price: data?.price || ''
+    price: data?.price || '',
+    description: data?.description || ''
   };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
-    price: Yup.string().required(t('form.common.required.price'))
+    price: Yup.string().required(t('form.common.required.price')),
+    description: Yup.string().required(t('form.common.required.description'))
   });
 
   const onSubmit = async (values) => {
     let sendBody = {};
     sendBody.name = values.name;
     sendBody.price = values.price;
+    sendBody.description = values.description;
     let method = POST;
     let message = t('inserted.female', { entity: t('products', { count: 1 }) });
     if (data) {
@@ -51,10 +54,9 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
       await queryClient.refetchQueries([API_PRODUCT_URL]);
       toast(message);
     } catch (error) {
-      toast.error(error);
+      toast(error.response.data.message);
     } finally {
       setLoading(false);
-      onOpen(false);
     }
   };
 
@@ -109,6 +111,18 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
             <p className="mt-4 text-red-600">{errors?.price}</p>
           ) : null}
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="description">{t('form.common.label.description')}</label>
+        <Field
+          as="textarea"
+          className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
+          rows={3}
+          id="description"
+          name="description"
+          placeholder={t('form.common.placeholder.description')}
+        />
       </div>
     </FormDialogWrapper>
   );

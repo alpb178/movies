@@ -5,7 +5,13 @@ import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDial
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useAreas, { saveAreas } from '@/hooks/area/useAreas';
-import { API_AREA_URL, AREAS_FORM_PAGE, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
+import {
+  API_AREA_URL,
+  AREAS_DETAIL_PAGE,
+  AREAS_FORM_PAGE,
+  DEFAULT_PAGE_SIZE,
+  DELETE
+} from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -26,7 +32,7 @@ const AreasList = () => {
   const [openFilters] = useState(false);
   const [openForm] = useState(false);
   const queryClient = useQueryClient();
-  const [selectedItem, setSelectedItem] = useState();
+  const [setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [loading, setLoading] = useState(isLoading);
   const [filterValues, setFilterValues] = useState({
@@ -167,6 +173,11 @@ const AreasList = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
+    onRowClick: (row) => {
+      const value = row?.original?.id;
+      const path = AREAS_DETAIL_PAGE(value);
+      router.push(path);
+    },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <AreasFilter open={openFilters} onSubmit={handleFilters} />

@@ -14,7 +14,7 @@ const UsersFormPage = ({ parentState }) => {
     <Wizard.Page>
       {() => (
         <div className="relative flex-1 w-full h-full px-8 pb-4 bg-white sm:px-4 sm:rounded-lg">
-          <p className="text-4xl m-6  ">{t('form.user.title.create')}</p>
+          <h3 className="text-center form-header">{t('form.user.title.create')}</h3>
           <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
             <div className="items-center  m-2">
               <p className="text-2xl">{t('form.common.label.name')}</p>
@@ -22,7 +22,11 @@ const UsersFormPage = ({ parentState }) => {
                 name="firstName"
                 id="firstName"
                 placeholder={t('form.common.placeholder.name')}
-                className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                className={`text-field text-xl mt-2 ${
+                  parentState?.errors?.firstName && parentState?.touched?.firstName
+                    ? 'border-red-400 bg-red-100'
+                    : 'border-transparent filled'
+                }`}
               />
               {parentState?.errors?.firstName && parentState?.touched?.firstName ? (
                 <p className="mt-1 text-red-500">{parentState?.errors?.firstName}</p>
@@ -36,7 +40,11 @@ const UsersFormPage = ({ parentState }) => {
                 <Field
                   name="lastName"
                   placeholder={t('form.common.placeholder.lastName')}
-                  className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                  className={`text-field text-xl mt-2 ${
+                    parentState?.errors?.lastName && parentState?.touched?.lastName
+                      ? 'border-red-400 bg-red-100'
+                      : 'border-transparent filled'
+                  }`}
                 />
                 {parentState?.errors?.lastName && parentState?.touched?.lastName ? (
                   <p className="mt-1 text-red-500">{parentState?.errors?.lastName}</p>
@@ -51,7 +59,11 @@ const UsersFormPage = ({ parentState }) => {
 
               <Field
                 name="email"
-                className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                className={`text-field text-xl mt-2 ${
+                  parentState?.errors?.email && parentState?.touched?.email
+                    ? 'border-red-400 bg-red-100'
+                    : 'border-transparent filled'
+                }`}
                 placeholder={t('form.common.placeholder.email')}
               />
               {parentState?.errors?.email && parentState?.touched?.email ? (
@@ -64,7 +76,11 @@ const UsersFormPage = ({ parentState }) => {
 
               <Field
                 name="mobile"
-                className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                className={`text-field text-xl mt-2 ${
+                  parentState?.errors?.mobile && parentState?.touched?.mobile
+                    ? 'border-red-400 bg-red-100'
+                    : 'border-transparent filled'
+                }`}
                 placeholder={t('form.common.placeholder.phone')}
               />
               {parentState?.errors?.mobile && parentState?.touched?.mobile ? (
@@ -74,7 +90,7 @@ const UsersFormPage = ({ parentState }) => {
           </div>
 
           <div className="flex flex-col  mt-6 space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
-            <div className="items-center  m-2">
+            <div className="items-center mt-8  m-2">
               <p className="text-2xl">{t('form.common.label.password')}</p>
 
               <div className="relative  rounded-md">
@@ -82,7 +98,11 @@ const UsersFormPage = ({ parentState }) => {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   id="password"
-                  className="block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                  className={`text-field text-xl mt-2 ${
+                    parentState?.errors?.password && parentState?.touched?.password
+                      ? 'border-red-400 bg-red-100'
+                      : 'border-transparent filled'
+                  }`}
                 />
                 <button
                   type="button"
@@ -109,7 +129,11 @@ const UsersFormPage = ({ parentState }) => {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   id="password"
-                  className="block w-full  rounded-md focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                  className={`text-field text-xl mt-2 ${
+                    parentState?.errors?.password && parentState?.touched?.password
+                      ? 'border-red-400 bg-red-100'
+                      : 'border-transparent filled'
+                  }`}
                 />
                 <button
                   type="button"

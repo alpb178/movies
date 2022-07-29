@@ -10,16 +10,19 @@ const BusinessFormPage = ({ parentState }) => {
     <Wizard.Page>
       {() => (
         <div className="relative flex-1 w-full h-full px-8 pb-4 bg-white sm:px-4 sm:rounded-lg">
-          <p className="text-4xl m-6  ">{t('form.business.title.create')}</p>
+          <h3 className="text-center form-header">{t('form.business.title.create')}</h3>
           <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
             <div className="items-center  m-2">
-              <p className="text-2xl">{t('form.common.label.name')}</p>
+              <p className=" text-2xl">{t('form.common.label.name')}</p>
               <Field
                 name="name"
                 id="name"
                 placeholder={t('form.common.placeholder.name')}
-                className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
-                meta={{ errors: parentState?.errors?.name, touched: parentState?.touched?.name }}
+                className={`text-field text-xl mt-2 ${
+                  parentState?.errors?.name && parentState?.touched?.name
+                    ? 'border-red-400 bg-red-100'
+                    : 'border-transparent filled'
+                }`}
               />
               {parentState?.errors?.name && parentState?.touched?.name ? (
                 <p className="mt-1 text-red-500">{parentState?.errors?.name}</p>
@@ -33,7 +36,11 @@ const BusinessFormPage = ({ parentState }) => {
                 <Field
                   name="address"
                   placeholder={t('form.common.placeholder.address')}
-                  className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                  className={`text-field text-xl mt-2 ${
+                    parentState?.errors?.address && parentState?.touched?.address
+                      ? 'border-red-400 bg-red-100'
+                      : 'border-transparent filled'
+                  }`}
                 />
                 {parentState?.errors?.address && parentState?.touched?.address ? (
                   <p className="mt-1 text-red-500">{parentState?.errors?.address}</p>
@@ -48,7 +55,11 @@ const BusinessFormPage = ({ parentState }) => {
               <Field
                 name="zipCode"
                 placeholder={t('form.common.placeholder.zipCode')}
-                className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                className={`text-field text-xl mt-2 ${
+                  parentState?.errors?.zipCode && parentState?.touched?.zipCode
+                    ? 'border-red-400 bg-red-100'
+                    : 'border-transparent filled'
+                }`}
               />
               {parentState?.errors?.zipCode && parentState?.touched?.zipCode ? (
                 <p className="mt-1 text-red-500">{parentState?.errors?.zipCode}</p>
@@ -60,7 +71,11 @@ const BusinessFormPage = ({ parentState }) => {
 
               <Field
                 name="phone"
-                className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                className={`text-field text-xl mt-2 ${
+                  parentState?.errors?.phone && parentState?.touched?.phone
+                    ? 'border-red-400 bg-red-100'
+                    : 'border-transparent filled'
+                }`}
                 placeholder={t('form.common.placeholder.phone')}
               />
               {parentState?.errors?.phone && parentState?.touched?.phone ? (
@@ -75,7 +90,11 @@ const BusinessFormPage = ({ parentState }) => {
 
               <Field
                 name="province"
-                className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                className={`text-field text-xl mt-2 ${
+                  parentState?.errors?.province && parentState?.touched?.province
+                    ? 'border-red-400 bg-red-100'
+                    : 'border-transparent filled'
+                }`}
                 placeholder={t('form.common.placeholder.province')}
               />
               {parentState?.errors?.province && parentState?.touched?.province ? (
@@ -88,7 +107,11 @@ const BusinessFormPage = ({ parentState }) => {
 
               <Field
                 name="city"
-                className="w-full m-1 text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                className={`text-field text-xl mt-2 ${
+                  parentState?.errors?.city && parentState?.touched?.city
+                    ? 'border-red-400 bg-red-100'
+                    : 'border-transparent filled'
+                }`}
                 placeholder={t('form.common.placeholder.city')}
               />
               {parentState?.errors?.city && parentState?.touched?.city ? (

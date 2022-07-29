@@ -1,23 +1,17 @@
-import { locales } from '@/lib/utils';
-import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 
 const UserOrganization = ({ data }) => {
-  const { t, lang } = useTranslation('common');
+  const { t } = useTranslation('common');
 
   const profile = {
     fields: {
-      'form.common.label.name': data?.name,
-      'form.common.label.email': data?.email,
-      'form.common.label.phone': data?.mobile,
-      'form.common.label.province': data?.province,
-      'form.common.label.city': data?.city,
-      'form.common.label.zipCode': data?.zipcode,
-      'form.common.label.address': data?.address,
-      createdAt: data?.createdAt
-        ? format(new Date(data?.createdAt), 'PPP', { locale: { ...locales[lang] } })
-        : null
+      'form.common.label.name': data[0]?.name,
+      'form.common.label.phone': data[0]?.phone,
+      'form.common.label.province': data[0]?.province,
+      'form.common.label.city': data[0]?.city,
+      'form.common.label.zipCode': data[0]?.zipCode,
+      'form.common.label.address': data[0]?.address
     }
   };
 

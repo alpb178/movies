@@ -11,7 +11,6 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import BirthDateForm from './BirthDateForm';
 
 const UsersForm = ({ userId }) => {
   const { t } = useTranslation('common');
@@ -47,8 +46,7 @@ const UsersForm = ({ userId }) => {
     lastName: Yup.string().required(t('required.surname')),
     email: Yup.string().required(t('required.email')),
     mobile: Yup.string().required(t('required.phone')),
-    status: Yup.object().nullable().required(t('required.status')),
-    birthdate: Yup.date().nullable().test('birthdate', 'Fecha Invalida', validateBirthdate)
+    status: Yup.object().nullable().required(t('required.status'))
   });
 
   const onSubmit = async (values) => {
@@ -57,8 +55,6 @@ const UsersForm = ({ userId }) => {
 
     try {
       setLoading(true);
-      usersSendApi.bio = values.bio;
-      usersSendApi.birthdate = values.birthdate;
       usersSendApi.email = values.email;
       usersSendApi.firstName = values.firstName;
       usersSendApi.lastName = values.lastName;
@@ -163,14 +159,6 @@ const UsersForm = ({ userId }) => {
                   ) : null}
                 </div>
 
-                <div className="w-full">
-                  <label htmlFor="name">{t('birthdate')}</label>
-                  <BirthDateForm user={users} />
-                  {errors?.birthdate && touched?.birthdate ? (
-                    <p className="mt-4 text-red-600">{errors?.birthdate}</p>
-                  ) : null}
-                </div>
-
                 <div className="w-full mt-8">
                   <label htmlFor="status">{t('status')}</label>
                   <AutocompleteField
@@ -186,19 +174,6 @@ const UsersForm = ({ userId }) => {
                 </div>
               </div>
 
-              <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
-                <div className="w-full mt-5">
-                  <label htmlFor="name">{t('bio')}</label>
-                  <Field
-                    as="textarea"
-                    name="bio"
-                    id="bio"
-                    rows={3}
-                    placeholder={t('form.user.placeholder.bio')}
-                    className="text-lg text-field"
-                  />
-                </div>
-              </div>
               <div className="flex justify-end space-x-8">
                 <button
                   type="submit"

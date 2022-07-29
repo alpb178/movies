@@ -1,4 +1,4 @@
-import AreaDetails from '@/containers/area/AreasDetails';
+import SaleDetails from '@/containers/sale/SalesDetails';
 import { ROLE_ADMIN } from '@/lib/constants';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -8,18 +8,18 @@ const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
 });
 
-const AreaDetailsPage = () => {
+const SaleDetailsPage = () => {
   const router = useRouter();
-  const areaId = router.query.slug;
+  const saleId = router.query.slug;
 
-  return <AreaDetails areaId={areaId} />;
+  return <SaleDetails saleId={saleId} />;
 };
 
-AreaDetailsPage.propTypes = {
+SaleDetailsPage.propTypes = {
   user: PropTypes.object.isRequired
 };
 
-AreaDetailsPage.layout = Admin;
-AreaDetailsPage.roles = [ROLE_ADMIN];
+SaleDetailsPage.layout = Admin;
+SaleDetailsPage.roles = [ROLE_ADMIN];
 
-export default AreaDetailsPage;
+export default SaleDetailsPage;
