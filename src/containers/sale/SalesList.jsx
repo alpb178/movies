@@ -73,7 +73,7 @@ const SalesList = () => {
     );
   };
 
-  const formatDate = (value) => <div>{format(new Date(value), 'PPPPP', { locale })}</div>;
+  const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
 
   const columns = React.useMemo(() => [
     {
