@@ -30,7 +30,7 @@ const Navbar = ({ onSidebarOpen }) => {
 
   const userNavigation = [
     { name: t('profile'), action: () => onProfile() },
-    { name: t('settings'), action: () => router.push('/settings') },
+    // { name: t('settings'), action: () => router.push('/settings') },
     {
       name: t('account.logout'),
       action: async () => {
