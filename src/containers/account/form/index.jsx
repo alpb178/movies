@@ -1,7 +1,7 @@
 import Loading from '@/components/common/Loader';
 import Wizard from '@/components/form/Wizards';
 import { createAccount } from '@/hooks/auth/useAuth';
-import { DASHBOARD_PAGE, POST } from '@/lib/constants';
+import { LOGIN_PAGE, POST } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -80,7 +80,7 @@ const CreateAccountForm = () => {
           method
         }
       });
-      if (res.ok) router.push(DASHBOARD_PAGE);
+      if (res.ok) router.push(LOGIN_PAGE);
     } catch (error) {
       toast('ERROR');
 
