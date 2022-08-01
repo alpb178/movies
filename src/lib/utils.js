@@ -55,7 +55,7 @@ export const disableDatesFrom = ({ date, years }) => {
 export const formatPrice = (price, decimals = 2) =>
   new Intl.NumberFormat('de-DE', {
     style: 'currency',
-    currency: 'EUR',
+    currency: 'USD',
     minimumFractionDigits: decimals
   }).format(Math.ceil(price));
 

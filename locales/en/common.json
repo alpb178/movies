@@ -29,7 +29,8 @@
     "male": "Este {{entity}} será eliminado. Una vez confirmado no es posible revertir la operación.",
     "female": "Esta {{entity}} será eliminada. Una vez confirmado no es posible revertir la operación."
   },
-  "delete-title": "Delete {entity}",
+  "create": "Create {{entity}}",
+  "delete-title": "Delete {{entity}}",
   "description": "Description",
   "email": "Email",
   "error-with-status": "A {{statusCode}} error occurred on server",
@@ -37,189 +38,145 @@
   "filter": "Filter",
   "filters": "Filters",
   "form": {
-    "airline": {
+    "area": {
       "title": {
-        "create": "New Airline",
-        "update": "Update Airline"
+        "create": "New Area",
+        "update": "New Area"
       }
     },
     "common": {
-      "empty-options": "Not Found",
+      "empty-options": "No se encontraron resultados",
       "label": {
+        "amount": "Amount",
         "code": "Code",
-        "name": "Name"
+        "description": "Description",
+        "name": "Name",
+        "price": "Price",
+        "area": "Area",
+        "table": "Table",
+        "tableCount": "Table Count by Area",
+        "address": "Address",
+        "country": "Country",
+        "phone": "Phone",
+        "province": "Province",
+        "city": "City",
+        "zipCode": "Zip Code",
+        "lastName": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "repeat-password": "Repeat Password",
+        "data-business": "Data Business",
+        "status": "Status",
+        "createdAt": "Created At",
+        "updatedAt": "updated At",
+        "size": "Size",
+        "time": "Time"
       },
       "placeholder": {
-        "search": "Find {{entity}}...."
+        "name": "Insert Name....",
+        "address": "Insert Address....",
+        "country": "Insert Country....",
+        "phone": "Insert Phone....",
+        "province": "Insert Province....",
+        "city": "Insert City....",
+        "zipCode": "Insert Zip Code....",
+        "search": "Find {{entity}}....",
+        "lastName": "Insert Last Name....",
+        "email": "Insert Email....",
+        "password": "Insert Password....",
+        "description": "Insert Description ..."
       },
       "required": {
-        "airline": "La Aerolinea es requerida",
-        "code": "El código es requerido",
-        "destination": "El destino es requerido",
-        "departureAt": "La Fecha es requerida",
-        "flight": "El vuelo es requerido",
-        "measureUnit": "La Unidad de Medida es Requerida",
-        "name": "El nombre es requerido",
-        "origin": "El origen es requerido",
-        "region": "El País es Requerido",
-        "shipmentItems": "Los Articulos son requeridos",
-        "maxAmount": "La Cantidad Permitida es requerida",
-        "traveler": "El viajero es requerido",
-        "maxPrice": "El precio Máximo es requerido",
-        "minPrice": "El precio Minimo es requerido"
+        "code": "Code required",
+        "departureAt": "Departure At required",
+        "description": "Description required",
+        "name": "Name required",
+        "price": "Price required",
+        "minPrice": "El precio Minimo es required",
+        "address": "Address required",
+        "country": " Country required",
+        "phone": " Phone required",
+        "province": "Province required",
+        "city": "City required",
+        "zipCode": "Zip Code required",
+        "lastName": "Last Name required",
+        "email": "Email required",
+        "password": "Password required",
+        "repeat-password": "Repeat Password required"
       },
-      "amount": {
-        "maxAmount": "La Cantidad Permitida debe ser mayor que 0",
-        "maxPrice": "El precio Máximo debe ser mayor que el Mínimo"
+      "status": {
+        "open": "OPEN",
+        "close": "CLOSE"
       }
     },
-    "country": {
+    "table": {
       "title": {
-        "create": "Nuevo País",
-        "update": "Editar País"
+        "create": "New Table",
+        "update": "Update Table"
       }
     },
-    "measure-unit": {
+    "password": {
       "title": {
-        "create": "Nueva Unidad de Medida",
-        "update": "Editar Unidad de Medida"
+        "create": "Reset Password",
+        "update": "Reset Password"
       }
     },
-
+    "business": {
+      "title": {
+        "create": "New Business",
+        "update": "Update Business"
+      }
+    },
     "permissions": {
       "title": {
-        "create": "Nuevo Permiso",
-        "update": "Actualizar Permiso"
+        "create": "New permissions",
+        "update": "Update permissions"
       },
       "label": {
-        "resource": "Recurso",
-        "action": "Acción"
+        "resource": "Resource",
+        "action": "Action"
       }
     },
-    "region": {
+    "products": {
       "title": {
-        "create": "Nueva Región",
-        "update": "Actualizar Región",
-        "details": "Detalles de una Región"
-      },
-      "required": {
-        "country": "El país es requerido"
+        "create": "New Product",
+        "update": "Update Product"
       }
     },
-    "regulation": {
+    "sales": {
       "title": {
-        "create": "Nueva Regulación",
-        "update": "Actualizar Regulación"
-      },
-
-      "label": {
-        "country": "País",
-        "permited-amount": "Cantidad permitida (Máx.)",
-        "price-range": "Rango de precios",
-        "regulate-price": "Regular precio",
-        "shipment-item": "Artículo"
-      },
-      "placeholder": {
-        "country": "País",
-        "shipment-item": "Artículo",
-        "permited-amount": "Cantidad permitida (Máx.)"
+        "create": "New Comanda",
+        "update": "Update Comanda",
+        "details": "Details Comanda",
+        "detailsEspecified": "Details Especified Comanda"
       }
     },
     "role": {
       "title": {
-        "create": "Nuevo Rol",
-        "update": "Actualizar Rol"
+        "create": "New Rol",
+        "update": "Update Rol"
       }
     },
     "resources": {
       "title": {
-        "create": "Nuevo Recurso",
-        "update": "Actualizar Recurso"
-      }
-    },
-    "shipment": {
-      "label": {
-        "measure-unit": "Unidad de medida"
-      },
-      "placeholder": {
-        "payload": "¿Qué deseas enviar?",
-        "sender": "Remitente"
-      },
-      "title": {
-        "create": "Nuevo Envío",
-        "update": "Actualizar Envío"
-      }
-    },
-    "shipment-item": {
-      "label": {
-        "measure-unit": "Unidad de medida"
-      },
-      "placeholder": {
-        "payload": "Seleccione una Unidad de Medida"
-      },
-      "title": {
-        "create": "Nuevo Artículo",
-        "update": "Editar Artículo"
-      }
-    },
-    "travel": {
-      "label": {
-        "baggage-capacity": "Capacidad de Equipaje",
-        "comments": "Comentarios",
-        "date": "Fecha de viaje",
-        "destination": "Destino",
-        "origin": "Origen",
-        "traveler": "Viajero"
-      },
-      "placeholder": {
-        "airline": "¿En qué aerolínea viaja?",
-        "baggage-capacity": "¿Qué artículos puede llevar?",
-        "departure-date": "¿Cuándo es el viaje?",
-        "destination": "¿Hacia dónde va?",
-        "flight": "¿Cuál es el número de vuelo?",
-        "origin": "¿De dónde sale?",
-        "traveler": "¿Quién viaja?",
-        "comments": "Comentarios sobre el viaje..."
-      },
-      "title": {
-        "create": "Nuevo viaje",
-        "update": "Actualizar viaje"
-      },
-      "required": {
-        "destination": "El destino del viaje es requerido",
-        "origin": "El origen del viaje es requerido",
-        "traveler": "El viajero es requerido"
+        "create": "New resources",
+        "update": "Update resources"
       }
     },
     "user": {
-      "label": {
-        "baggage-capacity": "Capacidad de Equipaje",
-        "comments": "Comentarios",
-        "date": "Fecha de viaje",
-        "destination": "Destino",
-        "origin": "Origen",
-        "traveler": "Viajero"
-      },
       "placeholder": {
-        "firstName": "Nombre",
-        "lastName": "Apellidos",
-        "email": "Correo Electrónico",
-        "mobile": "Celular",
-        "birthdate": "Fecha de Cumpleaños",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "mobile": "Mobile",
         "roles": "Roles",
-        "password": "Contraseña",
-        "repeat-password": "Repetir Contraseña",
-        "bio": "Biografía",
-        "status": "Estado"
+        "password": "Password",
+        "repeat-password": "Repeat Password",
+        "status": "Status"
       },
       "title": {
-        "create": "Nuevo Usuario",
-        "update": "Actualizar Usuario"
-      },
-      "required": {
-        "destination": "El destino del viaje es requerido",
-        "origin": "El origen del viaje es requerido",
-        "traveler": "El viajero es requerido"
+        "create": "New User",
+        "update": "Update User"
       }
     }
   },
@@ -271,6 +228,7 @@
   },
   "organization": "Organization",
   "password": "Password",
+  "profile": "Profile",
   "payload": {
     "available": "Available Load"
   },
@@ -298,6 +256,7 @@
     "one": "Report",
     "other": "Reports"
   },
+  "reset-password": "Reset Password",
   "required": {
     "username": "Username is required",
     "password": "Password is required",
@@ -324,9 +283,9 @@
     "female": "{{entity}} saved successfully."
   },
   "sales": {
-    "0": "No Sales",
-    "one": "Sale",
-    "other": "Sales"
+    "0": "No Comanda",
+    "one": "Comanda",
+    "other": "Comandas"
   },
 
   "send": "Send",
@@ -343,8 +302,8 @@
   "showing": "Showing",
   "status": "Status",
   "statistics": {
-    "users-count": "Number of Registered Users vs. Time",
-    "user-activate-desactivate": "Number of Active and Inactive users"
+    "users-count": "Amount By Day",
+    "user-activate-desactivate": "Order by Day"
   },
   "type": "Type",
   "tables": {

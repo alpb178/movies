@@ -100,7 +100,8 @@
         "status": "Estado",
         "createdAt": "Fecha de Creación",
         "updatedAt": "Última Actualización",
-        "size": "Cantidad"
+        "size": "Cantidad",
+        "time": "Hora"
       },
       "placeholder": {
         "name": "Insertar Nombre....",
@@ -132,12 +133,22 @@
         "lastName": "Apellidos requeridos",
         "email": "Correo Electrónico requerido",
         "password": "Password es requerido"
+      },
+      "status": {
+        "open": "ABIERTA",
+        "close": "CERRADA"
       }
     },
     "table": {
       "title": {
         "create": "Nueva Mesa",
         "update": "Editar Mesa"
+      }
+    },
+    "password": {
+      "title": {
+        "create": "Cambiar Password",
+        "update": "Cambiar Password"
       }
     },
     "business": {
@@ -164,8 +175,10 @@
     },
     "sales": {
       "title": {
-        "create": "Nueva Venta",
-        "update": "Actualizar Venta"
+        "create": "Nueva Comanda",
+        "update": "Actualizar Comanda",
+        "details": "Detalles de la Comanda",
+        "detailsEspecified": "Detalles Específicos de la Comanda"
       }
     },
     "role": {
@@ -292,14 +305,15 @@
       "other": "Reseñas dejadas"
     }
   },
+  "reset-password": "Cambiar Contraseña",
   "roles": { "0": "Sin roles", "1": "Rol", "other": "Roles" },
   "role-admin": "Administrador",
   "role-user": "Usuario",
   "save": "Guardar",
   "sales": {
-    "0": "No hay Ventas",
-    "one": "Venta",
-    "other": "Ventas"
+    "0": "No hay Comandas",
+    "one": "Comanda",
+    "other": "Comandas"
   },
   "saved": {
     "male": "{{entity}} guardado exitosamente.",
@@ -312,8 +326,8 @@
   "send": "Enviar",
   "status": "Estado",
   "statistics": {
-    "users-count": "Cantidad Usuarios Registrados vs Tiempo",
-    "user-activate-desactivate": "Cantidad Usuarios Activos e Inactivos"
+    "users-count": "Ganancias Diarias",
+    "user-activate-desactivate": "Comandas Diarias"
   },
   "symbol": "Símbolo",
   "tables": {

@@ -10,8 +10,7 @@ export const API_USERS_URL = '/users';
 export const API_PERMISSIONS_URL = '/permissions';
 export const API_RESOURCES_URL = '/resources';
 export const API_ROLES_URL = '/roles';
-export const API_STATISTICS_URL_USERS = '/statistics/users';
-export const API_STATISTICS_URL_USERS_COUNT = '/statistics/users/count';
+export const API_STATISTICS_URL_SALES = '/reports/sales';
 
 // Api Urls Vebrics
 export const API_AREA_URL = '/areas';
@@ -42,6 +41,7 @@ export const API_CREATE_ACCOUNT_SIGNUP_URL = `${API_AUTH_URL}/signup`;
 export const API_CONFIRM_SIGNUP_URL = `${API_AUTH_URL}/confirm/email`;
 export const API_CHANGE_PASSWORD_URL = `${API_AUTH_URL}/confirm/password`;
 export const API_RESET_PASSWORD_URL = `${API_AUTH_URL}/reset/password`;
+export const API_RESET_PASSWORD_UNSECURE_URL = `${API_AUTH_URL}/confirm/password/unsecure`;
 export const API_LOGIN_URL = `${API_AUTH_URL}/login`;
 export const API_SIGNUP_URL = `${API_AUTH_URL}/signup`;
 
@@ -62,6 +62,7 @@ export const AREASS_EDIT = (area) => `/area/edit/${area}`;
 // Users
 export const GET_USER_KEY = 'getUsers';
 export const USER_DETAIL_PAGE = (id) => `/users/${id}`;
+export const USER_PROFILE_PAGE = (id) => `/users/profile/${id}`;
 export const USER_FORM_PAGE = (id) => (id ? `/users/form/${id}` : `/users/form/create`);
 export const USER_EDIT = (user) => `/users/edit/${user}`;
 export const USERS_PAGE = '/users';
