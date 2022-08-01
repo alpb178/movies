@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
 import useSales from '@/hooks/sales/useSales';
-import { locales } from '@/lib/utils';
-import { CheckIcon, ThumbUpIcon, UserIcon } from '@heroicons/react/outline';
+import { formatPrice, locales } from '@/lib/utils';
+import clsx from 'clsx';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -14,58 +15,6 @@ const SaleDetails = ({ saleId }) => {
   const locale = {
     ...locales[lang]
   };
-
-  const eventTypes = {
-    applied: { icon: UserIcon, bgColorClass: 'bg-gray-400' },
-    advanced: { icon: ThumbUpIcon, bgColorClass: 'bg-blue-500' },
-    completed: { icon: CheckIcon, bgColorClass: 'bg-green-500' }
-  };
-  const timeline = [
-    {
-      id: 1,
-      type: eventTypes.applied,
-      content: 'Applied to',
-      target: 'Front End Developer',
-      date: 'Sep 20',
-      datetime: '2020-09-20'
-    },
-    {
-      id: 2,
-      type: eventTypes.advanced,
-      content: 'Advanced to phone screening by',
-      target: 'Bethany Blake',
-      date: 'Sep 22',
-      datetime: '2020-09-22'
-    },
-    {
-      id: 3,
-      type: eventTypes.completed,
-      content: 'Completed phone screening with',
-      target: 'Martha Gardner',
-      date: 'Sep 28',
-      datetime: '2020-09-28'
-    },
-    {
-      id: 4,
-      type: eventTypes.advanced,
-      content: 'Advanced to interview by',
-      target: 'Bethany Blake',
-      date: 'Sep 30',
-      datetime: '2020-09-30'
-    },
-    {
-      id: 5,
-      type: eventTypes.completed,
-      content: 'Completed interview with',
-      target: 'Katherine Snyder',
-      date: 'Oct 4',
-      datetime: '2020-10-04'
-    }
-  ];
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
-  }
 
   const { data: sale, isLoading } = useSales({
     args: { id: saleId },
@@ -119,7 +68,7 @@ const SaleDetails = ({ saleId }) => {
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900">
                         <span className="px-4 mt-5 py-1 font-medium text-yellow-700 bg-yellow-100 rounded-full float-center">
-                          {sale?.status}
+                          <Status data={sale?.status} />
                         </span>
                       </dd>
                     </div>
@@ -136,9 +85,9 @@ const SaleDetails = ({ saleId }) => {
                       <dt className="text-sm font-medium text-gray-500">
                         {t('form.common.label.amount')}
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-900">
-                        <span className="px-4 mt-5 py-1 font-medium text-yellow-700 bg-yellow-100 rounded-full float-center">
-                          {shipmentPrice || 0}
+                      <dd className="mt-1 leading-6 text-sm  text-gray-900">
+                        <span className="px-4 mt-5 py-1 font-medium text-green-700 bg-green-100 rounded-full float-center">
+                          {formatPrice(shipmentPrice) || 0}
                         </span>
                       </dd>
                     </div>
@@ -179,7 +128,6 @@ const SaleDetails = ({ saleId }) => {
                 {t('products', { count: 2 })}
               </h2>
 
-              {/* Activity Feed */}
               <div className="mt-6 flow-root">
                 <dl className="grid mt-5 grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-1">
                   {sale?.orderProducts?.length > 0 ? (
@@ -187,7 +135,7 @@ const SaleDetails = ({ saleId }) => {
                       {sale?.orderProducts.map((option) => (
                         <div
                           key={option?.id}
-                          className="flex m-4 justify-between w-full  p-3 space-x-4 transition duration-200 ease-in-out border rounded-md hover:shadow-lg"
+                          className="flex m-4 justify-between w-full  p-3 space-x-4  rounded-md"
                         >
                           <div className="">
                             <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">
@@ -207,8 +155,8 @@ const SaleDetails = ({ saleId }) => {
                           <div className="">
                             <p className="text-sm font-medium text-gray-700 sm:text-base md:text-lg">
                               {option?.amount} -
-                              <span className="px-4 mt-5 py-1 font-medium text-yellow-700 bg-yellow-100 rounded-full float-center">
-                                {option?.amount * option?.product?.price}$
+                              <span className="px-4 mt-5 py-1 font-medium text-green-700 bg-green-100 rounded-full float-center">
+                                {formatPrice(option?.amount * option?.product?.price) || 0}
                               </span>
                             </p>
                             <p className="max-w-2xl mt-1 text-sm text-gray-500">
@@ -234,3 +182,21 @@ SaleDetails.propTypes = {
 };
 
 export default SaleDetails;
+
+const Status = ({ data }) => {
+  const { t } = useTranslation('common');
+
+  const colorize = () => {
+    switch (data) {
+      case 'OPEN':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'CLOSE':
+        return 'bg-red-300 text-red-700';
+    }
+  };
+  return (
+    <dib className={clsx(colorize(), 'rounded-full px-3 p-1 text-sm')}>
+      {t(`form.common.status.${data.toLowerCase()}`)}
+    </dib>
+  );
+};

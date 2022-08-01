@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
@@ -6,6 +7,7 @@ import useSales from '@/hooks/sales/useSales';
 import { DEFAULT_PAGE_SIZE, SALES_DETAIL_PAGE } from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -62,15 +64,8 @@ const SalesList = () => {
     }
   });
 
-  const renderStatus = (status, row) => {
-    return (
-      <span
-        key={row.id}
-        className="px-4 py-1 font-medium text-yellow-700 bg-yellow-100 rounded-full float-center"
-      >
-        {status}
-      </span>
-    );
+  const renderStatus = (status) => {
+    return <Status data={status} />;
   };
 
   const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
@@ -201,3 +196,21 @@ SalesList.propTypes = {
 };
 
 export default SalesList;
+
+const Status = ({ data }) => {
+  const { t } = useTranslation('common');
+
+  const colorize = () => {
+    switch (data) {
+      case 'OPEN':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'CLOSE':
+        return 'bg-red-300 text-red-700';
+    }
+  };
+  return (
+    <dib className={clsx(colorize(), 'rounded-full px-3 p-1 text-sm')}>
+      {t(`form.common.status.${data.toLowerCase()}`)}
+    </dib>
+  );
+};
