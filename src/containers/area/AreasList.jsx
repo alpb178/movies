@@ -82,7 +82,7 @@ const AreasList = () => {
         }
       });
       await queryClient.refetchQueries([API_AREA_URL]);
-      toast(t('deleted.male', { entity: t('areas', { count: 1 }) }));
+      toast(t('deleted.male', { entity: t('area', { count: 1 }) }));
       setLoading(false);
     } catch (error) {
       toast.error(error);
