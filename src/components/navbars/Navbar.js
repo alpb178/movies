@@ -1,4 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
+import Loading from '@/components/common/Loader';
+import ResetPasswordForm from '@/containers/users/user-form/ResetPasswordForm';
 import { NAVBAR_HEIGHT, USER_DETAIL_PAGE } from '@/lib/constants';
 import { Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
@@ -7,12 +9,13 @@ import { signOut, useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { HiOutlineBell as BellIcon, HiOutlineMenuAlt2 as MenuAlt2Icon } from 'react-icons/hi';
 
 const Navbar = ({ onSidebarOpen }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
 
   const { id } = useMemo(() => {
@@ -23,13 +26,19 @@ const Navbar = ({ onSidebarOpen }) => {
     return {};
   }, [session]);
 
+  const [openForm, setOpenForm] = useState(false);
+
   const onProfile = () => {
     const path = USER_DETAIL_PAGE(id);
     router.push(path);
   };
+  const onResetPassword = () => {
+    setOpenForm(true);
+  };
 
   const userNavigation = [
     { name: t('profile'), action: () => onProfile() },
+    { name: t('reset-password'), action: () => onResetPassword() },
     // { name: t('settings'), action: () => router.push('/settings') },
     {
       name: t('account.logout'),
@@ -45,6 +54,7 @@ const Navbar = ({ onSidebarOpen }) => {
         (NAVBAR_HEIGHT - 28) / 4
       }`}
     >
+      {loading && <Loading />}
       <button
         type="button"
         className="px-4 text-gray-500 border-r border-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 xl:hidden"
@@ -140,6 +150,9 @@ const Navbar = ({ onSidebarOpen }) => {
           </Menu>
         </div>
       </div>
+      {openForm && (
+        <ResetPasswordForm data={id} open={openForm} onOpen={setOpenForm} setLoading={setLoading} />
+      )}
     </div>
   );
 };
