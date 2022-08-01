@@ -3,6 +3,7 @@ import {
   API_CHANGE_PASSWORD_URL,
   API_CONFIRM_SIGNUP_URL,
   API_CREATE_ACCOUNT_SIGNUP_URL,
+  API_RESET_PASSWORD_UNSECURE_URL,
   API_RESET_PASSWORD_URL,
   API_SIGNUP_URL,
   POST
@@ -43,4 +44,12 @@ export const changePassword = async (args) => {
   const url = `${API_CHANGE_PASSWORD_URL}/${token}`;
   const { data } = await apiFetcher(url, { data: { password }, method: POST });
   return data;
+};
+
+export const savePasswordUnsecure = async ({ args = {} } = {}) => {
+  await saveData({
+    path: API_RESET_PASSWORD_UNSECURE_URL + `/${args.id}`,
+    data: args,
+    method: POST
+  });
 };

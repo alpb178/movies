@@ -1,9 +1,9 @@
-import { API_STATISTICS_URL_USERS, API_STATISTICS_URL_USERS_COUNT } from '@/lib/constants';
+import { API_STATISTICS_URL_SALES, API_STATISTICS_URL_USERS_COUNT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { getData } from '..';
 
-export default function useStaticsUsers({ args = {}, options = {} } = {}) {
-  return useQuery([API_STATISTICS_URL_USERS, { ...args }], getData, {
+export default function useStatics({ args = {}, options = {} } = {}) {
+  return useQuery([API_STATISTICS_URL_SALES, { ...args }], getData, {
     ...options
   });
 }
