@@ -9,11 +9,11 @@ const BusinessFormPage = ({ parentState }) => {
   return (
     <Wizard.Page>
       {() => (
-        <div className="relative flex-1 w-full h-full px-8 pb-4 bg-white sm:px-4 sm:rounded-lg">
-          <h3 className="text-center form-header">{t('form.business.title.create')}</h3>
+        <div className="relative w-full h-full pb-4">
+          <h3 className="form-header">{t('form.business.title.create')}</h3>
           <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
-            <div className="items-center  m-2">
-              <p className=" text-2xl">{t('form.common.label.name')}</p>
+            <div className="items-center m-2">
+              <p className="text-lg">{t('form.common.label.name')}</p>
               <Field
                 name="name"
                 id="name"
@@ -29,9 +29,9 @@ const BusinessFormPage = ({ parentState }) => {
               ) : null}
             </div>
 
-            <div className="flex flex-col   space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
+            <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
               <div className="items-center m-2">
-                <p className="text-2xl">{t('form.common.label.address')}</p>
+                <p className="text-lg">{t('form.common.label.address')}</p>
 
                 <Field
                   name="address"
@@ -49,9 +49,9 @@ const BusinessFormPage = ({ parentState }) => {
             </div>
           </div>
 
-          <div className="flex flex-col  mt-6 space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
+          <div className="flex flex-col mt-6 space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
             <div className="items-center m-2">
-              <p className="text-2xl">{t('form.common.label.zipCode')}</p>
+              <p className="text-lg">{t('form.common.label.zipCode')}</p>
               <Field
                 name="zipCode"
                 placeholder={t('form.common.placeholder.zipCode')}
@@ -67,7 +67,7 @@ const BusinessFormPage = ({ parentState }) => {
             </div>
 
             <div className="items-center m-2">
-              <p className="text-2xl">{t('form.common.label.phone')}</p>
+              <p className="text-lg">{t('form.common.label.phone')}</p>
 
               <Field
                 name="phone"
@@ -84,9 +84,9 @@ const BusinessFormPage = ({ parentState }) => {
             </div>
           </div>
 
-          <div className="flex flex-col  mt-6 space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
-            <div className="items-center  m-2">
-              <p className="text-2xl">{t('form.common.label.province')}</p>
+          <div className="flex flex-col mt-6 space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
+            <div className="items-center m-2">
+              <p className="text-lg">{t('form.common.label.province')}</p>
 
               <Field
                 name="province"
@@ -103,7 +103,7 @@ const BusinessFormPage = ({ parentState }) => {
             </div>
 
             <div className="items-center m-2">
-              <p className="text-2xl">{t('form.common.label.city')}</p>
+              <p className="text-lg">{t('form.common.label.city')}</p>
 
               <Field
                 name="city"

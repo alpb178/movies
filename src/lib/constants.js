@@ -32,7 +32,7 @@ export const SETTINGS_PAGE = '/settings';
 
 // App Routes Vebrics
 export const AREA_PAGE = '/area';
-export const BUSINESS_PAGE = '/auth/create-account';
+export const BUSINESS_PAGE = '/auth/business';
 export const SALES_PAGE = '/sales';
 export const TABLE_PAGE = '/table';
 
