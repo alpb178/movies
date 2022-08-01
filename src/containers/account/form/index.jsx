@@ -110,15 +110,15 @@ const CreateAccountForm = () => {
   };
 
   const steps = [
-    <BusinessFormPage key="create-account" nextRoute="create-account" />,
-    <UsersFormPage key="users" nextRoute="users" />
+    <BusinessFormPage key="business" nextRoute="user" />,
+    <UsersFormPage key="user" />
   ];
 
   return (
-    <div className="w-full h-full ">
+    <div className="w-full h-full px-8 pb-4 sm:px-4">
       {loading && <Loading />}
       <Wizard
-        initialRoute="create-account"
+        initialRoute="business"
         initialValues={initialValues}
         validationSchemas={validationSchemas}
         onSubmit={onSubmit}
