@@ -2,8 +2,7 @@
 import Loading from '@/components/common/Loader';
 import CardBarChartUsers from 'components/cards/CardBarChartUsers.js';
 
-import useStaticsUsers from '@/hooks/statistics/useStatistics';
-
+import useStatics from '@/hooks/statistics/useStatistics';
 import { locales } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
@@ -13,8 +12,9 @@ import { useMemo, useState } from 'react';
 const Dashboard = () => {
   const { t, lang } = useTranslation('common');
   const [filterValues, setFilterValues] = useState('day');
+  const [filterValuesI, setFilterValuesI] = useState('day');
   const [data, setData] = useState({});
-  const [dataStatics, setDataStatics] = useState({});
+  const [dataUP, setDataUP] = useState({});
 
   const locale = {
     ...locales[lang]
@@ -26,16 +26,21 @@ const Dashboard = () => {
     return query;
   }, [filterValues]);
 
-  /* const { data: statisticsUsers, isLoading } = useStaticsUsers({
-    args: params,
+  const paramsI = useMemo(() => {
+    const query = {};
+    if (filterValuesI !== '') query.tf = filterValuesI;
+    return query;
+  }, [filterValuesI]);
+
+  const { data: statistics, isLoading } = useStatics({
+    args: paramsI,
     options: {
       keepPreviousData: true
     }
-  });*/
+  });
 
-  const statisticsUsers = [];
-
-  const { data: statistics, isLoadingStaticts } = useStaticsUsers({
+  const { data: statisticsAmount, isLoadingStatisticsAmount } = useStatics({
+    args: params,
     options: {
       keepPreviousData: true
     }
@@ -46,42 +51,56 @@ const Dashboard = () => {
     setFilterValues(value);
   };
 
+  const onSubmitI = (event, value) => {
+    event.stopPropagation();
+    setFilterValuesI(value);
+  };
+
   useMemo(async () => {
-    if (statisticsUsers) {
-      let count = [];
-      let labels = [];
-      statisticsUsers?.map((item) => {
-        count.push(item?.count);
-        switch (filterValues) {
-          case 'months':
-            return labels.push(new Date(item?.time_frame).getMonth());
-          case 'day':
-            return labels.push(format(new Date(item?.time_frame), 'PP', { locale }));
-          case 'year':
-            labels.push(new Date(item?.time_frame).getFullYear());
-        }
-      });
-      setData({ labels: labels, count: count });
-    }
     if (statistics) {
       let count = [];
       let labels = [];
       statistics?.map((item) => {
-        count.push(item?.count);
-        labels.push(format(new Date(item?.time_frame), 'PP', { locale }));
+        count.push(item.orderProducts?.length);
+        switch (filterValues) {
+          case 'months':
+            return labels.push(new Date(item?.date).getMonth());
+          case 'day':
+            return labels.push(format(new Date(item?.date), 'PP', { locale }));
+          case 'year':
+            labels.push(new Date(item?.item?.date).getFullYear());
+        }
       });
-      setDataStatics({ labels: labels, count: count });
+      setData({ labels: labels, count: count });
     }
-  }, [statisticsUsers]);
+    if (statisticsAmount) {
+      let count = [];
+      let labels = [];
+      statisticsAmount?.map((item) => {
+        let total = 0;
+        item.orderProducts?.map((buy) => {
+          total += buy.consumption;
+        });
+        count.push(total);
+        switch (filterValues) {
+          case 'day':
+            return labels.push(format(new Date(item?.date), 'PP', { locale }));
+          case 'year':
+            labels.push(new Date(item?.item?.date).getFullYear());
+        }
+      });
+      setDataUP({ labels: labels, count: count });
+    }
+  }, [statisticsAmount, statistics]);
 
   return (
     <>
-      {(isLoading || isLoadingStaticts) && <Loading />}
+      {isLoading && <Loading />}
       <div className="flex space-x-4">
         <div className="w-full xl:w-1/2">
           <CardBarChartUsers
-            data={data}
-            actions={['day', 'months', 'year']}
+            data={dataUP}
+            //actions={['day', 'months']}
             onSubmit={onSubmit}
             title={t('statistics.users-count')}
             type="line"
@@ -89,9 +108,11 @@ const Dashboard = () => {
         </div>
         <div className="w-full h-full xl:w-1/2">
           <CardBarChartUsers
-            data={dataStatics}
-            type="bar"
-            title={t('statistics.user-activate-desactivate')}
+            data={data}
+            // actions={['day', 'months']}
+            onSubmit={onSubmitI}
+            title={t('statistics.users-count')}
+            type="line"
           />
         </div>
       </div>
