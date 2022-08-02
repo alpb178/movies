@@ -57,6 +57,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
       toast(error.response.data.message);
     } finally {
       setLoading(false);
+      onOpen(false);
     }
   };
 
