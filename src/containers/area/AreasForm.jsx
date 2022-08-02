@@ -82,14 +82,13 @@ const AreasForm = ({ areasId }) => {
                 {isNaN(areasId) ? t('form.area.title.create') : t('form.area.title.update')}
               </p>
               <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
-                <div className="w-full">
+                <div className="w-full mt-4">
                   <label htmlFor="name">{t('form.common.label.name')}</label>
                   <Field
                     id="name"
+                    type="text"
                     name="name"
-                    className={`text-field ${
-                      errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
-                    }`}
+                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
                   />
                   {errors?.name && touched?.name ? (
                     <p className="mt-4 text-red-600">{errors?.name}</p>

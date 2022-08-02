@@ -61,12 +61,12 @@ const Dashboard = () => {
       let count = [];
       let labels = [];
       statistics?.map((item) => {
-        count.push(item.orderProducts?.length);
+        count.push(item?.orderProducts?.length);
         switch (filterValues) {
           case 'months':
             return labels.push(new Date(item?.date).getMonth());
           case 'day':
-            return labels.push(format(new Date(item?.date), 'PP', { locale }));
+            return labels.push(format(new Date(item?.date.split('T')[0]), 'PP', { locale }));
           case 'year':
             labels.push(new Date(item?.item?.date).getFullYear());
         }

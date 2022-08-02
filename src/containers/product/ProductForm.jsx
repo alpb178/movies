@@ -86,10 +86,9 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
         <div className="relative w-full mx-auto">
           <Field
             id="name"
+            type="text"
             name="name"
-            className={`text-field ${
-              errors?.name && touched?.name ? 'border-red-400' : 'border-gray-300'
-            }`}
+            className="w-full text-sm border-gray-300 rounded-lg hover:border-gray-700"
           />
           {errors?.name && touched?.name ? (
             <p className="mt-4 text-red-600">{errors?.name}</p>
@@ -104,9 +103,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
             id="price"
             type="number"
             name="price"
-            className={`text-field ${
-              errors?.price && touched?.price ? 'border-red-400' : 'border-gray-300'
-            }`}
+            className="w-full text-sm border-gray-300 rounded-lg hover:border-gray-700"
           />
           {errors?.price && touched?.price ? (
             <p className="mt-4 text-red-600">{errors?.price}</p>
@@ -118,7 +115,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
         <label htmlFor="description">{t('form.common.label.description')}</label>
         <Field
           as="textarea"
-          className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
+          className="w-full text-sm border-gray-300 rounded-lg hover:border-gray-700"
           rows={3}
           id="description"
           name="description"
