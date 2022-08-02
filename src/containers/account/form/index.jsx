@@ -16,6 +16,10 @@ const CreateAccountForm = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  const validatePassword = () => {
+    return true;
+  };
+
   const initialValues = {
     name: '',
     address: '',
@@ -27,7 +31,8 @@ const CreateAccountForm = () => {
     lastName: '',
     email: '',
     mobile: '',
-    password: ''
+    password: '',
+    repeatPassword: ''
   };
 
   const busisnessValidationSchema = Yup.object().shape({
@@ -44,7 +49,22 @@ const CreateAccountForm = () => {
     lastName: Yup.string().required(t('form.common.required.lastName')),
     email: Yup.string().required(t('form.common.required.email')),
     mobile: Yup.string().required(t('form.common.required.phone')),
-    password: Yup.string().required(t('form.common.required.password'))
+    password: Yup.string()
+      .ensure()
+      .when('create', {
+        is: validatePassword,
+        then: Yup.string()
+          .oneOf([Yup.ref('repeatPassword'), null], t('required.password-compare'))
+          .required(t('required.password'))
+      }),
+    repeatPassword: Yup.string()
+      .ensure()
+      .when('create', {
+        is: validatePassword,
+        then: Yup.string()
+          .oneOf([Yup.ref('password'), null], t('required.password-compare'))
+          .required(t('required.password-confirm'))
+      })
   });
 
   const validationSchemas = [busisnessValidationSchema, usersValidationSchema];

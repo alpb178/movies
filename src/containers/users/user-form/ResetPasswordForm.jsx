@@ -25,9 +25,27 @@ const ResetPasswordForm = ({ data, onOpen, open, setLoading }) => {
     repeatPassword: ''
   };
 
+  const validatePassword = () => {
+    return true;
+  };
+
   const validationSchema = Yup.object().shape({
-    password: Yup.string().required(t('form.common.required.password')),
-    repeatPassword: Yup.string().required(t('form.common.required.repeat-password'))
+    password: Yup.string()
+      .ensure()
+      .when('create', {
+        is: validatePassword,
+        then: Yup.string()
+          .oneOf([Yup.ref('repeatPassword'), null], t('required.password-compare'))
+          .required(t('required.password'))
+      }),
+    repeatPassword: Yup.string()
+      .ensure()
+      .when('create', {
+        is: validatePassword,
+        then: Yup.string()
+          .oneOf([Yup.ref('password'), null], t('required.password-compare'))
+          .required(t('required.password-confirm'))
+      })
   });
 
   const onSubmit = async (values) => {

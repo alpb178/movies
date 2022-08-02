@@ -123,11 +123,11 @@ const UsersFormPage = ({ parentState }) => {
 
             <div className="relative rounded-md ">
               <Field
-                type={showPassword ? 'text' : 'password'}
-                name="password"
-                id="password"
+                type={showPassword ? 'text' : 'repeatPassword'}
+                name="repeatPassword"
+                id="repeatPassword"
                 className={`text-field text-xl mt-2 ${
-                  parentState?.errors?.password && parentState?.touched?.password
+                  parentState?.errors?.repeatPassword && parentState?.touched?.repeatPassword
                     ? 'border-red-400 bg-red-100'
                     : 'border-transparent filled'
                 }`}
@@ -144,8 +144,8 @@ const UsersFormPage = ({ parentState }) => {
                 )}
               </button>
             </div>
-            {parentState?.errors?.password && parentState?.touched?.password ? (
-              <p className="mt-1 text-red-500">{parentState?.errors?.password}</p>
+            {parentState?.errors?.repeatPassword && parentState?.touched?.repeatPassword ? (
+              <p className="mt-1 text-red-500">{parentState?.errors?.repeatPassword}</p>
             ) : null}
           </div>
         </div>
