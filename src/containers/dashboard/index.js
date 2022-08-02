@@ -111,7 +111,7 @@ const Dashboard = () => {
             data={data}
             // actions={['day', 'months']}
             onSubmit={onSubmitI}
-            title={t('statistics.users-count')}
+            title={t('statistics.user-activate-desactivate')}
             type="line"
           />
         </div>
