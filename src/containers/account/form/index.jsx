@@ -15,6 +15,8 @@ const CreateAccountForm = () => {
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  var regex =
+    /^(\(\+?\d{2,3}\)[\*|\s|\-|\.]?(([\d][\*|\s|\-|\.]?){6})(([\d][\s|\-|\.]?){2})?|(\+?[\d][\s|\-|\.]?){8}(([\d][\s|\-|\.]?){2}(([\d][\s|\-|\.]?){2})?)?)$/;
 
   const validatePassword = () => {
     return true;
@@ -38,7 +40,9 @@ const CreateAccountForm = () => {
   const busisnessValidationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
     address: Yup.string().required(t('form.common.required.address')),
-    phone: Yup.string().required(t('form.common.required.phone')),
+    phone: Yup.string()
+      .required(t('form.common.required.phone'))
+      .matches(regex, t('form.common.required.phone-wrong')),
     province: Yup.string().required(t('form.common.required.province')),
     city: Yup.string().required(t('form.common.required.city')),
     zipCode: Yup.string().required(t('form.common.required.zipCode'))
@@ -47,8 +51,12 @@ const CreateAccountForm = () => {
   const usersValidationSchema = Yup.object().shape({
     firstName: Yup.string().required(t('form.common.required.name')),
     lastName: Yup.string().required(t('form.common.required.lastName')),
-    email: Yup.string().required(t('form.common.required.email')),
-    mobile: Yup.string().required(t('form.common.required.phone')),
+    email: Yup.string()
+      .required(t('form.common.required.email'))
+      .email(t('form.common.required.email-wrong')),
+    mobile: Yup.string()
+      .required(t('form.common.required.phone'))
+      .matches(regex, t('form.common.required.phone-wrong')),
     password: Yup.string()
       .ensure()
       .when('create', {

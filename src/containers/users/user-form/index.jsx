@@ -24,12 +24,8 @@ const UsersForm = ({ userId }) => {
     options: { keepPreviousData: true, enabled: userId !== 'create' }
   });
 
-  const validateBirthdate = (value) => {
-    const currentYear = new Date().getFullYear();
-    const selectYear = new Date(value).getFullYear();
-    if (currentYear - selectYear >= 18) return true;
-    else return false;
-  };
+  var regex =
+    /^(\(\+?\d{2,3}\)[\*|\s|\-|\.]?(([\d][\*|\s|\-|\.]?){6})(([\d][\s|\-|\.]?){2})?|(\+?[\d][\s|\-|\.]?){8}(([\d][\s|\-|\.]?){2}(([\d][\s|\-|\.]?){2})?)?)$/;
 
   const initialValues = {
     firstName: users?.firstName || '',
@@ -44,8 +40,12 @@ const UsersForm = ({ userId }) => {
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required(t('required.name')),
     lastName: Yup.string().required(t('required.surname')),
-    email: Yup.string().required(t('required.email')),
-    mobile: Yup.string().required(t('required.phone')),
+    email: Yup.string()
+      .required(t('form.common.required.email'))
+      .email(t('form.common.required.email-wrong')),
+    mobile: Yup.string()
+      .required(t('form.common.required.phone'))
+      .matches(regex, t('form.common.required.phone-wrong')),
     status: Yup.object().nullable().required(t('required.status'))
   });
 
@@ -107,9 +107,8 @@ const UsersForm = ({ userId }) => {
                     name="firstName"
                     id="firstName"
                     placeholder={t('form.user.placeholder.firstName')}
-                    className={`autocomplete-field ${
-                      errors?.firstName && touched?.firstName ? 'border-red-400' : 'border-gray-300'
-                    }`}
+                    type="text"
+                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
                   />
                   {errors?.firstName && touched?.firstName ? (
                     <p className="mt-4 text-red-600">{errors?.firstName}</p>
@@ -121,9 +120,8 @@ const UsersForm = ({ userId }) => {
                   <Field
                     name="lastName"
                     placeholder={t('form.user.placeholder.lastName')}
-                    className={`autocomplete-field ${
-                      errors?.lastName && touched?.lastName ? 'border-red-400' : 'border-gray-300'
-                    }`}
+                    type="text"
+                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
                   />
                   {errors?.lastName && touched?.lastName ? (
                     <p className="mt-4 text-red-600">{errors?.lastName}</p>
@@ -135,9 +133,8 @@ const UsersForm = ({ userId }) => {
                   <Field
                     name="email"
                     placeholder={t('form.user.placeholder.email')}
-                    className={`autocomplete-field ${
-                      errors?.email && touched?.email ? 'border-red-400' : 'border-gray-300'
-                    }`}
+                    type="text"
+                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
                   />
                   {errors?.email && touched?.email ? (
                     <p className="mt-4 text-red-600">{errors?.email}</p>
@@ -150,9 +147,8 @@ const UsersForm = ({ userId }) => {
                   <Field
                     name="mobile"
                     placeholder={t('form.user.placeholder.mobile')}
-                    className={`autocomplete-field ${
-                      errors?.mobile && touched?.mobile ? 'border-red-400' : 'border-gray-300'
-                    }`}
+                    type="text"
+                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
                   />
                   {errors?.mobile && touched?.mobile ? (
                     <p className="mt-4 text-red-600">{errors?.mobile}</p>
