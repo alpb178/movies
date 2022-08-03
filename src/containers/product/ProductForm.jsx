@@ -86,8 +86,8 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
         <div className="relative w-full mx-auto">
           <Field
             id="name"
-            type="text"
             name="name"
+            type="text"
             className="w-full text-sm border-gray-300 rounded-lg hover:border-gray-700"
           />
           {errors?.name && touched?.name ? (
