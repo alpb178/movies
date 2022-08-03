@@ -127,12 +127,14 @@
         "minPrice": "El precio Minimo es requerido",
         "address": "Dirección requerido",
         "country": " País  requerido",
-        "phone": " Telefóno  requerido",
+        "phone": "Telefóno  requerido",
+        "phone-wrong": "Telefóno Inválido",
         "province": "Provincia  requerida",
         "city": "Ciudad requerida",
         "zipCode": "Zip Code requerido",
         "lastName": "Apellidos requeridos",
         "email": "Correo Electrónico requerido",
+        "email-wrong": "Correo Electrónico Inválido",
         "password": "Password es requerido"
       },
       "status": {
@@ -141,6 +143,8 @@
       }
     },
     "table": {
+      "page-count": "Página {{currentPage}} de {{lastPage}}",
+      "rows-per-page": "Filas por página",
       "title": {
         "create": "Nueva Mesa",
         "update": "Editar Mesa"
@@ -335,10 +339,6 @@
     "0": "No hay Mesas",
     "one": "Mesa",
     "other": "Mesas"
-  },
-  "table": {
-    "page-count": "Página {{currentPage}} de {{lastPage}}",
-    "rows-per-page": "Filas por página"
   },
   "total": "Total",
   "traces": {

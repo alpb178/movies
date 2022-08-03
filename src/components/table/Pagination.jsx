@@ -24,20 +24,8 @@ function Pagination({ tableInstance, pageSizes, onPageSizeChange }) {
 
   return (
     <div className="flex items-center justify-end px-2 m-4 space-x-8">
-      {/* <span>
-        Go to page:{' '}
-        <input
-          type="number"
-          defaultValue={pageIndex + 1}
-          onChange={(e) => {
-            const page = e.target.value ? Number(e.target.value) - 1 : 0;
-            gotoPage(page);
-          }}
-          style={{ width: '56px' }}
-        />
-      </span> */}
       <div className="flex items-center space-x-2">
-        <p>{t('table.rows-per-page')}</p>
+        <p>{t('form.table.rows-per-page')}</p>
         <select
           value={pageSize}
           onChange={(e) => {
@@ -78,7 +66,7 @@ function Pagination({ tableInstance, pageSizes, onPageSizeChange }) {
           />
         </button>
         <span>
-          {t('table.page-count', { currentPage: pageIndex + 1, lastPage: pageOptions.length })}
+          {t('form.table.page-count', { currentPage: pageIndex + 1, lastPage: pageOptions.length })}
         </span>
         <button
           className={`${

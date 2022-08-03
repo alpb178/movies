@@ -96,11 +96,13 @@
         "address": "Address required",
         "country": " Country required",
         "phone": " Phone required",
+        "phone-wrong": "Phone Incorrect",
         "province": "Province required",
         "city": "City required",
         "zipCode": "Zip Code required",
         "lastName": "Last Name required",
         "email": "Email required",
+        "email-wrong": "Email Incorrect",
         "password": "Password required",
         "repeat-password": "Repeat Password required"
       },
@@ -110,6 +112,8 @@
       }
     },
     "table": {
+      "page-count": "Page {{currentPage}} of {{lastPage}}",
+      "rows-per-page": "Rows per page",
       "title": {
         "create": "New Table",
         "update": "Update Table"
