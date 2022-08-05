@@ -1,4 +1,4 @@
-import Wizard from '@/components/form/Wizards';
+import Wizard from '@/components/form/Wizard';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -15,7 +15,7 @@ const UsersFormPage = ({ parentState }) => {
     <Wizard.Page>
       {() => (
         <div className="relative flex-1 w-full h-full pb-4">
-          <h3 className="form-header items-center">{t('form.user.title.create')}</h3>
+          <h3 className="items-center form-header">{t('form.user.title.create')}</h3>
           <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-8 lg:flex-row">
             <div className="items-center m-2">
               <p className="text-lg">{t('form.common.label.name')}</p>

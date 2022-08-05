@@ -1,9 +1,11 @@
+import { lottieOptions } from '@/lib/utils';
 import { ArrowLeftIcon } from '@heroicons/react/outline';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import Lottie from 'react-lottie';
 
 const Wizard = ({ initialRoute, initialValues, children, onSubmit, validationSchemas }) => {
   const { t } = useTranslation('common');
@@ -80,8 +82,17 @@ const Wizard = ({ initialRoute, initialValues, children, onSubmit, validationSch
             )}
 
             {!submitButton ? (
-              <button type="submit" className="btn-contained" disabled={props?.isSubmitting}>
+              <button
+                type="submit"
+                className="relative btn-contained"
+                disabled={props?.isSubmitting}
+              >
                 {!isLastPage ? t('continue') : t('save')}
+                {props?.isSubmitting ? (
+                  <div className="absolute inset-0 z-40 w-full h-full rounded-full bg-primary-100">
+                    <Lottie options={lottieOptions('simple')} width={72} />
+                  </div>
+                ) : null}
               </button>
             ) : null}
           </div>

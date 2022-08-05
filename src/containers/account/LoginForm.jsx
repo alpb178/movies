@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { APP_NAME, BUSINESS_PAGE, DASHBOARD_PAGE, FORGOT_PASSWORD_PAGE } from '@/lib/constants';
+import { lottieOptions } from '@/lib/utils';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
@@ -7,6 +8,7 @@ import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import Lottie from 'react-lottie';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -141,8 +143,13 @@ const LoginForm = () => {
               </div>
 
               <div className="flex justify-center pt-4">
-                <button type="submit" className="btn-contained">
-                  {loading ? '...' : t('account.login')}
+                <button type="submit" className="relative btn-contained" disabled={loading}>
+                  {t('account.login')}
+                  {loading ? (
+                    <div className="absolute inset-0 z-40 w-full h-full rounded-full bg-primary-100">
+                      <Lottie options={lottieOptions('simple')} width={72} />
+                    </div>
+                  ) : null}
                 </button>
               </div>
             </div>

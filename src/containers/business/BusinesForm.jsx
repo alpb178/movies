@@ -44,9 +44,9 @@ const BusinessForm = ({ businessId }) => {
     address: Yup.string().required(t('required.address')),
     country: Yup.string().required(t('required.country')),
     phone: Yup.string().required(t('required.phone')),
-    province: Yup.string().required(t('required.phone')),
-    city: Yup.string().required(t('required.phone')),
-    zipCode: Yup.string().required(t('required.phone')),
+    province: Yup.string().required(t('required.province')),
+    city: Yup.string().required(t('required.city')),
+    zipCode: Yup.string().required(t('required.zipCode')),
     userId: Yup.object().nullable().required(t('required.status'))
   });
 

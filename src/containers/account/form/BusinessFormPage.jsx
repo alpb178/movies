@@ -1,4 +1,4 @@
-import Wizard from '@/components/form/Wizards';
+import Wizard from '@/components/form/Wizard';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';

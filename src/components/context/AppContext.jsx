@@ -1,13 +1,11 @@
-import useUsers from '@/hooks/user/useUsers';
+import useUsers from '@/hooks/users/useUsers';
 import jwtDecode from 'jwt-decode';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import { createContext, useContext, useMemo } from 'react';
 
 export const AppContext = createContext({});
 
 function AppContextProvider({ children }) {
-  const router = useRouter();
   const { data: session } = useSession();
 
   const { id, roles } = useMemo(() => {
@@ -18,7 +16,11 @@ function AppContextProvider({ children }) {
     return {};
   }, [session]);
 
-  const { data: user, error, isLoading } = useUsers(id, { enabled: !!id });
+  const {
+    data: user,
+    error,
+    isLoading
+  } = useUsers({ args: { id }, options: { enabled: !!session } });
 
   const value = useMemo(
     () => ({

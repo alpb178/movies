@@ -14,7 +14,7 @@ const providers = [
     // e.g. domain, username, password, 2FA token, etc.
     // You can pass any HTML attribute to the <input> tag through the object.
     credentials: {
-      username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
+      username: { label: 'Username', type: 'text' },
       password: { label: 'Password', type: 'password' },
       rememberMe: { label: 'Remember me', type: 'password' }
     },
@@ -33,7 +33,7 @@ const providers = [
         return null;
       } catch (error) {
         console.log(error);
-        return null;
+        return error;
       }
     }
   })

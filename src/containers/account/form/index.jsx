@@ -1,7 +1,7 @@
 import Loading from '@/components/common/Loader';
-import Wizard from '@/components/form/Wizards';
+import Wizard from '@/components/form/Wizard';
 import { createAccount } from '@/hooks/auth/useAuth';
-import { LOGIN_PAGE, POST } from '@/lib/constants';
+import { LOGIN_PAGE } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -78,40 +78,21 @@ const CreateAccountForm = () => {
   const validationSchemas = [busisnessValidationSchema, usersValidationSchema];
 
   const onSubmit = async (values) => {
-    let method = POST;
-    let sendBody = {};
-    let business = {};
-    let user = {};
-
-    business.name = values.name;
-    business.address = values.address;
-    business.city = values.city;
-    business.phone = values.phone;
-    business.province = values.province;
+    const { name, address, city, phone, province, zipCode } = values;
+    const business = { name, address, city, phone, province, zipCode };
     business.country = 'CUBA';
-    business.zipCode = values.zipCode;
+    const { firstName, lastName, email, mobile, password } = values;
+    const user = { firstName, lastName, email, mobile, password };
 
-    user.email = values.email;
-    user.firstName = values.firstName;
-    user.lastName = values.lastName;
-    user.mobile = values.mobile;
-    user.password = values.password;
-
-    sendBody.business = business;
-    sendBody.user = user;
+    let body = { business, user };
 
     try {
       setLoading(true);
       const res = await createAccount({
-        args: sendBody,
-        options: {
-          method
-        }
+        args: body
       });
       if (res.ok) router.push(LOGIN_PAGE);
     } catch (error) {
-      toast(error.response.data.message || error.toString() || 'ERROR');
-
       setLoading(false);
       let _messageErrors = error;
       if (error.response) {
@@ -130,7 +111,7 @@ const CreateAccountForm = () => {
             _messageErrors = error.toString();
             break;
         }
-        toast(_messageErrors);
+        toast.error(_messageErrors);
       }
     } finally {
       setLoading(false);
