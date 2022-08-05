@@ -138,8 +138,8 @@
         "password": "Password es requerido"
       },
       "status": {
-        "open": "ABIERTA",
-        "close": "CERRADA"
+        "open": "Abierta",
+        "close": "Cerrada"
       }
     },
     "table": {

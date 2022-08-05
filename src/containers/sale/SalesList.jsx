@@ -7,7 +7,6 @@ import useSales from '@/hooks/sales/useSales';
 import { DEFAULT_PAGE_SIZE, SALES_DETAIL_PAGE } from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
-import clsx from 'clsx';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -15,6 +14,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
 import SalesFilter from './SalesFilter';
+import Status from './Status';
 
 const SalesList = () => {
   const { t, lang } = useTranslation('common');
@@ -196,21 +196,3 @@ SalesList.propTypes = {
 };
 
 export default SalesList;
-
-const Status = ({ data }) => {
-  const { t } = useTranslation('common');
-
-  const colorize = () => {
-    switch (data) {
-      case 'OPEN':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'CLOSE':
-        return 'bg-red-300 text-red-700';
-    }
-  };
-  return (
-    <dib className={clsx(colorize(), 'rounded-full px-3 p-1 text-sm')}>
-      {t(`form.common.status.${data.toLowerCase()}`)}
-    </dib>
-  );
-};
