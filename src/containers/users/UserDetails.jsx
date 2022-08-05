@@ -39,7 +39,7 @@ export default function Example({ userId }) {
                         width={72}
                         height={72}
                         className="rounded-full"
-                        src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                        src="/images/user-avatar.png"
                         alt=""
                       />
                     </div>
