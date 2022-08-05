@@ -1,4 +1,4 @@
-import useUsers from '@/hooks/users/useUsers';
+import useUsers from '@/hooks/user/useUsers';
 import jwtDecode from 'jwt-decode';
 import { useSession } from 'next-auth/react';
 import { createContext, useContext, useMemo } from 'react';

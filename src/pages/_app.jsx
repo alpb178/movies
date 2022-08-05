@@ -1,3 +1,4 @@
+import { AppContextProvider } from '@/components/context/AppContext';
 import { APP_NAME } from '@/lib/constants';
 import '@/styles/calendar.scss';
 import { SessionProvider } from 'next-auth/react';
@@ -40,22 +41,24 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
       </Head>
       <QueryClientProvider client={queryClient}>
         <SessionProvider session={session}>
-          <CookiesProvider>
-            <Layout roles={Component?.roles}>
-              <Component {...pageProps} />
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar
-                newestOnTop={false}
-                draggable={false}
-                pauseOnVisibilityChange
-                closeOnClick
-                pauseOnHover
-                theme="colored"
-              />
-            </Layout>
-          </CookiesProvider>
+          <AppContextProvider>
+            <CookiesProvider>
+              <Layout roles={Component?.roles}>
+                <Component {...pageProps} />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar
+                  newestOnTop={false}
+                  draggable={false}
+                  pauseOnVisibilityChange
+                  closeOnClick
+                  pauseOnHover
+                  theme="colored"
+                />
+              </Layout>
+            </CookiesProvider>
+          </AppContextProvider>
         </SessionProvider>
       </QueryClientProvider>
     </>

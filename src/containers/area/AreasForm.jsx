@@ -1,4 +1,5 @@
 import Loading from '@/components/common/Loader';
+import { useAppContext } from '@/components/context/AppContext';
 import useAreas, { saveAreas } from '@/hooks/area/useAreas';
 import { Field, Form, Formik } from 'formik';
 import { AREA_PAGE, POST, PUT } from 'lib/constants';
@@ -14,7 +15,8 @@ const AreasForm = ({ areasId }) => {
   const { t } = useTranslation('common');
 
   const [loading, setLoading] = useState(false);
-
+  const { user } = useAppContext();
+  console.log(user);
   const router = useRouter();
   const [tableArea, setTableArea] = useState([]);
 
@@ -58,7 +60,7 @@ const AreasForm = ({ areasId }) => {
       toast(message);
       router.push(AREA_PAGE);
     } catch (error) {
-      toast(error.response.data.message || error.toString());
+      toast.error(error.response.data.message || error.toString(), { theme: 'colored' });
     } finally {
       setLoading(false);
     }
