@@ -58,7 +58,7 @@ const AreasForm = ({ areasId }) => {
       toast(message);
       router.push(AREA_PAGE);
     } catch (error) {
-      toast(error.toString());
+      toast(error.response.data.message || error.toString());
     } finally {
       setLoading(false);
     }

@@ -54,7 +54,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
       await queryClient.refetchQueries([API_PRODUCT_URL]);
       toast(message);
     } catch (error) {
-      toast(error.response.data.message);
+      toast(error.response.data.message || error.toString());
     } finally {
       setLoading(false);
       onOpen(false);

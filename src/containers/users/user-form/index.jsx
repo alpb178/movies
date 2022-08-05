@@ -79,7 +79,7 @@ const UsersForm = ({ userId }) => {
       toast(message);
       router.push(USERS_PAGE);
     } catch (error) {
-      toast.error(error.toString());
+      toast.error(error.response.data.message || error.toString());
     } finally {
       setLoading(false);
     }

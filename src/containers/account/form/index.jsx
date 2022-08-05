@@ -110,7 +110,7 @@ const CreateAccountForm = () => {
       });
       if (res.ok) router.push(LOGIN_PAGE);
     } catch (error) {
-      toast('ERROR');
+      toast(error.response.data.message || error.toString() || 'ERROR');
 
       setLoading(false);
       let _messageErrors = error;
