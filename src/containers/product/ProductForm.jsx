@@ -84,12 +84,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
       <div className="space-y-2">
         <label htmlFor="name">{t('form.common.label.name')}</label>
         <div className="relative w-full mx-auto">
-          <Field
-            id="name"
-            name="name"
-            type="text"
-            className="w-full text-sm border-gray-300 rounded-lg hover:border-gray-700"
-          />
+          <Field id="name" name="name" type="text" className="text-field filled" />
           {errors?.name && touched?.name ? (
             <p className="mt-4 text-red-600">{errors?.name}</p>
           ) : null}
@@ -99,12 +94,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
       <div className="space-y-2">
         <label htmlFor="price">{t('form.common.label.price')}</label>
         <div className="relative w-full mx-auto">
-          <Field
-            id="price"
-            type="number"
-            name="price"
-            className="w-full text-sm border-gray-300 rounded-lg hover:border-gray-700"
-          />
+          <Field id="price" type="number" name="price" className="text-field filled" />
           {errors?.price && touched?.price ? (
             <p className="mt-4 text-red-600">{errors?.price}</p>
           ) : null}
@@ -115,7 +105,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
         <label htmlFor="description">{t('form.common.label.description')}</label>
         <Field
           as="textarea"
-          className="w-full text-sm border-gray-300 rounded-lg hover:border-gray-700"
+          className="text-field filled"
           rows={3}
           id="description"
           name="description"
