@@ -16,7 +16,7 @@ const AreasForm = ({ areasId }) => {
 
   const [loading, setLoading] = useState(false);
   const { user } = useAppContext();
-  console.log(user);
+
   const router = useRouter();
   const [tableArea, setTableArea] = useState([]);
 
@@ -37,21 +37,23 @@ const AreasForm = ({ areasId }) => {
   const onSubmit = async (values) => {
     let method = POST;
 
-    let sendBody = {};
-    sendBody.tables = tableArea;
-    sendBody.name = values.name;
+    const body = {
+      tables: tableArea,
+      name: values.name,
+      business: user?.data?.business[0]?.id
+    };
 
     let message = t('inserted.female', { entity: t('areas', { count: 1 }) });
     if (!isNaN(areasId)) {
       method = PUT;
-      sendBody.id = areasId;
+      body.id = areasId;
       message = t('updated.female', { entity: t('areas', { count: 1 }) });
     }
 
     try {
       setLoading(true);
       await saveAreas({
-        args: sendBody,
+        args: body,
         options: {
           method
         }
@@ -84,12 +86,7 @@ const AreasForm = ({ areasId }) => {
               <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
                 <div className="w-full mt-4">
                   <label htmlFor="name">{t('form.common.label.name')}</label>
-                  <Field
-                    id="name"
-                    type="text"
-                    name="name"
-                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
-                  />
+                  <Field id="name" type="text" name="name" className="text-field filled" />
                   {errors?.name && touched?.name ? (
                     <p className="mt-4 text-red-600">{errors?.name}</p>
                   ) : null}
@@ -106,10 +103,7 @@ const AreasForm = ({ areasId }) => {
               </div>
 
               <div className="flex justify-end space-x-8">
-                <button
-                  type="submit"
-                  className="px-8 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
-                >
+                <button type="submit" className="btn-contained">
                   {t('save')}
                 </button>
               </div>

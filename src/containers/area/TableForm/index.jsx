@@ -47,11 +47,7 @@ const TableForm = ({ data, setTable }) => {
     <div className="relative flex flex-col w-full space-y-4">
       <label htmlFor="name">{t('form.common.label.table')}</label>
       <div className="flex items-center w-full p-4 pt-0 space-x-8">
-        <input
-          type="text"
-          id="name_table"
-          className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
-        />
+        <input type="text" id="name_table" className="text-field filled" />
 
         <button
           type="button"
