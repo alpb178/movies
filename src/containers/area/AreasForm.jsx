@@ -54,13 +54,11 @@ const AreasForm = ({ areasId }) => {
           method
         }
       });
-
-      router.push(AREA_PAGE);
       setLoading(false);
-
       toast(message);
+      router.push(AREA_PAGE);
     } catch (error) {
-      toast.error(error);
+      toast(error.toString());
     } finally {
       setLoading(false);
     }

@@ -36,11 +36,11 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
     sendBody.price = values.price;
     sendBody.description = values.description;
     let method = POST;
-    let message = t('inserted.female', { entity: t('products', { count: 1 }) });
+    let message = t('inserted.male', { entity: t('products', { count: 1 }) });
     if (data) {
       method = PUT;
       sendBody.id = data.id;
-      message = t('updated.female', { entity: t('products', { count: 1 }) });
+      message = t('updated.male', { entity: t('products', { count: 1 }) });
     }
 
     try {
