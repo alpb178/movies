@@ -34,6 +34,7 @@ export const AREA_PAGE = '/area';
 export const BUSINESS_PAGE = '/auth/business';
 export const SALES_PAGE = '/sales';
 export const TABLE_PAGE = '/table';
+export const CASH_REGISTER_BOX_PAGE = '/cash_register_box';
 
 // Auth
 export const API_AUTH_URL = '/auth';

@@ -50,18 +50,13 @@ const UsersForm = ({ userId }) => {
   });
 
   const onSubmit = async (values) => {
-    let usersSendApi = {};
+    const { email, firstName, lastName, mobile, status } = values;
+    const usersSendApi = { email, firstName, lastName, mobile, status };
+    usersSendApi.status = status.id;
     let method = POST;
-
     try {
       setLoading(true);
-      usersSendApi.email = values.email;
-      usersSendApi.firstName = values.firstName;
-      usersSendApi.lastName = values.lastName;
-      usersSendApi.mobile = values.mobile;
-      usersSendApi.status = values.status.id;
       let message = t('inserted.male', { entity: t('users', { count: 1 }) });
-
       if (users) {
         method = PUT;
         usersSendApi.id = userId;
@@ -79,7 +74,7 @@ const UsersForm = ({ userId }) => {
       toast(message);
       router.push(USERS_PAGE);
     } catch (error) {
-      toast.error(error.response.data.message || error.toString());
+      toast.error(error.response.data.message || error.toString()), { theme: 'colored' };
     } finally {
       setLoading(false);
     }

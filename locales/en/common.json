@@ -15,6 +15,11 @@
 
   "amount": "Amount",
   "business": "Business",
+  "cash_register_box": {
+    "0": "No data for Cash Register Box",
+    "1": "Cash Register Box",
+    "other": "Cash Register Box"
+  },
   "cancel": "Cancel",
   "close": "Close",
   "create-at": "Create date",
