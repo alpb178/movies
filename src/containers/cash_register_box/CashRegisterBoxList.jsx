@@ -22,18 +22,11 @@ const CashRegisterBoxList = () => {
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(true);
-  const [openForm] = useState(false);
-  const [SelectedItem, setSelectedItem] = useState();
+  const [shipmentPrice, setShipmentPrice] = useState(0);
   const [loading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
     date: ''
   });
-
-  useEffect(() => {
-    if (!openForm) {
-      setSelectedItem(null);
-    }
-  }, [openForm]);
 
   const locale = {
     ...locales[lang]
@@ -68,6 +61,16 @@ const CashRegisterBoxList = () => {
   const formatAmount = (value) => (
     <div>{formatPrice(value?.original?.amount * value?.original?.product?.price || 0, 2)}</div>
   );
+
+  const calculateShipmentPrice = () => {
+    let total = 0;
+    if (products?.length > 0) {
+      products?.map((option) => {
+        total += option?.amount * option?.product?.price || 0;
+      });
+      setShipmentPrice(total);
+    }
+  };
 
   const columns = React.useMemo(() => [
     {
@@ -140,7 +143,7 @@ const CashRegisterBoxList = () => {
   };
 
   const options = {
-    name: t('cash_register_box', { count: 2 }),
+    name: t('cash_register_box', { count: 2 }) + '  ' + formatPrice(shipmentPrice, 2),
     columns,
     data: products,
     count: products?.lenght,
@@ -149,6 +152,12 @@ const CashRegisterBoxList = () => {
     pageSize,
     onPageSizeChange: setPageSize
   };
+
+  useEffect(() => {
+    if (products?.length > 0) {
+      calculateShipmentPrice();
+    }
+  }, [products]);
 
   return (
     <>
