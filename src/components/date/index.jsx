@@ -50,7 +50,7 @@ function DateForm({ entity, fieldValue }) {
               <XCircleIcon className="w-8 h-8 text-gray-700" />
             </button>
             <Dialog.Title className="col-span-2 text-xl font-medium text-gray-800">
-              {t('form.travel.placeholder.departure-date')}
+              {t('form.common.label.selectDate')}
             </Dialog.Title>
           </div>
 

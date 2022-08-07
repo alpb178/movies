@@ -11,6 +11,7 @@ export const API_PERMISSIONS_URL = '/permissions';
 export const API_RESOURCES_URL = '/resources';
 export const API_ROLES_URL = '/roles';
 export const API_STATISTICS_URL_SALES = '/reports/sales';
+export const API_STATISTICS_URL_PRODUCTS = '/reports/products';
 
 // Api Urls Vebrics
 export const API_AREA_URL = '/areas';

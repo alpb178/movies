@@ -1,14 +1,13 @@
-import AutocompleteField from '@/components/form/AutocompleteField';
+import DateForm from '@/components/date';
 import { Menu, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
-import React from 'react';
 
 const RegionsFilter = ({ data, onSubmit, open }) => {
   const { t } = useTranslation('common');
 
   const initialValues = {
-    country: ''
+    date: ''
   };
 
   return (
@@ -28,9 +27,9 @@ const RegionsFilter = ({ data, onSubmit, open }) => {
               <Form className="flex items-end justify-end w-full space-x-4">
                 <div className="w-96">
                   <label htmlFor="rol" className="block font-medium text-gray-700">
-                    {t('countries', { count: 1 })}
+                    {t('form.common.label.createdAt')}
                   </label>
-                  <AutocompleteField className="autocomplete-field" name="country" options={[]} />
+                  <DateForm entity="" fieldValue="date"></DateForm>
                 </div>
 
                 <button

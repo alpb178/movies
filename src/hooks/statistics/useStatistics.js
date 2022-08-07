@@ -1,4 +1,4 @@
-import { API_STATISTICS_URL_SALES, API_STATISTICS_URL_USERS_COUNT } from '@/lib/constants';
+import { API_STATISTICS_URL_PRODUCTS, API_STATISTICS_URL_SALES } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { getData } from '..';
 
@@ -8,14 +8,8 @@ export default function useStatics({ args = {}, options = {} } = {}) {
   });
 }
 
-export function useStaticsUsersCount({ args = {}, options = {} } = {}) {
-  return useQuery([API_STATISTICS_URL_USERS_COUNT, { ...args }], getData, {
-    ...options
-  });
-}
-
-export function useStaticsUsersActiveDesactive({ args = {}, options = {} } = {}) {
-  return useQuery([API_STATISTICS_URL_USERS_COUNT, { ...args }], getData, {
+export function useStaticsProducts({ args = {}, options = {} } = {}) {
+  return useQuery([API_STATISTICS_URL_PRODUCTS, { ...args }], getData, {
     ...options
   });
 }

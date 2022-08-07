@@ -3,33 +3,30 @@
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DataTable from '@/components/table';
-import useSales from '@/hooks/sales/useSales';
-import { DEFAULT_PAGE_SIZE, SALES_DETAIL_PAGE } from '@/lib/constants';
-import { locales, lottieOptions } from '@/lib/utils';
+import { useStaticsProducts } from '@/hooks/statistics/useStatistics';
+import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
+import { formatPrice, locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
-import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
 import SalesFilter from './CashRegisterBoxFilter';
-import Status from './Status';
 
-const SalesList = () => {
+const CashRegisterBoxList = () => {
   const { t, lang } = useTranslation('common');
-  const router = useRouter();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
-  const [openFilters] = useState(false);
+  const [openFilters, setOpenFilters] = useState(true);
   const [openForm] = useState(false);
   const [SelectedItem, setSelectedItem] = useState();
   const [loading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
-    country: ''
+    date: ''
   });
 
   useEffect(() => {
@@ -54,49 +51,57 @@ const SalesList = () => {
     if (sort) {
       queryParams.sort = sort;
     }
+    if (filterValues.date !== '') {
+      queryParams.createdAt = filterValues.date;
+    }
     return queryParams;
   }, [filterValues, page, pageSize, sort]);
 
-  const { data: sales, isLoading } = useSales({
+  const { data: products, isLoading } = useStaticsProducts({
     args: params,
     options: {
       keepPreviousData: true
     }
   });
 
-  const renderStatus = (status) => {
-    return <Status data={status} />;
-  };
-
   const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
+  const formatAmount = (value) => (
+    <div>{formatPrice(value?.original?.amount * value?.original?.product?.price || 0, 2)}</div>
+  );
 
   const columns = React.useMemo(() => [
     {
       Header: t('form.common.label.createdAt'),
-      accessor: 'createdAt',
+      accessor: 'created_at',
       Cell: ({ value }) => formatDate(value)
     },
     {
-      Header: t('form.common.label.status'),
-      accessor: 'status',
-      Cell: ({ value, row }) => renderStatus(value, row)
-    },
-    {
-      Header: t('form.common.label.area'),
-      accessor: 'table.area.name'
+      Header: t('sales', { count: 1 }),
+      accessor: 'order.id'
     },
     {
       Header: t('form.common.label.table'),
-      accessor: 'table.code'
+      accessor: 'order.table.code'
     },
     {
-      Header: t('form.common.label.amount'),
+      Header: t('form.common.label.area'),
+      accessor: 'order.table.area.name'
+    },
+    {
+      Header: t('products', { count: 1 }),
+      accessor: 'product.name'
+    },
+    {
+      Header: t('form.common.label.price'),
+      accessor: 'product.price'
+    },
+    {
+      Header: t('form.common.label.size'),
       accessor: 'amount'
     },
     {
-      Header: t('form.common.label.updatedAt'),
-      accessor: 'updatedAt',
-      Cell: ({ value }) => formatDate(value)
+      Header: t('form.common.label.amount'),
+      Cell: ({ row }) => formatAmount(row)
     }
   ]);
 
@@ -131,52 +136,36 @@ const SalesList = () => {
         {}
       );
     setFilterValues(updatedFilters);
+    setLoading(false);
   };
 
   const options = {
-    name: t('sales', { count: 2 }),
+    name: t('cash_register_box', { count: 2 }),
     columns,
-    data: sales?.rows,
-    count: sales?.count,
+    data: products,
+    count: products?.lenght,
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
     pageSize,
-    onPageSizeChange: setPageSize,
-    onRowClick: (row) => {
-      const value = row?.original?.id;
-      const path = SALES_DETAIL_PAGE(value);
-      router.push(path);
-    },
-    onFilter: (
-      <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
-        <SalesFilter open={openFilters} onSubmit={handleFilters} />
-
-        <div className="flex">
-          <FilterCriteria />
-        </div>
-      </div>
-    ),
-    actions: (
-      <div className="space-x-4">
-        {/* <button
-          type="button"
-          className="px-6 py-2 text-lg font-medium bg-white border rounded-md w-max hover:bg-gray-100"
-          onClick={() => setOpenFilters(!openFilters)}
-        >
-          {t('filter')}
-        </button>*/}
-      </div>
-    )
+    onPageSizeChange: setPageSize
   };
 
   return (
     <>
       {(loading || isLoading) && <Loading />}
 
-      {sales && sales.rows.length > 0 ? (
+      <div className={`w-full mt-5 px-6 ${openFilters && 'flex flex-col'}`}>
+        <SalesFilter open={openFilters} onSubmit={handleFilters} />
+
+        <div className="flex">
+          <FilterCriteria />
+        </div>
+      </div>
+
+      {products && products?.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('sales', { count: 0 })}>
+        <EmptyState text={t('cash_register_box', { count: 0 })}>
           <div className="flex items-center justify-center h-64 w-max">
             <Lottie options={lottieOptions('offline')} />
           </div>
@@ -186,7 +175,7 @@ const SalesList = () => {
   );
 };
 
-SalesList.propTypes = {
+CashRegisterBoxList.propTypes = {
   row: PropTypes.object,
   data: PropTypes.object,
   loading: PropTypes.bool,
@@ -195,4 +184,4 @@ SalesList.propTypes = {
   onDeletePayment: PropTypes.func
 };
 
-export default SalesList;
+export default CashRegisterBoxList;

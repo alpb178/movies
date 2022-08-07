@@ -16,7 +16,7 @@
   "amount": "Amount",
   "business": "Business",
   "cash_register_box": {
-    "0": "No data for Cash Register Box",
+    "0": "No Operations for Cash Register Box",
     "1": "Cash Register Box",
     "other": "Cash Register Box"
   },
@@ -73,6 +73,7 @@
         "data-business": "Data Business",
         "status": "Status",
         "createdAt": "Created At",
+        "selectDate": "select Date",
         "updatedAt": "updated At",
         "size": "Size",
         "time": "Time"
