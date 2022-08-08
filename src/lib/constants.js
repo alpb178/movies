@@ -16,8 +16,9 @@ export const API_STATISTICS_URL_PRODUCTS = '/reports/products';
 // Api Urls Vebrics
 export const API_AREA_URL = '/areas';
 export const API_BUSINESS_URL = '/business';
-export const API_PRODUCT_URL = '/products';
 export const API_SALES_URL = '/orders';
+export const API_PRODUCT_URL = '/products';
+export const API_RECIPES_URL = '/recipes';
 export const API_TABLES_URL = '/tables';
 
 // App Routes
@@ -25,7 +26,8 @@ export const LOGIN_PAGE = '/auth/login';
 export const FORGOT_PASSWORD_PAGE = '/auth/forgot-password';
 export const HOME_PAGE = '/dashboard';
 export const DASHBOARD_PAGE = '/dashboard';
-export const PRODUCT_PAGE = '/product';
+export const PRODUCTS_PAGE = '/products';
+export const RECIPES_PAGE = '/recipes';
 export const PERMISSIONS_PAGE = '/permissions';
 export const ROLES_PAGE = '/roles';
 export const SETTINGS_PAGE = '/settings';

@@ -317,6 +317,11 @@
     }
   },
   "reset-password": "Cambiar Contraseña",
+  "recipes": {
+    "0": "Aún no existen recetas",
+    "1": "Receta",
+    "other": "Recetas"
+  },
   "roles": { "0": "Sin roles", "1": "Rol", "other": "Roles" },
   "role-admin": "Administrador",
   "role-user": "Usuario",

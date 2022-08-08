@@ -1,6 +1,7 @@
 import {
+  ClipboardListIcon,
+  CubeIcon,
   HomeIcon,
-  PaperAirplaneIcon,
   ScaleIcon,
   TicketIcon,
   UserGroupIcon
@@ -9,7 +10,8 @@ import {
   AREA_PAGE,
   CASH_REGISTER_BOX_PAGE,
   DASHBOARD_PAGE,
-  PRODUCT_PAGE,
+  PRODUCTS_PAGE,
+  RECIPES_PAGE,
   ROLE_ADMIN,
   SALES_PAGE,
   USERS_PAGE
@@ -24,7 +26,8 @@ export default [
   },
 
   { name: 'areas', link: AREA_PAGE, icon: ScaleIcon, roles: [ROLE_ADMIN] },
-  { name: 'products', link: PRODUCT_PAGE, icon: PaperAirplaneIcon, roles: [ROLE_ADMIN] },
+  { name: 'products', link: PRODUCTS_PAGE, icon: CubeIcon, roles: [ROLE_ADMIN] },
+  { name: 'recipes', link: RECIPES_PAGE, icon: ClipboardListIcon, roles: [ROLE_ADMIN] },
   { name: 'sales', link: SALES_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN] },
   {
     name: 'cash_register_box',
