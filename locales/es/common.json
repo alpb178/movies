@@ -272,10 +272,9 @@
   },
   "phone": "Teléfono",
   "previous": "Anterior",
-  "price-range": "Rango de precios (min - máx)",
   "products": {
-    "0": "Sin  Producto",
-    "1": " Producto",
+    "0": "Aún no existen productos",
+    "1": "Producto",
     "other": "Productos"
   },
   "profile": "Perfil",

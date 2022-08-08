@@ -26,8 +26,8 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
-    price: Yup.string().required(t('form.common.required.price')),
-    description: Yup.string().required(t('form.common.required.description'))
+    price: Yup.string().required(t('form.common.required.price'))
+    // description: Yup.string().required(t('form.common.required.description'))
   });
 
   const onSubmit = async (values) => {
