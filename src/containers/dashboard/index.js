@@ -74,14 +74,15 @@ const Dashboard = () => {
       setData({ labels: labels, count: count });
     }
     if (statisticsAmount) {
-      let count = [];
+      const count = [];
       let labels = [];
       statisticsAmount?.map((item) => {
-        let total = 0;
-        item.orderProducts?.map((buy) => {
-          total += buy.consumption;
-        });
+        const total = item.orderProducts?.reduce(
+          (partialSum, product) => partialSum + product?.consumption,
+          0
+        );
         count.push(total);
+
         switch (filterValues) {
           case 'day':
             return labels.push(format(new Date(item?.date), 'PP', { locale }));
@@ -89,34 +90,30 @@ const Dashboard = () => {
             labels.push(new Date(item?.item?.date).getFullYear());
         }
       });
-      setDataUP({ labels: labels, count: count });
+      setDataUP({ labels, count });
     }
   }, [statisticsAmount, statistics]);
 
   return (
-    <>
+    <div className="w-full">
       {isLoading && <Loading />}
-      <div className="flex space-x-4">
-        <div className="w-full xl:w-1/2">
-          <CardBarChartUsers
-            data={dataUP}
-            //actions={['day', 'months']}
-            onSubmit={onSubmit}
-            title={t('statistics.users-count')}
-            type="line"
-          />
-        </div>
-        <div className="w-full h-full xl:w-1/2">
-          <CardBarChartUsers
-            data={data}
-            // actions={['day', 'months']}
-            onSubmit={onSubmitI}
-            title={t('statistics.user-activate-desactivate')}
-            type="line"
-          />
-        </div>
+      <div className="flex w-full px-4 space-x-4">
+        <CardBarChartUsers
+          data={dataUP}
+          //actions={['day', 'months']}
+          onSubmit={onSubmit}
+          title={t('statistics.users-count')}
+          type="line"
+        />
+        <CardBarChartUsers
+          data={data}
+          // actions={['day', 'months']}
+          onSubmit={onSubmitI}
+          title={t('statistics.user-activate-desactivate')}
+          type="line"
+        />
       </div>
-    </>
+    </div>
   );
 };
 

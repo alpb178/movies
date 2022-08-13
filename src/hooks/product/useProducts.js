@@ -3,8 +3,7 @@ import { useQuery } from 'react-query';
 import { deleteData, getData, saveData } from '..';
 
 export default function useProducts({ args = {}, options = {} } = {}) {
-  const path = args?.id ? API_PRODUCT_URL : `${API_PRODUCT_URL}/business`;
-  return useQuery([path, { ...args }], getData, {
+  return useQuery([API_PRODUCT_URL, { ...args }], getData, {
     ...options
   });
 }

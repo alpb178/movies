@@ -1,4 +1,4 @@
-import CashRegisterBoxList from '@/containers/cash_register_box/CashRegisterBoxList';
+import CashRegisterBoxList from '@/containers/cash-register-box/CashRegisterBoxList';
 import { ROLE_ADMIN } from '@/lib/constants';
 import dynamic from 'next/dynamic';
 
