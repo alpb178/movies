@@ -39,11 +39,35 @@ button:focus {
 }
 
 .btn-contained {
-  @apply py-3 px-8 space-x-2 font-medium text-white duration-100 border border-transparent rounded-full hover:border-primary-500 w-max bg-primary-600 hover:text-primary-600 hover:bg-primary-200;
+  @apply inline-flex p-3 px-8 space-x-2 font-medium text-white duration-100 border border-transparent rounded-full hover:border-primary-500 w-max bg-primary-600 hover:text-primary-600 hover:bg-primary-200;
 }
 
 .btn-outlined {
-  @apply py-3 px-8 space-x-2 font-medium text-gray-800 duration-100 border rounded-full hover:border-primary-500 w-max bg-white hover:text-primary-600 hover:bg-primary-200;
+  @apply inline-flex py-3 px-8 space-x-2 font-medium text-gray-800 duration-100 border rounded-full hover:border-primary-500 w-max bg-white hover:text-primary-700 hover:bg-primary-200;
+}
+
+.btn-outlined.primary {
+  @extend .btn-outlined;
+  @apply bg-primary-100 text-primary-800 border-primary-500 hover:text-white hover:bg-primary-500;
+}
+
+.btn-outlined.secondary {
+  @extend .btn-outlined;
+  @apply bg-secondary-50 text-secondary-900 hover:border-secondary-500 border-secondary-500 hover:text-white hover:bg-secondary-500;
+}
+
+.btn-outlined.danger {
+  @extend .btn-outlined;
+  @apply bg-red-100 text-red-600 border-red-500 hover:text-white hover:bg-red-500;
+}
+
+.btn-outlined.black {
+  @extend .btn-outlined;
+  @apply bg-black text-white hover:border-black hover:text-white hover:bg-gray-800;
+}
+
+.btn-auth {
+  @apply flex items-center justify-between hover:bg-gray-100 py-6 md:p-6 px-4 -mx-6 transition duration-150 ease-in-out;
 }
 
 .react-numeric-input .wrap {
@@ -64,23 +88,29 @@ button:focus {
 }
 
 .text-field {
-  @apply relative w-full p-3 text-gray-700 placeholder-gray-400 rounded-lg hover:border-secondary-400 border-transparent;
+  @apply relative w-full py-4 px-3 text-gray-700 placeholder-gray-400 rounded-lg border-transparent outline-none;
 }
 
 .text-field.outlined {
-  @apply relative w-full p-3 text-gray-700 placeholder-gray-400 bg-white border border-gray-300 rounded-lg hover:border-gray-400;
+  @extend .text-field;
+  @apply text-gray-700 bg-white border border-gray-300 hover:border-gray-400;
 }
 
 .text-field.filled {
-  @apply relative w-full text-gray-700 placeholder-gray-400 bg-gray-100 rounded-lg hover:border-secondary-400 border-2 focus-within:bg-white;
+  @extend .text-field;
+  @apply bg-gray-100 border-2 focus-within:bg-white focus-within:border-primary-400 hover:bg-primary-50 hover:border-primary-400 ring-0;
 }
 
 .form-header {
-  @apply block mb-8 text-2xl font-semibold text-gray-700 lg:text-3xl;
+  @apply block mb-8 text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-700;
 }
 
 .autocomplete-field {
-  @apply w-full p-4 border rounded-md hover:border-gray-400 focus:border-secondary-500 focus:border-2;
+  @apply w-full rounded-md bg-transparent transition ease-in-out duration-200 border-2 border-transparent;
+}
+
+.autocomplete-field input {
+  @apply bg-gray-100 outline-none py-4 hover:bg-primary-100 focus:bg-transparent focus:border-primary-400 border-2 border-transparent rounded-md;
 }
 
 .autocomplete-field::placeholder {
@@ -89,4 +119,12 @@ button:focus {
 
 .autocomplete-with-icon {
   @apply pl-14 #{!important};
+}
+
+.menu-items {
+  @apply absolute z-50 w-full py-2 mt-2 origin-top bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none;
+}
+
+.menu-items li {
+  @apply p-4 cursor-pointer hover:bg-primary-50 hover:text-primary-700;
 }

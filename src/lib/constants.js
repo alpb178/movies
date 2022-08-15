@@ -17,7 +17,7 @@ export const API_STATISTICS_URL_PRODUCTS = '/reports/products';
 export const API_AREA_URL = '/areas';
 export const API_BUSINESS_URL = '/business';
 export const API_SALES_URL = '/orders';
-export const API_PRODUCT_URL = '/products';
+export const API_PRODUCTS_URL = '/products';
 export const API_RECIPES_URL = '/recipes';
 export const API_TABLES_URL = '/tables';
 

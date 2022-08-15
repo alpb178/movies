@@ -1,8 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
-import FormDialogWrapper from '@/components/form/FormDialogWrapper';
+import CustomSwitch from '@/components/form/CustomSwitch';
+import FormSidebarRight from '@/components/form/FormSidebarRight';
 import { saveProduct } from '@/hooks/product/useProducts';
-import { API_PRODUCT_URL, POST, PUT } from '@/lib/constants';
+import { API_PRODUCTS_URL, POST, PUT } from '@/lib/constants';
+import clsx from 'clsx';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -11,7 +13,7 @@ import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-const RegionForm = ({ data, onOpen, open, setLoading }) => {
+const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
   const [isNewData, setIsNewData] = useState(true);
@@ -21,7 +23,8 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
   const initialValues = {
     name: data?.name || '',
     price: data?.price || '',
-    description: data?.description || ''
+    description: data?.description || '',
+    directSale: data?.directSale
   };
 
   const validationSchema = Yup.object().shape({
@@ -51,7 +54,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
           method
         }
       });
-      await queryClient.refetchQueries([API_PRODUCT_URL]);
+      await queryClient.refetchQueries([API_PRODUCTS_URL]);
       toast(message);
     } catch (error) {
       toast(error.response.data.message || error.toString());
@@ -70,7 +73,7 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
   });
 
   return (
-    <FormDialogWrapper
+    <FormSidebarRight
       formName="products"
       open={open}
       onOpen={onOpen}
@@ -82,12 +85,18 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
       setTouchedForm={setTouchedForm}
     >
       <div className="space-y-2">
-        <label htmlFor="name">{t('form.common.label.name')}</label>
         <div className="relative w-full mx-auto">
-          <Field id="name" name="name" type="text" className="text-field filled" />
-          {errors?.name && touched?.name ? (
-            <p className="mt-4 text-red-600">{errors?.name}</p>
-          ) : null}
+          <div className="absolute z-10 text-center text-gray-500"></div>
+          <Field
+            name="name"
+            placeholder={t('form.products.placeholder.name')}
+            className={clsx(
+              'text-field',
+              errors?.shipmentItems && touched?.shipmentItems
+                ? 'border-red-400 bg-red-100'
+                : ' filled'
+            )}
+          />
         </div>
       </div>
 
@@ -112,7 +121,22 @@ const RegionForm = ({ data, onOpen, open, setLoading }) => {
           placeholder={t('form.common.placeholder.description')}
         />
       </div>
-    </FormDialogWrapper>
+
+      <div className="flex justify-between">
+        <label className="flex items-center">{t('notifications.preferences.push')}</label>
+        <Field id="directSale" name="directSale">
+          {({ form: { values, setFieldValue } }) => (
+            <CustomSwitch
+              checked={values?.directSale}
+              onChange={(val) => {
+                // setPushNotification(val);
+                setFieldValue('directSale', val);
+              }}
+            />
+          )}
+        </Field>
+      </div>
+    </FormSidebarRight>
   );
 };
 

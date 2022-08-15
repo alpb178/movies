@@ -182,6 +182,9 @@
       "title": {
         "create": "Nuevo Producto",
         "update": "Actualizar Producto"
+      },
+      "placeholder": {
+        "name": "Nombre"
       }
     },
     "sales": {

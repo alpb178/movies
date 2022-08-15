@@ -8,6 +8,7 @@ import useRecipes, { saveRecipe } from '@/hooks/recipe/useRecipes';
 import { API_RECIPE_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
@@ -17,6 +18,7 @@ import RecipesFilter from './RecipesFilter';
 
 const RecipesList = () => {
   const { t } = useTranslation('common');
+  const router = useRouter();
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
@@ -149,7 +151,11 @@ const RecipesList = () => {
   };
 
   const renderCreateButton = () => (
-    <button type="button" className="btn-contained" onClick={() => setOpenForm(true)}>
+    <button
+      type="button"
+      className="btn-contained"
+      onClick={() => router.push('recipes/create/new')}
+    >
       {t('create', { entity: t('recipes', { count: 1 }).toLowerCase() })}
     </button>
   );
