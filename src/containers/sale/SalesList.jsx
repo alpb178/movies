@@ -90,10 +90,6 @@ const SalesList = () => {
       accessor: 'table.code'
     },
     {
-      Header: t('form.common.label.amount'),
-      accessor: 'amount'
-    },
-    {
       Header: t('form.common.label.updatedAt'),
       accessor: 'updatedAt',
       Cell: ({ value }) => formatDate(value)

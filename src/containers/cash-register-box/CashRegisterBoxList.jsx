@@ -61,6 +61,7 @@ const CashRegisterBoxList = () => {
   const formatAmount = (value) => (
     <div>{formatPrice(value?.original?.amount * value?.original?.product?.price || 0, 2)}</div>
   );
+  const formatProductPrice = (value) => <div>{formatPrice(value || 0, 2)}</div>;
 
   const calculateShipmentPrice = () => {
     let total = 0;
@@ -96,7 +97,8 @@ const CashRegisterBoxList = () => {
     },
     {
       Header: t('form.common.label.price'),
-      accessor: 'product.price'
+      accessor: 'product.price',
+      Cell: ({ value }) => formatProductPrice(value)
     },
     {
       Header: t('form.common.label.size'),
