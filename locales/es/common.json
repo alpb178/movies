@@ -60,6 +60,7 @@
   "departure-at": "Fecha de Salida",
   "description": "Descripción",
   "destination": "Destino",
+  "direct-sale": "Venta directa",
   "drop-zone-text": "Arrastre un fichero aquí o haz click para añadir una imagen",
   "email": "Correo electrónico",
   "error": {
@@ -324,7 +325,11 @@
     "1": "Receta",
     "other": "Recetas"
   },
-  "roles": { "0": "Sin roles", "1": "Rol", "other": "Roles" },
+  "roles": {
+    "0": "Sin roles",
+    "1": "Rol",
+    "other": "Roles"
+  },
   "role-admin": "Administrador",
   "role-user": "Usuario",
   "save": "Guardar",
@@ -371,7 +376,11 @@
     "0": "Sin usuarios",
     "1": "Usuario",
     "other": "Usuarios",
-    "status": { "pending": "Pendiente", "activated": "Activado", "inactive": "Desactivado" }
+    "status": {
+      "pending": "Pendiente",
+      "activated": "Activado",
+      "inactive": "Desactivado"
+    }
   },
   "year": "Año"
 }

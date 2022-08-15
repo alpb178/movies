@@ -12,7 +12,6 @@
     "1": "Área",
     "other": "Áreas"
   },
-
   "amount": "Amount",
   "business": "Business",
   "cash_register_box": {
@@ -34,6 +33,7 @@
     "male": "Este {{entity}} será eliminado. Una vez confirmado no es posible revertir la operación.",
     "female": "Esta {{entity}} será eliminada. Una vez confirmado no es posible revertir la operación."
   },
+  "direct-sale": "Direct sale",
   "create": "Create {{entity}}",
   "delete-title": "Delete {{entity}}",
   "description": "Description",
@@ -202,7 +202,6 @@
     "one": "Information",
     "other": "Information"
   },
-
   "issue": "Issue",
   "loading": "Loading...",
   "message": {
@@ -260,7 +259,6 @@
     "one": "Rappel",
     "other": "Rappel"
   },
-
   "reports": {
     "0": "No reports",
     "one": "Report",
@@ -284,7 +282,6 @@
     "requests": "Shipping Requests",
     "confirmed": "reservations Confirmed"
   },
-
   "role": "Role",
   "rols": "Role",
   "save": "Save",
@@ -297,7 +294,6 @@
     "one": "Comanda",
     "other": "Comandas"
   },
-
   "send": "Send",
   "search": "Search",
   "search-entity": "Search {{entity}}",
@@ -307,7 +303,11 @@
     "0": "No Shipments",
     "1": "Shipment",
     "other": "Shipments",
-    "status": { "pending": "Pendiente", "acepted": "Aceptado", "reject": "rechazado" }
+    "status": {
+      "pending": "Pendiente",
+      "acepted": "Aceptado",
+      "reject": "rechazado"
+    }
   },
   "showing": "Showing",
   "status": "Status",

@@ -123,7 +123,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
       </div>
 
       <div className="flex justify-between">
-        <label className="flex items-center">{t('notifications.preferences.push')}</label>
+        <label className="flex items-center">{t('direct-sale')}</label>
         <Field id="directSale" name="directSale">
           {({ form: { values, setFieldValue } }) => (
             <CustomSwitch
