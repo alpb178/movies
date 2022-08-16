@@ -2,7 +2,7 @@
 import Loading from '@/components/common/Loader';
 import { useAppContext } from '@/components/context/AppContext';
 import AutocompleteField from '@/components/form/AutocompleteField';
-import { signupUser } from '@/hooks/auth/useAuth';
+import CustomSwitch from '@/components/form/CustomSwitch';
 import useUsers, { saveUser } from '@/hooks/user/useUsers';
 import { Field, Form, Formik } from 'formik';
 import { POST, PUT, USERS_PAGE } from 'lib/constants';
@@ -20,6 +20,7 @@ const UsersForm = ({ userId }) => {
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const [status] = useState([{ id: 'PENDING' }, { id: 'ACTIVE' }, { id: 'INACTIVE' }]);
 
@@ -39,8 +40,9 @@ const UsersForm = ({ userId }) => {
     birthdate: users?.birthdate || '',
     bio: users?.bio || '',
     status: { id: users?.status } || '',
-    password: '',
-    repeatPassword: ''
+    password: users?.password || '',
+    repeatPassword: '',
+    isOwner: users?.isOwner || false
   };
 
   const validatePassword = () => {
@@ -76,10 +78,10 @@ const UsersForm = ({ userId }) => {
   });
 
   const onSubmit = async (values) => {
-    const { email, firstName, lastName, mobile, status, password } = values;
-    const usersSendApi = { email, firstName, lastName, mobile, status, password };
+    const { email, firstName, lastName, mobile, status, password, isOwner } = values;
+    const usersSendApi = { email, firstName, lastName, mobile, status, password, isOwner };
     usersSendApi.status = status.id;
-    usersSendApi.business = user?.data?.business[0]?.id
+    usersSendApi.business = user?.data?.business[0]?.id;
     let method = POST;
     try {
       setLoading(true);
@@ -88,15 +90,13 @@ const UsersForm = ({ userId }) => {
         method = PUT;
         usersSendApi.id = userId;
         message = t('updated.male', { entity: t('users', { count: 1 }) });
-        await saveUser({
-          args: usersSendApi,
-          options: {
-            method
-          }
-        });
-      } else {
-        await signupUser({ data: values });
       }
+      await saveUser({
+        args: usersSendApi,
+        options: {
+          method
+        }
+      });
 
       toast(message);
       router.push(USERS_PAGE);
@@ -123,40 +123,40 @@ const UsersForm = ({ userId }) => {
                 {isNaN(userId) ? t('form.user.title.create') : t('form.user.title.update')}
               </p>
               <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
-                <div className="w-full">
+                <div className="space-y-2">
                   <label htmlFor="firstName">{t('form.common.label.name')}</label>
                   <Field
                     name="firstName"
                     id="firstName"
                     placeholder={t('form.user.placeholder.firstName')}
                     type="text"
-                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                    className="text-field filled"
                   />
                   {errors?.firstName && touched?.firstName ? (
                     <p className="mt-4 text-red-600">{errors?.firstName}</p>
                   ) : null}
                 </div>
 
-                <div className="w-full">
+                <div className="space-y-2">
                   <label htmlFor="surname">{t('surname')}</label>
                   <Field
                     name="lastName"
                     placeholder={t('form.user.placeholder.lastName')}
                     type="text"
-                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                    className="text-field filled"
                   />
                   {errors?.lastName && touched?.lastName ? (
                     <p className="mt-4 text-red-600">{errors?.lastName}</p>
                   ) : null}
                 </div>
 
-                <div className="w-full">
+                <div className="space-y-2">
                   <label htmlFor="email">{t('email')}</label>
                   <Field
                     name="email"
                     placeholder={t('form.user.placeholder.email')}
                     type="text"
-                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                    className="text-field filled"
                   />
                   {errors?.email && touched?.email ? (
                     <p className="mt-4 text-red-600">{errors?.email}</p>
@@ -164,20 +164,20 @@ const UsersForm = ({ userId }) => {
                 </div>
               </div>
               <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
-                <div className="w-full mt-8 ">
+                <div className="space-y-2 mt-8 ">
                   <label htmlFor="mobile">{t('phone')}</label>
                   <Field
                     name="mobile"
                     placeholder={t('form.user.placeholder.mobile')}
                     type="text"
-                    className="w-full text-xl border-gray-300 rounded-lg hover:border-gray-700"
+                    className="text-field filled"
                   />
                   {errors?.mobile && touched?.mobile ? (
                     <p className="mt-4 text-red-600">{errors?.mobile}</p>
                   ) : null}
                 </div>
 
-                <div className="w-full mt-8">
+                <div className="space-y-2 mt-8">
                   <label htmlFor="status">{t('status')}</label>
                   <AutocompleteField
                     name="status"
@@ -185,15 +185,28 @@ const UsersForm = ({ userId }) => {
                     options={status}
                     optionLabels={['id']}
                     keysToMatch={['id']}
-                    className="autocomplete-field"
+                    className="text-field filled"
                     aria-describedby="flight"
                     defaultValue={status.find((item) => item.id === users?.status)}
                   />
                 </div>
+
+                <div className="space-y-5 space-x-12 mr-8">
+                  <label className="flex items-center">{t('form.common.label.is-owner')}</label>
+                  <Field id="isOwner" className="mt-5" name="isOwner">
+                    {({ form: { values, setFieldValue } }) => (
+                      <CustomSwitch
+                        checked={values?.isOwner}
+                        onChange={(val) => {
+                          setFieldValue('isOwner', val);
+                        }}
+                      />
+                    )}
+                  </Field>
+                </div>
               </div>
 
               <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
-
                 <div className="space-y-2 mt-6">
                   <p className="text-xl">{t('form.common.label.password')}</p>
 
@@ -202,10 +215,11 @@ const UsersForm = ({ userId }) => {
                       type={showPassword ? 'text' : 'password'}
                       name="password"
                       id="password"
-                      className={`text-field text-sm mt-2 ${errors?.password && touched?.password
-                        ? 'border-red-400 bg-red-100'
-                        : 'border-transparent filled'
-                        }`}
+                      className={`text-field text-sm mt-2 ${
+                        errors?.password && touched?.password
+                          ? 'border-red-400 bg-red-100'
+                          : 'border-transparent filled'
+                      }`}
                     />
                     <button
                       type="button"
@@ -229,20 +243,21 @@ const UsersForm = ({ userId }) => {
 
                   <div className="relative  rounded-md ">
                     <Field
-                      type={showPassword ? 'text' : 'password'}
+                      type={showRepeatPassword ? 'text' : 'password'}
                       name="repeatPassword"
                       id="repeatPassword"
-                      className={`text-field text-sm ${errors?.repeatPassword && touched?.repeatPassword
-                        ? 'border-red-400 bg-red-100'
-                        : 'border-transparent filled'
-                        }`}
+                      className={`text-field text-sm ${
+                        errors?.repeatPassword && touched?.repeatPassword
+                          ? 'border-red-400 bg-red-100'
+                          : 'border-transparent filled'
+                      }`}
                     />
                     <button
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowRepeatPassword(!showRepeatPassword)}
                       className="absolute inset-y-0 right-0 flex items-center pr-3"
                     >
-                      {showPassword ? (
+                      {showRepeatPassword ? (
                         <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
                       ) : (
                         <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />

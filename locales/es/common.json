@@ -123,7 +123,8 @@
         "misc-cost": "Gastos Extras",
         "total-cost": "Costo Total",
         "ingredients": "Ingredientes",
-        "no-ingredients": "No existen Ingredientes"
+        "no-ingredients": "No existen Ingredientes",
+        "is-owner": "Trabajador/Propietario"
       },
       "placeholder": {
         "name": "Insertar Nombre....",
