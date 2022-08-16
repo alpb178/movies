@@ -75,7 +75,7 @@ const AreasList = () => {
     try {
       setLoading(true);
       await deleteAreas({
-        args: { id: deleteConfirmation.id },
+        args: { id: deleteConfirmation.id }
       });
       await queryClient.refetchQueries([API_AREA_URL]);
       toast(t('deleted.male', { entity: t('area', { count: 1 }) }));

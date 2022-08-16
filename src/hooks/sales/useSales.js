@@ -17,9 +17,9 @@ export const saveSales = async ({ args = {}, options = {} } = {}) => {
   }
 };
 
-export const deleteSales = async ({ args = {}, options = {} } = {}) => {
+export const deleteSales = async ({ args = {} } = {}) => {
   await deleteData({ path: API_SALES_URL + `/${args.id}`, method: DELETE });
-}
+};
 
 export default function useSales({ args = {}, options = {} } = {}) {
   return useQuery([API_SALES_URL, { ...args }], getData, {
