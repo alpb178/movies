@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
+import { useAppContext } from '@/components/context/AppContext';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import { signupUser } from '@/hooks/auth/useAuth';
 import useUsers, { saveUser } from '@/hooks/user/useUsers';
@@ -15,6 +16,7 @@ import * as Yup from 'yup';
 
 const UsersForm = ({ userId }) => {
   const { t } = useTranslation('common');
+  const { user } = useAppContext();
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -77,6 +79,7 @@ const UsersForm = ({ userId }) => {
     const { email, firstName, lastName, mobile, status, password } = values;
     const usersSendApi = { email, firstName, lastName, mobile, status, password };
     usersSendApi.status = status.id;
+    usersSendApi.business = user?.data?.business[0]?.id
     let method = POST;
     try {
       setLoading(true);
