@@ -81,7 +81,16 @@
         "selectDate": "select Date",
         "updatedAt": "updated At",
         "size": "Size",
-        "time": "Time"
+        "time": "Time",
+        "category": "Category",
+        "pos-id": "POS ID",
+        "sales-price": "Sales Price",
+        "sales-profit": "Sales Profit",
+        "cost": "Cost",
+        "misc-cost": "Misc Cost",
+        "ingredients": "Ingredients",
+        "no-ingredients": "No Ingredients",
+        "total-cost": "Total Cost"
       },
       "placeholder": {
         "name": "Insert Name....",

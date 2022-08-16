@@ -114,7 +114,16 @@
         "createdAt": "Fecha de Creación",
         "updatedAt": "Última Actualización",
         "size": "Cantidad",
-        "time": "Hora"
+        "time": "Hora",
+        "category": "Categoría",
+        "pos-id": "POS ID",
+        "sales-price": "Precio de Venta",
+        "sales-profit": "Margen de Ganancia",
+        "cost": "Costo",
+        "misc-cost": "Gastos Extras",
+        "total-cost": "Costo Total",
+        "ingredients": "Ingredientes",
+        "no-ingredients": "No existen Ingredientes"
       },
       "placeholder": {
         "name": "Insertar Nombre....",

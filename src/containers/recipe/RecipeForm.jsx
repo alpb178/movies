@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
+import { useAppContext } from '@/components/context/AppContext';
 import { saveRecipe } from '@/hooks/recipe/useRecipes';
 import { API_RECIPE_URL, POST, PUT } from '@/lib/constants';
 import { Field, Form, Formik } from 'formik';
@@ -15,26 +16,37 @@ const RecipeForm = ({ data, onOpen, open, setLoading }) => {
   const { t } = useTranslation('common');
   const queryClient = useQueryClient();
   const [isNewData, setIsNewData] = useState(true);
-  const [errors, setErrorsForm] = useState({});
-  const [touched, setTouchedForm] = useState({});
+  const [ingredients, setIngredients] = useState();
+  const [errors] = useState({});
+  const [touched] = useState({});
+  const { user } = useAppContext();
 
   const initialValues = {
     name: data?.name || '',
-    price: data?.price || '',
-    description: data?.description || ''
+    price: data?.salesPrice || '',
+    description: data?.description || '',
+    category: data?.category || '',
+    posId: data?.posId || '',
+    miscCost: data?.miscCost || '',
+    cost: data?.cost || '',
+    salesProfit: data?.salesProfit || '',
+    totalCost: data?.totalCost || '',
+    ingredients: data?.ingredients || []
   };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
-    price: Yup.string().required(t('form.common.required.price')),
-    description: Yup.string().required(t('form.common.required.description'))
+    price: Yup.number().required(t('form.common.required.price')),
+    description: Yup.string().required(t('form.common.required.description')),
+    category: Yup.string().required(t('form.common.required.description')),
+    posId: Yup.string().required(t('form.common.required.description')),
+    miscCost: Yup.string().required(t('form.common.required.description'))
   });
 
   const onSubmit = async (values) => {
-    let sendBody = {};
-    sendBody.name = values.name;
-    sendBody.price = values.price;
-    sendBody.description = values.description;
+    const { name, description, category, postId, miscCost } = values;
+    const sendBody = { name, description, category, postId, miscCost };
+    sendBody.business = user?.data?.business[0]?.id;
     let method = POST;
     let message = t('inserted.male', { entity: t('recipes', { count: 1 }) });
     if (data) {
@@ -66,7 +78,7 @@ const RecipeForm = ({ data, onOpen, open, setLoading }) => {
   }, [data?.id]);
 
   return (
-    <Formik initialValues={initialValues}>
+    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
       <Form>
         <div className="flex p-8 space-x-12">
           <div className="w-full space-y-4">
@@ -76,6 +88,26 @@ const RecipeForm = ({ data, onOpen, open, setLoading }) => {
                 <Field id="name" name="name" type="text" className="text-field filled" />
                 {errors?.name && touched?.name ? (
                   <p className="mt-4 text-red-600">{errors?.name}</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="w-full space-y-2">
+              <label htmlFor="category">{t('form.common.label.category')}</label>
+              <div className="relative w-full mx-auto">
+                <Field id="category" name="name" type="text" className="text-field filled" />
+                {errors?.category && touched?.category ? (
+                  <p className="mt-4 text-red-600">{errors?.category}</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="w-full space-y-2">
+              <label htmlFor="posId">{t('form.common.label.pos-id')}</label>
+              <div className="relative w-full mx-auto">
+                <Field id="posId" name="posId" type="text" className="text-field filled" />
+                {errors?.posId && touched?.posId ? (
+                  <p className="mt-4 text-red-600">{errors?.posId}</p>
                 ) : null}
               </div>
             </div>
@@ -94,30 +126,81 @@ const RecipeForm = ({ data, onOpen, open, setLoading }) => {
           </div>
 
           <div className="w-full space-y-4">
-            <div className="w-full space-y-2">
-              <label htmlFor="name">{t('form.common.label.name')}</label>
-              <div className="relative w-full mx-auto">
-                <Field id="name" name="name" type="text" className="text-field filled" />
-                {errors?.name && touched?.name ? (
-                  <p className="mt-4 text-red-600">{errors?.name}</p>
-                ) : null}
-              </div>
-            </div>
+            <label htmlFor="description">{t('form.common.label.ingredients')}</label>
+            <IngredientsForm
+              errors={errors}
+              onShipmentItemsChange={setIngredients}
+              touched={touched}
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label htmlFor="price">{t('form.common.label.price')}</label>
+          <div className="w-full space-y-4">
+            <div className="w-full space-y-2">
+              <label htmlFor="name">{t('form.common.label.sales-price')}</label>
               <div className="relative w-full mx-auto">
-                <Field id="price" type="number" name="price" className="text-field filled" />
+                <Field id="price" name="price" type="number" className="text-field filled" />
                 {errors?.price && touched?.price ? (
                   <p className="mt-4 text-red-600">{errors?.price}</p>
                 ) : null}
               </div>
             </div>
-          </div>
 
-          <div className="w-full space-y-2">
-            <IngredientsForm />
+            <div className="space-y-2">
+              <label htmlFor="cost">{t('form.common.label.cost')}</label>
+              <div className="relative w-full mx-auto">
+                <Field id="cost" type="number" name="cost" className="text-field filled" />
+                {errors?.cost && touched?.cost ? (
+                  <p className="mt-4 text-red-600">{errors?.cost}</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="price">{t('form.common.label.sales-profit')}</label>
+              <div className="relative w-full mx-auto">
+                <Field
+                  id="salesProfit"
+                  type="number"
+                  name="salesProfit"
+                  className="text-field filled"
+                />
+                {errors?.salesProfit && touched?.salesProfit ? (
+                  <p className="mt-4 text-red-600">{errors?.salesProfit}</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="price">{t('form.common.label.misc-cost')}</label>
+              <div className="relative w-full mx-auto">
+                <Field id="miscCost" type="number" name="miscCost" className="text-field filled" />
+                {errors?.miscCost && touched?.miscCost ? (
+                  <p className="mt-4 text-red-600">{errors?.miscCost}</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="totalCost">{t('form.common.label.total-cost')}</label>
+              <div className="relative w-full mx-auto">
+                <Field
+                  id="totalCost"
+                  type="number"
+                  name="totalCost"
+                  className="text-field filled"
+                />
+                {errors?.totalCost && touched?.totalCost ? (
+                  <p className="mt-4 text-red-600">{errors?.totalCost}</p>
+                ) : null}
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div className="flex justify-end p-4 space-x-8">
+          <button type="submit" className="btn-contained">
+            {t('save')}
+          </button>
         </div>
       </Form>
     </Formik>
