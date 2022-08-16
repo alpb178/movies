@@ -23,6 +23,11 @@
   "close": "Close",
   "create-at": "Create date",
   "create-account": "Create New Account",
+  "comandas": {
+    "0": "No Comandas",
+    "1": "Comandas",
+    "other": "Comandas"
+  },
   "delete": "Delete",
   "delete-filter": "Clear Filter",
   "deleted": {

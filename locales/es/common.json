@@ -40,6 +40,11 @@
     "other": "Operaciones de la Caja"
   },
   "create": "Crear {{entity}}",
+  "comandas": {
+    "0": "No existen órdenes",
+    "1": "Órdenes",
+    "other": "Órdenes"
+  },
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
   "date-flight": "Fecha de Vuelo",
