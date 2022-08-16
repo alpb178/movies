@@ -119,10 +119,16 @@ const UsersForm = ({ userId }) => {
         >
           {({ errors, touched }) => (
             <Form className="p-6 space-y-6 text-lg">
-              <p className="mb-8 form-header">
-                {isNaN(userId) ? t('form.user.title.create') : t('form.user.title.update')}
-              </p>
-              <div className="flex flex-col space-y-8 lg:space-y-0 lg:space-x-12 lg:flex-row">
+              <div className="flex flex-col items-start justify-between md:space-x-8 md:items-center md:flex-row">
+                <p className="mb-8 form-header">
+                  {isNaN(userId) ? t('form.user.title.create') : t('form.user.title.update')}
+                </p>
+                <button type="submit" className="btn-contained">
+                  {t('save')}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 <div className="space-y-2">
                   <label htmlFor="firstName">{t('form.common.label.name')}</label>
                   <Field
@@ -155,29 +161,22 @@ const UsersForm = ({ userId }) => {
                   <Field
                     name="email"
                     placeholder={t('form.user.placeholder.email')}
-                    type="text"
                     className="text-field filled"
                   />
                   {errors?.email && touched?.email ? (
                     <p className="mt-4 text-red-600">{errors?.email}</p>
                   ) : null}
                 </div>
-              </div>
-              <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
-                <div className="space-y-2 mt-8 ">
+
+                <div className="space-y-2">
                   <label htmlFor="mobile">{t('phone')}</label>
-                  <Field
-                    name="mobile"
-                    placeholder={t('form.user.placeholder.mobile')}
-                    type="text"
-                    className="text-field filled"
-                  />
+                  <Field name="mobile" placeholder={t('phone')} className="text-field filled" />
                   {errors?.mobile && touched?.mobile ? (
                     <p className="mt-4 text-red-600">{errors?.mobile}</p>
                   ) : null}
                 </div>
 
-                <div className="space-y-2 mt-8">
+                <div className="space-y-2">
                   <label htmlFor="status">{t('status')}</label>
                   <AutocompleteField
                     name="status"
@@ -191,31 +190,14 @@ const UsersForm = ({ userId }) => {
                   />
                 </div>
 
-                <div className="space-y-5 space-x-12 mr-8">
-                  <label className="flex items-center">{t('form.common.label.is-owner')}</label>
-                  <Field id="isOwner" className="mt-5" name="isOwner">
-                    {({ form: { values, setFieldValue } }) => (
-                      <CustomSwitch
-                        checked={values?.isOwner}
-                        onChange={(val) => {
-                          setFieldValue('isOwner', val);
-                        }}
-                      />
-                    )}
-                  </Field>
-                </div>
-              </div>
-
-              <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
-                <div className="space-y-2 mt-6">
-                  <p className="text-xl">{t('form.common.label.password')}</p>
-
-                  <div className="relative  rounded-md">
+                <div className="col-start-1 space-y-2">
+                  <label htmlFor="password">{t('form.common.label.password')}</label>
+                  <div className="relative w-full">
                     <Field
                       type={showPassword ? 'text' : 'password'}
                       name="password"
                       id="password"
-                      className={`text-field text-sm mt-2 ${
+                      className={`text-field ${
                         errors?.password && touched?.password
                           ? 'border-red-400 bg-red-100'
                           : 'border-transparent filled'
@@ -239,14 +221,13 @@ const UsersForm = ({ userId }) => {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-xl">{t('form.common.label.repeat-password')}</p>
-
-                  <div className="relative  rounded-md ">
+                  <label htmlFor="password">{t('form.common.label.repeat-password')}</label>
+                  <div className="relative w-full">
                     <Field
                       type={showRepeatPassword ? 'text' : 'password'}
                       name="repeatPassword"
                       id="repeatPassword"
-                      className={`text-field text-sm ${
+                      className={`text-field ${
                         errors?.repeatPassword && touched?.repeatPassword
                           ? 'border-red-400 bg-red-100'
                           : 'border-transparent filled'
@@ -268,15 +249,20 @@ const UsersForm = ({ userId }) => {
                     <p className="mt-1 text-red-500">{errors?.repeatPassword}</p>
                   ) : null}
                 </div>
-              </div>
 
-              <div className="flex justify-end space-x-8">
-                <button
-                  type="submit"
-                  className="px-8 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
-                >
-                  {t('save')}
-                </button>
+                <div className="flex items-center h-16 mr-8 space-x-4 md:col-span-2">
+                  <label className="flex items-center">{t('form.common.label.is-owner')}</label>
+                  <Field id="isOwner" name="isOwner">
+                    {({ form: { values, setFieldValue } }) => (
+                      <CustomSwitch
+                        checked={values?.isOwner}
+                        onChange={(val) => {
+                          setFieldValue('isOwner', val);
+                        }}
+                      />
+                    )}
+                  </Field>
+                </div>
               </div>
             </Form>
           )}
