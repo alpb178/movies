@@ -9,6 +9,7 @@ import useTranslation from 'next-translate/useTranslation';
 import router from 'next/router';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -16,6 +17,7 @@ const UsersForm = ({ userId }) => {
   const { t } = useTranslation('common');
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [status] = useState([{ id: 'PENDING' }, { id: 'ACTIVE' }, { id: 'INACTIVE' }]);
 
@@ -34,7 +36,13 @@ const UsersForm = ({ userId }) => {
     mobile: users?.mobile || '',
     birthdate: users?.birthdate || '',
     bio: users?.bio || '',
-    status: { id: users?.status } || ''
+    status: { id: users?.status } || '',
+    password: '',
+    repeatPassword: ''
+  };
+
+  const validatePassword = () => {
+    return true;
   };
 
   const validationSchema = Yup.object().shape({
@@ -46,12 +54,28 @@ const UsersForm = ({ userId }) => {
     mobile: Yup.string()
       .required(t('form.common.required.phone'))
       .matches(regex, t('form.common.required.phone-wrong')),
-    status: Yup.object().nullable().required(t('required.status'))
+    status: Yup.object().nullable().required(t('required.status')),
+    password: Yup.string()
+      .ensure()
+      .when('create', {
+        is: validatePassword,
+        then: Yup.string()
+          .oneOf([Yup.ref('repeatPassword'), null], t('required.password-compare'))
+          .required(t('required.password'))
+      }),
+    repeatPassword: Yup.string()
+      .ensure()
+      .when('create', {
+        is: validatePassword,
+        then: Yup.string()
+          .oneOf([Yup.ref('password'), null], t('required.password-compare'))
+          .required(t('required.password-confirm'))
+      })
   });
 
   const onSubmit = async (values) => {
-    const { email, firstName, lastName, mobile, status } = values;
-    const usersSendApi = { email, firstName, lastName, mobile, status };
+    const { email, firstName, lastName, mobile, status, password } = values;
+    const usersSendApi = { email, firstName, lastName, mobile, status, password };
     usersSendApi.status = status.id;
     let method = POST;
     try {
@@ -162,6 +186,69 @@ const UsersForm = ({ userId }) => {
                     aria-describedby="flight"
                     defaultValue={status.find((item) => item.id === users?.status)}
                   />
+                </div>
+              </div>
+
+              <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
+
+                <div className="space-y-2 mt-6">
+                  <p className="text-xl">{t('form.common.label.password')}</p>
+
+                  <div className="relative  rounded-md">
+                    <Field
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      id="password"
+                      className={`text-field text-sm mt-2 ${errors?.password && touched?.password
+                        ? 'border-red-400 bg-red-100'
+                        : 'border-transparent filled'
+                        }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    >
+                      {showPassword ? (
+                        <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                      ) : (
+                        <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                      )}
+                    </button>
+                  </div>
+                  {errors?.password && touched?.password ? (
+                    <p className="mt-1 text-red-500">{errors?.password}</p>
+                  ) : null}
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-xl">{t('form.common.label.repeat-password')}</p>
+
+                  <div className="relative  rounded-md ">
+                    <Field
+                      type={showPassword ? 'text' : 'password'}
+                      name="repeatPassword"
+                      id="repeatPassword"
+                      className={`text-field text-sm ${errors?.repeatPassword && touched?.repeatPassword
+                        ? 'border-red-400 bg-red-100'
+                        : 'border-transparent filled'
+                        }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3"
+                    >
+                      {showPassword ? (
+                        <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                      ) : (
+                        <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                      )}
+                    </button>
+                  </div>
+                  {errors?.repeatPassword && touched?.repeatPassword ? (
+                    <p className="mt-1 text-red-500">{errors?.repeatPassword}</p>
+                  ) : null}
                 </div>
               </div>
 
