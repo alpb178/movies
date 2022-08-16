@@ -2,8 +2,10 @@
 /* eslint-disable react/display-name */
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
+import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
-import useSales from '@/hooks/sales/useSales';
+import TableActions from '@/components/table/TableActions';
+import useSales, { deleteSales } from '@/hooks/sales/useSales';
 import { DEFAULT_PAGE_SIZE, SALES_DETAIL_PAGE } from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
@@ -13,6 +15,7 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
+import { toast } from 'react-toastify';
 import SalesFilter from './SalesFilter';
 import Status from './Status';
 
@@ -28,6 +31,7 @@ const SalesList = () => {
   const [openForm] = useState(false);
   const [SelectedItem, setSelectedItem] = useState();
   const [loading, setLoading] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [filterValues, setFilterValues] = useState({
     country: ''
   });
@@ -64,6 +68,35 @@ const SalesList = () => {
     }
   });
 
+  const handleDelete = (event, row) => {
+    event.stopPropagation();
+    setDeleteConfirmation({ open: true, id: row.original.id });
+  };
+
+  const onDeleteConfirmation = async () => {
+    try {
+      setLoading(true);
+      await deleteSales({
+        args: { id: deleteConfirmation.id },
+      });
+
+      await queryClient.refetchQueries([API_AREA_URL]);
+      toast(t('deleted.male', { entity: t('area', { count: 1 }) }));
+      setLoading(false);
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onUpdate = (event, row) => {
+    event.stopPropagation();
+    const value = row.original.id;
+    const path = SALE_FORM_PAGE(value);
+    router.push(path);
+  };
+
   const renderStatus = (status) => {
     return <Status data={status} />;
   };
@@ -93,6 +126,16 @@ const SalesList = () => {
       Header: t('form.common.label.updatedAt'),
       accessor: 'updatedAt',
       Cell: ({ value }) => formatDate(value)
+    },
+    {
+      id: 'optionComanda',
+      displayName: 'optionComanda',
+      Cell: ({ row }) => (
+        <TableActions
+          onEdit={(event) => onUpdate(event, row)}
+          onDelete={(event) => handleDelete(event, row)}
+        />
+      )
     }
   ]);
 
@@ -178,7 +221,16 @@ const SalesList = () => {
           </div>
         </EmptyState>
       )}
+
+      <DeleteConfirmationDialog
+        open={deleteConfirmation.open}
+        onOpen={setDeleteConfirmation}
+        onDeleteConfirmation={onDeleteConfirmation}
+        title={t('delete-title', { entity: t('sales', { count: 1 }) })}
+        content={t('delete-message.female', { entity: t('sales', { count: 1 }) })}
+      />
     </>
+
   );
 };
 

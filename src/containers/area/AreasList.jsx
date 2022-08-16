@@ -4,13 +4,12 @@ import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useAreas, { saveAreas } from '@/hooks/area/useAreas';
+import useAreas, { deleteAreas } from '@/hooks/area/useAreas';
 import {
   API_AREA_URL,
   AREAS_DETAIL_PAGE,
   AREAS_FORM_PAGE,
-  DEFAULT_PAGE_SIZE,
-  DELETE
+  DEFAULT_PAGE_SIZE
 } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
@@ -75,11 +74,8 @@ const AreasList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await saveAreas({
+      await deleteAreas({
         args: { id: deleteConfirmation.id },
-        options: {
-          method: DELETE
-        }
       });
       await queryClient.refetchQueries([API_AREA_URL]);
       toast(t('deleted.male', { entity: t('area', { count: 1 }) }));

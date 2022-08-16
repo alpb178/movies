@@ -14,11 +14,12 @@ export const saveSales = async ({ args = {}, options = {} } = {}) => {
         method: options.method
       });
       break;
-    case DELETE:
-      await deleteData({ path: API_SALES_URL + `/${args.id}`, method: options.method });
-      break;
   }
 };
+
+export const deleteSales = async ({ args = {}, options = {} } = {}) => {
+  await deleteData({ path: API_SALES_URL + `/${args.id}`, method: DELETE });
+}
 
 export default function useSales({ args = {}, options = {} } = {}) {
   return useQuery([API_SALES_URL, { ...args }], getData, {
