@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { valuesFromString } from '@/lib/utils';
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon, XIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, PlusCircleIcon, XIcon } from '@heroicons/react/outline';
 import clsx from 'clsx';
 import Downshift from 'downshift';
 import { Field } from 'formik';
@@ -9,7 +9,15 @@ import { matchSorter } from 'match-sorter';
 import PropTypes from 'prop-types';
 
 const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }) => {
-  const { defaultValue, disabled, noOptionsLabel, keysToMatch, optionLabels, placeholder } = props;
+  const {
+    defaultValue,
+    disabled,
+    noOptionsLabel,
+    actionCreate,
+    keysToMatch,
+    optionLabels,
+    placeholder
+  } = props;
 
   const getItems = (filter) =>
     filter
@@ -123,8 +131,19 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                           {itemToString(item)}
                         </Menu.Item>
                       ))
-                    ) : (
+                    ) : !actionCreate ? (
                       <p className="p-4 text-gray-500">{noOptionsLabel}</p>
+                    ) : (
+                      <p className="p-4 text-gray-500">
+                        <button
+                          type="button"
+                          className="flex w-full space-x-4 items-center p-4 text-base text-gray-600 hover:text-primary-500 hover:bg-primary-100"
+                          onClick={() => actionCreate(inputValue)}
+                        >
+                          <PlusCircleIcon className="w-6 h-6 " />
+                          <p>{inputValue}</p>
+                        </button>
+                      </p>
                     )}
                   </Menu.Items>
                 </Transition>
