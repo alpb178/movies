@@ -19,6 +19,7 @@ export const API_BUSINESS_URL = '/business';
 export const API_COMANDAS_URL = '/orders';
 export const API_PRODUCTS_URL = '/products';
 export const API_RECIPES_URL = '/recipes';
+export const API_CATEGORY_RECIPES_URL = '/recipe-groups';
 export const API_TABLES_URL = '/tables';
 
 // App Routes
