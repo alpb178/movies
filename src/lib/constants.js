@@ -60,9 +60,9 @@ export const ROLE_USER = 'ROLE_USER';
 export const ROLE_OWNER = 'ROLE_OWNER';
 
 // Area
-export const AREAS_DETAIL_PAGE = (id) => `/area/${id}`;
-export const AREAS_FORM_PAGE = (id) => (id ? `/area/form/${id}` : `/area/form/create`);
-export const AREASS_EDIT = (area) => `/area/edit/${area}`;
+export const AREAS_DETAIL_PAGE = (id) => `/areas/${id}`;
+export const AREAS_FORM_PAGE = (id) => (id ? `/areas/form/${id}` : `/areas/form/create`);
+export const AREASS_EDIT = (area) => `/areas/edit/${area}`;
 
 // Users
 export const GET_USER_KEY = 'getUsers';
@@ -78,7 +78,7 @@ export const BUSINESS_FORM_PAGE = (id) => (id ? `/business/form/${id}` : `/busin
 export const BUSINESS_EDIT = (business) => `/business/edit/${business}`;
 
 // Sale
-export const COMANDAS_DETAIL_PAGE = (id) => `/comandas/${id}`;
+export const COMANDAS_DETAIL_PAGE = (id) => `/orders/${id}`;
 
 // Permisions actions (CRUD)
 export const actions = [

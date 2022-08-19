@@ -33,6 +33,7 @@ const TableForm = ({ data, setTable }) => {
       }
     }
     setTable(selectedOptions);
+    document.getElementById('name_table').value = '';
   };
 
   useEffect(() => {
