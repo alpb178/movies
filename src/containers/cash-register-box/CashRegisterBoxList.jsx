@@ -65,8 +65,8 @@ const CashRegisterBoxList = () => {
 
   const calculateShipmentPrice = () => {
     let total = 0;
-    if (products?.length > 0) {
-      products?.map((option) => {
+    if (products?.rows?.length > 0) {
+      products?.rows?.map((option) => {
         total += option?.amount * option?.product?.price || 0;
       });
       setShipmentPrice(total);
@@ -147,8 +147,8 @@ const CashRegisterBoxList = () => {
   const options = {
     name: t('cash_register_box', { count: 2 }) + '  ' + formatPrice(shipmentPrice, 2),
     columns,
-    data: products,
-    count: products?.lenght,
+    data: products?.rows,
+    count: products?.count,
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
     pageSize,
@@ -156,7 +156,7 @@ const CashRegisterBoxList = () => {
   };
 
   useEffect(() => {
-    if (products?.length > 0) {
+    if (products?.rows?.length > 0) {
       calculateShipmentPrice();
     }
   }, [products]);
@@ -173,7 +173,7 @@ const CashRegisterBoxList = () => {
         </div>
       </div>
 
-      {products && products?.length > 0 ? (
+      {products && products.rows?.length > 0 ? (
         <DataTable {...options} />
       ) : (
         <EmptyState text={t('cash_register_box', { count: 0 })}>
