@@ -33,11 +33,11 @@ export const ROLES_PAGE = '/roles';
 export const SETTINGS_PAGE = '/settings';
 
 // App Routes Vebrics
-export const AREA_PAGE = '/area';
+export const AREA_PAGE = '/areas';
 export const BUSINESS_PAGE = '/auth/business';
-export const COMANDAS_PAGE = '/comandas';
+export const COMANDAS_PAGE = '/orders';
 export const TABLE_PAGE = '/table';
-export const CASH_REGISTER_BOX_PAGE = '/cash_register_box';
+export const CASH_REGISTER_BOX_PAGE = '/cash-register-box';
 
 // Auth
 export const API_AUTH_URL = '/auth';
@@ -57,6 +57,7 @@ export const DELETE = 'DELETE';
 // Roles
 export const ROLE_ADMIN = 'ROLE_ADMIN';
 export const ROLE_USER = 'ROLE_USER';
+export const ROLE_OWNER = 'ROLE_OWNER';
 
 // Area
 export const AREAS_DETAIL_PAGE = (id) => `/area/${id}`;
