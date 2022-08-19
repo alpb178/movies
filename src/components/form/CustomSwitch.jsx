@@ -1,11 +1,11 @@
 import { Switch } from '@headlessui/react';
 import clsx from 'clsx';
-import React from 'react';
 
-const CustomSwitch = ({ checked, label, onChange }) => (
+const CustomSwitch = ({ checked, label, onChange, onClick }) => (
   <Switch
     checked={checked}
     onChange={onChange}
+    onClick={onClick}
     className={clsx(
       checked ? 'bg-primary-500' : 'bg-gray-300',
       'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none'

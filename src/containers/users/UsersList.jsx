@@ -1,8 +1,9 @@
 import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
+import CustomSwitch from '@/components/form/CustomSwitch';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useUsers, { saveUser } from '@/hooks/user/useUsers';
+import useUsers, { saveUser, userActivatedDesactivated } from '@/hooks/user/useUsers';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import EmptyState from 'components/common/EmptyState';
@@ -105,6 +106,36 @@ const UsersList = () => {
     router.push(USER_FORM_PAGE());
   };
 
+  const renderStatus = (status, row) => {
+    return (
+      <CustomSwitch
+        checked={status == 'ACTIVE' ? true : false}
+        onChange={(val) => {}}
+        onClick={(event) => {
+          event.stopPropagation();
+          onActiveInactiveUsers(event, row);
+        }}
+      />
+    );
+  };
+
+  const onActiveInactiveUsers = async (event, row) => {
+    try {
+      setLoading(true);
+      await userActivatedDesactivated({
+        args: row,
+        actions: row.status == 'ACTIVE' ? 'deactivate' : 'activate'
+      });
+      await queryClient.refetchQueries([API_USERS_URL]);
+      setLoading(true);
+      toast(t('updated.male', { entity: t('users', { count: 1 }) }));
+    } catch (error) {
+      toast.error(error.toString());
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
 
   const columns = React.useMemo(() => [
@@ -123,6 +154,11 @@ const UsersList = () => {
     {
       Header: t('phone'),
       accessor: 'mobile'
+    },
+    {
+      Header: t('status'),
+      accessor: 'status',
+      Cell: ({ cell }) => renderStatus(cell.row.original.status, cell.row.original)
     },
     {
       Header: t('create-at'),
