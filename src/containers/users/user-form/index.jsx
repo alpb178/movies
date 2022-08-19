@@ -46,7 +46,8 @@ const UsersForm = ({ userId }) => {
   };
 
   const validatePassword = () => {
-    return true;
+    if (userId !== 'create') return false;
+    else return true;
   };
 
   const validationSchema = Yup.object().shape({
@@ -206,69 +207,71 @@ const UsersForm = ({ userId }) => {
                 </div>
               </div>
 
-              <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
-                <div className="space-y-2 mt-6">
-                  <p className="text-xl">{t('form.common.label.password')}</p>
+              {userId == 'create' ? (
+                <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
+                  <div className="space-y-2 mt-6">
+                    <p className="text-xl">{t('form.common.label.password')}</p>
 
-                  <div className="relative  rounded-md">
-                    <Field
-                      type={showPassword ? 'text' : 'password'}
-                      name="password"
-                      id="password"
-                      className={`text-field text-sm mt-2 ${
-                        errors?.password && touched?.password
-                          ? 'border-red-400 bg-red-100'
-                          : 'border-transparent filled'
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3"
-                    >
-                      {showPassword ? (
-                        <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                      ) : (
-                        <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                      )}
-                    </button>
+                    <div className="relative  rounded-md">
+                      <Field
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        id="password"
+                        className={`text-field text-sm mt-2 ${
+                          errors?.password && touched?.password
+                            ? 'border-red-400 bg-red-100'
+                            : 'border-transparent filled'
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3"
+                      >
+                        {showPassword ? (
+                          <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                        ) : (
+                          <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
+                    {errors?.password && touched?.password ? (
+                      <p className="mt-1 text-red-500">{errors?.password}</p>
+                    ) : null}
                   </div>
-                  {errors?.password && touched?.password ? (
-                    <p className="mt-1 text-red-500">{errors?.password}</p>
-                  ) : null}
-                </div>
 
-                <div className="space-y-2">
-                  <p className="text-xl">{t('form.common.label.repeat-password')}</p>
+                  <div className="space-y-2">
+                    <p className="text-xl">{t('form.common.label.repeat-password')}</p>
 
-                  <div className="relative  rounded-md ">
-                    <Field
-                      type={showRepeatPassword ? 'text' : 'password'}
-                      name="repeatPassword"
-                      id="repeatPassword"
-                      className={`text-field text-sm ${
-                        errors?.repeatPassword && touched?.repeatPassword
-                          ? 'border-red-400 bg-red-100'
-                          : 'border-transparent filled'
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowRepeatPassword(!showRepeatPassword)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3"
-                    >
-                      {showRepeatPassword ? (
-                        <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                      ) : (
-                        <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
-                      )}
-                    </button>
+                    <div className="relative  rounded-md ">
+                      <Field
+                        type={showRepeatPassword ? 'text' : 'password'}
+                        name="repeatPassword"
+                        id="repeatPassword"
+                        className={`text-field text-sm ${
+                          errors?.repeatPassword && touched?.repeatPassword
+                            ? 'border-red-400 bg-red-100'
+                            : 'border-transparent filled'
+                        }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3"
+                      >
+                        {showRepeatPassword ? (
+                          <IoMdEye className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                        ) : (
+                          <IoMdEyeOff className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
+                    {errors?.repeatPassword && touched?.repeatPassword ? (
+                      <p className="mt-1 text-red-500">{errors?.repeatPassword}</p>
+                    ) : null}
                   </div>
-                  {errors?.repeatPassword && touched?.repeatPassword ? (
-                    <p className="mt-1 text-red-500">{errors?.repeatPassword}</p>
-                  ) : null}
                 </div>
-              </div>
+              ) : null}
 
               <div className="flex justify-end space-x-8">
                 <button
