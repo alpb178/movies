@@ -92,27 +92,28 @@ const CreateAccountForm = () => {
         args: body
       });
       if (res.ok) router.push(LOGIN_PAGE);
-    } catch (error) {
-      setLoading(false);
-      let _messageErrors = error;
-      if (error.response) {
-        const { status } = error.response;
-        switch (status) {
-          case 400:
-            _messageErrors = t('error.400');
-            break;
-          case 401:
-            _messageErrors = t('error.401');
-            break;
-          case 500:
-            _messageErrors = t('error.500');
-            break;
-          default:
-            _messageErrors = error.toString();
-            break;
+      else {
+        let _messageErrors = '';
+        if (res.status) {
+          switch (res.status) {
+            case 400:
+              _messageErrors = t('error.400');
+              break;
+            case 401:
+              _messageErrors = t('error.401');
+              break;
+            case 500:
+              _messageErrors = t('error.500');
+              break;
+            default:
+              _messageErrors = res.error.toString();
+              break;
+          }
         }
-        toast.error(_messageErrors);
+        toast.error(_messageErrors, { variant: 'error' });
       }
+    } catch (error) {
+      toast.error(error.toString(), { variant: 'error' });
     } finally {
       setLoading(false);
     }
