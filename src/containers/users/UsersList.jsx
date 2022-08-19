@@ -105,19 +105,6 @@ const UsersList = () => {
     router.push(USER_FORM_PAGE());
   };
 
-  const renderRoles = (roles) => (
-    <div className="flex space-x-2">
-      {roles?.map((role) => (
-        <span
-          key={role.id}
-          className="px-4 py-1 font-medium rounded-full text-secondary-700 bg-secondary-100"
-        >
-          {t(role.name.replace(/_/g, '-').toLowerCase())}
-        </span>
-      ))}
-    </div>
-  );
-
   const formatDate = (value) => <div>{format(new Date(value), 'PP', { locale })}</div>;
 
   const columns = React.useMemo(() => [
