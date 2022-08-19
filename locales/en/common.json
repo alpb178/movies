@@ -91,7 +91,7 @@
         "ingredients": "Ingredients",
         "no-ingredients": "No Ingredients",
         "total-cost": "Total Cost",
-        "is-owner": "Worker/Owner"
+        "is-owner": "Is owner?"
       },
       "placeholder": {
         "name": "Insert Name....",
