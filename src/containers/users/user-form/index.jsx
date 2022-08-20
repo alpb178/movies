@@ -80,7 +80,7 @@ const UsersForm = ({ userId }) => {
 
   const onSubmit = async (values) => {
     const { email, firstName, lastName, mobile, status, password, isOwner } = values;
-    const usersSendApi = { email, firstName, lastName, mobile, status, password, isOwner };
+    const usersSendApi = { email, firstName, lastName, mobile, status, isOwner };
     usersSendApi.status = status.id;
     usersSendApi.business = user?.data?.business[0]?.id;
     let method = POST;
@@ -91,6 +91,8 @@ const UsersForm = ({ userId }) => {
         method = PUT;
         usersSendApi.id = userId;
         message = t('updated.male', { entity: t('users', { count: 1 }) });
+      } else {
+        usersSendApi.password = password;
       }
       await saveUser({
         args: usersSendApi,
