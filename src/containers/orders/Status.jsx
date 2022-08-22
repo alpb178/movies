@@ -1,7 +1,7 @@
 const { default: clsx } = require('clsx');
 const { default: useTranslation } = require('next-translate/useTranslation');
 
-const Status = ({ data }) => {
+const Status = ({ data, className }) => {
   const { t } = useTranslation('common');
 
   const colorize = () => {
@@ -13,7 +13,7 @@ const Status = ({ data }) => {
     }
   };
   return (
-    <dib className={clsx(colorize(), 'rounded-full px-4 p-1 text-sm')}>
+    <dib className={clsx(colorize(), className ? className : 'rounded-full px-4 p-1 text-sm')}>
       {t(`form.common.status.${data.toLowerCase()}`)}
     </dib>
   );

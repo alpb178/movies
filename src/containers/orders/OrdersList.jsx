@@ -5,8 +5,8 @@ import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useComandas, { deleteComandas } from '@/hooks/comanda/useComandas';
-import { API_COMANDAS_URL, COMANDAS_DETAIL_PAGE, DEFAULT_PAGE_SIZE } from '@/lib/constants';
+import useOrders, { deleteOrders } from '@/hooks/orders/useOrders';
+import { API_ORDERS_URL, DEFAULT_PAGE_SIZE, ORDERS_DETAIL_PAGE } from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
@@ -17,10 +17,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import ComandasFilter from './ComandaFilter';
+import OrdersFilter from './OrdersFilter';
 import Status from './Status';
 
-const ComandasList = () => {
+const OrdersList = () => {
   const { t, lang } = useTranslation('common');
   const router = useRouter();
   const [page, setPage] = useState(0);
@@ -55,7 +55,7 @@ const ComandasList = () => {
     return queryParams;
   }, [filterValues, page, pageSize, sort]);
 
-  const { data: comandas, isLoading } = useComandas({
+  const { data: orders, isLoading } = useOrders({
     args: params,
     options: {
       keepPreviousData: true
@@ -70,12 +70,12 @@ const ComandasList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await deleteComandas({
+      await deleteOrders({
         args: { id: deleteConfirmation.id }
       });
 
-      await queryClient.refetchQueries([API_COMANDAS_URL]);
-      toast(t('deleted.male', { entity: t('comandas', { count: 1 }) }));
+      await queryClient.refetchQueries([API_ORDERS_URL]);
+      toast(t('deleted.male', { entity: t('orders', { count: 1 }) }));
       setLoading(false);
     } catch (error) {
       toast.error(error);
@@ -167,22 +167,22 @@ const ComandasList = () => {
   };
 
   const options = {
-    name: t('comandas', { count: 2 }),
+    name: t('orders', { count: 2 }),
     columns,
-    data: comandas?.rows,
-    count: comandas?.count,
+    data: orders?.rows,
+    count: orders?.count,
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
     onRowClick: (row) => {
       const value = row?.original?.id;
-      const path = COMANDAS_DETAIL_PAGE(value);
+      const path = ORDERS_DETAIL_PAGE(value);
       router.push(path);
     },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
-        <ComandasFilter open={openFilters} onSubmit={handleFilters} />
+        <OrdersFilter open={openFilters} onSubmit={handleFilters} />
 
         <div className="flex">
           <FilterCriteria />
@@ -206,10 +206,10 @@ const ComandasList = () => {
     <>
       {(loading || isLoading) && <Loading />}
 
-      {comandas && comandas.rows.length > 0 ? (
+      {orders && orders.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('comandas', { count: 0 })}>
+        <EmptyState text={t('orders', { count: 0 })}>
           <div className="flex items-center justify-center h-64 w-max">
             <Lottie options={lottieOptions('offline')} />
           </div>
@@ -220,20 +220,20 @@ const ComandasList = () => {
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete-title', { entity: t('comandas', { count: 1 }) })}
-        content={t('delete-message.female', { entity: t('comandas', { count: 1 }) })}
+        title={t('delete-title', { entity: t('orders', { count: 1 }) })}
+        content={t('delete-message.female', { entity: t('orders', { count: 1 }) })}
       />
     </>
   );
 };
 
-ComandasList.propTypes = {
+OrdersList.propTypes = {
   row: PropTypes.object,
   data: PropTypes.object,
   loading: PropTypes.bool,
-  onGetComandas: PropTypes.func,
+  onGetOrders: PropTypes.func,
   onSelectPayment: PropTypes.func,
   onDeletePayment: PropTypes.func
 };
 
-export default ComandasList;
+export default OrdersList;
