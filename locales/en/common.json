@@ -24,9 +24,9 @@
   "create-at": "Create date",
   "create-account": "Create New Account",
   "comandas": {
-    "0": "No Comandas",
-    "1": "Comandas",
-    "other": "Comandas"
+    "0": "No Orders",
+    "1": "Orders",
+    "other": "Orders"
   },
   "delete": "Delete",
   "delete-filter": "Clear Filter",
@@ -170,10 +170,10 @@
     },
     "sales": {
       "title": {
-        "create": "New Comanda",
-        "update": "Update Comanda",
-        "details": "Details Comanda",
-        "detailsEspecified": "Details Especified Comanda"
+        "create": "New Order",
+        "update": "Update Order",
+        "details": "Details Order",
+        "detailsEspecified": "Details Especified Order"
       }
     },
     "role": {
@@ -305,9 +305,9 @@
     "female": "{{entity}} saved successfully."
   },
   "sales": {
-    "0": "No Comanda",
-    "one": "Comanda",
-    "other": "Comandas"
+    "0": "No Order",
+    "one": "Order",
+    "other": "Orders"
   },
   "send": "Send",
   "search": "Search",

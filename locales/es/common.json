@@ -205,10 +205,10 @@
     },
     "sales": {
       "title": {
-        "create": "Nueva Comanda",
-        "update": "Actualizar Comanda",
-        "details": "Detalles de la Comanda",
-        "detailsEspecified": "Detalles Específicos de la Comanda"
+        "create": "Nueva Orden",
+        "update": "Actualizar Orden",
+        "details": "Detalles de la Orden",
+        "detailsEspecified": "Detalles Específicos de la Orden"
       }
     },
     "role": {
@@ -349,9 +349,9 @@
   "role-user": "Usuario",
   "save": "Guardar",
   "sales": {
-    "0": "No hay Comandas",
-    "one": "Comanda",
-    "other": "Comandas"
+    "0": "No hay Ordenes",
+    "one": "Orden",
+    "other": "Ordenes"
   },
   "saved": {
     "male": "{{entity}} guardado exitosamente.",
@@ -365,7 +365,7 @@
   "status": "Estado",
   "statistics": {
     "users-count": "Ganancias Diarias",
-    "user-activate-desactivate": "Comandas Diarias"
+    "user-activate-desactivate": "Ordenes Diarias"
   },
   "symbol": "Símbolo",
   "tables": {
