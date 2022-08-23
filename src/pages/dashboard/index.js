@@ -1,5 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-import Dashboard from '@/containers/dashboard';
 import dynamic from 'next/dynamic';
 import { ROLE_ADMIN } from '../../lib/constants';
 
@@ -8,7 +7,7 @@ const Admin = dynamic(() => import('layouts/Admin'), {
 });
 
 const DashboardPage = () => {
-  return <Dashboard />;
+  return <></>;
 };
 
 DashboardPage.layout = Admin;
