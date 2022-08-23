@@ -48,7 +48,7 @@ const OrderDetails = ({ orderId }) => {
   return isLoading ? (
     <Loading />
   ) : (
-    <div className="flex flex-col w-full sm:space-x-8 lg:flex-row">
+    <div className="flex flex-col w-full pb-8 space-x-0 lg:space-x-8 lg:flex-row">
       <div className="w-full space-y-6">
         <section aria-labelledby="applicant-information-title">
           <div className="bg-white">
@@ -102,21 +102,27 @@ const OrderDetails = ({ orderId }) => {
               <div className="lg:max-w-xs sm:col-span-1">
                 <p className="text-sm font-medium text-gray-500">{t('form.common.label.amount')}</p>
 
-                <div className="grid grid-cols-2 gap-2 mt-2 text-base gap-x-6">
+                <div className="grid grid-cols-2 gap-2 mt-2 text-base gap-x-8">
                   <p>Subtotal</p>
                   <span className="font-medium text-right text-gray-700">
                     {formatPrice(profit) || 0}
                   </span>
-                  <p>Servicio</p>
+                  <p>
+                    Servicio{' '}
+                    <span className="font-medium text-gray-400">({order?.service * 100}%)</span>
+                  </p>
                   <span className="font-medium text-right text-gray-700">
                     {formatPrice(service) || 0}
                   </span>
-                  <p>Descuento</p>
+                  <p>
+                    Descuento{' '}
+                    <span className="font-medium text-gray-400">({order?.discount * 100}%)</span>
+                  </p>
                   <span className="font-medium text-right text-gray-700">
                     {formatPrice(discount) || 0}
                   </span>
                   <p className="font-semibold">Total</p>
-                  <span className="font-semibold text-right text-gray-900">
+                  <span className="font-semibold text-right text-emerald-600">
                     {formatPrice(profit + service - discount) || 0}
                   </span>
                 </div>
@@ -126,8 +132,8 @@ const OrderDetails = ({ orderId }) => {
         </section>
       </div>
 
-      <section className="w-full max-w-2xl">
-        <div className="px-4 py-5 lg:px-8">
+      <section className="w-full lg:max-w-2xl">
+        <div className="px-4 py-5 sm:px-8">
           <h2 id="timeline-title" className="text-lg font-medium text-gray-900 bor">
             {t('products', { count: 2 })}
           </h2>
@@ -135,7 +141,7 @@ const OrderDetails = ({ orderId }) => {
 
         <div className="w-full pt-5 mt-0 border-t border-gray-200 lg:mt-5">
           {order?.orderProducts?.length > 0 ? (
-            <dl className="w-full px-4 space-y-6 lg:px-8">
+            <dl className="w-full px-4 space-y-6 sm:px-8">
               {order?.orderProducts.map((option) => (
                 <div key={option?.id} className="flex justify-between w-full space-x-8">
                   <div className="w-full">
