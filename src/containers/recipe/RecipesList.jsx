@@ -13,7 +13,6 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import RecipeForm from './RecipeForm';
 import RecipesFilter from './RecipesFilter';
 
 const RecipesList = () => {
@@ -200,15 +199,6 @@ const RecipesList = () => {
         <DataTable {...options} />
       ) : (
         <EmptyState text={t('recipes', { count: 0 })}>{renderCreateButton()}</EmptyState>
-      )}
-
-      {openForm && (
-        <RecipeForm
-          data={selectedItem}
-          open={openForm}
-          onOpen={setOpenForm}
-          setLoading={setLoading}
-        />
       )}
 
       <DeleteConfirmationDialog

@@ -12,13 +12,10 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
   const { t } = useTranslation('common');
 
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [shipmentPrice, setShipmentPrice] = useState(0);
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    if (selectedOptions?.length > 0) {
-      calculateShipmentPrice();
-    }
     onShipmentItemsChange(selectedOptions);
   }, [selectedOptions]);
 
@@ -41,12 +38,13 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
     if (item) {
       const selectedItem = item;
       selectedItem.amount = 1;
+      selectedItem.measureUnit = 1;
       var index = products.findIndex((e) => e.id === item.id);
       products.splice(index, 1);
       if (!selectedOptions.includes(selectedItem)) {
         setSelectedOptions(
           (oldArray) => [...oldArray, selectedItem],
-          products.filter((c) => c.shipmentItem.name !== selectedItem.name)
+          products.filter((c) => c.name !== selectedItem.name)
         );
       }
     }
@@ -70,21 +68,6 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
         return option;
       })
     );
-  };
-
-  function getSumPrice(total, num) {
-    return (total += num?.amount * num?.price);
-  }
-
-  const calculateShipmentPrice = () => {
-    let total = 0;
-    if (selectedOptions.length > 1) {
-      total = selectedOptions.reduce(getSumPrice, 0);
-    } else {
-      total = selectedOptions[0]?.amount * selectedOptions[0]?.price;
-    }
-
-    setShipmentPrice(total);
   };
 
   useMemo(async () => {
@@ -139,7 +122,6 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
             <div key={option?.name} className="flex flex-col">
               <p className="w-full px-4 pt-4 space-x-1 text-sm text-gray-400">
                 <span>{option?.amount}</span>
-                <span>{option?.measureUnit?.name}</span>
                 {!isSender ? <span>{`· ${formatPrice(option?.price)} / unidad`}</span> : null}
               </p>
               <div className="flex items-center w-full p-2 pt-0 space-x-6">
@@ -157,7 +139,7 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
                     id={`amount-${idx}`}
                     type="number"
                     value={option?.amount}
-                    className="w-10 h-8 px-2 text-lg"
+                    className="w-12 h-8 px-2 text-lg"
                     aria-describedby={`amount-${idx}`}
                   />
 
@@ -169,9 +151,6 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
                     <PlusCircleIcon className="w-6 h-6 " />
                   </button>
                 </div>
-
-                <p className="text-sm">{t('total')}:</p>
-                <p className="text-sm">{formatPrice(shipmentPrice)}</p>
 
                 <button
                   type="button"
