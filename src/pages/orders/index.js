@@ -1,4 +1,4 @@
-import ComandasList from '@/containers/comanda/ComandaList';
+import OrdersList from '@/containers/orders/OrdersList';
 import { ROLE_ADMIN } from '@/lib/constants';
 import dynamic from 'next/dynamic';
 
@@ -6,11 +6,11 @@ const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
 });
 
-const ComandasPage = () => {
-  return <ComandasList />;
+const OrdersPage = () => {
+  return <OrdersList />;
 };
 
-ComandasPage.layout = Admin;
-ComandasPage.roles = [ROLE_ADMIN];
+OrdersPage.layout = Admin;
+OrdersPage.roles = [ROLE_ADMIN];
 
-export default ComandasPage;
+export default OrdersPage;

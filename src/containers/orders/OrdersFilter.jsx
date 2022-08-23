@@ -2,9 +2,8 @@ import AutocompleteField from '@/components/form/AutocompleteField';
 import { Menu, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
-import React from 'react';
 
-const RegionsFilter = ({ data, onSubmit, open }) => {
+const OrdersFilter = ({ data, onSubmit, open }) => {
   const { t } = useTranslation('common');
 
   const initialValues = {
@@ -48,4 +47,4 @@ const RegionsFilter = ({ data, onSubmit, open }) => {
   );
 };
 
-export default RegionsFilter;
+export default OrdersFilter;

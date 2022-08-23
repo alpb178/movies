@@ -16,7 +16,7 @@ export const API_STATISTICS_URL_PRODUCTS = '/reports/products';
 // Api Urls Vebrics
 export const API_AREA_URL = '/areas';
 export const API_BUSINESS_URL = '/business';
-export const API_COMANDAS_URL = '/orders';
+export const API_ORDERS_URL = '/orders';
 export const API_PRODUCTS_URL = '/products';
 export const API_RECIPES_URL = '/recipes';
 export const API_CATEGORY_RECIPES_URL = '/recipe-groups';
@@ -36,7 +36,7 @@ export const SETTINGS_PAGE = '/settings';
 // App Routes Vebrics
 export const AREA_PAGE = '/areas';
 export const BUSINESS_PAGE = '/auth/business';
-export const COMANDAS_PAGE = '/orders';
+export const ORDERS_PAGE = '/orders';
 export const TABLE_PAGE = '/table';
 export const CASH_REGISTER_BOX_PAGE = '/cash-register-box';
 
@@ -79,7 +79,7 @@ export const BUSINESS_FORM_PAGE = (id) => (id ? `/business/form/${id}` : `/busin
 export const BUSINESS_EDIT = (business) => `/business/edit/${business}`;
 
 // Sale
-export const COMANDAS_DETAIL_PAGE = (id) => `/orders/${id}`;
+export const ORDERS_DETAIL_PAGE = (id) => `/orders/${id}`;
 
 // Permisions actions (CRUD)
 export const actions = [
