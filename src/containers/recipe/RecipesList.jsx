@@ -6,6 +6,7 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRecipes, { saveRecipe } from '@/hooks/recipe/useRecipes';
 import { API_RECIPE_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
+import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
@@ -91,6 +92,9 @@ const RecipesList = () => {
     setOpenForm(true);
   };
 
+  const formatPriceValue = (value) => <div>{formatPrice(value)}</div>;
+  const formatIngredients = (value) => <div>{value.length}</div>;
+
   const columns = React.useMemo(() => [
     {
       Header: t('form.common.label.name'),
@@ -98,11 +102,18 @@ const RecipesList = () => {
     },
     {
       Header: t('form.common.label.price'),
-      accessor: 'price'
+      accessor: 'price',
+      Cell: ({ value }) => formatPriceValue(value)
     },
     {
-      Header: t('form.common.label.description'),
-      accessor: 'description'
+      Header: t('form.common.label.misc-cost'),
+      accessor: 'miscCost',
+      Cell: ({ value }) => formatPriceValue(value)
+    },
+    {
+      Header: t('form.common.label.count-ingredients'),
+      accessor: 'ingredients',
+      Cell: ({ value }) => formatIngredients(value)
     },
     {
       id: 'optionsRecipes',

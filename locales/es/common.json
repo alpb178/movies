@@ -124,7 +124,8 @@
         "total-cost": "Costo Total",
         "ingredients": "Ingredientes",
         "no-ingredients": "No existen Ingredientes",
-        "is-owner": "¿Es propietario?"
+        "is-owner": "¿Es propietario?",
+        "count-ingredients": "cantidad de ingredientes"
       },
       "placeholder": {
         "name": "Insertar Nombre....",
@@ -157,7 +158,9 @@
         "lastName": "Apellidos requeridos",
         "email": "Correo Electrónico requerido",
         "email-wrong": "Correo Electrónico Inválido",
-        "password": "Password es requerido"
+        "password": "Password es requerido",
+        "category": "Categoría requerida",
+        "pos-id": "POS ID requerido"
       },
       "status": {
         "open": "Abierta",

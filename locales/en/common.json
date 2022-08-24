@@ -91,7 +91,8 @@
         "ingredients": "Ingredients",
         "no-ingredients": "No Ingredients",
         "total-cost": "Total Cost",
-        "is-owner": "Is owner?"
+        "is-owner": "Is owner?",
+        "count-ingredients": "Ingredients Count"
       },
       "placeholder": {
         "name": "Insert Name....",
@@ -125,7 +126,9 @@
         "email": "Email required",
         "email-wrong": "Email Incorrect",
         "password": "Password required",
-        "repeat-password": "Repeat Password required"
+        "repeat-password": "Repeat Password required",
+        "category": "Category required",
+        "pos-id": "POS ID required"
       },
       "status": {
         "open": "OPEN",
@@ -269,10 +272,11 @@
     "other": "PPU"
   },
   "population": "Population",
-  "rappel": {
-    "0": "Rappel",
-    "one": "Rappel",
-    "other": "Rappel"
+
+  "recipes": {
+    "0": "No Recipes",
+    "1": "Recipe",
+    "other": "Recipes"
   },
   "reports": {
     "0": "No reports",
