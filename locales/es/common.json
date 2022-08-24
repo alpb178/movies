@@ -397,7 +397,7 @@
     "status": {
       "pending": "Pendiente",
       "activated": "Activado",
-      "inactive": "Desactivado"
+      "deactivated": "Desactivado"
     }
   },
   "year": "Año"

@@ -22,7 +22,10 @@ const UsersForm = ({ userId }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
-  const [status] = useState([{ id: 'ACTIVE' }, { id: 'INACTIVE' }]);
+  const statusArr = [
+    { id: 'ACTIVE', name: t('users.status.activated') },
+    { id: 'INACTIVE', name: t('users.status.deactivated') }
+  ];
 
   const { data: users, isLoading: isLoadingUsers } = useUsers({
     args: { id: userId },
@@ -122,13 +125,27 @@ const UsersForm = ({ userId }) => {
         >
           {({ errors, touched }) => (
             <Form className="p-6 space-y-6 text-lg">
-              <div className="flex flex-col items-start justify-between md:space-x-8 md:items-center md:flex-row">
+              <div className="flex flex-col items-start justify-between border-b md:space-x-8 md:items-center md:flex-row">
                 <p className="mb-8 form-header">
                   {isNaN(userId) ? t('form.user.title.create') : t('form.user.title.update')}
                 </p>
               </div>
 
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                <div className="flex items-center mb-2 mr-8 space-x-12 md:col-span-2">
+                  <label className="flex items-center">{t('form.common.label.is-owner')}</label>
+                  <Field id="isOwner" className="mt-5" name="isOwner">
+                    {({ form: { values, setFieldValue } }) => (
+                      <CustomSwitch
+                        checked={values?.isOwner}
+                        onChange={(val) => {
+                          setFieldValue('isOwner', val);
+                        }}
+                      />
+                    )}
+                  </Field>
+                </div>
+
                 <div className="space-y-2">
                   <label htmlFor="firstName">{t('form.common.label.name')}</label>
                   <Field
@@ -181,36 +198,22 @@ const UsersForm = ({ userId }) => {
                   <AutocompleteField
                     name="status"
                     placeholder={t('form.user.placeholder.status')}
-                    options={status}
-                    optionLabels={['id']}
-                    keysToMatch={['id']}
+                    options={statusArr}
+                    optionLabels={['name']}
+                    keysToMatch={['name']}
                     className="text-field filled"
                     aria-describedby="flight"
-                    defaultValue={status.find((item) => item.id === users?.status)}
+                    defaultValue={statusArr.find((item) => item.id === users?.status)}
                   />
-                </div>
-
-                <div className="space-y-5 space-x-12 mr-8">
-                  <label className="flex items-center">{t('form.common.label.is-owner')}</label>
-                  <Field id="isOwner" className="mt-5" name="isOwner">
-                    {({ form: { values, setFieldValue } }) => (
-                      <CustomSwitch
-                        checked={values?.isOwner}
-                        onChange={(val) => {
-                          setFieldValue('isOwner', val);
-                        }}
-                      />
-                    )}
-                  </Field>
                 </div>
               </div>
 
               {isNaN(userId) ? (
                 <div className="flex flex-col space-y-8 lg:space-y-8 lg:space-x-12 lg:flex-row">
-                  <div className="space-y-2 mt-6">
+                  <div className="mt-6 space-y-2">
                     <p className="text-xl">{t('form.common.label.password')}</p>
 
-                    <div className="relative  rounded-md">
+                    <div className="relative rounded-md">
                       <Field
                         type={showPassword ? 'text' : 'password'}
                         name="password"
@@ -241,7 +244,7 @@ const UsersForm = ({ userId }) => {
                   <div className="space-y-2">
                     <p className="text-xl">{t('form.common.label.repeat-password')}</p>
 
-                    <div className="relative  rounded-md ">
+                    <div className="relative rounded-md ">
                       <Field
                         type={showRepeatPassword ? 'text' : 'password'}
                         name="repeatPassword"
@@ -272,10 +275,7 @@ const UsersForm = ({ userId }) => {
               ) : null}
 
               <div className="flex justify-end space-x-8">
-                <button
-                  type="submit"
-                  className="px-8 py-3 mt-6 font-medium leading-5 text-white transition duration-300 ease-in-out rounded-md bg-primary-500 hover:bg-primary-400"
-                >
+                <button type="submit" className="btn-contained">
                   {t('save')}
                 </button>
               </div>
