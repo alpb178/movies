@@ -14,6 +14,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
     disabled,
     noOptionsLabel,
     actionCreate,
+    actionText,
     keysToMatch,
     optionLabels,
     placeholder
@@ -133,21 +134,31 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                       ))
                     ) : !actionCreate ? (
                       <p className="p-4 text-gray-500">{noOptionsLabel}</p>
+                    ) : inputValue ? (
+                      <button
+                        type="button"
+                        className={clsx(
+                          'flex items-center w-full p-4 space-x-4 text-base text-gray-600',
+                          inputValue
+                            ? 'hover:text-primary-500 hover:bg-primary-100'
+                            : 'text-gray-400'
+                        )}
+                        onClick={() => actionCreate(inputValue)}
+                        disabled={!inputValue}
+                      >
+                        <PlusCircleIcon className="w-6 h-6 " />
+                        <p>
+                          {actionText}"{inputValue}"
+                        </p>
+                      </button>
                     ) : (
-                      <p className="p-4 text-gray-500">
-                        <button
-                          type="button"
-                          className="flex w-full space-x-4 items-center p-4 text-base text-gray-600 hover:text-primary-500 hover:bg-primary-100"
-                          onClick={() => actionCreate(inputValue)}
-                        >
-                          <PlusCircleIcon className="w-6 h-6 " />
-                          <p>{inputValue}</p>
-                        </button>
-                      </p>
+                      <p className="p-4 text-gray-500">{noOptionsLabel}</p>
                     )}
                   </Menu.Items>
                 </Transition>
               </Menu>
+
+              {console.log('AAAAAAA')}
 
               {error && touched ? (
                 <p className="mt-2 text-red-500">{error.name || error.toString()}</p>

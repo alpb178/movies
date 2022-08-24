@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/display-name */
 import { useAppContext } from '@/components/context/AppContext';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useCategoryRecipes, { saveCategoryRecipes } from '@/hooks/recipe-groups/useRecipesGroups';
@@ -14,6 +12,7 @@ import {
 import { formatNumber, formatPrice } from '@/lib/utils';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
@@ -23,12 +22,12 @@ import IngredientsForm from './IngredientsForm';
 
 const RecipeForm = ({ data }) => {
   const { t } = useTranslation('common');
+  const router = useRouter();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
   const queryClient = useQueryClient();
   const [ingredients, setIngredients] = useState([]);
-  const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errors] = useState({});
   const [touched] = useState({});
@@ -65,14 +64,14 @@ const RecipeForm = ({ data }) => {
     name: data?.name || '',
     description: data?.description || '',
     category: data?.category || '',
-    posId: data?.posId || '',
+    // posId: data?.posId || '',
     ingredients: data?.ingredients || []
   };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
-    category: Yup.object().nullable().required(t('form.common.required.category')),
-    posId: Yup.string().required(t('form.common.required.pos-id'))
+    category: Yup.object().nullable().required(t('form.common.required.category'))
+    // posId: Yup.string().required(t('form.common.required.pos-id'))
   });
 
   const onCreateCategories = async (name) => {
@@ -134,10 +133,8 @@ const RecipeForm = ({ data }) => {
 
   useMemo(async () => {
     if (ingredients.length > 0) {
-      setDisable(false);
       calculateTotalCost();
     } else {
-      setDisable(true);
       setSalesPrice(0);
       setSalesProfit(0);
       setTotalCost(0);
@@ -177,6 +174,7 @@ const RecipeForm = ({ data }) => {
       });
       await queryClient.refetchQueries([API_RECIPES_URL]);
       toast(message);
+      router.back();
     } catch (error) {
       toast(error.response.data.message || error.toString());
     } finally {
@@ -188,7 +186,7 @@ const RecipeForm = ({ data }) => {
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
       {({ errors, touched }) => (
         <Form>
-          <div className="flex flex-col p-8 space-y-6 lg:space-x-12 lg:flex-row lg:space-y-0">
+          <div className="grid grid-cols-1 gap-12 p-8 md:grid-cols-2 lg:grid-cols-3">
             <div className="w-full space-y-4">
               <div className="w-full space-y-2">
                 <label htmlFor="name">{t('form.common.label.name')}</label>
@@ -201,7 +199,7 @@ const RecipeForm = ({ data }) => {
               </div>
 
               <div className="w-full space-y-2">
-                <label htmlFor="category">{t('form.common.label.category')}</label>
+                <label htmlFor="category">{t('recipe-groups', { count: 1 })}</label>
                 <div className="relative w-full mx-auto">
                   <AutocompleteField
                     id="category"
@@ -210,19 +208,21 @@ const RecipeForm = ({ data }) => {
                     className="text-field filled"
                     defaultValue={data?.category}
                     actionCreate={onCreateCategories}
+                    actionText={t('recipe-groups.create')}
+                    placeholder={t('select')}
                   />
                 </div>
               </div>
 
-              <div className="w-full space-y-2">
+              {/* <div className="w-full space-y-2">
                 <label htmlFor="posId">{t('form.common.label.pos-id')}</label>
                 <div className="relative w-full mx-auto">
                   <Field id="posId" name="posId" type="text" className="text-field filled" />
                   {errors?.posId && touched?.posId ? (
                     <p className="mt-4 text-red-600">{errors?.posId}</p>
                   ) : null}
-                </div>
-              </div>
+                </div> 
+              </div>*/}
 
               <div className="space-y-2">
                 <label htmlFor="description">{t('form.common.label.description')}</label>
@@ -237,7 +237,7 @@ const RecipeForm = ({ data }) => {
               </div>
             </div>
 
-            <div className="w-full space-y-4">
+            <div className="w-full space-y-2">
               <label htmlFor="description">{t('form.common.label.ingredients')}</label>
               <IngredientsForm
                 errors={errors}
@@ -254,7 +254,6 @@ const RecipeForm = ({ data }) => {
                     id="price"
                     type="number"
                     value={salesPrice}
-                    disabled={disable}
                     onChange={(e) => onChangeSalesPrice(e.target.value)}
                     className="text-field filled"
                   />
@@ -270,7 +269,6 @@ const RecipeForm = ({ data }) => {
                     type="number"
                     name="cost"
                     value={cost}
-                    disabled={disable}
                     className="text-field filled"
                     onChange={(e) => onChangeCost(e.target.value)}
                   />
@@ -286,7 +284,6 @@ const RecipeForm = ({ data }) => {
                       id="salesProfit"
                       type="number"
                       name="salesProfit"
-                      disabled={disable}
                       value={salesProfit}
                       className="text-field filled"
                       onChange={(e) => onChangeSalesProfit(e.target.value)}
@@ -306,19 +303,14 @@ const RecipeForm = ({ data }) => {
                     value={miscCost}
                     className="text-field filled"
                     onChange={(e) => setMiscCost(e.target.value)}
-                    disabled={disable}
                   />
                   <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
                 </div>
               </div>
               <div className="space-y-2 ">
                 <label htmlFor="totalCost">{t('form.common.label.total-cost')}</label>
-                <div className="relative w-full mx-auto">
-                  <input
-                    value={formatPrice(totalCost)}
-                    disabled={true}
-                    className="text-field filled"
-                  />
+                <div className="relative w-full p-4 mx-auto bg-gray-100 border-2 border-transparent rounded-lg">
+                  {formatPrice(totalCost)}
                 </div>
               </div>
             </div>

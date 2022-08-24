@@ -343,6 +343,12 @@
     "1": "Receta",
     "other": "Recetas"
   },
+  "recipe-groups": {
+    "0": "Aún no existen grupos para las recetas",
+    "1": "Grupo del Menú",
+    "other": "Grupos del Menú",
+    "create": "Crear "
+  },
   "roles": {
     "0": "Sin roles",
     "1": "Rol",
