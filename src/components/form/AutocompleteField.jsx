@@ -158,8 +158,6 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                 </Transition>
               </Menu>
 
-              {console.log('AAAAAAA')}
-
               {error && touched ? (
                 <p className="mt-2 text-red-500">{error.name || error.toString()}</p>
               ) : null}

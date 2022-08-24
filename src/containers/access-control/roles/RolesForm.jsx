@@ -141,11 +141,9 @@ const RolesForm = ({ roleId }) => {
 
   const checkboxClick = (event) => {
     let index = permissionsRole.findIndex((e) => e.id == parseInt(event.target.name));
-    console.log(index);
     index >= 0
       ? permissionsRole.splice(index, 1)
       : permissionsRole.push({ id: parseInt(event.target.name) });
-    console.log(permissionsRole);
   };
 
   const onSubmit = async (values) => {

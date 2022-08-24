@@ -53,7 +53,6 @@ const BusinessForm = ({ businessId }) => {
   const onSubmit = async (values) => {
     let businessSendApi = {};
     let method = POST;
-    console.log(values);
 
     try {
       setLoading(true);

@@ -84,7 +84,6 @@ const PermissionsForm = ({ data, onLoading, onOpen, open }) => {
       isNewData={isNewData}
       validationSchema={validationSchema}
     >
-      {console.log(initialValues, data)}
       <div className="space-y-2">
         <label htmlFor="action">{t('form.permissions.label.action')}</label>
         <div className="relative w-full mx-auto">
