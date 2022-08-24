@@ -15,7 +15,7 @@ import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import AreasFilter from './AreasFilter';
@@ -29,20 +29,12 @@ const AreasList = () => {
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters] = useState(false);
-  const [openForm] = useState(false);
   const queryClient = useQueryClient();
-  const [selectedItem, setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
   const [loading, setLoading] = useState(isLoading);
   const [filterValues, setFilterValues] = useState({
     country: ''
   });
-
-  useEffect(() => {
-    if (!openForm) {
-      setSelectedItem(null);
-    }
-  }, [openForm]);
 
   const params = useMemo(() => {
     const queryParams = {};
