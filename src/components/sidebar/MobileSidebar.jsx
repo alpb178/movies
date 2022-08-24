@@ -1,16 +1,20 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { APP_NAME } from 'lib/constants';
+import getConfig from 'next/config';
+import Image from 'next/image';
 import PropTypes from 'prop-types';
 import { Fragment } from 'react';
 import { HiX as XIcon } from 'react-icons/hi';
 import NavigationMenu from './NavigationMenu';
+
+const { publicRuntimeConfig } = getConfig();
 
 const MobileSidebar = ({ open, onOpen }) => (
   <Transition.Root show={open} as={Fragment}>
     <Dialog
       as="div"
       static
-      className="fixed inset-0 z-40 flex md:hidden"
+      className="fixed inset-0 z-40 flex xl:hidden"
       open={open}
       onClose={onOpen}
     >
@@ -58,12 +62,11 @@ const MobileSidebar = ({ open, onOpen }) => (
             </div>
           </Transition.Child>
           <div className="flex items-center flex-shrink-0 h-16 px-4 space-x-4 bg-gray-900">
-            <img
-              className="h-10 w-max"
-              src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-              alt={APP_NAME}
-            />
-            <span className="text-xl font-medium text-white">{APP_NAME}</span>
+            <Image className="w-auto h-10" src="/logo.svg" width={40} height={40} alt={APP_NAME} />
+            <div className="flex flex-col items-end justify-between">
+              <h1 className="text-2xl font-medium text-white">{APP_NAME}</h1>
+              <span className="text-xs font-medium text-gray-400">{`v ${publicRuntimeConfig?.version}`}</span>
+            </div>
           </div>
           <div className="flex-1 h-0 mt-5 overflow-y-auto">
             <nav className="px-2 space-y-1">
