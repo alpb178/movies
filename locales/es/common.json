@@ -40,7 +40,7 @@
     "other": "Operaciones de la Caja"
   },
   "create": "Crear {{entity}}",
-  "comandas": {
+  "orders": {
     "0": "No existen órdenes",
     "1": "Órdenes",
     "other": "Órdenes"

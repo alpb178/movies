@@ -24,9 +24,7 @@ export default function AuthNavbar() {
                   alt={APP_NAME}
                 />
                 <div className="flex flex-col items-end justify-between">
-                  <h1 className="block text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-slate-700">
-                    {APP_NAME}
-                  </h1>
+                  <h1 className="block text-3xl font-semibold text-gray-700">{APP_NAME}</h1>
                   <span className="text-sm font-medium text-gray-500">{`v ${publicRuntimeConfig?.version}`}</span>
                 </div>
               </a>
