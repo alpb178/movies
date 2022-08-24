@@ -59,6 +59,12 @@ export const formatPrice = (price, decimals = 2) =>
     minimumFractionDigits: decimals
   }).format(Math.ceil(price));
 
+export const formatNumber = (num) =>
+  new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(num);
+
 export const valuesFromString = (obj, keysArr) =>
   keysArr.split('.').reduce(function (result, key) {
     return result?.[key];

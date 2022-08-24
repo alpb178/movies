@@ -11,7 +11,7 @@ import {
   POST,
   PUT
 } from '@/lib/constants';
-import { formatPrice } from '@/lib/utils';
+import { formatNumber, formatPrice } from '@/lib/utils';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -33,7 +33,7 @@ const RecipeForm = ({ data }) => {
   const [errors] = useState({});
   const [touched] = useState({});
   const { user } = useAppContext();
-  const [shipmentPrice, setShipmentPrice] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
   const [miscCost, setMiscCost] = useState(0);
   const [salesPrice, setSalesPrice] = useState(0);
   const [salesProfit, setSalesProfit] = useState(0);
@@ -97,28 +97,31 @@ const RecipeForm = ({ data }) => {
     }
   };
 
-  function getSumPrice(total, num) {
+  const getSumPrice = (total, num) => {
     return (total += num?.amount * num?.price);
-  }
+  };
 
   const onChangeSalesPrice = async (value) => {
     setSalesPrice(value);
-    setSalesProfit(parseFloat(value) - parseFloat(shipmentPrice));
-    setCost((parseFloat(value) / parseFloat(shipmentPrice)) * 100);
+    setSalesProfit(parseFloat(value) - parseFloat(totalCost));
+    setCost(formatNumber((parseFloat(totalCost) * 100) / parseFloat(value)));
   };
 
   const onChangeSalesProfit = async (value) => {
     setSalesProfit(value);
-    setSalesPrice(parseFloat(shipmentPrice) + parseFloat(value));
-    setCost(((parseFloat(shipmentPrice) + parseFloat(value)) / parseFloat(shipmentPrice)) * 100);
+    const newPrice = parseFloat(totalCost) + parseFloat(value);
+    setSalesPrice(formatNumber(newPrice));
+    setCost(formatNumber((parseFloat(totalCost) * 100) / newPrice));
   };
 
   const onChangeCost = async (value) => {
     setCost(value);
-    setSalesPrice((parseFloat(shipmentPrice) / parseFloat(value)) * 100);
+    const newSalePrice = (parseFloat(totalCost) / parseFloat(value)) * 100;
+    setSalesPrice(formatNumber(newSalePrice));
+    setSalesProfit(formatNumber(newSalePrice - totalCost));
   };
 
-  const calculateShipmentPrice = () => {
+  const calculateTotalCost = () => {
     let total = 0;
     if (ingredients.length > 1) {
       total = ingredients.reduce(getSumPrice, 0);
@@ -126,24 +129,27 @@ const RecipeForm = ({ data }) => {
       total = ingredients[0]?.amount * ingredients[0]?.price;
     }
     total += parseFloat(miscCost);
-    setShipmentPrice(total);
+    setTotalCost(total);
   };
 
   useMemo(async () => {
     if (ingredients.length > 0) {
-      setDisable(false), calculateShipmentPrice();
+      setDisable(false);
+      calculateTotalCost();
     } else {
       setDisable(true);
       setSalesPrice(0);
       setSalesProfit(0);
-      setShipmentPrice(0);
+      setTotalCost(0);
       setCost(0);
     }
-    setSalesPrice(parseFloat(shipmentPrice) + parseFloat(salesProfit));
+    setSalesPrice(parseFloat(totalCost) + parseFloat(salesProfit));
     setCost(
-      ((parseFloat(shipmentPrice) + parseFloat(salesProfit)) / parseFloat(shipmentPrice)) * 100
+      formatNumber(
+        (parseFloat(totalCost) * 100) / (parseFloat(totalCost) + parseFloat(salesProfit))
+      )
     );
-  }, [ingredients, miscCost, shipmentPrice]);
+  }, [ingredients, miscCost, totalCost]);
 
   const onSubmit = async (values) => {
     const { name, description, category, posId } = values;
@@ -182,7 +188,7 @@ const RecipeForm = ({ data }) => {
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
       {({ errors, touched }) => (
         <Form>
-          <div className="flex p-8 space-x-12 lg:space-y-0 lg:space-x-12 lg:flex-row">
+          <div className="flex flex-col p-8 space-y-6 lg:space-x-12 lg:flex-row lg:space-y-0">
             <div className="w-full space-y-4">
               <div className="w-full space-y-2">
                 <label htmlFor="name">{t('form.common.label.name')}</label>
@@ -240,81 +246,79 @@ const RecipeForm = ({ data }) => {
               />
             </div>
 
-            <div className="w-full space-y-4">
-              <div className="flex w-full space-x-4 items-center">
-                <div className="w-full space-y-2">
-                  <label htmlFor="sales-price">{t('form.common.label.sales-price')}</label>
-                  <div className="relative w-full mx-auto">
-                    <input
-                      id="price"
-                      type="number"
-                      value={salesPrice}
-                      disabled={disable}
-                      onChange={(e) => onChangeSalesPrice(e.target.value)}
-                      className="text-field filled"
-                    />
-                    <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="cost">{t('form.common.label.cost')}</label>
-                  <div className="relative  w-full mx-auto">
-                    <input
-                      id="cost"
-                      type="number"
-                      name="cost"
-                      value={cost}
-                      disabled={disable}
-                      className="text-field filled"
-                      onChange={(e) => onChangeCost(e.target.value)}
-                    />
-                    <p className="absolute inset-y-0 right-0 flex items-center pr-10">%</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="sales-profit">{t('form.common.label.sales-profit')}</label>
-                <div className="relative">
+            <div className="grid w-full grid-cols-2 gap-6 h-max">
+              <div className="w-full space-y-2">
+                <label htmlFor="sales-price">{t('form.common.label.sales-price')}</label>
+                <div className="relative w-full mx-auto">
                   <input
-                    id="salesProfit"
+                    id="price"
                     type="number"
-                    name="salesProfit"
+                    value={salesPrice}
                     disabled={disable}
-                    value={salesProfit}
+                    onChange={(e) => onChangeSalesPrice(e.target.value)}
                     className="text-field filled"
-                    onChange={(e) => onChangeSalesProfit(e.target.value)}
                   />
                   <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
                 </div>
               </div>
 
-              <div className="flex w-full space-x-4 items-center">
+              <div className="space-y-2">
+                <label htmlFor="cost">{t('form.common.label.cost')}</label>
+                <div className="relative w-full mx-auto">
+                  <input
+                    id="cost"
+                    type="number"
+                    name="cost"
+                    value={cost}
+                    disabled={disable}
+                    className="text-field filled"
+                    onChange={(e) => onChangeCost(e.target.value)}
+                  />
+                  <p className="absolute inset-y-0 right-0 flex items-center pr-10">%</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 col-span-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="misc-cost">{t('form.common.label.misc-cost')}</label>
-                  <div className="relative w-full mx-auto">
+                  <label htmlFor="sales-profit">{t('form.common.label.sales-profit')}</label>
+                  <div className="relative">
                     <input
-                      id="miscCost"
+                      id="salesProfit"
                       type="number"
-                      name="miscCost"
-                      value={miscCost}
-                      className="text-field filled"
-                      onChange={(e) => setMiscCost(e.target.value)}
+                      name="salesProfit"
                       disabled={disable}
+                      value={salesProfit}
+                      className="text-field filled"
+                      onChange={(e) => onChangeSalesProfit(e.target.value)}
                     />
                     <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
                   </div>
                 </div>
-                <div className="space-y-2 ">
-                  <label htmlFor="totalCost">{t('form.common.label.total-cost')}</label>
-                  <div className="relative w-full mx-auto">
-                    <input
-                      value={formatPrice(shipmentPrice)}
-                      disabled={true}
-                      className="text-field filled"
-                    />
-                  </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="misc-cost">{t('form.common.label.misc-cost')}</label>
+                <div className="relative w-full mx-auto">
+                  <input
+                    id="miscCost"
+                    type="number"
+                    name="miscCost"
+                    value={miscCost}
+                    className="text-field filled"
+                    onChange={(e) => setMiscCost(e.target.value)}
+                    disabled={disable}
+                  />
+                  <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                </div>
+              </div>
+              <div className="space-y-2 ">
+                <label htmlFor="totalCost">{t('form.common.label.total-cost')}</label>
+                <div className="relative w-full mx-auto">
+                  <input
+                    value={formatPrice(totalCost)}
+                    disabled={true}
+                    className="text-field filled"
+                  />
                 </div>
               </div>
             </div>
