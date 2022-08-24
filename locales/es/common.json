@@ -40,11 +40,6 @@
     "other": "Operaciones de la Caja"
   },
   "create": "Crear {{entity}}",
-  "orders": {
-    "0": "No existen órdenes",
-    "1": "Órdenes",
-    "other": "Órdenes"
-  },
   "dashboard": "Dashboard",
   "date-order": "Fecha Pedido",
   "date-flight": "Fecha de Vuelo",
@@ -285,6 +280,11 @@
   "next": "Siguiente",
   "no-match-found": "No se encontraron resultados",
   "observations": "Observaciones",
+  "orders": {
+    "0": "No existen órdenes",
+    "1": "Órdenes",
+    "other": "Órdenes"
+  },
   "origin": "Origen",
   "password": "Contraseña",
   "permissions": {

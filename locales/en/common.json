@@ -23,11 +23,6 @@
   "close": "Close",
   "create-at": "Create date",
   "create-account": "Create New Account",
-  "comandas": {
-    "0": "No Orders",
-    "1": "Orders",
-    "other": "Orders"
-  },
   "delete": "Delete",
   "delete-filter": "Clear Filter",
   "deleted": {
@@ -243,11 +238,6 @@
   "next": "Next",
   "no-match-found": "No matches found",
   "observations": "Observations",
-  "offers": {
-    "0": "No offers",
-    "one": "Offer",
-    "other": "Offers"
-  },
   "orders": {
     "0": "No orders",
     "one": "Order",

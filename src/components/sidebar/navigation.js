@@ -29,7 +29,7 @@ export default [
   { name: 'areas', link: AREA_PAGE, icon: ScaleIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   { name: 'products', link: PRODUCTS_PAGE, icon: CubeIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   { name: 'recipes', link: RECIPES_PAGE, icon: ClipboardListIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
-  { name: 'comandas', link: ORDERS_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
+  { name: 'orders', link: ORDERS_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   {
     name: 'cash_register_box',
     link: CASH_REGISTER_BOX_PAGE,
