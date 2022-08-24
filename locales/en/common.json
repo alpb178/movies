@@ -51,6 +51,7 @@
     },
     "common": {
       "empty-options": "No se encontraron resultados",
+      "message-users": "This users not have access",
       "label": {
         "amount": "Amount",
         "code": "Code",

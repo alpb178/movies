@@ -1,5 +1,6 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
+import jwtDecode from 'jwt-decode';
 import { useSession } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
@@ -10,13 +11,13 @@ const NavigationMenu = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
   const { data: session } = useSession();
+  const rolesSession = jwtDecode(session?.accessToken).roles;
 
   const canAccess = (item) =>
-    item?.roles.length === 0 ||
-    session?.user?.roles?.some((role) => item?.roles.includes(role.name));
+    item?.roles.length === 0 || rolesSession?.some((role) => item?.roles.includes(role));
 
   return navigation.map((item, idx) =>
-    !canAccess(item) ? (
+    canAccess(item) ? (
       item.children ? (
         <Disclosure as="div" key={item.name} className="space-y-1">
           {({ open }) => (

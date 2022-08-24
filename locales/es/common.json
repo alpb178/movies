@@ -84,6 +84,7 @@
     },
     "common": {
       "empty-options": "No se encontraron resultados",
+      "message-users": "Este usuario no tiene acceso",
       "label": {
         "amount": "Importe",
         "code": "Código",
