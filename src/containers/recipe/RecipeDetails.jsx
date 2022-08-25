@@ -3,6 +3,7 @@
 import Loading from '@/components/common/Loader';
 import useRecipes from '@/hooks/recipe/useRecipes';
 import { formatPrice, locales } from '@/lib/utils';
+import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
@@ -68,40 +69,38 @@ const RecipeDetails = ({ recipeId }) => {
               <div className="space-y-4 font-medium text-gray-900">
                 <div>
                   <p className="text-sm font-medium text-gray-500">{t('form.common.label.name')}</p>
-                  <div className="mt-1 text-sm text-gray-900">
-                    {/*format(new Date(recipe?.createdAt), 'PP', { locale })} -{' '}
-                    {new Date(recipe?.createdAt).toLocaleTimeString('en-US')*/}
-                  </div>
+                  <div className="mt-1 text-sm text-gray-900">{recipe?.name}</div>
                 </div>
 
                 <div className="sm:col-span-1">
                   <p className="text-sm font-medium text-gray-500">
                     {t('recipe-groups', { count: 1 })}
                   </p>
+                  <dd className="mt-1 text-sm text-gray-900">{recipe.category || '-'}</dd>
+                </div>
+
+                <div className="sm:col-span-1">
+                  <p className="text-sm font-medium text-gray-500">
+                    {t('form.common.label.createdAt')}
+                  </p>
                   <dd className="mt-1 text-sm text-gray-900">
-                    {/*format(new Date(recipe?.updatedAt), 'PP', { locale })} -{' '}
-                    {new Date(recipe?.updatedAt).toLocaleTimeString('en-US')*/}
+                    {format(new Date(recipe?.createdAt), 'PP', { locale })}
                   </dd>
                 </div>
 
+                <div className="sm:col-span-1">
+                  <p className="text-sm font-medium text-gray-500">
+                    {t('form.common.label.updatedAt')}
+                  </p>
+                  <dd className="mt-1 text-sm text-gray-900">
+                    {format(new Date(recipe?.updatedAt), 'PP', { locale })}
+                  </dd>
+                </div>
                 <div className="sm:col-span-1">
                   <p className="text-sm font-medium text-gray-500">
                     {t('form.common.label.description')}
                   </p>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {/*format(new Date(recipe?.updatedAt), 'PP', { locale })} -{' '}
-                    {new Date(recipe?.updatedAt).toLocaleTimeString('en-US')*/}
-                  </dd>
-                </div>
-
-                <div className="sm:col-span-1">
-                  <p className="text-sm font-medium text-gray-500">
-                    {t('recipe-groups', { count: 1 })}
-                  </p>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {/*format(new Date(recipe?.updatedAt), 'PP', { locale })} -{' '}
-                    {new Date(recipe?.updatedAt).toLocaleTimeString('en-US')*/}
-                  </dd>
+                  <dd className="mt-1 text-sm text-gray-900">{recipe?.description}</dd>
                 </div>
               </div>
 
@@ -111,23 +110,23 @@ const RecipeDetails = ({ recipeId }) => {
                 <div className="grid grid-cols-2 gap-2 mt-2 text-base gap-x-8">
                   <p>{t('form.common.label.sales-price')}</p>
                   <span className="font-medium text-right text-gray-700">
-                    {formatPrice(profit) || 0}
+                    {formatPrice(recipe?.price || 0)}
                   </span>
                   <p>{t('form.common.label.cost')}</p>
                   <span className="font-medium text-right text-gray-700">
-                    {formatPrice(profit) || 0}
+                    {formatPrice(recipe?.cost || 0)}
                   </span>
                   <p>{t('form.common.label.sales-profit')}</p>
                   <span className="font-medium text-right text-gray-700">
-                    {formatPrice(service) || 0}
+                    {formatPrice(recipe?.salesProfit || 0)}
                   </span>
                   <p>{t('form.common.label.misc-cost')}</p>
                   <span className="font-medium text-right text-gray-700">
-                    {formatPrice(discount) || 0}
+                    {formatPrice(recipe.miscCost || 0)}
                   </span>
                   <p className="font-semibold">{t('form.common.label.total-cost')}</p>
                   <span className="font-semibold text-right text-emerald-600">
-                    {formatPrice(profit + service - discount) || 0}
+                    {formatPrice(recipe.miscCost + recipe.price || 0)}
                   </span>
                 </div>
               </div>

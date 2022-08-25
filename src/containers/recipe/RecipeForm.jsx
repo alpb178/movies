@@ -113,15 +113,15 @@ const RecipeForm = ({ recipesId }) => {
   const onChangeSalesProfit = async (value) => {
     setSalesProfit(value);
     const newPrice = parseFloat(totalCost) + parseFloat(value);
-    setSalesPrice(formatNumber(newPrice));
+    setSalesPrice(newPrice);
     setCost(formatNumber((parseFloat(totalCost) * 100) / newPrice));
   };
 
   const onChangeCost = async (value) => {
     setCost(value);
-    const newSalePrice = (parseFloat(totalCost) / parseFloat(value)) * 100;
-    setSalesPrice(formatNumber(newSalePrice));
-    setSalesProfit(formatNumber(newSalePrice - totalCost));
+    const newSalePrice = (parseFloat(totalCost) * parseFloat(value)) / 100;
+    setSalesPrice(newSalePrice);
+    setSalesProfit(newSalePrice - totalCost);
   };
 
   const calculateTotalCost = () => {
@@ -229,16 +229,6 @@ const RecipeForm = ({ recipesId }) => {
                     </div>
                   </div>
 
-                  {/* <div className="w-full space-y-2">
-                <label htmlFor="posId">{t('form.common.label.pos-id')}</label>
-                <div className="relative w-full mx-auto">
-                  <Field id="posId" name="posId" type="text" className="text-field filled" />
-                  {errors?.posId && touched?.posId ? (
-                    <p className="mt-4 text-red-600">{errors?.posId}</p>
-                  ) : null}
-                </div> 
-              </div>*/}
-
                   <div className="space-y-2">
                     <label htmlFor="description">{t('form.common.label.description')}</label>
                     <Field
@@ -330,7 +320,7 @@ const RecipeForm = ({ recipesId }) => {
                   </div>
                 </div>
               </div>
-
+              {console.log(salesPrice)}
               <div className="flex justify-end p-4 space-x-8">
                 <button type="submit" className="btn-contained">
                   {t('save')}
