@@ -10,11 +10,11 @@ const Admin = dynamic(() => import('layouts/Admin'), {
 
 const RecipeFormPage = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const recipesId = router.query.slug;
 
   return (
     <div className="bg-white">
-      <RecipeForm id={id} />
+      <RecipeForm recipesId={recipesId} />
     </div>
   );
 };

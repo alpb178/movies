@@ -167,6 +167,14 @@
         "update": "Update Product"
       }
     },
+    "recipes": {
+      "title": {
+        "create": "New Recipe",
+        "update": "Update Recipe",
+        "details": "Details Recipe",
+        "detailsEspecified": "Details Especified Recipe"
+      }
+    },
     "sales": {
       "title": {
         "create": "New Order",

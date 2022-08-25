@@ -78,6 +78,10 @@ export const BUSINESS_DETAIL_PAGE = (id) => `/business/${id}`;
 export const BUSINESS_FORM_PAGE = (id) => (id ? `/business/form/${id}` : `/business/form/create`);
 export const BUSINESS_EDIT = (business) => `/business/edit/${business}`;
 
+// Recipes
+export const RECIPES_FORM_PAGE = (id) => (id ? `/recipes/form/${id}` : `/recipes/form/create`);
+export const RECIPES_DETAIL_PAGE = (id) => `/recipes/${id}`;
+
 // Sale
 export const ORDERS_DETAIL_PAGE = (id) => `/orders/${id}`;
 

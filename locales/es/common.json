@@ -202,6 +202,14 @@
         "name": "Nombre"
       }
     },
+    "recipes": {
+      "title": {
+        "create": "Nueva Receta",
+        "update": "Actualizar Receta",
+        "details": "Detalles de la Receta",
+        "detailsEspecified": "Detalles Específicos de la Receta"
+      }
+    },
     "sales": {
       "title": {
         "create": "Nueva Orden",

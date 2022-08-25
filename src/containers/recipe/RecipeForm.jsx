@@ -1,7 +1,8 @@
+import Loading from '@/components/common/Loader';
 import { useAppContext } from '@/components/context/AppContext';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useCategoryRecipes, { saveCategoryRecipes } from '@/hooks/recipe-groups/useRecipesGroups';
-import { saveRecipe } from '@/hooks/recipe/useRecipes';
+import useRecipes, { saveRecipe } from '@/hooks/recipe/useRecipes';
 import {
   API_CATEGORY_RECIPES_URL,
   API_RECIPES_URL,
@@ -20,7 +21,7 @@ import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import IngredientsForm from './IngredientsForm';
 
-const RecipeForm = ({ data }) => {
+const RecipeForm = ({ recipesId }) => {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [page, setPage] = useState(0);
@@ -29,8 +30,6 @@ const RecipeForm = ({ data }) => {
   const queryClient = useQueryClient();
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [errors] = useState({});
-  const [touched] = useState({});
   const { user } = useAppContext();
   const [totalCost, setTotalCost] = useState(0);
   const [miscCost, setMiscCost] = useState(0);
@@ -60,12 +59,17 @@ const RecipeForm = ({ data }) => {
     }
   });
 
+  const { data: recipes, isLoading: isLoading } = useRecipes({
+    args: { id: recipesId },
+    options: { keepPreviousData: true, enabled: !isNaN(recipesId) }
+  });
+
   const initialValues = {
-    name: data?.name || '',
-    description: data?.description || '',
-    category: data?.category || '',
+    name: recipes?.name || '',
+    description: recipes?.description || '',
+    category: recipes?.category || '',
     // posId: data?.posId || '',
-    ingredients: data?.ingredients || []
+    ingredients: recipes?.ingredients || []
   };
 
   const validationSchema = Yup.object().shape({
@@ -158,9 +162,9 @@ const RecipeForm = ({ data }) => {
     sendBody.ingredients = ingredients;
     let method = POST;
     let message = t('inserted.male', { entity: t('recipes', { count: 1 }) });
-    if (data) {
+    if (!isNaN(recipesId)) {
       method = PUT;
-      sendBody.id = data.id;
+      sendBody.id = recipesId;
       message = t('updated.male', { entity: t('recipes', { count: 1 }) });
     }
 
@@ -183,38 +187,49 @@ const RecipeForm = ({ data }) => {
   };
 
   return (
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-      {({ errors, touched }) => (
-        <Form>
-          <div className="grid grid-cols-1 gap-12 p-8 md:grid-cols-2 lg:grid-cols-3">
-            <div className="w-full space-y-4">
-              <div className="w-full space-y-2">
-                <label htmlFor="name">{t('form.common.label.name')}</label>
-                <div className="relative w-full mx-auto">
-                  <Field id="name" name="name" type="text" className="text-field filled" />
-                  {errors?.name && touched?.name ? (
-                    <p className="mt-4 text-red-600">{errors?.name}</p>
-                  ) : null}
-                </div>
-              </div>
+    <>
+      {loading || isLoading ? (
+        <Loading />
+      ) : (
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ errors, touched }) => (
+            <Form className="p-6 space-y-6 text-lg">
+              <p className="mb-1 form-header">
+                {isNaN(recipesId) ? t('form.recipes.title.create') : t('form.recipes.title.update')}
+              </p>
+              <div className="grid grid-cols-1 gap-12 p-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="w-full space-y-4">
+                  <div className="w-full space-y-2">
+                    <label htmlFor="name">{t('form.common.label.name')}</label>
+                    <div className="relative w-full mx-auto">
+                      <Field id="name" name="name" type="text" className="text-field filled" />
+                      {errors?.name && touched?.name ? (
+                        <p className="mt-4 text-red-600">{errors?.name}</p>
+                      ) : null}
+                    </div>
+                  </div>
 
-              <div className="w-full space-y-2">
-                <label htmlFor="category">{t('recipe-groups', { count: 1 })}</label>
-                <div className="relative w-full mx-auto">
-                  <AutocompleteField
-                    id="category"
-                    name="category"
-                    options={categories?.rows ? categories.rows : []}
-                    className="text-field filled"
-                    defaultValue={data?.category}
-                    actionCreate={onCreateCategories}
-                    actionText={t('recipe-groups.create')}
-                    placeholder={t('select')}
-                  />
-                </div>
-              </div>
+                  <div className="w-full space-y-2">
+                    <label htmlFor="category">{t('recipe-groups', { count: 1 })}</label>
+                    <div className="relative w-full mx-auto">
+                      <AutocompleteField
+                        id="category"
+                        name="category"
+                        options={categories?.rows ? categories.rows : []}
+                        className="text-field filled"
+                        defaultValue={recipes?.category}
+                        actionCreate={onCreateCategories}
+                        actionText={t('recipe-groups.create')}
+                        placeholder={t('select')}
+                      />
+                    </div>
+                  </div>
 
-              {/* <div className="w-full space-y-2">
+                  {/* <div className="w-full space-y-2">
                 <label htmlFor="posId">{t('form.common.label.pos-id')}</label>
                 <div className="relative w-full mx-auto">
                   <Field id="posId" name="posId" type="text" className="text-field filled" />
@@ -224,106 +239,108 @@ const RecipeForm = ({ data }) => {
                 </div> 
               </div>*/}
 
-              <div className="space-y-2">
-                <label htmlFor="description">{t('form.common.label.description')}</label>
-                <Field
-                  as="textarea"
-                  className="text-field filled"
-                  rows={3}
-                  id="description"
-                  name="description"
-                  placeholder={t('form.common.placeholder.description')}
-                />
-              </div>
-            </div>
-
-            <div className="w-full space-y-2">
-              <label htmlFor="description">{t('form.common.label.ingredients')}</label>
-              <IngredientsForm
-                errors={errors}
-                onShipmentItemsChange={setIngredients}
-                touched={touched}
-              />
-            </div>
-
-            <div className="grid w-full grid-cols-2 gap-6 h-max">
-              <div className="w-full space-y-2">
-                <label htmlFor="sales-price">{t('form.common.label.sales-price')}</label>
-                <div className="relative w-full mx-auto">
-                  <input
-                    id="price"
-                    type="number"
-                    value={salesPrice}
-                    onChange={(e) => onChangeSalesPrice(e.target.value)}
-                    className="text-field filled"
-                  />
-                  <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="cost">{t('form.common.label.cost')}</label>
-                <div className="relative w-full mx-auto">
-                  <input
-                    id="cost"
-                    type="number"
-                    name="cost"
-                    value={cost}
-                    className="text-field filled"
-                    onChange={(e) => onChangeCost(e.target.value)}
-                  />
-                  <p className="absolute inset-y-0 right-0 flex items-center pr-10">%</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 col-span-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="sales-profit">{t('form.common.label.sales-profit')}</label>
-                  <div className="relative">
-                    <input
-                      id="salesProfit"
-                      type="number"
-                      name="salesProfit"
-                      value={salesProfit}
+                  <div className="space-y-2">
+                    <label htmlFor="description">{t('form.common.label.description')}</label>
+                    <Field
+                      as="textarea"
                       className="text-field filled"
-                      onChange={(e) => onChangeSalesProfit(e.target.value)}
+                      rows={3}
+                      id="description"
+                      name="description"
+                      placeholder={t('form.common.placeholder.description')}
                     />
-                    <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                  </div>
+                </div>
+
+                <div className="w-full space-y-2">
+                  <label htmlFor="description">{t('form.common.label.ingredients')}</label>
+                  <IngredientsForm
+                    errors={errors}
+                    onShipmentItemsChange={setIngredients}
+                    touched={touched}
+                  />
+                </div>
+
+                <div className="grid w-full grid-cols-2 gap-6 h-max">
+                  <div className="w-full space-y-2">
+                    <label htmlFor="sales-price">{t('form.common.label.sales-price')}</label>
+                    <div className="relative w-full mx-auto">
+                      <input
+                        id="price"
+                        type="number"
+                        value={salesPrice}
+                        onChange={(e) => onChangeSalesPrice(e.target.value)}
+                        className="text-field filled"
+                      />
+                      <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="cost">{t('form.common.label.cost')}</label>
+                    <div className="relative w-full mx-auto">
+                      <input
+                        id="cost"
+                        type="number"
+                        name="cost"
+                        value={cost}
+                        className="text-field filled"
+                        onChange={(e) => onChangeCost(e.target.value)}
+                      />
+                      <p className="absolute inset-y-0 right-0 flex items-center pr-10">%</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 col-span-2 gap-6">
+                    <div className="space-y-2">
+                      <label htmlFor="sales-profit">{t('form.common.label.sales-profit')}</label>
+                      <div className="relative">
+                        <input
+                          id="salesProfit"
+                          type="number"
+                          name="salesProfit"
+                          value={salesProfit}
+                          className="text-field filled"
+                          onChange={(e) => onChangeSalesProfit(e.target.value)}
+                        />
+                        <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="misc-cost">{t('form.common.label.misc-cost')}</label>
+                    <div className="relative w-full mx-auto">
+                      <input
+                        id="miscCost"
+                        type="number"
+                        name="miscCost"
+                        value={miscCost}
+                        className="text-field filled"
+                        onChange={(e) => setMiscCost(e.target.value)}
+                      />
+                      <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2 ">
+                    <label htmlFor="totalCost">{t('form.common.label.total-cost')}</label>
+                    <div className="relative w-full p-4 mx-auto bg-gray-100 border-2 border-transparent rounded-lg">
+                      {formatPrice(totalCost)}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="misc-cost">{t('form.common.label.misc-cost')}</label>
-                <div className="relative w-full mx-auto">
-                  <input
-                    id="miscCost"
-                    type="number"
-                    name="miscCost"
-                    value={miscCost}
-                    className="text-field filled"
-                    onChange={(e) => setMiscCost(e.target.value)}
-                  />
-                  <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
-                </div>
+              <div className="flex justify-end p-4 space-x-8">
+                <button type="submit" className="btn-contained">
+                  {t('save')}
+                </button>
               </div>
-              <div className="space-y-2 ">
-                <label htmlFor="totalCost">{t('form.common.label.total-cost')}</label>
-                <div className="relative w-full p-4 mx-auto bg-gray-100 border-2 border-transparent rounded-lg">
-                  {formatPrice(totalCost)}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-end p-4 space-x-8">
-            <button type="submit" className="btn-contained">
-              {t('save')}
-            </button>
-          </div>
-        </Form>
+            </Form>
+          )}
+        </Formik>
       )}
-    </Formik>
+    </>
   );
 };
 

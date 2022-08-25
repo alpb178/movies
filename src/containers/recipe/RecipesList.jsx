@@ -5,13 +5,19 @@ import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDial
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useRecipes, { saveRecipe } from '@/hooks/recipe/useRecipes';
-import { API_RECIPE_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
+import {
+  API_RECIPE_URL,
+  DEFAULT_PAGE_SIZE,
+  DELETE,
+  RECIPES_DETAIL_PAGE,
+  RECIPES_FORM_PAGE
+} from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import RecipesFilter from './RecipesFilter';
@@ -19,14 +25,12 @@ import RecipesFilter from './RecipesFilter';
 const RecipesList = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
-
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
-  const [openForm, setOpenForm] = useState(false);
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
@@ -34,12 +38,6 @@ const RecipesList = () => {
   const [filterValues, setFilterValues] = useState({
     country: ''
   });
-
-  useEffect(() => {
-    if (!openForm) {
-      setSelectedItem(null);
-    }
-  }, [openForm]);
 
   const params = useMemo(() => {
     const queryParams = {};
@@ -86,10 +84,15 @@ const RecipesList = () => {
     }
   };
 
-  const onUpdate = (event, item) => {
+  const handleAdd = () => {
+    router.push(RECIPES_FORM_PAGE());
+  };
+
+  const onUpdate = (event, row) => {
     event.stopPropagation();
-    setSelectedItem(item);
-    setOpenForm(true);
+    const value = row.id;
+    const path = RECIPES_FORM_PAGE(value);
+    router.push(path);
   };
 
   const formatPriceValue = (value) => <div>{formatPrice(value)}</div>;
@@ -161,11 +164,7 @@ const RecipesList = () => {
   };
 
   const renderCreateButton = () => (
-    <button
-      type="button"
-      className="btn-contained"
-      onClick={() => router.push('recipes/create/new')}
-    >
+    <button type="button" className="btn-contained" onClick={() => handleAdd()}>
       {t('create', { entity: t('recipes', { count: 1 }).toLowerCase() })}
     </button>
   );
@@ -179,6 +178,11 @@ const RecipesList = () => {
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
+    onRowClick: (row) => {
+      const value = row?.original?.id;
+      const path = RECIPES_DETAIL_PAGE(value);
+      router.push(path);
+    },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
         <RecipesFilter open={openFilters} onSubmit={handleFilters} />
