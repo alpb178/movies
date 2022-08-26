@@ -14,8 +14,7 @@ import {
   PRODUCTS_PAGE,
   RECIPES_PAGE,
   ROLE_ADMIN,
-  ROLE_OWNER,
-  USERS_PAGE
+  ROLE_OWNER, SHIFT_PAGE, USERS_PAGE
 } from 'lib/constants';
 
 export default [
@@ -30,6 +29,7 @@ export default [
   { name: 'products', link: PRODUCTS_PAGE, icon: CubeIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   { name: 'recipes', link: RECIPES_PAGE, icon: ClipboardListIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   { name: 'orders', link: ORDERS_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
+  { name: 'shift', link: SHIFT_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   {
     name: 'cash_register_box',
     link: CASH_REGISTER_BOX_PAGE,

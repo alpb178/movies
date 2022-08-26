@@ -21,6 +21,7 @@ export const API_PRODUCTS_URL = '/products';
 export const API_RECIPES_URL = '/recipes';
 export const API_CATEGORY_RECIPES_URL = '/recipe-groups';
 export const API_TABLES_URL = '/tables';
+export const API_SHIFT_URL = '/shifts';
 
 // App Routes
 export const LOGIN_PAGE = '/auth/login';
@@ -32,6 +33,7 @@ export const RECIPES_PAGE = '/recipes';
 export const PERMISSIONS_PAGE = '/permissions';
 export const ROLES_PAGE = '/roles';
 export const SETTINGS_PAGE = '/settings';
+export const SHIFT_PAGE = '/shift';
 
 // App Routes Vebrics
 export const AREA_PAGE = '/areas';
