@@ -10,12 +10,13 @@ import {
   POST,
   PUT
 } from '@/lib/constants';
-import { formatNumber, formatPrice } from '@/lib/utils';
+import { formatPrice } from '@/lib/utils';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
+import NumberFormat from 'react-number-format';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
@@ -107,19 +108,19 @@ const RecipeForm = ({ recipesId }) => {
   const onChangeSalesPrice = async (value) => {
     setSalesPrice(value);
     setSalesProfit(parseFloat(value) - parseFloat(totalCost));
-    setCost(formatNumber((parseFloat(totalCost) * 100) / parseFloat(value)));
+    setCost((parseFloat(totalCost) * 100) / parseFloat(value));
   };
 
   const onChangeSalesProfit = async (value) => {
     setSalesProfit(value);
     const newPrice = parseFloat(totalCost) + parseFloat(value);
     setSalesPrice(newPrice);
-    setCost(formatNumber((parseFloat(totalCost) * 100) / newPrice));
+    setCost((parseFloat(totalCost) * 100) / newPrice);
   };
 
   const onChangeCost = async (value) => {
     setCost(value);
-    const newSalePrice = (parseFloat(totalCost) * parseFloat(value)) / 100;
+    const newSalePrice = (parseFloat(totalCost) * 100) / parseFloat(value);
     setSalesPrice(newSalePrice);
     setSalesProfit(newSalePrice - totalCost);
   };
@@ -145,11 +146,7 @@ const RecipeForm = ({ recipesId }) => {
       setCost(0);
     }
     setSalesPrice(parseFloat(totalCost) + parseFloat(salesProfit));
-    setCost(
-      formatNumber(
-        (parseFloat(totalCost) * 100) / (parseFloat(totalCost) + parseFloat(salesProfit))
-      )
-    );
+    setCost((parseFloat(totalCost) * 100) / (parseFloat(totalCost) + parseFloat(salesProfit)));
   }, [ingredients, miscCost, totalCost]);
 
   const onSubmit = async (values) => {
@@ -255,9 +252,10 @@ const RecipeForm = ({ recipesId }) => {
                   <div className="w-full space-y-2">
                     <label htmlFor="sales-price">{t('form.common.label.sales-price')}</label>
                     <div className="relative w-full mx-auto">
-                      <input
+                      <NumberFormat
+                        decimalSeparator={','}
+                        decimalScale={2}
                         id="price"
-                        type="number"
                         value={salesPrice}
                         onChange={(e) => onChangeSalesPrice(e.target.value)}
                         className="text-field filled"
@@ -269,9 +267,10 @@ const RecipeForm = ({ recipesId }) => {
                   <div className="space-y-2">
                     <label htmlFor="cost">{t('form.common.label.cost')}</label>
                     <div className="relative w-full mx-auto">
-                      <input
+                      <NumberFormat
+                        decimalSeparator={','}
+                        decimalScale={2}
                         id="cost"
-                        type="number"
                         name="cost"
                         value={cost}
                         className="text-field filled"
@@ -285,9 +284,10 @@ const RecipeForm = ({ recipesId }) => {
                     <div className="space-y-2">
                       <label htmlFor="sales-profit">{t('form.common.label.sales-profit')}</label>
                       <div className="relative">
-                        <input
+                        <NumberFormat
+                          decimalSeparator={','}
+                          decimalScale={2}
                           id="salesProfit"
-                          type="number"
                           name="salesProfit"
                           value={salesProfit}
                           className="text-field filled"
@@ -301,9 +301,10 @@ const RecipeForm = ({ recipesId }) => {
                   <div className="space-y-2">
                     <label htmlFor="misc-cost">{t('form.common.label.misc-cost')}</label>
                     <div className="relative w-full mx-auto">
-                      <input
+                      <NumberFormat
+                        decimalSeparator={','}
+                        decimalScale={2}
                         id="miscCost"
-                        type="number"
                         name="miscCost"
                         value={miscCost}
                         className="text-field filled"
@@ -320,7 +321,7 @@ const RecipeForm = ({ recipesId }) => {
                   </div>
                 </div>
               </div>
-              {console.log(salesPrice)}
+
               <div className="flex justify-end p-4 space-x-8">
                 <button type="submit" className="btn-contained">
                   {t('save')}
