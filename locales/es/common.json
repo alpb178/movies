@@ -85,6 +85,7 @@
     "common": {
       "empty-options": "No se encontraron resultados",
       "message-users": "Este usuario no tiene acceso",
+      "message-credentials": "Credenciales Inválidas",
       "label": {
         "amount": "Importe",
         "code": "Código",

@@ -72,7 +72,7 @@ const LoginForm = () => {
         toast.error(_messageErrors, { variant: 'error' });
       }
     } catch (error) {
-      toast.error(error.toString(), { variant: 'error' });
+      toast.error(t('form.common.message-credentials'), { variant: 'error' });
     } finally {
       setLoading(false);
     }

@@ -52,6 +52,7 @@
     "common": {
       "empty-options": "No se encontraron resultados",
       "message-users": "This users not have access",
+      "message-credentials": "Credentials Invalid",
       "label": {
         "amount": "Amount",
         "code": "Code",
