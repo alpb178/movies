@@ -53,6 +53,8 @@
       "empty-options": "No se encontraron resultados",
       "message-users": "This users not have access",
       "message-credentials": "Credentials Invalid",
+      "size-orders": "Size orders",
+      "worker-shift": "Worker shift",
       "label": {
         "amount": "Amount",
         "code": "Code",
@@ -318,6 +320,11 @@
   "search-entity": "Search {{entity}}",
   "select": "Select",
   "settings": "Settings",
+  "shifts": {
+    "0": "No Shifts",
+    "1": "Shift",
+    "other": "Shifts"
+  },
   "shipments": {
     "0": "No Shipments",
     "1": "Shipment",

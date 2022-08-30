@@ -86,6 +86,8 @@
       "empty-options": "No se encontraron resultados",
       "message-users": "Este usuario no tiene acceso",
       "message-credentials": "Credenciales Inválidas",
+      "size-orders": "Cantidad de Comandas",
+      "worker-shift": "Trabajador del turno",
       "label": {
         "amount": "Importe",
         "code": "Código",
@@ -381,6 +383,11 @@
   "select": "Seleccione",
   "settings": "Ajustes",
   "send": "Enviar",
+  "shifts": {
+    "0": "No existen turnos",
+    "1": "Turno",
+    "other": "Turnos"
+  },
   "status": "Estado",
   "statistics": {
     "users-count": "Ganancias Diarias",

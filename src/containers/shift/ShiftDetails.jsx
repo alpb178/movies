@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
-import useOrders from '@/hooks/orders/useOrders';
+import useShifts from '@/hooks/shift/useShift';
 import { formatPrice, locales } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
@@ -9,17 +9,17 @@ import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 import Status from './Status';
 
-const OrderDetails = ({ orderId }) => {
+const OrderDetails = ({ shiftId }) => {
   const { t, lang } = useTranslation('common');
   const locale = {
     ...locales[lang]
   };
 
-  const { data: order, isLoading } = useOrders({
-    args: { id: orderId },
+  const { data: order, isLoading } = useShifts({
+    args: { id: shiftId },
     options: {
       keepPreviousData: true,
-      enabled: !!orderId
+      enabled: !!shiftId
     }
   });
 
@@ -179,7 +179,7 @@ const OrderDetails = ({ orderId }) => {
 };
 
 OrderDetails.propTypes = {
-  orderId: PropTypes.number
+  shiftId: PropTypes.number
 };
 
 export default OrderDetails;

@@ -5,9 +5,8 @@ import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import { deleteOrders } from '@/hooks/orders/useOrders';
-import useShifts from '@/hooks/shift/useShift';
-import { API_ORDERS_URL, DEFAULT_PAGE_SIZE, ORDERS_DETAIL_PAGE } from '@/lib/constants';
+import useShifts, { deleteShifts } from '@/hooks/shift/useShift';
+import { API_SHIFT_URL, DEFAULT_PAGE_SIZE, SHIFT_DETAIL_PAGE } from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
@@ -18,7 +17,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import OrdersFilter from './ShiftFilter';
+import ShiftFilter from './ShiftFilter';
 import Status from './Status';
 
 const ShiftList = () => {
@@ -56,7 +55,7 @@ const ShiftList = () => {
     return queryParams;
   }, [filterValues, page, pageSize, sort]);
 
-  const { data: orders, isLoading } = useShifts({
+  const { data: shifts, isLoading } = useShifts({
     args: params,
     options: {
       keepPreviousData: true
@@ -71,12 +70,12 @@ const ShiftList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await deleteOrders({
+      await deleteShifts({
         args: { id: deleteConfirmation.id }
       });
 
-      await queryClient.refetchQueries([API_ORDERS_URL]);
-      toast(t('deleted.male', { entity: t('orders', { count: 1 }) }));
+      await queryClient.refetchQueries([API_SHIFT_URL]);
+      toast(t('deleted.male', { entity: t('shifts', { count: 1 }) }));
       setLoading(false);
     } catch (error) {
       toast.error(error);
@@ -97,6 +96,12 @@ const ShiftList = () => {
   };
 
   const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
+  const formatUser = (value) => (
+    <div>
+      {value?.firstName} {value?.lastName}
+    </div>
+  );
+  const formatOrders = (value) => <div>{value?.length}</div>;
 
   const columns = React.useMemo(() => [
     {
@@ -113,6 +118,16 @@ const ShiftList = () => {
       Header: t('form.common.label.updatedAt'),
       accessor: 'updatedAt',
       Cell: ({ value }) => formatDate(value)
+    },
+    {
+      Header: t('form.common.worker-shift'),
+      accessor: 'user',
+      Cell: ({ value }) => formatUser(value)
+    },
+    {
+      Header: t('form.common.size-orders'),
+      accessor: 'orders',
+      Cell: ({ value }) => formatOrders(value)
     },
     {
       id: 'optionComanda',
@@ -160,22 +175,23 @@ const ShiftList = () => {
   };
 
   const options = {
-    name: t('orders', { count: 2 }),
+    name: t('shifts', { count: 2 }),
     columns,
-    data: orders?.rows,
-    count: orders?.count,
+    data: shifts?.rows,
+    count: shifts?.count,
     setPage: onPageChangeCallback,
     setSortBy: onSortChangeCallback,
     pageSize,
     onPageSizeChange: setPageSize,
     onRowClick: (row) => {
-      const value = row?.original?.id;
-      const path = ORDERS_DETAIL_PAGE(value);
+      console.log(row);
+      const value = row?.id;
+      const path = SHIFT_DETAIL_PAGE(value);
       router.push(path);
     },
     onFilter: (
       <div className={`w-full px-6 ${openFilters && 'flex flex-col'}`}>
-        <OrdersFilter open={openFilters} onSubmit={handleFilters} />
+        <ShiftFilter open={openFilters} onSubmit={handleFilters} />
 
         <div className="flex">
           <FilterCriteria />
@@ -199,10 +215,10 @@ const ShiftList = () => {
     <>
       {(loading || isLoading) && <Loading />}
 
-      {orders && orders.rows.length > 0 ? (
+      {shifts && shifts.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('orders', { count: 0 })}>
+        <EmptyState text={t('shifts', { count: 0 })}>
           <div className="flex items-center justify-center h-64 w-max">
             <Lottie options={lottieOptions('offline')} />
           </div>
@@ -213,8 +229,8 @@ const ShiftList = () => {
         open={deleteConfirmation.open}
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
-        title={t('delete-title', { entity: t('orders', { count: 1 }) })}
-        content={t('delete-message.female', { entity: t('orders', { count: 1 }) })}
+        title={t('delete-title', { entity: t('shifts', { count: 1 }) })}
+        content={t('delete-message.female', { entity: t('shifts', { count: 1 }) })}
       />
     </>
   );
@@ -224,7 +240,6 @@ ShiftList.propTypes = {
   row: PropTypes.object,
   data: PropTypes.object,
   loading: PropTypes.bool,
-  onGetOrders: PropTypes.func,
   onSelectPayment: PropTypes.func,
   onDeletePayment: PropTypes.func
 };

@@ -87,6 +87,9 @@ export const RECIPES_DETAIL_PAGE = (id) => `/recipes/${id}`;
 // Sale
 export const ORDERS_DETAIL_PAGE = (id) => `/orders/${id}`;
 
+// Shift
+export const SHIFT_DETAIL_PAGE = (id) => `/shift/${id}`;
+
 // Permisions actions (CRUD)
 export const actions = [
   { name: 'create' },
