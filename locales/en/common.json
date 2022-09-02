@@ -186,6 +186,14 @@
         "detailsEspecified": "Details Especified Order"
       }
     },
+    "shifts": {
+      "title": {
+        "create": "New Shifts",
+        "update": "Update Shifts",
+        "details": "Details Shifts",
+        "detailsEspecified": "Details Especified Shifts"
+      }
+    },
     "role": {
       "title": {
         "create": "New Rol",

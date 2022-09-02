@@ -221,6 +221,14 @@
         "detailsEspecified": "Detalles Específicos de la Orden"
       }
     },
+    "shifts": {
+      "title": {
+        "create": "Nuevo Turno",
+        "update": "Actualizar Turno",
+        "details": "Detalles del Turno",
+        "detailsEspecified": "Detalles Específicos del Turno"
+      }
+    },
     "role": {
       "title": {
         "create": "Nuevo Rol",

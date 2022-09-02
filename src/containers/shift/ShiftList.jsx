@@ -185,7 +185,7 @@ const ShiftList = () => {
     onPageSizeChange: setPageSize,
     onRowClick: (row) => {
       console.log(row);
-      const value = row?.id;
+      const value = row.original.id;
       const path = SHIFT_DETAIL_PAGE(value);
       router.push(path);
     },
