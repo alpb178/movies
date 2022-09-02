@@ -77,7 +77,6 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
         const productselected = productsApi?.rows.find(
           (element) => element?.shipmentItem.id === item.shipmentItems.id
         );
-        console.log(productselected, 'Ale');
         item.id = item.ShipmentItemId;
         item.measureUnit = productselected?.shipmentItem?.measureUnit;
         item.name = productselected?.shipmentItem?.name;
@@ -122,7 +121,7 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
             <div key={option?.name} className="flex flex-col">
               <p className="w-full px-4 pt-4 space-x-1 text-sm text-gray-400">
                 <span>{option?.amount}</span>
-                {!isSender ? <span>{`· ${formatPrice(option?.price)} / unidad`}</span> : null}
+                {!isSender ? <span>{`· ${formatPrice(option?.cost)} / unidad`}</span> : null}
               </p>
               <div className="flex items-center w-full p-2 pt-0 space-x-6">
                 <p className="w-full text-lg">{option?.name}</p>

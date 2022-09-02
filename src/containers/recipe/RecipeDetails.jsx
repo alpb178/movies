@@ -26,7 +26,7 @@ const RecipeDetails = ({ recipeId }) => {
     let total = 0;
     if (recipe?.recipeProducts?.length > 0) {
       recipe?.recipeProducts.map((option) => {
-        total += option?.amount * option?.product?.price;
+        total += option?.amount * option?.product?.cost;
       });
       return total;
     }
@@ -76,7 +76,7 @@ const RecipeDetails = ({ recipeId }) => {
                   <p className="text-sm font-medium text-gray-500">
                     {t('recipe-groups', { count: 1 })}
                   </p>
-                  <dd className="mt-1 text-sm text-gray-900">{recipe.category || '-'}</dd>
+                  <dd className="mt-1 text-sm text-gray-900">{recipe?.recipeGroup?.name || '-'}</dd>
                 </div>
 
                 <div className="sm:col-span-1">
@@ -145,7 +145,7 @@ const RecipeDetails = ({ recipeId }) => {
         <div className="w-full pt-5 mt-0 brecipe-t border-gray-200 lg:mt-5">
           {recipe?.ingredients?.length > 0 ? (
             <dl className="w-full px-4 space-y-6 sm:px-8">
-              {recipe?.orderProducts.map((option) => (
+              {recipe?.ingredients.map((option) => (
                 <div key={option?.id} className="flex justify-between w-full space-x-8">
                   <div className="w-full">
                     <p className="font-medium text-gray-700">{option?.product?.name}</p>
@@ -156,7 +156,7 @@ const RecipeDetails = ({ recipeId }) => {
 
                   <div className="w-full">
                     <p className="font-medium text-gray-700">{`${option?.amount} x ${formatPrice(
-                      option?.product?.price,
+                      option?.product?.cost,
                       2
                     )}`}</p>
                     <p className="max-w-2xl mt-1 text-sm text-gray-500">
@@ -166,7 +166,7 @@ const RecipeDetails = ({ recipeId }) => {
                   <div className="text-right">
                     <p className="font-medium text-gray-700">
                       <span className="py-1 mt-5 font-medium">
-                        {formatPrice(option?.amount * option?.product?.price) || 0}
+                        {formatPrice(option?.amount * option?.product?.cost) || 0}
                       </span>
                     </p>
                     <p className="mt-1 text-sm text-gray-500">{t('form.common.label.amount')}</p>

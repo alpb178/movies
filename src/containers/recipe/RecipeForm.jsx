@@ -102,7 +102,7 @@ const RecipeForm = ({ recipesId }) => {
   };
 
   const getSumPrice = (total, num) => {
-    return (total += num?.amount * num?.price);
+    return (total += num?.amount * num?.cost);
   };
 
   const onChangeSalesPrice = async (value) => {
@@ -130,7 +130,7 @@ const RecipeForm = ({ recipesId }) => {
     if (ingredients.length > 1) {
       total = ingredients.reduce(getSumPrice, 0);
     } else {
-      total = ingredients[0]?.amount * ingredients[0]?.price;
+      total = ingredients[0]?.amount * ingredients[0]?.cost;
     }
     total += parseFloat(miscCost);
     setTotalCost(total);
@@ -150,8 +150,8 @@ const RecipeForm = ({ recipesId }) => {
   }, [ingredients, miscCost, totalCost]);
 
   const onSubmit = async (values) => {
-    const { name, description, category, posId } = values;
-    const sendBody = { name, description, posId };
+    const { name, description, category } = values;
+    const sendBody = { name, description };
     sendBody.recipeGroup = category.id;
     sendBody.business = user?.data?.business[0]?.id;
     sendBody.miscCost = miscCost;
@@ -164,6 +164,8 @@ const RecipeForm = ({ recipesId }) => {
       sendBody.id = recipesId;
       message = t('updated.male', { entity: t('recipes', { count: 1 }) });
     }
+
+    console.log(sendBody);
 
     try {
       setLoading(true);

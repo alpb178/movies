@@ -218,7 +218,9 @@
         "create": "Nueva Orden",
         "update": "Actualizar Orden",
         "details": "Detalles de la Orden",
-        "detailsEspecified": "Detalles Específicos de la Orden"
+        "detailsEspecified": "Detalles Específicos de la Orden",
+        "edit": "Editar Orden",
+        "editEspecified": "Editar Detalles Específicos de la Orden"
       }
     },
     "shifts": {

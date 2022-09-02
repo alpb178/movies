@@ -6,7 +6,12 @@ import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDial
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useOrders, { deleteOrders } from '@/hooks/orders/useOrders';
-import { API_ORDERS_URL, DEFAULT_PAGE_SIZE, ORDERS_DETAIL_PAGE } from '@/lib/constants';
+import {
+  API_ORDERS_URL,
+  DEFAULT_PAGE_SIZE,
+  ORDERS_DETAIL_PAGE,
+  ORDERS_FORM_PAGE
+} from '@/lib/constants';
 import { locales, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { format } from 'date-fns';
@@ -87,8 +92,8 @@ const OrdersList = () => {
   const onUpdate = (event, row) => {
     event.stopPropagation();
     const value = row.original.id;
-    // const path = SALE_FORM_PAGE(value);
-    // router.push(path);
+    const path = ORDERS_FORM_PAGE(value);
+    router.push(path);
   };
 
   const renderStatus = (status) => {

@@ -115,8 +115,7 @@ const RecipesList = () => {
     },
     {
       Header: t('form.common.label.count-ingredients'),
-      accessor: 'ingredients',
-      Cell: ({ value }) => formatIngredients(value)
+      accessor: 'ingredientsCount'
     },
     {
       id: 'optionsRecipes',

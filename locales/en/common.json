@@ -183,7 +183,9 @@
         "create": "New Order",
         "update": "Update Order",
         "details": "Details Order",
-        "detailsEspecified": "Details Especified Order"
+        "detailsEspecified": "Details Especified Order",
+        "edit": "Edit Order",
+        "editEspecified": "Edit Details Especified Order"
       }
     },
     "shifts": {
