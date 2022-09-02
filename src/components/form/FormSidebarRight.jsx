@@ -1,5 +1,4 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { AdjustmentsIcon } from '@heroicons/react/outline';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -90,15 +89,6 @@ export default function FormSidebarRight({
           </div>
         </Dialog>
       </Transition.Root>
-
-      <div className="flex flex-col flex-1">
-        <div className="sticky top-0 z-10 flex flex-shrink-0 h-16">
-          <button type="button" className="px-4 text-gray-500" onClick={() => setSidebarOpen(true)}>
-            <span className="sr-only">Open sidebar</span>
-            <AdjustmentsIcon className="text-gray-700 rotate-90 w-7 h-7" />
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
