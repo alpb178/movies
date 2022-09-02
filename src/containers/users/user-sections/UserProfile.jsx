@@ -24,7 +24,8 @@ const UserProfile = ({ data }) => {
         : null,
       'form.common.label.updatedAt': data?.updatedAt
         ? format(new Date(data?.updatedAt), 'PPP', { locale: { ...locales[lang] } })
-        : null
+        : null,
+      'form.common.label.role': data?.roles[0].name || ''
     }
   };
 

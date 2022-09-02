@@ -91,7 +91,8 @@
         "no-ingredients": "No Ingredients",
         "total-cost": "Total Cost",
         "is-owner": "Is owner?",
-        "count-ingredients": "Ingredients Count"
+        "count-ingredients": "Ingredients Count",
+        "role": "Role"
       },
       "placeholder": {
         "name": "Insert Name....",

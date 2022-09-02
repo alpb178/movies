@@ -124,7 +124,8 @@
         "ingredients": "Ingredientes",
         "no-ingredients": "No existen Ingredientes",
         "is-owner": "¿Es propietario?",
-        "count-ingredients": "cantidad de ingredientes"
+        "count-ingredients": "cantidad de ingredientes",
+        "role": "Rol"
       },
       "placeholder": {
         "name": "Insertar Nombre....",
