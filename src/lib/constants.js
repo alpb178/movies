@@ -71,7 +71,7 @@ export const AREASS_EDIT = (area) => `/areas/edit/${area}`;
 // Users
 export const GET_USER_KEY = 'getUsers';
 export const USER_DETAIL_PAGE = (id) => `/users/${id}`;
-export const USER_PROFILE_PAGE = (id) => `/users/profile/${id}`;
+export const USER_PROFILE_PAGE = `/users/profile`;
 export const USER_FORM_PAGE = (id) => (id ? `/users/form/${id}` : `/users/form/create`);
 export const USER_EDIT = (user) => `/users/edit/${user}`;
 export const USERS_PAGE = '/users';

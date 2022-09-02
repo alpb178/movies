@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
 import ResetPasswordForm from '@/containers/users/user-form/ResetPasswordForm';
-import { NAVBAR_HEIGHT, USER_DETAIL_PAGE } from '@/lib/constants';
+import { NAVBAR_HEIGHT, USER_PROFILE_PAGE } from '@/lib/constants';
 import { Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import jwtDecode from 'jwt-decode';
@@ -29,8 +29,7 @@ const Navbar = ({ onSidebarOpen }) => {
   const [openForm, setOpenForm] = useState(false);
 
   const onProfile = () => {
-    const path = USER_DETAIL_PAGE(id);
-    router.push(path);
+    router.push(USER_PROFILE_PAGE);
   };
   const onResetPassword = () => {
     setOpenForm(true);
