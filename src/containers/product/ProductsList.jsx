@@ -5,7 +5,7 @@ import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDial
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useProducts, { saveProduct } from '@/hooks/product/useProducts';
-import { API_PRODUCTS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
+import { API_PRODUCTS_CATALOG_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -75,7 +75,8 @@ const ProductsList = () => {
           method: DELETE
         }
       });
-      await queryClient.refetchQueries([API_PRODUCTS_URL]);
+      await queryClient.invalidateQueries([API_PRODUCTS_CATALOG_URL
+      ]);
       toast(t('deleted.male', { entity: t('products', { count: 1 }) }));
     } catch (error) {
       toast.error(error);
@@ -96,8 +97,8 @@ const ProductsList = () => {
       accessor: 'name'
     },
     {
-      Header: t('form.common.label.price'),
-      accessor: 'price'
+      Header: t('form.common.label.cost'),
+      accessor: 'cost'
     },
     {
       Header: t('form.common.label.description'),

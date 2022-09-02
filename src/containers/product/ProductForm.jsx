@@ -3,7 +3,7 @@
 import CustomSwitch from '@/components/form/CustomSwitch';
 import FormSidebarRight from '@/components/form/FormSidebarRight';
 import { saveProduct } from '@/hooks/product/useProducts';
-import { API_PRODUCTS_URL, POST, PUT } from '@/lib/constants';
+import { API_PRODUCTS_CATALOG_URL, POST, PUT } from '@/lib/constants';
 import clsx from 'clsx';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -19,24 +19,30 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
   const [isNewData, setIsNewData] = useState(true);
   const [errors, setErrorsForm] = useState({});
   const [touched, setTouchedForm] = useState({});
+  const [directSale, setDirectSale] = useState(false);
+
+
 
   const initialValues = {
     name: data?.name || '',
     price: data?.price || '',
     description: data?.description || '',
-    directSale: data?.directSale
+    directSale: data?.directSale,
+    cost: data?.cost
   };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
-    price: Yup.string().required(t('form.common.required.price'))
-    // description: Yup.string().required(t('form.common.required.description'))
+    cost: Yup.string().required(t('form.common.required.cost'))
   });
+
+
 
   const onSubmit = async (values) => {
     let sendBody = {};
     sendBody.name = values.name;
     sendBody.price = values.price;
+    sendBody.cost = values.cost;
     sendBody.description = values.description;
     let method = POST;
     let message = t('inserted.male', { entity: t('products', { count: 1 }) });
@@ -54,7 +60,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
           method
         }
       });
-      await queryClient.refetchQueries([API_PRODUCTS_URL]);
+      await queryClient.invalidateQueries([API_PRODUCTS_CATALOG_URL]);
       toast(message);
     } catch (error) {
       toast(error.response.data.message || error.toString());
@@ -101,11 +107,11 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="price">{t('form.common.label.price')}</label>
+        <label htmlFor="cost">{t('form.common.label.cost')}</label>
         <div className="relative w-full mx-auto">
-          <Field id="price" type="number" name="price" className="text-field filled" />
-          {errors?.price && touched?.price ? (
-            <p className="mt-4 text-red-600">{errors?.price}</p>
+          <Field id="cost" type="number" name="cost" className="text-field filled" />
+          {errors?.cost && touched?.cost ? (
+            <p className="mt-4 text-red-600">{errors?.cost}</p>
           ) : null}
         </div>
       </div>
@@ -131,11 +137,24 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
               onChange={(val) => {
                 // setPushNotification(val);
                 setFieldValue('directSale', val);
+                setDirectSale(!directSale)
               }}
             />
           )}
         </Field>
       </div>
+
+      {directSale ? <div className="space-y-2">
+        <label htmlFor="price">{t('form.common.label.price')}</label>
+        <div className="relative w-full mx-auto">
+          <Field id="price" type="number" name="price" className="text-field filled" />
+          {errors?.price && touched?.price ? (
+            <p className="mt-4 text-red-600">{errors?.price}</p>
+          ) : null}
+        </div>
+      </div> : null}
+
+
     </FormSidebarRight>
   );
 };
