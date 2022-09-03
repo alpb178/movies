@@ -1,13 +1,19 @@
-import DateForm from '@/components/date';
+import FormikAsyncAutocompleteField from '@/components/form/async-autocomplete/formik';
+import useShifts from '@/hooks/shift/useShift';
+import { API_SHIFTS_URL } from '@/lib/constants';
+import { lottieOptions } from '@/lib/utils';
 import { Menu, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
+import Lottie from 'react-lottie';
 
-const RegionsFilter = ({ data, onSubmit, open }) => {
+const CashRegisterFilter = ({ data, onSubmit, open }) => {
   const { t } = useTranslation('common');
 
+  const { data: shifts } = useShifts();
+
   const initialValues = {
-    date: ''
+    shift: ''
   };
 
   return (
@@ -24,18 +30,32 @@ const RegionsFilter = ({ data, onSubmit, open }) => {
         >
           <Menu.Items>
             <Formik initialValues={initialValues} onSubmit={onSubmit}>
-              <Form className="flex items-end justify-end w-full space-x-4">
+              <Form className="flex items-center justify-end w-full space-x-4">
                 <div className="w-96">
-                  <label htmlFor="rol" className="block font-medium text-gray-700">
-                    {t('form.common.label.createdAt')}
-                  </label>
-                  <DateForm entity="" fieldValue="date"></DateForm>
+                  <FormikAsyncAutocompleteField
+                    id="shift"
+                    name="shift"
+                    placheholder={t('shifts')}
+                    options={shifts ? shifts?.rows : []}
+                    className="autocomplete-field"
+                    optionLabels={[
+                      'createdAt',
+                      'updatedAt',
+                      'user.firstName',
+                      'user.lastName',
+                      'status'
+                    ]}
+                    keysToMatch={['user.firstName', 'user.lastName', 'status']}
+                    baseEndpoint={API_SHIFTS_URL}
+                    // requestParams={regulationsParams}
+                    loader={
+                      <Lottie options={lottieOptions('simple')} style={{ width: 64, height: 64 }} />
+                    }
+                    emptyOptionsLabel={t('shipping-items', { count: 0 })}
+                  />
                 </div>
 
-                <button
-                  type="submit"
-                  className="px-8 py-3 font-medium text-white rounded-md bg-primary-500"
-                >
+                <button type="submit" className="btn-contained">
                   {t('filter')}
                 </button>
               </Form>
@@ -47,4 +67,4 @@ const RegionsFilter = ({ data, onSubmit, open }) => {
   );
 };
 
-export default RegionsFilter;
+export default CashRegisterFilter;

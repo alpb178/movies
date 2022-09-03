@@ -22,7 +22,7 @@ export const API_PRODUCTS_CATALOG_URL = '/products/catalog';
 export const API_RECIPES_URL = '/recipes';
 export const API_CATEGORY_RECIPES_URL = '/recipe-groups';
 export const API_TABLES_URL = '/tables';
-export const API_SHIFT_URL = '/shifts';
+export const API_SHIFTS_URL = '/shifts';
 
 // App Routes
 export const LOGIN_PAGE = '/auth/login';

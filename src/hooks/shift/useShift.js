@@ -1,15 +1,15 @@
-import { API_SHIFT_URL, DELETE, POST, PUT } from '@/lib/constants';
+import { API_SHIFTS_URL, DELETE, POST, PUT } from '@/lib/constants';
 import { useQuery } from 'react-query';
 import { deleteData, getData, saveData } from '..';
 
 export const saveShifts = async ({ args = {}, options = {} } = {}) => {
   switch (options?.method) {
     case POST:
-      await saveData({ path: API_SHIFT_URL, data: args, method: options.method });
+      await saveData({ path: API_SHIFTS_URL, data: args, method: options.method });
       break;
     case PUT:
       await saveData({
-        path: API_SHIFT_URL + `/${args.id}`,
+        path: API_SHIFTS_URL + `/${args.id}`,
         data: args,
         method: options.method
       });
@@ -18,11 +18,11 @@ export const saveShifts = async ({ args = {}, options = {} } = {}) => {
 };
 
 export const deleteShifts = async ({ args = {} } = {}) => {
-  await deleteData({ path: API_SHIFT_URL + `/${args.id}`, method: DELETE });
+  await deleteData({ path: API_SHIFTS_URL + `/${args.id}`, method: DELETE });
 };
 
 export default function useShifts({ args = {}, options = {} } = {}) {
-  return useQuery([API_SHIFT_URL, { ...args }], getData, {
+  return useQuery([API_SHIFTS_URL, { ...args }], getData, {
     ...options
   });
 }
