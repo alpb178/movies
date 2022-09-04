@@ -27,7 +27,7 @@ const OrderDetails = ({ orderId }) => {
     let total = 0;
     if (order?.orderProducts?.length > 0) {
       order?.orderProducts.map((option) => {
-        total += option?.amount * option?.product?.price;
+        total += option?.amount * option?.recipe?.price;
       });
       return total;
     }
@@ -145,7 +145,7 @@ const OrderDetails = ({ orderId }) => {
               {order?.orderProducts.map((option) => (
                 <div key={option?.id} className="flex justify-between w-full space-x-8">
                   <div className="w-full">
-                    <p className="font-medium text-gray-700">{option?.product?.name}</p>
+                    <p className="font-medium text-gray-700">{option?.recipe?.name}</p>
                     <p className="max-w-2xl mt-1 text-sm text-gray-500">
                       {t('products', { count: 1 })}
                     </p>
@@ -153,7 +153,7 @@ const OrderDetails = ({ orderId }) => {
 
                   <div className="w-full">
                     <p className="font-medium text-gray-700">{`${option?.amount} x ${formatPrice(
-                      option?.product?.price,
+                      option?.recipe?.price,
                       2
                     )}`}</p>
                     <p className="max-w-2xl mt-1 text-sm text-gray-500">
@@ -163,7 +163,7 @@ const OrderDetails = ({ orderId }) => {
                   <div className="text-right">
                     <p className="font-medium text-gray-700">
                       <span className="py-1 mt-5 font-medium">
-                        {formatPrice(option?.amount * option?.product?.price) || 0}
+                        {formatPrice(option?.amount * option?.recipe?.price) || 0}
                       </span>
                     </p>
                     <p className="mt-1 text-sm text-gray-500">{t('form.common.label.amount')}</p>

@@ -27,7 +27,7 @@ const OrderDetails = ({ shiftId }) => {
     let total = 0;
     if (order?.orders?.length > 0) {
       order?.orders.map((option) => {
-        total += option?.amount * option?.product?.price;
+        total += option?.amount * option?.recipe?.price;
       });
       return total;
     }

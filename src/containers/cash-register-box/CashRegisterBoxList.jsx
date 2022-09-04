@@ -59,7 +59,7 @@ const CashRegisterBoxList = () => {
 
   const formatDate = (value) => <div>{format(new Date(value), 'PPp', { locale })}</div>;
   const formatAmount = (value) => (
-    <div>{formatPrice(value?.original?.amount * value?.original?.product?.price || 0, 2)}</div>
+    <div>{formatPrice(value?.original?.amount * value?.original?.recipe?.price || 0, 2)}</div>
   );
   const formatProductPrice = (value) => <div>{formatPrice(value || 0, 2)}</div>;
 
@@ -67,7 +67,7 @@ const CashRegisterBoxList = () => {
     let total = 0;
     if (products?.rows?.length > 0) {
       products?.rows?.map((option) => {
-        total += option?.amount * option?.product?.price || 0;
+        total += option?.amount * option?.recipe?.price || 0;
       });
       setShipmentPrice(total);
     }
@@ -93,11 +93,11 @@ const CashRegisterBoxList = () => {
     },
     {
       Header: t('products', { count: 1 }),
-      accessor: 'product.name'
+      accessor: 'recipe.name'
     },
     {
       Header: t('form.common.label.price'),
-      accessor: 'product.price',
+      accessor: 'recipe.price',
       Cell: ({ value }) => formatProductPrice(value)
     },
     {

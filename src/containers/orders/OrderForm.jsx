@@ -35,7 +35,7 @@ const OrderForm = ({ ordersId }) => {
     let total = 0;
     if (orders?.orderProducts?.length > 0) {
       orders?.orderProducts.map((option) => {
-        total += option?.amount * option?.product?.price;
+        total += option?.amount * option?.recipe?.price;
       });
       return total;
     }
@@ -172,7 +172,7 @@ const OrderForm = ({ ordersId }) => {
                             </span>
                             <p>
                               Servicio
-                              <div className="relative  font-medium text-gray-400 w-full mx-auto">
+                              <div className="relative w-full mx-auto font-medium text-gray-400">
                                 <NumberFormat
                                   decimalSeparator={','}
                                   decimalScale={2}
@@ -236,7 +236,7 @@ const OrderForm = ({ ordersId }) => {
                         {orders?.orderProducts.map((option) => (
                           <div key={option?.id} className="flex justify-between w-full space-x-8">
                             <div className="w-full">
-                              <p className="font-medium text-gray-700">{option?.product?.name}</p>
+                              <p className="font-medium text-gray-700">{option?.recipe?.name}</p>
                               <p className="max-w-2xl mt-1 text-sm text-gray-500">
                                 {t('products', { count: 1 })}
                               </p>
@@ -245,7 +245,7 @@ const OrderForm = ({ ordersId }) => {
                             <div className="w-full">
                               <p className="font-medium text-gray-700">{`${
                                 option?.amount
-                              } x ${formatPrice(option?.product?.price, 2)}`}</p>
+                              } x ${formatPrice(option?.recipe?.price, 2)}`}</p>
                               <p className="max-w-2xl mt-1 text-sm text-gray-500">
                                 {t('form.common.label.size')}- {t('form.common.label.price')}
                               </p>
@@ -253,7 +253,7 @@ const OrderForm = ({ ordersId }) => {
                             <div className="text-right">
                               <p className="font-medium text-gray-700">
                                 <span className="py-1 mt-5 font-medium">
-                                  {formatPrice(option?.amount * option?.product?.price) || 0}
+                                  {formatPrice(option?.amount * option?.recipe?.price) || 0}
                                 </span>
                               </p>
                               <p className="mt-1 text-sm text-gray-500">
