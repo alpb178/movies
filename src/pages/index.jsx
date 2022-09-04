@@ -1,5 +1,5 @@
+import Dashboard from '@/containers/dashboard';
 import dynamic from 'next/dynamic';
-import React from 'react';
 
 const Admin = dynamic(() => import('layouts/Admin'), {
   ssr: false
@@ -8,7 +8,9 @@ const Admin = dynamic(() => import('layouts/Admin'), {
 const HomePage = () => {
   return (
     <section className="flex flex-1 section lg:items-stretch">
-      <div className="flex items-center justify-center w-full space-x-2 container-fluid">HOME</div>
+      <div className="flex items-center justify-center w-full space-x-2 container-fluid">
+        <Dashboard />
+      </div>
     </section>
   );
 };
