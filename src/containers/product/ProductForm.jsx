@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/display-name */
+import { useAppContext } from '@/components/context/AppContext';
 import CustomSwitch from '@/components/form/CustomSwitch';
 import FormSidebarRight from '@/components/form/FormSidebarRight';
 import { saveProduct } from '@/hooks/product/useProducts';
@@ -21,7 +22,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
   const [touched, setTouchedForm] = useState({});
   const [directSale, setDirectSale] = useState(false);
 
-
+  const { user } = useAppContext();
 
   const initialValues = {
     name: data?.name || '',
@@ -36,14 +37,9 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
     cost: Yup.string().required(t('form.common.required.cost'))
   });
 
-
-
   const onSubmit = async (values) => {
-    let sendBody = {};
-    sendBody.name = values.name;
-    sendBody.price = values.price;
-    sendBody.cost = values.cost;
-    sendBody.description = values.description;
+    const { name, price, directSale, cost, description } = values;
+    const sendBody = { name, price, directSale, cost, description };
     let method = POST;
     let message = t('inserted.male', { entity: t('products', { count: 1 }) });
     if (data) {
@@ -137,24 +133,24 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
               onChange={(val) => {
                 // setPushNotification(val);
                 setFieldValue('directSale', val);
-                setDirectSale(!directSale)
+                setDirectSale(!directSale);
               }}
             />
           )}
         </Field>
       </div>
 
-      {directSale ? <div className="space-y-2">
-        <label htmlFor="price">{t('form.common.label.price')}</label>
-        <div className="relative w-full mx-auto">
-          <Field id="price" type="number" name="price" className="text-field filled" />
-          {errors?.price && touched?.price ? (
-            <p className="mt-4 text-red-600">{errors?.price}</p>
-          ) : null}
+      {directSale ? (
+        <div className="space-y-2">
+          <label htmlFor="price">{t('form.common.label.price')}</label>
+          <div className="relative w-full mx-auto">
+            <Field id="price" type="number" name="price" className="text-field filled" />
+            {errors?.price && touched?.price ? (
+              <p className="mt-4 text-red-600">{errors?.price}</p>
+            ) : null}
+          </div>
         </div>
-      </div> : null}
-
-
+      ) : null}
     </FormSidebarRight>
   );
 };
