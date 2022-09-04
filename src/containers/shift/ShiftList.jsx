@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
@@ -84,13 +82,6 @@ const ShiftList = () => {
     }
   };
 
-  const onUpdate = (event, row) => {
-    event.stopPropagation();
-    const value = row.original.id;
-    // const path = SALE_FORM_PAGE(value);
-    // router.push(path);
-  };
-
   const renderStatus = (status) => {
     return <Status data={status} />;
   };
@@ -130,14 +121,9 @@ const ShiftList = () => {
       Cell: ({ value }) => formatOrders(value)
     },
     {
-      id: 'optionComanda',
-      displayName: 'optionComanda',
-      Cell: ({ row }) => (
-        <TableActions
-          onEdit={(event) => onUpdate(event, row)}
-          onDelete={(event) => handleDelete(event, row)}
-        />
-      )
+      id: 'optionShift',
+      displayName: 'optionShift',
+      Cell: ({ row }) => <TableActions onDelete={(event) => handleDelete(event, row)} />
     }
   ]);
 
@@ -230,7 +216,7 @@ const ShiftList = () => {
         onOpen={setDeleteConfirmation}
         onDeleteConfirmation={onDeleteConfirmation}
         title={t('delete-title', { entity: t('shifts', { count: 1 }) })}
-        content={t('delete-message.female', { entity: t('shifts', { count: 1 }) })}
+        content={t('delete-message.male', { entity: t('shifts', { count: 1 }) })}
       />
     </>
   );
