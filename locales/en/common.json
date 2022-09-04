@@ -30,8 +30,8 @@
     "female": "{{entity}} deleted successfully."
   },
   "delete-message": {
-    "male": "Este {{entity}} será eliminado. Una vez confirmado no es posible revertir la operación.",
-    "female": "Esta {{entity}} será eliminada. Una vez confirmado no es posible revertir la operación."
+    "male": "This {{entity}} will be deleted. Once confirmed, it is not possible to reverse the operation. Do you want to delete the {{entity}}?",
+    "female": "This {{entity}} will be deleted. Once confirmed it is not possible to reverse the operation. Do you want to delete the {{entity}}?"
   },
   "direct-sale": "Direct sale",
   "create": "Create {{entity}}",

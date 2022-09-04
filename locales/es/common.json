@@ -53,8 +53,8 @@
     "female": "{{entity}} eliminada exitosamente."
   },
   "delete-message": {
-    "male": "Este {{entity}} será eliminado. Una vez confirmado no es posible revertir la operación.",
-    "female": "Esta {{entity}} será eliminada. Una vez confirmado no es posible revertir la operación."
+    "male": "Este {{entity}} será eliminado. Una vez confirmado no es posible revertir la operación.¿Desea eliminar el {{entity}}?",
+    "female": "Esta {{entity}} será eliminada. Una vez confirmado no es posible revertir la operación.¿Desea eliminar la {{entity}}?"
   },
   "delete-title": "Eliminar {{entity}}",
   "departure-at": "Fecha de Salida",

@@ -34,7 +34,7 @@ const DialogWrapper = ({ children, open, onOpen, title }) => {
             >
               <Dialog.Panel className="w-full max-w-lg p-6 overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-lg">
                 {title ? (
-                  <Dialog.Title as="h3" className="form-header">
+                  <Dialog.Title as="h3" className="text-2xl text-gray-900 ">
                     {t(title)}
                   </Dialog.Title>
                 ) : null}
