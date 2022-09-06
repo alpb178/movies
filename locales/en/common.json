@@ -49,6 +49,12 @@
         "update": "New Area"
       }
     },
+    "business": {
+      "title": {
+        "create": "New Business",
+        "update": "Update Business"
+      }
+    },
     "common": {
       "empty-options": "No se encontraron resultados",
       "message-users": "This users not have access",
@@ -128,31 +134,24 @@
         "password": "Password required",
         "repeat-password": "Repeat Password required",
         "category": "Category required",
-        "pos-id": "POS ID required"
+        "pos-id": "POS ID required",
+        "symbol": "Symbol required"
       },
       "status": {
         "open": "OPEN",
         "close": "CLOSE"
       }
     },
-    "table": {
-      "page-count": "Page {{currentPage}} of {{lastPage}}",
-      "rows-per-page": "Rows per page",
+    "measure-unit": {
       "title": {
-        "create": "New Table",
-        "update": "Update Table"
+        "create": "New Measure Unit",
+        "update": "New Measure Unit"
       }
     },
     "password": {
       "title": {
         "create": "Reset Password",
         "update": "Reset Password"
-      }
-    },
-    "business": {
-      "title": {
-        "create": "New Business",
-        "update": "Update Business"
       }
     },
     "permissions": {
@@ -197,6 +196,15 @@
         "detailsEspecified": "Details Especified Shifts"
       }
     },
+    "table": {
+      "page-count": "Page {{currentPage}} of {{lastPage}}",
+      "rows-per-page": "Rows per page",
+      "title": {
+        "create": "New Table",
+        "update": "Update Table"
+      }
+    },
+
     "role": {
       "title": {
         "create": "New Rol",
@@ -244,6 +252,11 @@
     "user-delete": "You want to Delete the User",
     "message": "Message",
     "message-customer-care": "I have read and accept the Data Protection clause."
+  },
+  "measure-units": {
+    "0": "No Measure Units",
+    "1": "Measure Units",
+    "other": "Measure Units"
   },
   "municipality": "Municipality",
   "months": "Months",

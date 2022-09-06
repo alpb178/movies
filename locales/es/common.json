@@ -125,7 +125,8 @@
         "no-ingredients": "No existen Ingredientes",
         "is-owner": "¿Es propietario?",
         "count-ingredients": "cantidad de ingredientes",
-        "role": "Rol"
+        "role": "Rol",
+        "measure-unit": "Unidad de medida"
       },
       "placeholder": {
         "name": "Insertar Nombre....",
@@ -144,6 +145,7 @@
       "required": {
         "code": "El código requerido",
         "departureAt": "La Fecha es requerida",
+        "measureUnit": "La Unidad de Medida es Requerida",
         "description": "Descripción requerida",
         "name": "Nombre requerido",
         "price": "El precio requerido",
@@ -160,31 +162,30 @@
         "email-wrong": "Correo Electrónico Inválido",
         "password": "Password es requerido",
         "category": "Categoría requerida",
-        "pos-id": "POS ID requerido"
+        "pos-id": "POS ID requerido",
+        "symbol": "Símbolo requerido"
       },
       "status": {
         "open": "Abierta",
         "close": "Cerrada"
       }
     },
-    "table": {
-      "page-count": "Página {{currentPage}} de {{lastPage}}",
-      "rows-per-page": "Filas por página",
+    "business": {
       "title": {
-        "create": "Nueva Mesa",
-        "update": "Editar Mesa"
+        "create": "Nuevo Negocio",
+        "update": "Editar Negocio"
+      }
+    },
+    "measure-unit": {
+      "title": {
+        "create": "Nueva Unidad de Medida",
+        "update": "Editar Unidad de Medida"
       }
     },
     "password": {
       "title": {
         "create": "Cambiar Password",
         "update": "Cambiar Password"
-      }
-    },
-    "business": {
-      "title": {
-        "create": "Nuevo Negocio",
-        "update": "Editar Negocio"
       }
     },
     "permissions": {
@@ -244,6 +245,14 @@
         "update": "Actualizar Recurso"
       }
     },
+    "table": {
+      "page-count": "Página {{currentPage}} de {{lastPage}}",
+      "rows-per-page": "Filas por página",
+      "title": {
+        "create": "Nueva Mesa",
+        "update": "Editar Mesa"
+      }
+    },
     "user": {
       "label": {
         "baggage-capacity": "Capacidad de Equipaje",
@@ -292,6 +301,11 @@
     "user-delete": "Desea Eliminar el Usuario",
     "message": "Mensaje",
     "message-customer-care": "He leído y acepto la cláusula de Protección de Datos."
+  },
+  "measure-units": {
+    "0": "Aún no existen unidades de medida registradas",
+    "1": "Unidad de medida",
+    "other": "Unidades de medida"
   },
   "mobile": "Móvil",
   "municipality": "Municipio",
