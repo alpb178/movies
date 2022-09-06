@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
+
 import * as Yup from 'yup';
 
 const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
@@ -97,7 +98,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
       setErrorsForm={setErrorsForm}
       setTouchedForm={setTouchedForm}
     >
-      <div className="p-6 space-y-6 text-lg">
+      <div className="space-y-6 text-base">
         <div className="space-y-2">
           <div className="relative w-full mx-auto">
             <div className="absolute z-10 text-center text-gray-500"></div>
