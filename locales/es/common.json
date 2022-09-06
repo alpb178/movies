@@ -415,8 +415,8 @@
   },
   "status": "Estado",
   "statistics": {
-    "users-count": "Ganancias Diarias",
-    "user-activate-desactivate": "Ordenes Diarias"
+    "sales": "Ganancias Diarias",
+    "orders": "Ordenes Diarias"
   },
   "symbol": "Símbolo",
   "tables": {

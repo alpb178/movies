@@ -80,7 +80,7 @@ const BarChart = ({ data, actions, onSubmit, title, type }) => {
   };
 
   return (
-    <div className="relative flex flex-col w-full mt-5 min-w-0 mb-4 break-words bg-white rounded shadow">
+    <div className="relative flex flex-col w-full min-w-0 mt-5 mb-4 break-words bg-white border rounded">
       <CardChart
         title={title}
         type={type}
