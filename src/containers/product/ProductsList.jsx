@@ -101,7 +101,7 @@ const ProductsList = () => {
     },
     {
       Header: t('measure-units', { count: 1 }),
-      accessor: 'measureUnit'
+      accessor: 'measureUnit.name'
     },
     {
       id: 'optionsProducts',
