@@ -92,7 +92,6 @@ const ShiftList = () => {
       {value?.firstName} {value?.lastName}
     </div>
   );
-  const formatOrders = (value) => <div>{value?.length}</div>;
 
   const columns = React.useMemo(() => [
     {
@@ -117,8 +116,7 @@ const ShiftList = () => {
     },
     {
       Header: t('form.common.size-orders'),
-      accessor: 'orders',
-      Cell: ({ value }) => formatOrders(value)
+      accessor: 'ordersCount'
     },
     {
       id: 'optionShift',
