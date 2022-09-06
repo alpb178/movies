@@ -75,8 +75,7 @@ const ProductsList = () => {
           method: DELETE
         }
       });
-      await queryClient.invalidateQueries([API_PRODUCTS_CATALOG_URL
-      ]);
+      await queryClient.invalidateQueries([API_PRODUCTS_CATALOG_URL]);
       toast(t('deleted.male', { entity: t('products', { count: 1 }) }));
     } catch (error) {
       toast.error(error);
@@ -101,8 +100,8 @@ const ProductsList = () => {
       accessor: 'cost'
     },
     {
-      Header: t('form.common.label.description'),
-      accessor: 'description'
+      Header: t('measure-units', { count: 1 }),
+      accessor: 'measureUnit'
     },
     {
       id: 'optionsProducts',
