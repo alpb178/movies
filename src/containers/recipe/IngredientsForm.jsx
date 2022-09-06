@@ -38,7 +38,7 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
     if (item) {
       const selectedItem = item;
       selectedItem.amount = 1;
-      selectedItem.measureUnit = 1;
+      selectedItem.measureUnit = selectedItem.measureUnit.id;
       var index = products.findIndex((e) => e.id === item.id);
       products.splice(index, 1);
       if (!selectedOptions.includes(selectedItem)) {

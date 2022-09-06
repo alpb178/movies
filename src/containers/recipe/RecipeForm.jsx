@@ -3,13 +3,7 @@ import { useAppContext } from '@/components/context/AppContext';
 import AutocompleteField from '@/components/form/AutocompleteField';
 import useCategoryRecipes, { saveCategoryRecipes } from '@/hooks/recipe-groups/useRecipesGroups';
 import useRecipes, { saveRecipe } from '@/hooks/recipe/useRecipes';
-import {
-  API_CATEGORY_RECIPES_URL,
-  API_RECIPES_URL,
-  DEFAULT_PAGE_SIZE,
-  POST,
-  PUT
-} from '@/lib/constants';
+import { API_CATEGORY_RECIPES_URL, DEFAULT_PAGE_SIZE, POST, RECIPES_PAGE } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -171,9 +165,9 @@ const RecipeForm = ({ recipesId }) => {
           method
         }
       });
-      await queryClient.refetchQueries([API_RECIPES_URL]);
+      router.push(RECIPES_PAGE);
+      setLoading(false);
       toast(message);
-      router.back();
     } catch (error) {
       toast(error.response.data.message || error.toString());
     } finally {

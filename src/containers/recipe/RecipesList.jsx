@@ -96,7 +96,6 @@ const RecipesList = () => {
   };
 
   const formatPriceValue = (value) => <div>{formatPrice(value)}</div>;
-  const formatIngredients = (value) => <div>{value.length}</div>;
 
   const columns = React.useMemo(() => [
     {
