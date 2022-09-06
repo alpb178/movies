@@ -66,9 +66,9 @@ const Dashboard = () => {
           case 'months':
             return labels.push(new Date(item?.date).getMonth());
           case 'day':
-            return labels.push(format(new Date(item?.date.split('T')[0]), 'PP', { locale }));
+            return labels.push(format(new Date(item?.date), 'P', { locale }));
           case 'year':
-            labels.push(new Date(item?.item?.date).getFullYear());
+            labels.push(new Date(item?.date).getFullYear());
         }
       });
       setData({ labels: labels, count: count });
@@ -85,9 +85,9 @@ const Dashboard = () => {
 
         switch (filterValues) {
           case 'day':
-            return labels.push(format(new Date(item?.date), 'PP', { locale }));
+            return labels.push(format(new Date(item?.date), 'P', { locale }));
           case 'year':
-            labels.push(new Date(item?.item?.date).getFullYear());
+            labels.push(new Date(item?.date).getFullYear());
         }
       });
       setDataUP({ labels, count });
