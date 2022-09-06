@@ -53,7 +53,7 @@ const RecipeForm = ({ recipesId }) => {
     return queryParams;
   }, [page, pageSize, sort]);
 
-  const { data: categories } = useCategoryRecipes({
+  const { data: categories, loadingCategories } = useCategoryRecipes({
     args: params,
     options: {
       keepPreviousData: true
@@ -62,21 +62,19 @@ const RecipeForm = ({ recipesId }) => {
 
   const { data: recipes, isLoading: isLoading } = useRecipes({
     args: { id: recipesId },
-    options: { keepPreviousData: true, enabled: !isNaN(recipesId) }
+    options: { keepPreviousData: true, enabled: !isNaN(recipesId) && !!categories }
   });
 
   const initialValues = {
     name: recipes?.name || '',
     description: recipes?.description || '',
     category: recipes?.category || '',
-    // posId: data?.posId || '',
     ingredients: recipes?.ingredients || []
   };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t('form.common.required.name')),
     category: Yup.object().nullable().required(t('form.common.required.category'))
-    // posId: Yup.string().required(t('form.common.required.pos-id'))
   });
 
   const onCreateCategories = async (name) => {
@@ -165,8 +163,6 @@ const RecipeForm = ({ recipesId }) => {
       message = t('updated.male', { entity: t('recipes', { count: 1 }) });
     }
 
-    console.log(sendBody);
-
     try {
       setLoading(true);
       await saveRecipe({
@@ -187,7 +183,7 @@ const RecipeForm = ({ recipesId }) => {
 
   return (
     <>
-      {loading || isLoading ? (
+      {loading || isLoading || loadingCategories ? (
         <Loading />
       ) : (
         <Formik

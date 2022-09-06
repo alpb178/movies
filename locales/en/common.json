@@ -304,6 +304,12 @@
     "1": "Recipe",
     "other": "Recipes"
   },
+  "recipe-groups": {
+    "0": "No Recipe Groups for recipes",
+    "1": " Recipe Groups",
+    "other": " Recipe Groups",
+    "create": "Create "
+  },
   "reports": {
     "0": "No reports",
     "one": "Report",
