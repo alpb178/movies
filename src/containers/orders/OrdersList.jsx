@@ -3,6 +3,7 @@
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
+import Status from '@/components/status';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useOrders, { deleteOrders } from '@/hooks/orders/useOrders';
@@ -23,7 +24,6 @@ import Lottie from 'react-lottie';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import OrdersFilter from './OrdersFilter';
-import Status from './Status';
 
 const OrdersList = () => {
   const { t, lang } = useTranslation('common');

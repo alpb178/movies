@@ -1,6 +1,7 @@
 import EmptyState from '@/components/common/EmptyState';
 import Loading from '@/components/common/Loader';
 import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDialog';
+import Status from '@/components/status';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useShifts, { deleteShifts } from '@/hooks/shift/useShift';
@@ -16,7 +17,6 @@ import Lottie from 'react-lottie';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import ShiftFilter from './ShiftFilter';
-import Status from './Status';
 
 const ShiftList = () => {
   const { t, lang } = useTranslation('common');
