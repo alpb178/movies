@@ -33,20 +33,18 @@ const OrdersList = () => {
   const [sort, setSort] = useState();
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
-  const [openFilters] = useState(false);
+  const [openFilters, setOpenFilters] = useState(false);
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
-  const [filterValues, setFilterValues] = useState({
-    country: ''
-  });
+  const [filterValues, setFilterValues] = useState({});
 
   const locale = {
     ...locales[lang]
   };
 
   const params = useMemo(() => {
-    const queryParams = {};
+    const queryParams = { ...filterValues };
 
     if (page) {
       queryParams.page = page;
@@ -57,6 +55,7 @@ const OrdersList = () => {
     if (sort) {
       queryParams.sort = sort;
     }
+
     return queryParams;
   }, [filterValues, page, pageSize, sort]);
 
@@ -145,7 +144,7 @@ const OrdersList = () => {
           <div className="flex items-center px-4 py-1 mr-4 text-sm font-medium bg-gray-100 rounded-full w-max">
             <span key={filterValues[e]} className="font-medium">
               {`${t(e)}: `}
-              <span className="font-normal">{filterValues[e]}</span>
+              <span className="font-normal">{filterValues[e].toString()}</span>
             </span>
             <button type="button" id={filterValues[e]} onClick={() => onFilterChange(e)}>
               <XCircleIcon className="w-6 h-6 ml-2 float-center" />
@@ -202,7 +201,7 @@ const OrdersList = () => {
           onClick={() => setOpenFilters(!openFilters)}
         >
           {t('filter')}
-        </button>*/}
+        </button> */}
       </div>
     )
   };

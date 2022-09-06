@@ -55,23 +55,7 @@ const Dashboard = () => {
     setFilterValuesI(value);
   };
 
-  useMemo(async () => {
-    if (statistics) {
-      let count = [];
-      let labels = [];
-      statistics?.map((item) => {
-        count.push(item?.orderProducts?.length);
-        switch (filterValues) {
-          case 'months':
-            return labels.push(new Date(item?.date).getMonth());
-          case 'day':
-            return labels.push(format(new Date(item?.date), 'P', { locale }));
-          case 'year':
-            labels.push(new Date(item?.date).getFullYear());
-        }
-      });
-      setData({ labels: labels, count: count });
-    }
+  const salesData = useMemo(() => {
     if (statisticsAmount) {
       const count = [];
       let labels = [];
@@ -92,9 +76,9 @@ const Dashboard = () => {
 
         switch (filterValues) {
           case 'day':
-            return labels.push(format(new Date(item?.date), 'P', { locale }));
+            return labels.push(format(new Date(date.split('T')[0] + 'T00:00'), 'P', { locale }));
           case 'year':
-            labels.push(new Date(item?.date).getFullYear());
+            labels.push(new Date(date).getFullYear());
         }
       });
       return { labels, count };

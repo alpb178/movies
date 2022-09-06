@@ -1,4 +1,4 @@
-import AutocompleteField from '@/components/form/AutocompleteField';
+import DateForm from '@/components/date';
 import { Menu, Transition } from '@headlessui/react';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -7,7 +7,7 @@ const OrdersFilter = ({ data, onSubmit, open }) => {
   const { t } = useTranslation('common');
 
   const initialValues = {
-    country: ''
+    'createdAt.equals': ''
   };
 
   return (
@@ -25,12 +25,7 @@ const OrdersFilter = ({ data, onSubmit, open }) => {
           <Menu.Items>
             <Formik initialValues={initialValues} onSubmit={onSubmit}>
               <Form className="flex items-end justify-end w-full space-x-4">
-                <div className="w-96">
-                  <label htmlFor="rol" className="block font-medium text-gray-700">
-                    {t('countries', { count: 1 })}
-                  </label>
-                  <AutocompleteField className="autocomplete-field" name="country" options={[]} />
-                </div>
+                <DateForm fieldValue={['createdAt.equals']} />
 
                 <button
                   type="submit"
