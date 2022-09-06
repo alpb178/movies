@@ -17,9 +17,10 @@ import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
+import MenuCategoriesForm from "./MenuCategoriesForm";
 import RecipesFilter from './RecipesFilter';
 
 const RecipesList = () => {
@@ -31,6 +32,7 @@ const RecipesList = () => {
   const onPageChangeCallback = useCallback(setPage, []);
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
@@ -38,6 +40,12 @@ const RecipesList = () => {
   const [filterValues, setFilterValues] = useState({
     country: ''
   });
+
+  useEffect(() => {
+    if (!openForm) {
+      setSelectedItem(null);
+    }
+  }, [openForm]);
 
   const params = useMemo(() => {
     const queryParams = {};
@@ -167,6 +175,13 @@ const RecipesList = () => {
     </button>
   );
 
+  const renderCategoriesButton = () => (
+    <button type="button" className="btn-contained" onClick={() => setOpenForm(true)}>
+      {t('create', { entity: t('recipe-groups', { count: 1 }).toLowerCase() })}
+    </button>
+  );
+
+
   const options = {
     name: t('recipes', { count: 2 }),
     columns,
@@ -200,6 +215,7 @@ const RecipesList = () => {
           {t('filter')}
         </button>*/}
         {renderCreateButton()}
+        {renderCategoriesButton()}
       </div>
     )
   };
@@ -212,6 +228,16 @@ const RecipesList = () => {
         <DataTable {...options} />
       ) : (
         <EmptyState text={t('recipes', { count: 0 })}>{renderCreateButton()}</EmptyState>
+      )}
+
+      {openForm && (
+        <MenuCategoriesForm
+          data={selectedItem}
+          open={openForm}
+          onOpen={setOpenForm}
+          setLoading={setLoading}
+        //products={recipes}
+        />
       )}
 
       <DeleteConfirmationDialog
