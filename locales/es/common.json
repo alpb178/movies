@@ -20,8 +20,9 @@
     "other": "Áreas"
   },
   "add": "Añadir",
-  "business": "Negocios",
   "amount": "Importe",
+  "available": "Disponible",
+  "business": "Negocios",
   "birthdate": "Fecha de Nacimiento",
   "bio": "Biografía",
   "cancel": "Cancelar",
@@ -126,7 +127,8 @@
         "is-owner": "¿Es propietario?",
         "count-ingredients": "cantidad de ingredientes",
         "role": "Rol",
-        "measure-unit": "Unidad de medida"
+        "measure-unit": "Unidad de medida",
+        "recipe-group": "Grupo del menú"
       },
       "placeholder": {
         "name": "Insertar Nombre....",

@@ -16,6 +16,10 @@ const NavigationMenu = () => {
   const canAccess = (item) =>
     item?.roles.length === 0 || rolesSession?.some((role) => item?.roles.includes(role));
 
+  const isNewItem = () => (
+    <div className="p-1 px-2 text-xs text-white bg-red-500 rounded-full">nuevo</div>
+  );
+
   return navigation.map((item, idx) =>
     canAccess(item) ? (
       item.children ? (
@@ -63,6 +67,7 @@ const NavigationMenu = () => {
                         } flex items-center px-2 py-3 text-sm font-medium rounded-md pl-12`}
                       >
                         {t(item.name, { count: 2 })}
+                        {item?.isNew ? isNewItem() : null}
                       </a>
                     </Link>
                   ))}
@@ -89,8 +94,10 @@ const NavigationMenu = () => {
               } mr-3 flex-shrink-0 h-6 w-6`}
               aria-hidden="true"
             />
-
-            {t(item.name, { count: 2 })}
+            <span className="flex items-center justify-between w-full">
+              {t(item.name, { count: 2 })}
+              {item?.isNew ? isNewItem() : null}
+            </span>
           </a>
         </Link>
       )

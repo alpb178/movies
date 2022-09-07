@@ -1,5 +1,6 @@
 import { Switch } from '@headlessui/react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 
 const CustomSwitch = ({ checked, label, onChange, onClick }) => (
   <Switch
@@ -21,5 +22,13 @@ const CustomSwitch = ({ checked, label, onChange, onClick }) => (
     />
   </Switch>
 );
+
+CustomSwitch.defaultProps = {
+  onChange: () => null
+};
+
+CustomSwitch.propTypes = {
+  onChange: PropTypes.bool
+};
 
 export default CustomSwitch;

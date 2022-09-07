@@ -13,6 +13,7 @@
     "other": "Áreas"
   },
   "amount": "Amount",
+  "available": "Available",
   "business": "Business",
   "cash_register_box": {
     "0": "No Operations for Cash Register Box",
@@ -98,7 +99,8 @@
         "total-cost": "Total Cost",
         "is-owner": "Is owner?",
         "count-ingredients": "Ingredients Count",
-        "role": "Role"
+        "role": "Role",
+        "recipe-group": "Grupo del menú"
       },
       "placeholder": {
         "name": "Insert Name....",

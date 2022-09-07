@@ -5,8 +5,8 @@ import DeleteConfirmationDialog from '@/components/dialog/DeleteConfirmationDial
 import CustomSwitch from '@/components/form/CustomSwitch';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
-import useMenuItems from '@/hooks/menu-item/useMenuItems';
-import { DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
+import useMenuItems, { changeMenuItemStatus } from '@/hooks/menu-item/useMenuItems';
+import { API_MENU_ITEMS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
@@ -91,28 +91,27 @@ const MenuItemsList = () => {
     setOpenForm(true);
   };
 
-  const renderStatus = (status, row) => {
+  const renderStatus = (row) => {
     return (
       <CustomSwitch
-        checked={status == 'ACTIVE' ? true : false}
+        checked={row.isAvailable}
         onClick={(event) => {
           event.stopPropagation();
-          onActiveInactiveUsers(event, row);
+          onMenuItemStatusChange({ id: row.id, isAvailable: !row.isAvailable });
         }}
       />
     );
   };
 
-  const onActiveInactiveUsers = async (event, row) => {
+  const onMenuItemStatusChange = async (values) => {
     try {
       setLoading(true);
-      await userActivatedDesactivated({
-        args: row,
-        actions: row.status == 'ACTIVE' ? 'deactivate' : 'activate'
+      await changeMenuItemStatus({
+        args: values
       });
-      await queryClient.refetchQueries([API_USERS_URL]);
+      await queryClient.refetchQueries([API_MENU_ITEMS_URL]);
       setLoading(true);
-      toast(t('updated.male', { entity: t('users', { count: 1 }) }));
+      toast(t('updated.male', { entity: t('menu-items', { count: 1 }) }));
     } catch (error) {
       toast.error(error.toString());
     } finally {
@@ -120,7 +119,7 @@ const MenuItemsList = () => {
     }
   };
 
-  const formatPriceValue = (value) => <div>{formatPrice(value)}</div>;
+  const formatPriceValue = (value) => <div className="text-right w-28">{formatPrice(value)}</div>;
 
   const columns = useMemo(() => [
     {
@@ -133,9 +132,13 @@ const MenuItemsList = () => {
       Cell: ({ value }) => formatPriceValue(value)
     },
     {
-      Header: t('status'),
-      accessor: 'status',
-      Cell: ({ cell }) => renderStatus(cell.row.original.status, cell.row.original)
+      Header: t('form.common.label.recipe-group'),
+      accessor: 'recipeGroup.name'
+    },
+    {
+      Header: t('available'),
+      accessor: 'isAvailable',
+      Cell: ({ row }) => renderStatus(row.original)
     },
     {
       id: 'optionsMenuItems',
@@ -215,7 +218,6 @@ const MenuItemsList = () => {
         >
           {t('filter')}
         </button>*/}
-        {renderCreateButton()}
       </div>
     )
   };
