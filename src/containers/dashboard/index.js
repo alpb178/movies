@@ -19,27 +19,27 @@ const Dashboard = () => {
     ...locales[lang]
   };
 
-  const params = useMemo(() => {
+  const salesParams = useMemo(() => {
     const query = {};
     if (filterValues !== '') query.tf = filterValues;
     return query;
   }, [filterValues]);
 
-  const paramsI = useMemo(() => {
+  const ordersParams = useMemo(() => {
     const query = {};
     if (filterValuesI !== '') query.tf = filterValuesI;
     return query;
   }, [filterValuesI]);
 
   const { data: statistics, isLoading } = useStatics({
-    args: paramsI,
+    args: ordersParams,
     options: {
       keepPreviousData: true
     }
   });
 
-  const { data: statisticsAmount, isLoadingStatisticsAmount } = useStatics({
-    args: params,
+  const { data: salesReport, isLoadingStatisticsAmount } = useStatics({
+    args: salesParams,
     options: {
       keepPreviousData: true
     }
@@ -56,11 +56,11 @@ const Dashboard = () => {
   };
 
   const salesData = useMemo(() => {
-    if (statisticsAmount) {
+    if (salesReport) {
       const count = [];
       let labels = [];
 
-      const grouped = _.mapValues(_.groupBy(statisticsAmount, 'date'), (list) =>
+      const grouped = _.mapValues(_.groupBy(salesReport, 'date'), (list) =>
         list.map((order) => _.omit(order, 'date'))
       );
 
@@ -85,7 +85,7 @@ const Dashboard = () => {
     }
 
     return null;
-  }, [statisticsAmount]);
+  }, [salesReport]);
 
   const ordersData = useMemo(() => {
     if (statistics) {
@@ -119,14 +119,14 @@ const Dashboard = () => {
       <div className="flex flex-col w-full px-4 lg:space-x-4 lg:flex-row">
         <CardBarChartUsers
           data={salesData}
-          //actions={['day', 'months']}
+          actions={['day', 'months']}
           onSubmit={onSubmit}
           title={t('statistics.sales')}
           type="line"
         />
         <CardBarChartUsers
           data={ordersData}
-          // actions={['day', 'months']}
+          actions={['day', 'months']}
           onSubmit={onSubmitI}
           title={t('statistics.orders')}
           type="line"

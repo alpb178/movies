@@ -70,11 +70,11 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
       });
       await queryClient.invalidateQueries([API_PRODUCTS_CATALOG_URL]);
       toast(message);
+      onOpen(false);
     } catch (error) {
-      toast(error.response.data.message || error.toString());
+      toast.error(error.response.data.message || error.toString());
     } finally {
       setLoading(false);
-      onOpen(false);
     }
   };
 
