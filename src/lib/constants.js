@@ -36,6 +36,7 @@ export const ROLES_PAGE = '/roles';
 export const SETTINGS_PAGE = '/settings';
 export const SHIFT_PAGE = '/shift';
 export const MEASURE_UNITS_PAGE = '/measure-units';
+export const MENU_ITEMS_PAGE = '/menu-items';
 
 // App Routes Vebrics
 export const AREA_PAGE = '/areas';
@@ -44,6 +45,7 @@ export const ORDERS_PAGE = '/orders';
 export const TABLE_PAGE = '/table';
 export const CASH_REGISTER_BOX_PAGE = '/cash-register-box';
 export const API_MEASURE_UNITS_URL = '/measure-units';
+export const API_MENU_ITEMS_URL = '/menu-items';
 
 // Auth
 export const API_AUTH_URL = '/auth';

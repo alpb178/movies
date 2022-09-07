@@ -258,6 +258,11 @@
     "1": "Measure Units",
     "other": "Measure Units"
   },
+  "menu-items": {
+    "0": "No Menu items",
+    "1": "Menu Item",
+    "other": "Menu Items"
+  },
   "municipality": "Municipality",
   "months": "Months",
   "name": "Name",
