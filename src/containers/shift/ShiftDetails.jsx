@@ -1,11 +1,11 @@
 import Loading from '@/components/common/Loader';
+import Status from '@/components/status';
 import useShifts from '@/hooks/shift/useShift';
 import { locales, lottieOptions } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import Lottie from 'react-lottie';
-import Status from './Status';
 
 const ShiftDetails = ({ shiftId }) => {
   const { t, lang } = useTranslation('common');

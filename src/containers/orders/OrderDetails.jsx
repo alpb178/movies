@@ -1,13 +1,11 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
+import Status from '@/components/status';
 import useOrders from '@/hooks/orders/useOrders';
 import { formatPrice, locales } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import Status from './Status';
 
 const OrderDetails = ({ orderId }) => {
   const { t, lang } = useTranslation('common');

@@ -1,5 +1,6 @@
 import Loading from '@/components/common/Loader';
 import { useAppContext } from '@/components/context/AppContext';
+import Status from '@/components/status';
 import useOrders, { saveOrders } from '@/hooks/orders/useOrders';
 import { formatPrice, locales } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -12,7 +13,6 @@ import { useMemo, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import Status from './Status';
 
 const OrderForm = ({ ordersId }) => {
   const { t, lang } = useTranslation('common');

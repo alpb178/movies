@@ -13,7 +13,9 @@ const Status = ({ data, className }) => {
     }
   };
   return (
-    <div className={clsx(colorize(), className ? className : 'rounded-full px-4 p-1 text-sm')}>
+    <div
+      className={clsx(colorize(), className ? className : 'rounded-full px-4 p-1 text-sm w-max')}
+    >
       {t(`form.common.status.${data.toLowerCase()}`)}
     </div>
   );
