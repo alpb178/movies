@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
+import MenuGroups from './MenuGroups';
 import MenuItemsFilter from './MenuItemsFilter';
 
 const MenuItemsList = () => {
@@ -26,6 +27,7 @@ const MenuItemsList = () => {
   const onSortChangeCallback = useCallback(setSort, []);
   const [openFilters, setOpenFilters] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+  const [openMenuGroups, setOpenMenuGroups] = useState(false);
   const queryClient = useQueryClient();
   const [selectedItem, setSelectedItem] = useState();
   const [deleteConfirmation, setDeleteConfirmation] = useState({ open: false, id: null });
@@ -191,6 +193,12 @@ const MenuItemsList = () => {
     </button>
   );
 
+  const renderCategoriesButton = () => (
+    <button type="button" className="btn-contained" onClick={() => setOpenMenuGroups(true)}>
+      {t('recipe-groups', { count: 2 })}
+    </button>
+  );
+
   const options = {
     name: t('menu-items', { count: 2 }),
     columns,
@@ -218,6 +226,7 @@ const MenuItemsList = () => {
         >
           {t('filter')}
         </button>*/}
+        {renderCategoriesButton()}
       </div>
     )
   };
@@ -230,6 +239,10 @@ const MenuItemsList = () => {
         <DataTable {...options} />
       ) : (
         <EmptyState text={t('menu-items', { count: 0 })}>{renderCreateButton()}</EmptyState>
+      )}
+
+      {openMenuGroups && (
+        <MenuGroups open={openMenuGroups} onOpen={setOpenMenuGroups} setLoading={setLoading} />
       )}
 
       <DeleteConfirmationDialog
