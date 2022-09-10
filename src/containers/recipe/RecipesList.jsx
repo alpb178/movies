@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import MenuCategoriesForm from "./MenuCategoriesForm";
+import MenuCategoriesForm from './CategoriesRecipe/MenuCategories';
 import RecipesFilter from './RecipesFilter';
 
 const RecipesList = () => {
@@ -103,7 +103,7 @@ const RecipesList = () => {
     router.push(path);
   };
 
-  const formatPriceValue = (value) => <div>{formatPrice(value)}</div>;
+  const formatPriceValue = (value) => <div>{formatPrice(value) || 0}</div>;
 
   const columns = React.useMemo(() => [
     {
@@ -112,7 +112,7 @@ const RecipesList = () => {
     },
     {
       Header: t('form.common.label.price'),
-      accessor: 'price',
+      accessor: 'menuItemId',
       Cell: ({ value }) => formatPriceValue(value)
     },
     {
@@ -177,10 +177,9 @@ const RecipesList = () => {
 
   const renderCategoriesButton = () => (
     <button type="button" className="btn-contained" onClick={() => setOpenForm(true)}>
-      {t('create', { entity: t('recipe-groups', { count: 1 }).toLowerCase() })}
+      {t('recipe-groups', { count: 1 }).toLowerCase()}
     </button>
   );
-
 
   const options = {
     name: t('recipes', { count: 2 }),
@@ -236,7 +235,6 @@ const RecipesList = () => {
           open={openForm}
           onOpen={setOpenForm}
           setLoading={setLoading}
-        //products={recipes}
         />
       )}
 

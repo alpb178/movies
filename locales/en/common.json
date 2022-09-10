@@ -219,6 +219,11 @@
         "update": "Update resources"
       }
     },
+    "recipe-groups": {
+      "title": {
+        "create": "Categories"
+      }
+    },
     "user": {
       "placeholder": {
         "firstName": "First Name",

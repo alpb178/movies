@@ -247,6 +247,11 @@
         "update": "Actualizar Recurso"
       }
     },
+    "recipe-groups": {
+      "title": {
+        "create": "Categorías"
+      }
+    },
     "table": {
       "page-count": "Página {{currentPage}} de {{lastPage}}",
       "rows-per-page": "Filas por página",
