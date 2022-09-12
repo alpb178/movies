@@ -61,7 +61,7 @@
   "departure-at": "Fecha de Salida",
   "description": "Descripción",
   "destination": "Destino",
-  "direct-sale": "Venta directa",
+  "direct-sale": "Agregar al Menu",
   "drop-zone-text": "Arrastre un fichero aquí o haz click para añadir una imagen",
   "email": "Correo electrónico",
   "error": {
@@ -249,7 +249,7 @@
     },
     "recipe-groups": {
       "title": {
-        "create": "Categorías"
+        "create": "Categorías del Menú"
       }
     },
     "table": {

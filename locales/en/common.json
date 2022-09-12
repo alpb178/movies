@@ -34,7 +34,7 @@
     "male": "This {{entity}} will be deleted. Once confirmed, it is not possible to reverse the operation. Do you want to delete the {{entity}}?",
     "female": "This {{entity}} will be deleted. Once confirmed it is not possible to reverse the operation. Do you want to delete the {{entity}}?"
   },
-  "direct-sale": "Direct sale",
+  "direct-sale": "Add Menu Item",
   "create": "Create {{entity}}",
   "delete-title": "Delete {{entity}}",
   "description": "Description",
@@ -221,7 +221,7 @@
     },
     "recipe-groups": {
       "title": {
-        "create": "Categories"
+        "create": "Categories Menu"
       }
     },
     "user": {
