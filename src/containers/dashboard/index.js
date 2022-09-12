@@ -99,7 +99,7 @@ const Dashboard = () => {
         count.push(item?.length);
         switch (filterValues) {
           case 'day':
-            return labels.push(format(new Date(date.split('T')[0] + 'T00:00'), 'PP', { locale }));
+            return labels.push(format(new Date(date.split('T')[0] + 'T00:00'), 'P', { locale }));
           case 'months':
             return labels.push(new Date(date).getMonth());
           case 'year':
