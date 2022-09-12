@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import MenuCategoriesForm from './CategoriesRecipe/MenuCategories';
+// import MenuCategoriesForm from './CategoriesRecipe/MenuCategories';
 import RecipesFilter from './RecipesFilter';
 
 const RecipesList = () => {
@@ -221,14 +221,14 @@ const RecipesList = () => {
         <EmptyState text={t('recipes', { count: 0 })}>{renderCreateButton()}</EmptyState>
       )}
 
-      {openForm && (
+      {/* {openForm && (
         <MenuCategoriesForm
           data={selectedItem}
           open={openForm}
           onOpen={setOpenForm}
           setLoading={setLoading}
         />
-      )}
+      )} */}
 
       <DeleteConfirmationDialog
         open={deleteConfirmation.open}

@@ -126,7 +126,7 @@ const MenuItemsList = () => {
   const columns = useMemo(() => [
     {
       Header: t('form.common.label.name'),
-      accessor: 'product.name'
+      Cell: ({ row }) => row?.original?.product?.name || row?.original?.recipe?.name
     },
     {
       Header: t('form.common.label.price'),
