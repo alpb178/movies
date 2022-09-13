@@ -16,7 +16,7 @@ import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -72,7 +72,7 @@ const RecipeForm = ({ recipesId }) => {
     description: recipes?.description || '',
     category: recipes?.category || '',
     ingredients: recipes?.ingredients || [],
-    isMenuItem: recipes?.isMenuItem || '',
+    isMenuItem: recipes?.menuItem?.isAvailable || false,
     recipeGroups: recipes?.recipeGroups || []
   };
 
@@ -103,7 +103,7 @@ const RecipeForm = ({ recipesId }) => {
   };
 
   const getSumPrice = (total, num) => {
-    return (total += num?.amount * num?.cost);
+    return (total += num?.amount * (num?.cost || num?.product?.cost));
   };
 
   const onChangeSalesPrice = async (value) => {
@@ -127,15 +127,22 @@ const RecipeForm = ({ recipesId }) => {
   };
 
   const calculateTotalCost = () => {
+    console.log(ingredients);
     let total = 0;
     if (ingredients.length > 1) {
       total = ingredients.reduce(getSumPrice, 0);
     } else {
-      total = ingredients[0]?.amount * ingredients[0]?.cost;
+      total = ingredients[0]?.amount * (ingredients[0]?.cost || ingredients[0]?.product?.cost);
     }
     total += parseFloat(miscCost);
     setTotalCost(total);
   };
+
+  useEffect(() => {
+    setMenuItem(recipes?.menuItem?.isAvailable || false);
+    setSalesPrice(recipes?.menuItem?.price || 0);
+    console.log('ale');
+  }, [recipes]);
 
   useMemo(async () => {
     if (ingredients.length > 0) {
@@ -231,6 +238,7 @@ const RecipeForm = ({ recipesId }) => {
                     errors={errors}
                     onShipmentItemsChange={setIngredients}
                     touched={touched}
+                    recipe={recipes}
                   />
                 </div>
 

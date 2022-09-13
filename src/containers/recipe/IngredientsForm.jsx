@@ -8,7 +8,7 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 
-const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, travel }) => {
+const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, recipe }) => {
   const { t } = useTranslation('common');
 
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -71,22 +71,13 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
   };
 
   useMemo(async () => {
-    if (productsApi && !travel?.payload) setProducts(productsApi.rows);
-    if (productsApi && travel?.payload) {
-      travel?.payload?.map((item) => {
-        const productselected = productsApi?.rows.find(
-          (element) => element?.shipmentItem.id === item.shipmentItems.id
-        );
-        item.id = item.ShipmentItemId;
-        item.measureUnit = productselected?.shipmentItem?.measureUnit;
-        item.name = productselected?.shipmentItem?.name;
-        item.maxAmount = productselected?.maxAmount;
-        item.maxPrice = productselected?.maxPrice;
-        item.minPrice = productselected?.maxPrice;
-      });
-      setSelectedOptions(travel?.payload);
-      productsApi?.rows?.map((item) => {
-        var index = travel.payload.find((e) => e.id === item.shipmentItem.id);
+    if (productsApi && !recipe?.ingredients) {
+      setProducts(productsApi?.rows);
+    }
+    if (productsApi && recipe?.ingredients) {
+      setSelectedOptions(recipe?.ingredients);
+      productsApi?.rows.map((item) => {
+        var index = recipe?.ingredients.find((e) => e.id === item.id);
         !index && products.push(item);
       });
     }
@@ -118,13 +109,17 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
       {selectedOptions?.length > 0 ? (
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
           {selectedOptions.map((option, idx) => (
-            <div key={option?.name} className="flex flex-col">
+            <div key={option?.id || option?.id} className="flex flex-col">
               <p className="w-full px-4 pt-4 space-x-1 text-sm text-gray-400">
                 <span>{option?.amount}</span>
-                {!isSender ? <span>{`· ${formatPrice(option?.cost)} / unidad`}</span> : null}
+                {!isSender ? (
+                  <span>{`· ${formatPrice(option?.cost || option?.product?.cost)} / ${
+                    option?.measureUnit?.name || option?.measureUnit?.name
+                  }`}</span>
+                ) : null}
               </p>
               <div className="flex items-center w-full p-2 pt-0 space-x-6">
-                <p className="w-full text-lg">{option?.name}</p>
+                <p className="w-full text-lg">{option?.name || option?.product?.name}</p>
                 <div className="flex items-center space-x-1 text-field max-w-max">
                   <button
                     type="button"
@@ -169,7 +164,7 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, tra
 
 IngredientsForm.propTypes = {
   errors: PropTypes.objects,
-  travel: PropTypes.objects,
+  recipes: PropTypes.objects,
   touched: PropTypes.objects,
   onShipmentItemsChange: PropTypes.objects,
   isSender: PropTypes.func
