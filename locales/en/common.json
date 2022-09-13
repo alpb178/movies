@@ -21,9 +21,11 @@
     "other": "Cash Register Box"
   },
   "cancel": "Cancel",
+  "countries": "",
   "close": "Close",
   "create-at": "Create date",
   "create-account": "Create New Account",
+  "dashboard": "Dashboard",
   "delete": "Delete",
   "delete-filter": "Clear Filter",
   "deleted": {
@@ -362,6 +364,7 @@
   "search-entity": "Search {{entity}}",
   "select": "Select",
   "settings": "Settings",
+  "symbol": "Symbol",
   "shifts": {
     "0": "No Shifts",
     "1": "Shift",
