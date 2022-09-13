@@ -91,7 +91,7 @@ const MenuCategories = ({ data, onOpen, open, setLoading }) => {
       onOpen={onOpen}
       isNewData={isNewData}
     >
-      <div className="p-5">
+      <>
         {isloading && <Loading />}
         <div className="flow-root mt-1">
           <div>
@@ -122,7 +122,7 @@ const MenuCategories = ({ data, onOpen, open, setLoading }) => {
             </ul>
           </div>
         </div>
-      </div>
+      </>
     </ContainerSidebarRight>
   );
 };

@@ -14,7 +14,7 @@ export default function ContainerSidebarRight({ children, open, onOpen, isNewDat
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-5 h-screen" onClose={() => onOpen(false)}>
+      <Dialog as="div" className="relative z-40 h-screen" onClose={() => onOpen(false)}>
         <Transition.Child
           as={Fragment}
           enter="transition-opacity ease-linear duration-300"
@@ -40,7 +40,7 @@ export default function ContainerSidebarRight({ children, open, onOpen, isNewDat
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full opacity-0"
           >
-            <Dialog.Panel className="relative flex flex-col flex-1 w-full max-w-lg bg-white">
+            <Dialog.Panel className="relative flex flex-col flex-1 w-full max-w-lg bg-white shadow-xl">
               <SimpleBar style={{ maxHeight: '100%' }} className="h-full">
                 <p className="px-8 pt-8 form-header">{t(title)}</p>
                 <div className="px-8 pb-24">
