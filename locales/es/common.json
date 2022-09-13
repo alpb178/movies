@@ -7,7 +7,17 @@
     "already": "¿Ya tienes una cuenta?",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
-    "new": "¿Nuevo en Vebrics?"
+    "new": "¿Nuevo en Vebrics?",
+    "register": {
+      "label": "Registrarme",
+      "complete": {
+        "title": "Gracias por registrarte en {{name}}",
+        "content": "Sólo te queda verficar tu dirección de correo para usar tu cuenta.",
+        "instructions": "Te hemos enviado un correo electrónico a tu dirección para que verifiques tu cuenta.",
+        "no-email": "¿No recibiste un correo?",
+        "resend-email": "Volver a enviar"
+      }
+    }
   },
   "actions": {
     "0": "No existen acciones para este elemento",

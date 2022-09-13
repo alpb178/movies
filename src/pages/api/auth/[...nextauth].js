@@ -1,6 +1,7 @@
-import { API_LOGIN_URL, API_REFRESH_TOKEN_URL, POST, TOKEN_KEY } from '@/lib/constants';
+import { API_LOGIN_URL, API_REFRESH_TOKEN_URL, POST, ROLE_USER, TOKEN_KEY } from '@/lib/constants';
 import axios from 'axios';
 import Cookies from 'cookies';
+import jwtDecode from 'jwt-decode';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import url from 'url';
@@ -25,6 +26,7 @@ const providers = [
         const options = { method: POST, data };
         const path = `${process.env.NEXT_PUBLIC_API_URL}${API_LOGIN_URL}`;
         const res = await axios(path, options);
+
         // If no error and we have user data, return it
         if (res.status === 200) {
           return res.data;
@@ -41,6 +43,10 @@ const providers = [
 
 const callbacks = {
   async signIn({ user, account }) {
+    if (user && user?.accessToken && jwtDecode(user?.accessToken)?.roles.includes(ROLE_USER)) {
+      return false;
+    }
+
     if (account.provider === 'credentials' && user) {
       return true;
     }

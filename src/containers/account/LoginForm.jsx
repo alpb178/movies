@@ -1,16 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
-import {
-  APP_NAME,
-  BUSINESS_PAGE,
-  DASHBOARD_PAGE,
-  FORGOT_PASSWORD_PAGE,
-  ROLE_USER
-} from '@/lib/constants';
+import { APP_NAME, BUSINESS_PAGE, DASHBOARD_PAGE, FORGOT_PASSWORD_PAGE } from '@/lib/constants';
 import { lottieOptions } from '@/lib/utils';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { Field, Form, Formik } from 'formik';
-import jwtDecode from 'jwt-decode';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -22,7 +15,6 @@ import * as Yup from 'yup';
 const LoginForm = () => {
   const { t } = useTranslation('common');
   const router = useRouter();
-  const { data: session } = useSession();
   // const rolesSession =
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,10 +39,9 @@ const LoginForm = () => {
         rememberMe: values.rememberMe,
         callbackUrl: DASHBOARD_PAGE
       });
+
       if (res.ok) {
-        if (jwtDecode(session?.accessToken)?.roles.includes(ROLE_USER))
-          toast.error(t('form.common.message-users'), { variant: 'error' });
-        else router.push(DASHBOARD_PAGE);
+        router.push(DASHBOARD_PAGE);
       } else {
         let _messageErrors = '';
         if (res.status) {
@@ -60,6 +51,9 @@ const LoginForm = () => {
               break;
             case 401:
               _messageErrors = t('error.401');
+              break;
+            case 403:
+              _messageErrors = t('form.common.message-users');
               break;
             case 500:
               _messageErrors = t('error.500');

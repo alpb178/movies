@@ -26,6 +26,7 @@ export const API_SHIFTS_URL = '/shifts';
 
 // App Routes
 export const LOGIN_PAGE = '/auth/login';
+export const REGISTER_PAGE = '/auth/register';
 export const FORGOT_PASSWORD_PAGE = '/auth/forgot-password';
 export const HOME_PAGE = '/dashboard';
 export const DASHBOARD_PAGE = '/dashboard';
@@ -37,10 +38,11 @@ export const SETTINGS_PAGE = '/settings';
 export const SHIFT_PAGE = '/shift';
 export const MEASURE_UNITS_PAGE = '/measure-units';
 export const MENU_ITEMS_PAGE = '/menu-items';
+export const WELCOME_PAGE = '/auth/register/done';
 
 // App Routes Vebrics
 export const AREA_PAGE = '/areas';
-export const BUSINESS_PAGE = '/auth/business';
+export const BUSINESS_PAGE = '/auth/register/business';
 export const ORDERS_PAGE = '/orders';
 export const TABLE_PAGE = '/table';
 export const CASH_REGISTER_BOX_PAGE = '/cash-register-box';

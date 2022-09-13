@@ -7,7 +7,7 @@ const { publicRuntimeConfig } = getConfig();
 
 export default function AuthNavbar() {
   return (
-    <header className="inset-x-0 top-0 z-50 lg:relative">
+    <header className="inset-x-0 top-0 z-30 lg:relative">
       <div id="main-navbar" className="w-full transition duration-300 ease-in-out bg-white">
         <div
           className="flex items-center justify-between w-full h-full px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:justify-start md:space-x-10 lg:px-8"

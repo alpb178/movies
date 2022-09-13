@@ -1,7 +1,7 @@
 import Loading from '@/components/common/Loader';
 import Wizard from '@/components/form/Wizard';
 import { createAccount } from '@/hooks/auth/useAuth';
-import { LOGIN_PAGE } from '@/lib/constants';
+import { WELCOME_PAGE } from '@/lib/constants';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -88,30 +88,10 @@ const CreateAccountForm = () => {
 
     try {
       setLoading(true);
-      const res = await createAccount({
+      await createAccount({
         args: body
       });
-      if (res.ok) router.push(LOGIN_PAGE);
-      else {
-        let _messageErrors = '';
-        if (res.status) {
-          switch (res.status) {
-            case 400:
-              _messageErrors = t('error.400');
-              break;
-            case 401:
-              _messageErrors = t('error.401');
-              break;
-            case 500:
-              _messageErrors = t('error.500');
-              break;
-            default:
-              _messageErrors = res.error.toString();
-              break;
-          }
-        }
-        toast.error(_messageErrors, { variant: 'error' });
-      }
+      router.push(WELCOME_PAGE);
     } catch (error) {
       toast.error(error.toString(), { variant: 'error' });
     } finally {
