@@ -61,7 +61,8 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
     const { name, price, isMenuItem, cost, description, measureUnit, recipeGroup } = values;
     const sendBody = { name, price, isMenuItem, cost, description, isMenuItem };
     sendBody.measureUnit = measureUnit.id;
-    recipeGroup;
+    sendBody.recipeGroup = recipeGroup.id;
+
     let method = POST;
     let message = t('inserted.male', { entity: t('products', { count: 1 }) });
     if (data) {
@@ -214,7 +215,11 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
                 <AutocompleteField
                   id="recipeGroup"
                   name="recipeGroup"
-                  options={recipeGroups ? recipeGroups : []}
+                  options={
+                    recipeGroups
+                      ? recipeGroups.filter((rg) => !rg.name.includes('uncategorized'))
+                      : []
+                  }
                   className="text-field filled"
                   defaultValue={recipeGroups?.category}
                   actionCreate={onCreateRecipeGroups}
