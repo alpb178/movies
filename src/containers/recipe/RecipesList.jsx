@@ -76,7 +76,7 @@ const RecipesList = () => {
           method: DELETE
         }
       });
-      await queryClient.refetchQueries([API_RECIPE_URL]);
+      queryClient.refetchQueries([API_RECIPE_URL]);
       toast(t('deleted.male', { entity: t('recipes', { count: 1 }) }));
     } catch (error) {
       toast.error(error);
@@ -96,7 +96,17 @@ const RecipesList = () => {
     router.push(path);
   };
 
-  const formatPriceValue = (value) => <div>{formatPrice(value) || 0}</div>;
+  const formatPriceValue = (value) => (
+    <div className="text-center w-28"> {value?.price ? formatPrice(value.price) : '-'}</div>
+  );
+  const formatMiscCostValue = (value) => (
+    <div className="text-center w-28">{formatPrice(value) || 0}</div>
+  );
+  const formatRecipeGroup = (value) => (
+    <div className="text-center w-28">
+      {value ? (value.includes('uncategorized') ? '-' : value) : '-'}
+    </div>
+  );
 
   const columns = React.useMemo(() => [
     {
@@ -105,13 +115,18 @@ const RecipesList = () => {
     },
     {
       Header: t('form.common.label.price'),
-      accessor: 'menuItemId',
+      accessor: 'menuItem',
       Cell: ({ value }) => formatPriceValue(value)
     },
     {
       Header: t('form.common.label.misc-cost'),
       accessor: 'miscCost',
-      Cell: ({ value }) => formatPriceValue(value)
+      Cell: ({ value }) => formatMiscCostValue(value)
+    },
+    {
+      Header: t('form.common.label.recipe-group'),
+      accessor: 'menuItem.recipeGroup.name',
+      Cell: ({ value }) => formatRecipeGroup(value)
     },
     {
       Header: t('form.common.label.count-ingredients'),

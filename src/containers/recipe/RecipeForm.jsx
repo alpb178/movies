@@ -1,6 +1,7 @@
 import Loading from '@/components/common/Loader';
 import { useAppContext } from '@/components/context/AppContext';
 import AutocompleteField from '@/components/form/AutocompleteField';
+import CustomSwitch from '@/components/form/CustomSwitch';
 import useCategoryRecipes, { saveCategoryRecipes } from '@/hooks/recipe-groups/useRecipesGroups';
 import useRecipes, { saveRecipe } from '@/hooks/recipe/useRecipes';
 import { API_CATEGORY_RECIPES_URL, DEFAULT_PAGE_SIZE, POST, RECIPES_PAGE } from '@/lib/constants';
@@ -31,6 +32,7 @@ const RecipeForm = ({ recipesId }) => {
   const [salesPrice, setSalesPrice] = useState(0);
   const [salesProfit, setSalesProfit] = useState(0);
   const [cost, setCost] = useState(0);
+  const [menuItem, setMenuItem] = useState(false);
 
   const params = useMemo(() => {
     const queryParams = {};
@@ -47,7 +49,7 @@ const RecipeForm = ({ recipesId }) => {
     return queryParams;
   }, [page, pageSize, sort]);
 
-  const { data: categories, loadingCategories } = useCategoryRecipes({
+  const { data: recipeGroups, loadingRecipeGroups } = useCategoryRecipes({
     args: params,
     options: {
       keepPreviousData: true
@@ -56,25 +58,26 @@ const RecipeForm = ({ recipesId }) => {
 
   const { data: recipes, isLoading: isLoading } = useRecipes({
     args: { id: recipesId },
-    options: { keepPreviousData: true, enabled: !isNaN(recipesId) && !!categories }
+    options: { keepPreviousData: true, enabled: !isNaN(recipesId) && !!recipeGroups }
   });
 
   const initialValues = {
     name: recipes?.name || '',
     description: recipes?.description || '',
     category: recipes?.category || '',
-    ingredients: recipes?.ingredients || []
+    ingredients: recipes?.ingredients || [],
+    isMenuItem: recipes?.isMenuItem || '',
+    recipeGroups: recipes?.recipeGroups || []
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t('form.common.required.name')),
-    category: Yup.object().nullable().required(t('form.common.required.category'))
+    name: Yup.string().required(t('form.common.required.name'))
   });
 
-  const onCreateCategories = async (name) => {
+  const onCreateRecipeGroups = async (name) => {
     const sendBody = { name: name };
     let method = POST;
-    let message = t('inserted.male', { entity: t('recipes', { count: 1 }) });
+    let message = t('inserted.male', { entity: t('recipe-groups', { count: 1 }) });
     try {
       setLoading(true);
       await saveCategoryRecipes({
@@ -142,13 +145,14 @@ const RecipeForm = ({ recipesId }) => {
   }, [ingredients, miscCost, totalCost]);
 
   const onSubmit = async (values) => {
-    const { name, description, category } = values;
-    const sendBody = { name, description };
-    sendBody.recipeGroup = category.id;
+    const { name, description, recipeGroups, isMenuItem } = values;
+    const sendBody = { name, description, isMenuItem };
+    sendBody.recipeGroup = recipeGroups.id;
     sendBody.business = user?.data?.business[0]?.id;
     sendBody.miscCost = miscCost;
     sendBody.price = salesPrice;
     sendBody.ingredients = ingredients;
+
     let method = POST;
     let message = t('inserted.male', { entity: t('recipes', { count: 1 }) });
     if (!isNaN(recipesId)) {
@@ -177,7 +181,7 @@ const RecipeForm = ({ recipesId }) => {
 
   return (
     <>
-      {loading || isLoading || loadingCategories ? (
+      {loading || isLoading || loadingRecipeGroups ? (
         <Loading />
       ) : (
         <Formik
@@ -199,22 +203,6 @@ const RecipeForm = ({ recipesId }) => {
                       {errors?.name && touched?.name ? (
                         <p className="mt-4 text-red-600">{errors?.name}</p>
                       ) : null}
-                    </div>
-                  </div>
-
-                  <div className="w-full space-y-2">
-                    <label htmlFor="category">{t('recipe-groups', { count: 1 })}</label>
-                    <div className="relative w-full mx-auto">
-                      <AutocompleteField
-                        id="category"
-                        name="category"
-                        options={categories?.rows ? categories.rows : []}
-                        className="text-field filled"
-                        defaultValue={recipes?.category}
-                        actionCreate={onCreateCategories}
-                        actionText={t('recipe-groups.create')}
-                        placeholder={t('select')}
-                      />
                     </div>
                   </div>
 
@@ -241,55 +229,6 @@ const RecipeForm = ({ recipesId }) => {
                 </div>
 
                 <div className="grid w-full grid-cols-2 gap-6 h-max">
-                  <div className="w-full space-y-2">
-                    <label htmlFor="sales-price">{t('form.common.label.sales-price')}</label>
-                    <div className="relative w-full mx-auto">
-                      <NumberFormat
-                        decimalSeparator={','}
-                        decimalScale={2}
-                        id="price"
-                        value={salesPrice}
-                        onChange={(e) => onChangeSalesPrice(e.target.value)}
-                        className="text-field filled"
-                      />
-                      <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="cost">{t('form.common.label.cost')}</label>
-                    <div className="relative w-full mx-auto">
-                      <NumberFormat
-                        decimalSeparator={','}
-                        decimalScale={2}
-                        id="cost"
-                        name="cost"
-                        value={cost}
-                        className="text-field filled"
-                        onChange={(e) => onChangeCost(e.target.value)}
-                      />
-                      <p className="absolute inset-y-0 right-0 flex items-center pr-10">%</p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 col-span-2 gap-6">
-                    <div className="space-y-2">
-                      <label htmlFor="sales-profit">{t('form.common.label.sales-profit')}</label>
-                      <div className="relative">
-                        <NumberFormat
-                          decimalSeparator={','}
-                          decimalScale={2}
-                          id="salesProfit"
-                          name="salesProfit"
-                          value={salesProfit}
-                          className="text-field filled"
-                          onChange={(e) => onChangeSalesProfit(e.target.value)}
-                        />
-                        <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="space-y-2">
                     <label htmlFor="misc-cost">{t('form.common.label.misc-cost')}</label>
                     <div className="relative w-full mx-auto">
@@ -311,6 +250,92 @@ const RecipeForm = ({ recipesId }) => {
                       {formatPrice(totalCost)}
                     </div>
                   </div>
+
+                  <div className="grid grid-cols-2 mt-5 col-span-2 gap-6">
+                    <label className="flex items-center">{t('direct-sale')}</label>
+                    <Field id="isMenuItem" name="isMenuItem">
+                      {({ form: { values, setFieldValue } }) => (
+                        <CustomSwitch
+                          checked={values?.isMenuItem}
+                          onChange={(val) => {
+                            setFieldValue('isMenuItem', val);
+                            setMenuItem(!menuItem);
+                          }}
+                        />
+                      )}
+                    </Field>
+                  </div>
+
+                  {menuItem ? (
+                    <>
+                      <div className="w-full mt-5 space-y-2">
+                        <label htmlFor="sales-price">{t('form.common.label.sales-price')}</label>
+                        <div className="relative w-full mx-auto">
+                          <NumberFormat
+                            decimalSeparator={','}
+                            decimalScale={2}
+                            id="price"
+                            value={salesPrice}
+                            onChange={(e) => onChangeSalesPrice(e.target.value)}
+                            className="text-field filled"
+                          />
+                          <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                        </div>
+                      </div>
+
+                      <div className=" mt-5 space-y-2">
+                        <label htmlFor="cost">{t('form.common.label.cost')}</label>
+                        <div className="relative w-full mx-auto">
+                          <NumberFormat
+                            decimalSeparator={','}
+                            decimalScale={2}
+                            id="cost"
+                            name="cost"
+                            value={cost}
+                            className="text-field filled"
+                            onChange={(e) => onChangeCost(e.target.value)}
+                          />
+                          <p className="absolute inset-y-0 right-0 flex items-center pr-10">%</p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 col-span-2 gap-6">
+                        <div className="space-y-2">
+                          <label htmlFor="sales-profit">
+                            {t('form.common.label.sales-profit')}
+                          </label>
+                          <div className="relative">
+                            <NumberFormat
+                              decimalSeparator={','}
+                              decimalScale={2}
+                              id="salesProfit"
+                              name="salesProfit"
+                              value={salesProfit}
+                              className="text-field filled"
+                              onChange={(e) => onChangeSalesProfit(e.target.value)}
+                            />
+                            <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="w-full space-y-2">
+                        <label htmlFor="category">{t('recipe-groups', { count: 1 })}</label>
+                        <div className="relative w-full mx-auto">
+                          <AutocompleteField
+                            id="recipeGroups"
+                            name="recipeGroups"
+                            options={recipeGroups ? recipeGroups : []}
+                            className="text-field filled"
+                            defaultValue={recipes?.recipeGroups}
+                            actionCreate={onCreateRecipeGroups}
+                            actionText={t('recipe-groups.create')}
+                            placeholder={t('select')}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  ) : null}
                 </div>
               </div>
 
