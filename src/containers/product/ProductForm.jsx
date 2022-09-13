@@ -6,7 +6,8 @@ import CustomSwitch from '@/components/form/CustomSwitch';
 import FormSidebarRight from '@/components/form/FormSidebarRight';
 import useMeasureUnits from '@/hooks/measure-unit/useMeasureUnits';
 import { saveProduct } from '@/hooks/product/useProducts';
-import { API_PRODUCTS_CATALOG_URL, POST, PUT } from '@/lib/constants';
+import useCategoryRecipes, { saveCategoryRecipes } from '@/hooks/recipe-groups/useRecipesGroups';
+import { API_CATEGORY_RECIPES_URL, API_PRODUCTS_CATALOG_URL, POST, PUT } from '@/lib/constants';
 import clsx from 'clsx';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -23,18 +24,26 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
   const [isNewData, setIsNewData] = useState(true);
   const [errors, setErrorsForm] = useState({});
   const [touched, setTouchedForm] = useState({});
-  const [directSale, setDirectSale] = useState(false);
+  const [menuItem, setMenuItem] = useState(false);
 
   const { user } = useAppContext();
 
   const initialValues = {
     name: data?.name || '',
-    price: data?.price || '',
+    price: data?.menuItem?.price || 0,
     description: data?.description || '',
-    directSale: data?.directSale || '',
+    isMenuItem: data?.menuItem?.isAvailable || false,
     cost: data?.cost || '',
-    measureUnit: data?.measureUnit || ''
+    measureUnit: data?.measureUnit || '',
+    recipeGroup: data?.recipeGroups || ''
   };
+
+  const { data: recipeGroups } = useCategoryRecipes({
+    args: {},
+    options: {
+      keepPreviousData: true
+    }
+  });
 
   const { data: measureUnits } = useMeasureUnits({
     args: {},
@@ -49,9 +58,10 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
   });
 
   const onSubmit = async (values) => {
-    const { name, price, directSale, cost, description, measureUnit } = values;
-    const sendBody = { name, price, directSale, cost, description };
+    const { name, price, isMenuItem, cost, description, measureUnit, recipeGroup } = values;
+    const sendBody = { name, price, isMenuItem, cost, description, isMenuItem };
     sendBody.measureUnit = measureUnit.id;
+    recipeGroup;
     let method = POST;
     let message = t('inserted.male', { entity: t('products', { count: 1 }) });
     if (data) {
@@ -78,8 +88,31 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
     }
   };
 
+  const onCreateRecipeGroups = async (name) => {
+    const sendBody = { name: name };
+    let method = POST;
+    let message = t('inserted.male', { entity: t('recipe-groups', { count: 1 }) });
+    try {
+      setLoading(true);
+      await saveCategoryRecipes({
+        args: sendBody,
+        options: {
+          method
+        }
+      });
+      await queryClient.refetchQueries([API_CATEGORY_RECIPES_URL]);
+      setLoading(false);
+      toast(message);
+    } catch (error) {
+      toast(error?.response?.data?.message || error.toString());
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     data?.id ? setIsNewData(false) : setIsNewData(true);
+    setMenuItem(data?.menuItem?.isAvailable || false);
   }, [data?.id]);
 
   useEffect(() => {
@@ -151,30 +184,46 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
 
         <div className="flex justify-between">
           <label className="flex items-center">{t('direct-sale')}</label>
-          <Field id="directSale" name="directSale">
+          <Field id="isMenuItem" name="isMenuItem">
             {({ form: { values, setFieldValue } }) => (
               <CustomSwitch
-                checked={values?.directSale}
+                checked={values?.isMenuItem}
                 onChange={(val) => {
-                  // setPushNotification(val);
-                  setFieldValue('directSale', val);
-                  setDirectSale(!directSale);
+                  setFieldValue('isMenuItem', val);
+                  setMenuItem(!menuItem);
                 }}
               />
             )}
           </Field>
         </div>
 
-        {directSale ? (
-          <div className="space-y-2">
-            <label htmlFor="price">{t('form.common.label.price')}</label>
-            <div className="relative w-full mx-auto">
-              <Field id="price" type="number" name="price" className="text-field filled" />
-              {errors?.price && touched?.price ? (
-                <p className="mt-4 text-red-600">{errors?.price}</p>
-              ) : null}
+        {menuItem ? (
+          <>
+            <div className="space-y-2">
+              <label htmlFor="price">{t('form.common.label.price')}</label>
+              <div className="relative w-full mx-auto">
+                <Field id="price" type="number" name="price" className="text-field filled" />
+                {errors?.price && touched?.price ? (
+                  <p className="mt-4 text-red-600">{errors?.price}</p>
+                ) : null}
+              </div>
             </div>
-          </div>
+            <div className="w-full space-y-2">
+              <label htmlFor="recipeGroups">{t('recipe-groups', { count: 1 })}</label>
+              <div className="relative w-full mx-auto">
+                <AutocompleteField
+                  id="recipeGroup"
+                  name="recipeGroup"
+                  options={recipeGroups ? recipeGroups : []}
+                  className="text-field filled"
+                  defaultValue={recipeGroups?.category}
+                  actionCreate={onCreateRecipeGroups}
+                  actionText={t('recipe-groups.create')}
+                  placeholder={t('select')}
+                />
+              </div>
+            </div>
+          </>
         ) : null}
       </div>
     </FormSidebarRight>

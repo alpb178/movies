@@ -6,6 +6,7 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useProducts, { saveProduct } from '@/hooks/product/useProducts';
 import { API_PRODUCTS_CATALOG_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
+import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -90,6 +91,18 @@ const ProductsList = () => {
     setOpenForm(true);
   };
 
+  const formatPriceValue = (value) => (
+    <div className="text-left w-28"> {value?.price ? formatPrice(value.price) : '-'} </div>
+  );
+  const formatCostValue = (value) => (
+    <div className="text-left w-28">{formatPrice(value) || 0}</div>
+  );
+  const formatRecipeGroup = (value) => (
+    <div className="text-center w-28">
+      {value ? (value.includes('uncategorized') ? '-' : value) : '-'}
+    </div>
+  );
+
   const columns = React.useMemo(() => [
     {
       Header: t('form.common.label.name'),
@@ -97,7 +110,18 @@ const ProductsList = () => {
     },
     {
       Header: t('form.common.label.cost'),
-      accessor: 'cost'
+      accessor: 'cost',
+      Cell: ({ value }) => formatCostValue(value)
+    },
+    {
+      Header: t('form.common.label.price'),
+      accessor: 'menuItem',
+      Cell: ({ value }) => formatPriceValue(value)
+    },
+    {
+      Header: t('form.common.label.recipe-group'),
+      accessor: 'menuItem.recipeGroup.name',
+      Cell: ({ value }) => formatRecipeGroup(value)
     },
     {
       Header: t('measure-units', { count: 1 }),
