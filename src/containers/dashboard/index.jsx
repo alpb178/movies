@@ -12,8 +12,8 @@ import { useMemo, useState } from 'react';
 
 const Dashboard = () => {
   const { t, lang } = useTranslation('common');
-  const [filterValues, setFilterValues] = useState('day');
-  const [filterValuesI, setFilterValuesI] = useState('day');
+  const [salesFilters, setSalesFilters] = useState('day');
+  const [ordersFilters, setOrdersFilters] = useState('day');
 
   const locale = {
     ...locales[lang]
@@ -21,38 +21,36 @@ const Dashboard = () => {
 
   const salesParams = useMemo(() => {
     const query = {};
-    if (filterValues !== '') query.tf = filterValues;
+    if (salesFilters !== '') query.tf = salesFilters;
     return query;
-  }, [filterValues]);
+  }, [salesFilters]);
 
   const ordersParams = useMemo(() => {
     const query = {};
-    if (filterValuesI !== '') query.tf = filterValuesI;
+    if (ordersFilters !== '') query.tf = ordersFilters;
     return query;
-  }, [filterValuesI]);
+  }, [ordersFilters]);
 
-  const { data: statistics, isLoading } = useStatics({
+  const { data: statistics, isLoading: isLoadingOrders } = useStatics({
     args: ordersParams,
     options: {
       keepPreviousData: true
     }
   });
 
-  const { data: salesReport, isLoadingStatisticsAmount } = useStatics({
+  const { data: salesReport, isLoading: isLoadingSales } = useStatics({
     args: salesParams,
     options: {
       keepPreviousData: true
     }
   });
 
-  const onSubmit = (event, value) => {
-    event.stopPropagation();
-    setFilterValues(value);
+  const onSubmit = (value) => {
+    setSalesFilters(value);
   };
 
-  const onSubmitI = (event, value) => {
-    event.stopPropagation();
-    setFilterValuesI(value);
+  const onSubmitI = (value) => {
+    setOrdersFilters(value);
   };
 
   const salesData = useMemo(() => {
@@ -74,13 +72,16 @@ const Dashboard = () => {
         }, 0);
         count.push(total);
 
-        switch (filterValues) {
+        switch (salesFilters) {
           case 'day':
             return labels.push(format(new Date(date.split('T')[0] + 'T00:00'), 'P', { locale }));
+          case 'month':
+            return labels.push(format(new Date(date.split('T')[0] + 'T00:00'), 'MMMM', { locale }));
           case 'year':
-            labels.push(new Date(date).getFullYear());
+            return labels.push(new Date(date).getFullYear());
         }
       });
+
       return { labels, count };
     }
 
@@ -97,13 +98,13 @@ const Dashboard = () => {
 
       Object.entries(grouped)?.map(([date, item]) => {
         count.push(item?.length);
-        switch (filterValues) {
+        switch (salesFilters) {
           case 'day':
             return labels.push(format(new Date(date.split('T')[0] + 'T00:00'), 'P', { locale }));
-          case 'months':
-            return labels.push(new Date(date).getMonth());
+          case 'month':
+            return labels.push(format(new Date(date.split('T')[0] + 'T00:00'), 'MMMM', { locale }));
           case 'year':
-            labels.push(new Date(date).getFullYear());
+            return labels.push(new Date(date).getFullYear());
         }
       });
 
@@ -115,22 +116,38 @@ const Dashboard = () => {
 
   return (
     <div className="w-full">
-      {isLoading && <Loading />}
       <div className="flex flex-col w-full px-4 lg:space-x-4 lg:flex-row">
-        <CardBarChartUsers
-          data={salesData}
-          actions={['day', 'months']}
-          onSubmit={onSubmit}
-          title={t('statistics.sales')}
-          type="line"
-        />
-        <CardBarChartUsers
-          data={ordersData}
-          actions={['day', 'months']}
-          onSubmit={onSubmitI}
-          title={t('statistics.orders')}
-          type="line"
-        />
+        {isLoadingSales ? (
+          <Loading />
+        ) : (
+          <CardBarChartUsers
+            data={salesData}
+            actions={[
+              { name: 'sales-day', value: 'day' },
+              { name: 'sales-months', value: 'month' }
+            ]}
+            onSubmit={onSubmit}
+            title={t('statistics.sales')}
+            type="line"
+          />
+        )}
+
+        {isLoadingOrders ? (
+          <Loading />
+        ) : (
+          <CardBarChartUsers
+            data={ordersData}
+            actions={[
+              { name: 'orders-day', value: 'day' },
+              { name: 'orders-months', value: 'month' }
+            ]}
+            onSubmit={onSubmitI}
+            title={t('statistics.orders')}
+            type="line"
+            bgColor=""
+            borderColor=""
+          />
+        )}
       </div>
     </div>
   );

@@ -3,19 +3,18 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import CardChart from './Card';
 
-const BarChart = ({ data, actions, onSubmit, title, type }) => {
+const BarChart = ({ data, actions, onSubmit, title, type, ...rest }) => {
   const { t } = useTranslation('common');
 
   const info = {
     labels: data?.labels,
     datasets: [
       {
-        label: 'Cantidad',
+        label: '',
         data: data?.count,
         fill: true,
-        barThickness: 8,
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        borderColor: 'rgba(75,192,192,1)'
+        backgroundColor: rest?.backgroundColor || 'rgba(75,192,192,0.4)',
+        borderColor: rest?.borderColor || 'rgba(75,192,192,1)'
       }
     ]
   };
