@@ -4,7 +4,13 @@ import AutocompleteField from '@/components/form/AutocompleteField';
 import CustomSwitch from '@/components/form/CustomSwitch';
 import useCategoryRecipes, { saveCategoryRecipes } from '@/hooks/recipe-groups/useRecipesGroups';
 import useRecipes, { saveRecipe } from '@/hooks/recipe/useRecipes';
-import { API_CATEGORY_RECIPES_URL, DEFAULT_PAGE_SIZE, POST, RECIPES_PAGE } from '@/lib/constants';
+import {
+  API_CATEGORY_RECIPES_URL,
+  DEFAULT_PAGE_SIZE,
+  POST,
+  PUT,
+  RECIPES_PAGE
+} from '@/lib/constants';
 import { formatPrice } from '@/lib/utils';
 import { Field, Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
@@ -251,7 +257,7 @@ const RecipeForm = ({ recipesId }) => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 mt-5 col-span-2 gap-6">
+                  <div className="grid grid-cols-2 col-span-2 gap-6 mt-5">
                     <label className="flex items-center">{t('direct-sale')}</label>
                     <Field id="isMenuItem" name="isMenuItem">
                       {({ form: { values, setFieldValue } }) => (
@@ -283,7 +289,7 @@ const RecipeForm = ({ recipesId }) => {
                         </div>
                       </div>
 
-                      <div className=" mt-5 space-y-2">
+                      <div className="mt-5 space-y-2 ">
                         <label htmlFor="cost">{t('form.common.label.cost')}</label>
                         <div className="relative w-full mx-auto">
                           <NumberFormat
