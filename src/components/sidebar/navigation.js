@@ -46,8 +46,7 @@ export default [
     name: 'menu-items',
     link: MENU_ITEMS_PAGE,
     icon: BookOpenIcon,
-    roles: [ROLE_ADMIN, ROLE_OWNER],
-    isNew: true
+    roles: [ROLE_ADMIN, ROLE_OWNER]
   },
   { name: 'orders', link: ORDERS_PAGE, icon: TicketIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   { name: 'shifts', link: SHIFT_PAGE, icon: ClockIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },

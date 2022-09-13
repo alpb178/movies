@@ -33,7 +33,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
     price: data?.menuItem?.price || 0,
     description: data?.description || '',
     isMenuItem: data?.menuItem?.isAvailable || false,
-    cost: data?.cost || '',
+    cost: data?.cost || 0,
     measureUnit: data?.measureUnit || '',
     recipeGroup: data?.recipeGroups || ''
   };
@@ -53,8 +53,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
   });
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t('form.common.required.name')),
-    cost: Yup.string().required(t('form.common.required.cost'))
+    name: Yup.string().required(t('form.common.required.name'))
   });
 
   const onSubmit = async (values) => {
