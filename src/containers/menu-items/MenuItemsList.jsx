@@ -6,10 +6,11 @@ import CustomSwitch from '@/components/form/CustomSwitch';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useMenuItems, { changeMenuItemStatus } from '@/hooks/menu-item/useMenuItems';
-import { API_MENU_ITEMS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
+import { API_MENU_ITEMS_URL, DEFAULT_PAGE_SIZE, DELETE, RECIPES_FORM_PAGE } from '@/lib/constants';
 import { formatPrice, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
@@ -20,7 +21,7 @@ import MenuItemsFilter from './MenuItemsFilter';
 
 const MenuItemsList = () => {
   const { t } = useTranslation('common');
-
+  const router = useRouter();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [sort, setSort] = useState();
@@ -73,7 +74,7 @@ const MenuItemsList = () => {
   const onDeleteConfirmation = async () => {
     try {
       setLoading(true);
-      await saveProduct({
+      await save({
         args: { id: deleteConfirmation.id },
         options: {
           method: DELETE
@@ -90,8 +91,13 @@ const MenuItemsList = () => {
 
   const onUpdate = (event, item) => {
     event.stopPropagation();
-    setSelectedItem(item);
-    setOpenForm(true);
+    const path = '';
+    const value = '';
+    if (item?.recipe?.id) {
+      value = item?.recipe?.id;
+      path = RECIPES_FORM_PAGE(value);
+    }
+    router.push(path);
   };
 
   const renderStatus = (row) => {
