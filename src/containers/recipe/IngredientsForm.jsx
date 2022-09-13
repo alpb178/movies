@@ -71,13 +71,21 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, rec
   };
 
   useMemo(async () => {
+    const ingredients = [];
     if (productsApi && !recipe?.ingredients) {
       setProducts(productsApi?.rows);
     }
     if (productsApi && recipe?.ingredients) {
-      setSelectedOptions(recipe?.ingredients);
+      recipe?.ingredients?.map((item) => {
+        const itemSelect = item.product;
+        itemSelect.amount = item.amount;
+        itemSelect.measureUnit = item.measureUnit;
+        ingredients.push(itemSelect);
+      });
+
+      setSelectedOptions(ingredients);
       productsApi?.rows.map((item) => {
-        var index = recipe?.ingredients.find((e) => e.id === item.id);
+        var index = ingredients.find((e) => e.id === item.id);
         !index && products.push(item);
       });
     }
@@ -109,17 +117,15 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, rec
       {selectedOptions?.length > 0 ? (
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
           {selectedOptions.map((option, idx) => (
-            <div key={option?.id || option?.id} className="flex flex-col">
+            <div key={option?.id} className="flex flex-col">
               <p className="w-full px-4 pt-4 space-x-1 text-sm text-gray-400">
                 <span>{option?.amount}</span>
                 {!isSender ? (
-                  <span>{`· ${formatPrice(option?.cost || option?.product?.cost)} / ${
-                    option?.measureUnit?.name || option?.measureUnit?.name
-                  }`}</span>
+                  <span>{`· ${formatPrice(option?.cost)} / ${option?.measureUnit?.name}`}</span>
                 ) : null}
               </p>
               <div className="flex items-center w-full p-2 pt-0 space-x-6">
-                <p className="w-full text-lg">{option?.name || option?.product?.name}</p>
+                <p className="w-full text-lg">{option?.name}</p>
                 <div className="flex items-center space-x-1 text-field max-w-max">
                   <button
                     type="button"

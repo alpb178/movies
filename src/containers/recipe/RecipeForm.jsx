@@ -73,7 +73,7 @@ const RecipeForm = ({ recipesId }) => {
     category: recipes?.category || '',
     ingredients: recipes?.ingredients || [],
     isMenuItem: recipes?.menuItem?.isAvailable || false,
-    recipeGroups: recipes?.recipeGroups || []
+    recipeGroups: recipes?.menuItem?.recipeGroup || []
   };
 
   const validationSchema = Yup.object().shape({
@@ -127,7 +127,6 @@ const RecipeForm = ({ recipesId }) => {
   };
 
   const calculateTotalCost = () => {
-    console.log(ingredients);
     let total = 0;
     if (ingredients.length > 1) {
       total = ingredients.reduce(getSumPrice, 0);
@@ -141,7 +140,6 @@ const RecipeForm = ({ recipesId }) => {
   useEffect(() => {
     setMenuItem(recipes?.menuItem?.isAvailable || false);
     setSalesPrice(recipes?.menuItem?.price || 0);
-    console.log('ale');
   }, [recipes]);
 
   useMemo(async () => {
@@ -194,7 +192,7 @@ const RecipeForm = ({ recipesId }) => {
 
   return (
     <>
-      {loading || isLoading || loadingRecipeGroups ? (
+      {loading || isLoading ? (
         <Loading />
       ) : (
         <Formik
@@ -341,7 +339,7 @@ const RecipeForm = ({ recipesId }) => {
                             name="recipeGroups"
                             options={recipeGroups ? recipeGroups : []}
                             className="text-field filled"
-                            defaultValue={recipes?.recipeGroups}
+                            defaultValue={recipes?.menuItem?.recipeGroup}
                             actionCreate={onCreateRecipeGroups}
                             actionText={t('recipe-groups.create')}
                             placeholder={t('select')}
