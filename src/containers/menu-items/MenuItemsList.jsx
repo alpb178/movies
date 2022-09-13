@@ -7,11 +7,12 @@ import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useMenuItems, { changeMenuItemStatus } from '@/hooks/menu-item/useMenuItems';
 import { API_MENU_ITEMS_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/constants';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import Lottie from 'react-lottie';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import MenuGroups from './MenuGroups';
@@ -121,7 +122,10 @@ const MenuItemsList = () => {
     }
   };
 
-  const formatPriceValue = (value) => <div className="text-right w-28">{formatPrice(value)}</div>;
+  const formatPriceValue = (value) => <div className="text-center w-28">{formatPrice(value)}</div>;
+  const formatRecipeGroup = (value) => (
+    <div className="text-center w-28">{value.includes('uncategorized') ? '-' : value}</div>
+  );
 
   const columns = useMemo(() => [
     {
@@ -135,7 +139,8 @@ const MenuItemsList = () => {
     },
     {
       Header: t('form.common.label.recipe-group'),
-      accessor: 'recipeGroup.name'
+      accessor: 'recipeGroup.name',
+      Cell: ({ value }) => formatRecipeGroup(value)
     },
     {
       Header: t('available'),
@@ -187,12 +192,6 @@ const MenuItemsList = () => {
     setFilterValues(updatedFilters);
   };
 
-  const renderCreateButton = () => (
-    <button type="button" className="btn-contained" onClick={() => setOpenForm(true)}>
-      {t('create', { entity: t('menu-items', { count: 1 }).toLowerCase() })}
-    </button>
-  );
-
   const renderCategoriesButton = () => (
     <button type="button" className="btn-contained" onClick={() => setOpenMenuGroups(true)}>
       {t('recipe-groups', { count: 2 })}
@@ -238,7 +237,11 @@ const MenuItemsList = () => {
       {menuItems && menuItems.rows.length > 0 ? (
         <DataTable {...options} />
       ) : (
-        <EmptyState text={t('menu-items', { count: 0 })}>{renderCreateButton()}</EmptyState>
+        <EmptyState text={t('menu-items', { count: 0 })}>
+          <div className="flex items-center justify-center h-64 w-max">
+            <Lottie options={lottieOptions('offline')} />
+          </div>
+        </EmptyState>
       )}
 
       {openMenuGroups && (
