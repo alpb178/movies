@@ -40,7 +40,7 @@ export default [
     icon: ScaleIcon,
     roles: [ROLE_ADMIN, ROLE_OWNER]
   },
-  { name: 'products', link: PRODUCTS_PAGE, icon: CubeIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
+  { name: 'products', link: PRODUCTS_PAGE(), icon: CubeIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   { name: 'recipes', link: RECIPES_PAGE, icon: ClipboardListIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   {
     name: 'menu-items',

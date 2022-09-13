@@ -30,7 +30,6 @@ export const REGISTER_PAGE = '/auth/register';
 export const FORGOT_PASSWORD_PAGE = '/auth/forgot-password';
 export const HOME_PAGE = '/dashboard';
 export const DASHBOARD_PAGE = '/dashboard';
-export const PRODUCTS_PAGE = '/products';
 export const RECIPES_PAGE = '/recipes';
 export const PERMISSIONS_PAGE = '/permissions';
 export const ROLES_PAGE = '/roles';
@@ -73,6 +72,9 @@ export const ROLE_OWNER = 'ROLE_OWNER';
 export const AREAS_DETAIL_PAGE = (id) => `/areas/${id}`;
 export const AREAS_FORM_PAGE = (id) => (id ? `/areas/form/${id}` : `/areas/form/create`);
 export const AREASS_EDIT = (area) => `/areas/edit/${area}`;
+
+//Product
+export const PRODUCTS_PAGE = (id) => (id ? `/products/${id}` : `/products/list`);
 
 // Users
 export const GET_USER_KEY = 'getUsers';

@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import ProductForm from './ProductForm';
 import ProductsFilter from './ProductsFilter';
 
-const ProductsList = () => {
+const ProductsList = ({ productId }) => {
   const { t } = useTranslation('common');
 
   const [page, setPage] = useState(0);
@@ -61,6 +61,18 @@ const ProductsList = () => {
       keepPreviousData: true
     }
   });
+
+  const { data: detailsProducts, isLoadingProductId } = useProducts({
+    args: { id: productId },
+    options: { keepPreviousData: true, enabled: !isNaN(productId) }
+  });
+
+  useEffect(() => {
+    if (detailsProducts) {
+      setOpenForm(true);
+      setSelectedItem(detailsProducts);
+    }
+  }, [detailsProducts]);
 
   const handleDelete = (event, row) => {
     event.stopPropagation();
@@ -212,7 +224,7 @@ const ProductsList = () => {
 
   return (
     <>
-      {(loading || isLoading) && <Loading />}
+      {(loading || isLoadingProductId || isLoading) && <Loading />}
 
       {products && products.rows.length > 0 ? (
         <DataTable {...options} />

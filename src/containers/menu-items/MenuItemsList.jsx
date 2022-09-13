@@ -6,7 +6,13 @@ import CustomSwitch from '@/components/form/CustomSwitch';
 import DataTable from '@/components/table';
 import TableActions from '@/components/table/TableActions';
 import useMenuItems, { changeMenuItemStatus } from '@/hooks/menu-item/useMenuItems';
-import { API_MENU_ITEMS_URL, DEFAULT_PAGE_SIZE, DELETE, RECIPES_FORM_PAGE } from '@/lib/constants';
+import {
+  API_MENU_ITEMS_URL,
+  DEFAULT_PAGE_SIZE,
+  DELETE,
+  PRODUCTS_PAGE,
+  RECIPES_FORM_PAGE
+} from '@/lib/constants';
 import { formatPrice, lottieOptions } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
@@ -96,7 +102,11 @@ const MenuItemsList = () => {
     if (item?.recipe?.id) {
       value = item?.recipe?.id;
       path = RECIPES_FORM_PAGE(value);
+    } else {
+      value = item?.product?.id;
+      path = PRODUCTS_PAGE(value);
     }
+
     router.push(path);
   };
 
@@ -159,7 +169,7 @@ const MenuItemsList = () => {
       Cell: ({ row }) => (
         <TableActions
           onEdit={(event) => onUpdate(event, row.original)}
-          onDelete={(event) => handleDelete(event, row)}
+          //onDelete={(event) => handleDelete(event, row)}
         />
       )
     }
