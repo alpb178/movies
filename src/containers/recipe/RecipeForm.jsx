@@ -32,6 +32,7 @@ const RecipeForm = ({ recipesId }) => {
   const queryClient = useQueryClient();
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingRG, setLoadingRG] = useState(false);
   const { user } = useAppContext();
   const [totalCost, setTotalCost] = useState(0);
   const [miscCost, setMiscCost] = useState(0);
@@ -55,14 +56,14 @@ const RecipeForm = ({ recipesId }) => {
     return queryParams;
   }, [page, pageSize, sort]);
 
-  const { data: recipeGroups, loadingRecipeGroups } = useCategoryRecipes({
+  const { data: recipeGroups, isLoading: loadingRecipeGroups } = useCategoryRecipes({
     args: params,
     options: {
       keepPreviousData: true
     }
   });
 
-  const { data: recipes, isLoading: isLoading } = useRecipes({
+  const { data: recipes, isLoading } = useRecipes({
     args: { id: recipesId },
     options: { keepPreviousData: true, enabled: !isNaN(recipesId) && !!recipeGroups }
   });
@@ -85,7 +86,7 @@ const RecipeForm = ({ recipesId }) => {
     let method = POST;
     let message = t('inserted.male', { entity: t('recipe-groups', { count: 1 }) });
     try {
-      setLoading(true);
+      setLoadingRG(true);
       await saveCategoryRecipes({
         args: sendBody,
         options: {
@@ -93,7 +94,7 @@ const RecipeForm = ({ recipesId }) => {
         }
       });
       await queryClient.refetchQueries([API_CATEGORY_RECIPES_URL]);
-      setLoading(false);
+      setLoadingRG(false);
       toast(message);
     } catch (error) {
       toast(error?.response?.data?.message || error.toString());
@@ -192,7 +193,8 @@ const RecipeForm = ({ recipesId }) => {
 
   return (
     <>
-      {loading || isLoading ? (
+      {loadingRG && <Loading />}
+      {loading || isLoading || loadingRecipeGroups ? (
         <Loading />
       ) : (
         <Formik
