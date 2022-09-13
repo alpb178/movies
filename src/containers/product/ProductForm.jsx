@@ -35,7 +35,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
     isMenuItem: data?.menuItem?.isAvailable || false,
     cost: data?.cost || 0,
     measureUnit: data?.measureUnit || '',
-    recipeGroup: data?.recipeGroups || ''
+    recipeGroup: data?.menuItem?.recipeGroup || []
   };
 
   const { data: recipeGroups } = useCategoryRecipes({
@@ -220,7 +220,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
                       : []
                   }
                   className="text-field filled"
-                  defaultValue={recipeGroups?.category}
+                  defaultValue={data?.menuItem?.recipeGroup || []}
                   actionCreate={onCreateRecipeGroups}
                   actionText={t('recipe-groups.create')}
                   placeholder={t('select')}
