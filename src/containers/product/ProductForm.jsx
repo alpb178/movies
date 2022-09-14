@@ -131,7 +131,7 @@ const RegionForm = ({ data, onOpen, open, products, setLoading }) => {
       setErrorsForm={setErrorsForm}
       setTouchedForm={setTouchedForm}
     >
-      <div className="space-y-6 text-base">
+      <div className="space-y-6">
         <div className="space-y-2">
           <div className="relative w-full mx-auto">
             <div className="absolute z-10 text-center text-gray-500"></div>

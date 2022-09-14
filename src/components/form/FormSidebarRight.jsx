@@ -28,10 +28,10 @@ export default function FormSidebarRight({
     <RightSidebar open={open} onOpen={onOpen}>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ errors, touched }) => (
-          <Form className="space-y-6 overflow-y-auto">
+          <Form className="pb-20 space-y-6 overflow-y-auto">
             <SimpleBar style={{ maxHeight: '100%' }} className="h-full">
               <p className="px-8 pt-8 form-header">{t(title)}</p>
-              <div className="px-8 pb-24">
+              <div className="h-full px-8 pb-8">
                 {React.Children.map(children, (child) => {
                   if (React.isValidElement(child)) {
                     setErrorsForm(errors);

@@ -31,7 +31,7 @@ export default function RightSidebar({ children, open, onOpen }) {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full opacity-0"
           >
-            <Dialog.Panel className="relative flex flex-col flex-1 w-full max-w-lg bg-white">
+            <Dialog.Panel className="relative flex flex-col flex-1 w-full h-full max-w-lg bg-white">
               {children}
             </Dialog.Panel>
           </Transition.Child>
