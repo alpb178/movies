@@ -3,7 +3,7 @@ import FormikAsyncAutocompleteField from '@/components/form/async-autocomplete/f
 import useProducts from '@/hooks/product/useProducts';
 import { API_PRODUCTS_CATALOG_URL } from '@/lib/constants';
 import { formatPrice, lottieOptions } from '@/lib/utils';
-import { MinusCircleIcon, PlusCircleIcon, XCircleIcon } from '@heroicons/react/outline';
+import { MinusCircleIcon, PlusCircleIcon, TrashIcon } from '@heroicons/react/outline';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
@@ -104,7 +104,7 @@ const IngredientsForm = ({ onShipmentItemsChange, errors, touched, recipe }) => 
   }, [productsApi]);
 
   return (
-    <div className="relative flex flex-col w-full space-y-4">
+    <div className="relative flex flex-col w-full space-y-6">
       <FormikAsyncAutocompleteField
         id="ingredient"
         name="ingredient"
@@ -119,16 +119,14 @@ const IngredientsForm = ({ onShipmentItemsChange, errors, touched, recipe }) => 
         emptyOptionsLabel={t('ingredients', { count: 0 })}
       />
 
-      <div>
-        {errors?.shipmentItems && touched?.shipmentItems ? (
-          <p className="mt-4 text-red-600">{errors?.name}</p>
-        ) : null}
-      </div>
+      {errors?.shipmentItems && touched?.shipmentItems ? (
+        <p className="mt-4 text-red-600">{errors?.name}</p>
+      ) : null}
 
       {selectedOptions?.length > 0 ? (
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
           {selectedOptions.map((option, idx) => (
-            <div key={option?.id} className="flex flex-col p-4">
+            <div key={option?.id} className="flex flex-col p-4 pr-2">
               <p className="w-full space-x-1 text-sm text-gray-400">
                 <span>{`${formatPrice(option?.cost)} / ${option?.measureUnit?.symbol}`}</span>
               </p>
@@ -164,10 +162,10 @@ const IngredientsForm = ({ onShipmentItemsChange, errors, touched, recipe }) => 
 
                 <button
                   type="button"
-                  className="text-gray-600 rounded-full hover:text-red-500 hover:bg-red-100"
+                  className="p-2 text-gray-600 rounded-full hover:text-red-500 hover:bg-red-100"
                   onClick={() => handleRemoveItem(option)}
                 >
-                  <XCircleIcon className="w-6 h-6 " />
+                  <TrashIcon className="w-6 h-6" />
                 </button>
               </div>
             </div>

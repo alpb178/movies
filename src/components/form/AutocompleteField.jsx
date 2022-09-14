@@ -86,7 +86,7 @@ const AutocompleteField = ({ label, name, onSelectionChange, options, ...props }
                       aria-label="clear selection"
                       disabled={disabled}
                     >
-                      <XIcon className="w-6 h-6 text-gray-500" />
+                      <XIcon className="w-5 h-5 text-gray-500" />
                     </button>
                   ) : (
                     <button

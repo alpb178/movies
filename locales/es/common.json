@@ -72,7 +72,7 @@
   "departure-at": "Fecha de Salida",
   "description": "Descripción",
   "destination": "Destino",
-  "direct-sale": "Agregar al Menu",
+  "direct-sale": "Agregar al Menú",
   "drop-zone-text": "Arrastre un fichero aquí o haz click para añadir una imagen",
   "email": "Correo electrónico",
   "error": {
@@ -131,7 +131,7 @@
         "sales-price": "Precio de Venta",
         "sales-profit": "Margen de Ganancia",
         "cost": "Costo",
-        "misc-cost": "Gastos Extras",
+        "misc-cost": "Otros Gastos",
         "total-cost": "Costo Total",
         "ingredients": "Ingredientes",
         "no-ingredients": "No existen Ingredientes",

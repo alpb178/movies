@@ -73,7 +73,7 @@ const RecipeForm = ({ recipesId }) => {
     description: recipes?.description || '',
     category: recipes?.category || '',
     ingredients: recipes?.ingredients || [],
-    isMenuItem: recipes?.menuItem?.isAvailable || false,
+    isMenuItem: recipes?.menuItem || false,
     recipeGroups: recipes?.menuItem?.recipeGroup || []
   };
 
@@ -208,18 +208,18 @@ const RecipeForm = ({ recipesId }) => {
         >
           {({ errors, touched }) => (
             <Form className="p-8 space-y-6">
-              <div className="flex items-center justify-between space-x-8">
-                <p className="mb-1 form-header">
+              <div className="flex items-center justify-between pb-6 space-x-8">
+                <h3 className="form-header" style={{ marginBottom: 0 }}>
                   {isNaN(recipesId)
                     ? t('form.recipes.title.create')
                     : t('form.recipes.title.update')}
-                </p>
+                </h3>
                 <button type="submit" className="btn-contained">
                   {t('save')}
                 </button>
               </div>
               <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
-                <div className="w-full space-y-4">
+                <div className="w-full space-y-6">
                   <div className="w-full space-y-2">
                     <label htmlFor="name">{t('form.common.label.name')}</label>
                     <div className="relative w-full mx-auto">
@@ -271,12 +271,12 @@ const RecipeForm = ({ recipesId }) => {
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="totalCost">{t('form.common.label.total-cost')}</label>
-                    <div className="relative w-full p-4 mx-auto bg-gray-100 border-2 border-transparent rounded-lg">
+                    <div className="relative w-full px-3 py-4 bg-gray-100 border-2 border-transparent rounded-lg">
                       {formatPrice(totalCost)}
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 col-span-2 gap-6 mt-5">
+                  <div className="grid grid-cols-2 col-span-2 gap-6">
                     <label className="flex items-center">{t('direct-sale')}</label>
                     <Field id="isMenuItem" name="isMenuItem">
                       {({ form: { values, setFieldValue } }) => (

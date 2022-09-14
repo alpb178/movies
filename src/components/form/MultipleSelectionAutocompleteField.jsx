@@ -6,7 +6,7 @@ import Downshift from 'downshift';
 import { Field } from 'formik';
 import { matchSorter } from 'match-sorter';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const MultiDownshift = ({
   render,
@@ -197,7 +197,7 @@ const MultipleSelectionAutocompleteField = ({
                   >
                     <p className="text-primary-800">{itemToString(item)}</p>
                     <button {...getRemoveButtonProps({ item })}>
-                      <XIcon className="w-4 h-4 text-gray-700" />
+                      <XIcon className="w-5 h-5 text-gray-700" />
                     </button>
                   </div>
                 ))}
