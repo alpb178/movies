@@ -306,6 +306,11 @@
   "forgot-password": "¿Olvidaste la contraseña?",
   "go-back": "Volver",
   "home": "Inicio",
+  "ingredients": {
+    "0": "No se han encontrado ingredientes",
+    "1": "Ingrediente",
+    "other": "Ingredientes"
+  },
   "inserted": {
     "male": "{{entity}} insertado exitosamente.",
     "female": "{{entity}} insertada exitosamente."

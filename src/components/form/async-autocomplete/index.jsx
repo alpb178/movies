@@ -101,7 +101,7 @@ const ControlledAutocomplete = ({
                 placeholder,
                 onChange: onInputChange
               })}
-              className={clsx('w-full', icon && 'autocomplete-with-icon')}
+              className={clsx('w-full', icon ? 'autocomplete-with-icon' : 'pl-4')}
               disabled={disabled}
               role="textbox"
               aria-label={name}

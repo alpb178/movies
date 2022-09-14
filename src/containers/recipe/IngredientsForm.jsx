@@ -1,14 +1,16 @@
 /* eslint-disable react/react-in-jsx-scope */
-import AutocompleteField from '@/components/form/AutocompleteField';
+import FormikAsyncAutocompleteField from '@/components/form/async-autocomplete/formik';
 import useProducts from '@/hooks/product/useProducts';
-import { formatPrice } from '@/lib/utils';
+import { API_PRODUCTS_CATALOG_URL } from '@/lib/constants';
+import { formatPrice, lottieOptions } from '@/lib/utils';
 import { MinusCircleIcon, PlusCircleIcon, XCircleIcon } from '@heroicons/react/outline';
 import { Field } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
+import Lottie from 'react-lottie';
 
-const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, recipe }) => {
+const IngredientsForm = ({ onShipmentItemsChange, errors, touched, recipe }) => {
   const { t } = useTranslation('common');
 
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -38,7 +40,7 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, rec
     if (item) {
       const selectedItem = item;
       selectedItem.amount = 1;
-      selectedItem.measureUnit = selectedItem.measureUnit?.id;
+      // selectedItem.measureUnit = selectedItem.measureUnit?.id;
       var index = products.findIndex((e) => e.id === item.id);
       products.splice(index, 1);
       if (!selectedOptions.includes(selectedItem)) {
@@ -59,6 +61,16 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, rec
         })
       );
     }
+  };
+
+  const onAmountChange = (item, e) => {
+    const { value } = e.target;
+    setSelectedOptions(
+      selectedOptions.map((option) => {
+        if (option.id === item.id) return { ...option, amount: value };
+        return option;
+      })
+    );
   };
 
   const incrementAmount = (item) => {
@@ -93,21 +105,20 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, rec
 
   return (
     <div className="relative flex flex-col w-full space-y-4">
-      <AutocompleteField
-        name="shipmentItems"
-        placeholder={
-          products.length > 0
-            ? t('form.common.label.ingredients')
-            : t('form.common.label.no-ingredients')
-        }
-        options={products ? products : []}
-        className="text-field filled"
+      <FormikAsyncAutocompleteField
+        id="ingredient"
+        name="ingredient"
+        placeholder={`${t('select')} ${t('ingredients', { count: 1 }).toLowerCase()}`}
+        options={products ? products?.rows : []}
+        className="bg-gray-100 border-transparent autocomplete-field"
         optionLabels={['name']}
         keysToMatch={['name']}
         onSelectionChange={handleSelection}
-        shipmentItems={true}
-        noOptionsLabel={t('form.common.empty-options')}
+        baseEndpoint={API_PRODUCTS_CATALOG_URL}
+        loader={<Lottie options={lottieOptions('simple')} style={{ width: 64, height: 64 }} />}
+        emptyOptionsLabel={t('ingredients', { count: 0 })}
       />
+
       <div>
         {errors?.shipmentItems && touched?.shipmentItems ? (
           <p className="mt-4 text-red-600">{errors?.name}</p>
@@ -117,16 +128,14 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, rec
       {selectedOptions?.length > 0 ? (
         <div className="w-full border border-gray-300 divide-y rounded-md bg-gray-50">
           {selectedOptions.map((option, idx) => (
-            <div key={option?.id} className="flex flex-col">
-              <p className="w-full px-4 pt-4 space-x-1 text-sm text-gray-400">
-                <span>{option?.amount}</span>
-                {!isSender ? (
-                  <span>{`· ${formatPrice(option?.cost)} / ${option?.measureUnit?.name}`}</span>
-                ) : null}
+            <div key={option?.id} className="flex flex-col p-4">
+              <p className="w-full space-x-1 text-sm text-gray-400">
+                <span>{`${formatPrice(option?.cost)} / ${option?.measureUnit?.symbol}`}</span>
               </p>
-              <div className="flex items-center w-full p-2 pt-0 space-x-6">
-                <p className="w-full text-lg">{option?.name}</p>
-                <div className="flex items-center space-x-1 text-field max-w-max">
+              <div className="flex items-center w-full pt-0 space-x-6">
+                <p className="w-full">{option?.name}</p>
+
+                <div className="flex items-center justify-between w-full max-w-[160px] px-1 border rounded-full">
                   <button
                     type="button"
                     className="text-gray-600 rounded-full hover:text-red-500 hover:bg-red-100"
@@ -139,7 +148,8 @@ const IngredientsForm = ({ onShipmentItemsChange, isSender, errors, touched, rec
                     id={`amount-${idx}`}
                     type="number"
                     value={option?.amount}
-                    className="w-12 h-8 px-2 text-lg"
+                    onChange={(e) => onAmountChange(option, e)}
+                    className="w-full p-2 mx-0 text-center border-none md:mx-4 focus-within:outline-none active:bg-white"
                     aria-describedby={`amount-${idx}`}
                   />
 

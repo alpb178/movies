@@ -104,7 +104,7 @@ const RecipeForm = ({ recipesId }) => {
   };
 
   const getSumPrice = (total, num) => {
-    return (total += num?.amount * (num?.cost || num?.product?.cost));
+    return (total += num?.amount * num?.cost);
   };
 
   const onChangeSalesPrice = async (value) => {
@@ -132,7 +132,7 @@ const RecipeForm = ({ recipesId }) => {
     if (ingredients.length > 1) {
       total = ingredients.reduce(getSumPrice, 0);
     } else {
-      total = ingredients[0]?.amount * (ingredients[0]?.cost || ingredients[0]?.product?.cost);
+      total = ingredients[0]?.amount * ingredients[0]?.cost;
     }
     total += parseFloat(miscCost);
     setTotalCost(total);
@@ -163,7 +163,11 @@ const RecipeForm = ({ recipesId }) => {
     sendBody.business = user?.data?.business[0]?.id;
     sendBody.miscCost = miscCost;
     sendBody.price = salesPrice;
-    sendBody.ingredients = ingredients;
+    sendBody.ingredients = ingredients.map(({ id, amount, measureUnit }) => ({
+      id,
+      amount,
+      measureUnit: measureUnit.id
+    }));
 
     let method = POST;
     let message = t('inserted.male', { entity: t('recipes', { count: 1 }) });
@@ -203,11 +207,18 @@ const RecipeForm = ({ recipesId }) => {
           onSubmit={onSubmit}
         >
           {({ errors, touched }) => (
-            <Form className="p-6 space-y-6 text-lg">
-              <p className="mb-1 form-header">
-                {isNaN(recipesId) ? t('form.recipes.title.create') : t('form.recipes.title.update')}
-              </p>
-              <div className="grid grid-cols-1 gap-12 p-8 md:grid-cols-2 lg:grid-cols-3">
+            <Form className="p-8 space-y-6">
+              <div className="flex items-center justify-between space-x-8">
+                <p className="mb-1 form-header">
+                  {isNaN(recipesId)
+                    ? t('form.recipes.title.create')
+                    : t('form.recipes.title.update')}
+                </p>
+                <button type="submit" className="btn-contained">
+                  {t('save')}
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
                 <div className="w-full space-y-4">
                   <div className="w-full space-y-2">
                     <label htmlFor="name">{t('form.common.label.name')}</label>
@@ -255,10 +266,10 @@ const RecipeForm = ({ recipesId }) => {
                         className="text-field filled"
                         onChange={(e) => setMiscCost(e.target.value)}
                       />
-                      <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                      <p className="absolute inset-y-0 right-0 flex items-center pr-6">$</p>
                     </div>
                   </div>
-                  <div className="space-y-2 ">
+                  <div className="space-y-2">
                     <label htmlFor="totalCost">{t('form.common.label.total-cost')}</label>
                     <div className="relative w-full p-4 mx-auto bg-gray-100 border-2 border-transparent rounded-lg">
                       {formatPrice(totalCost)}
@@ -293,7 +304,7 @@ const RecipeForm = ({ recipesId }) => {
                             onChange={(e) => onChangeSalesPrice(e.target.value)}
                             className="text-field filled"
                           />
-                          <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                          <p className="absolute inset-y-0 right-0 flex items-center pr-6">$</p>
                         </div>
                       </div>
 
@@ -309,7 +320,7 @@ const RecipeForm = ({ recipesId }) => {
                             className="text-field filled"
                             onChange={(e) => onChangeCost(e.target.value)}
                           />
-                          <p className="absolute inset-y-0 right-0 flex items-center pr-10">%</p>
+                          <p className="absolute inset-y-0 right-0 flex items-center pr-6">%</p>
                         </div>
                       </div>
 
@@ -328,12 +339,12 @@ const RecipeForm = ({ recipesId }) => {
                               className="text-field filled"
                               onChange={(e) => onChangeSalesProfit(e.target.value)}
                             />
-                            <p className="absolute inset-y-0 right-0 flex items-center pr-10">$</p>
+                            <p className="absolute inset-y-0 right-0 flex items-center pr-6">$</p>
                           </div>
                         </div>
                       </div>
 
-                      <div className="w-full space-y-2">
+                      <div className="w-full col-span-2 space-y-2">
                         <label htmlFor="category">{t('recipe-groups', { count: 1 })}</label>
                         <div className="relative w-full mx-auto">
                           <AutocompleteField
@@ -351,12 +362,6 @@ const RecipeForm = ({ recipesId }) => {
                     </>
                   ) : null}
                 </div>
-              </div>
-
-              <div className="flex justify-end p-4 space-x-8">
-                <button type="submit" className="btn-contained">
-                  {t('save')}
-                </button>
               </div>
             </Form>
           )}
