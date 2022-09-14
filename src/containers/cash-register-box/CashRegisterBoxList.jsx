@@ -25,7 +25,10 @@ const CashRegisterBoxList = () => {
   const [shipmentPrice, setShipmentPrice] = useState(0);
   const [loading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
-    date: ''
+    user: '',
+    year: '',
+    month: '',
+    day: ''
   });
 
   const locale = {
@@ -67,7 +70,7 @@ const CashRegisterBoxList = () => {
     let total = 0;
     if (products?.rows?.length > 0) {
       products?.rows?.map((option) => {
-        total += option?.amount * option?.recipe?.price || 0;
+        total += option?.amount * option?.menuItem?.price || 0;
       });
       setShipmentPrice(total);
     }
@@ -93,11 +96,11 @@ const CashRegisterBoxList = () => {
     },
     {
       Header: t('products', { count: 1 }),
-      accessor: 'recipe.name'
+      accessor: 'menuItem.product.name'
     },
     {
       Header: t('form.common.label.price'),
-      accessor: 'recipe.price',
+      accessor: 'menuItem.price',
       Cell: ({ value }) => formatProductPrice(value)
     },
     {

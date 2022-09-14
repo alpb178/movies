@@ -4,41 +4,48 @@ import useUsers from '@/hooks/user/useUsers';
 import { API_USERS_URL } from '@/lib/constants';
 import { lottieOptions } from '@/lib/utils';
 import { Menu, Transition } from '@headlessui/react';
+import { getDaysInMonth } from 'date-fns';
 import { Form, Formik } from 'formik';
 import useTranslation from 'next-translate/useTranslation';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
 
 const CashRegisterFilter = ({ data, onSubmit, open }) => {
   const { t } = useTranslation('common');
 
   const { user } = useAppContext();
+  const [selectedYear, setSelectedYear] = useState();
+  const [selectedMonth, setSelectedMonth] = useState();
 
   const { data: users } = useUsers();
   const months = [
-    { id: 'January' },
-    { id: 'February' },
-    { id: 'March' },
-    { id: 'April' },
-    { id: 'May' },
-    { id: 'June' },
-    { id: 'July' },
-    { id: 'August' },
-    { id: 'September' },
-    { id: 'October' },
-    { id: 'November' },
-    { id: 'December' }
+    { id: 1, name: 'January' },
+    { id: 2, name: 'February' },
+    { id: 3, name: 'March' },
+    { id: 4, name: 'April' },
+    { id: 5, name: 'May' },
+    { id: 6, name: 'June' },
+    { id: 7, name: 'July' },
+    { id: 8, name: 'August' },
+    { id: 9, name: 'September' },
+    { id: 10, name: 'October' },
+    { id: 11, name: 'November' },
+    { id: 12, name: 'December' }
   ];
 
+  const daysInCurrentMonth = getDaysInMonth(2020, 9);
+
   const initialValues = {
-    shift: ''
+    month: '',
+    day: '',
+    year: '',
+    user: ''
   };
 
   const years = useMemo(() => {
     const years = [];
     const yearsBusiness = new Date(user.data.business[0].createdAt).getFullYear();
     const yearsCurrent = new Date().getFullYear();
-
     if (yearsCurrent - yearsBusiness == 0) years.push({ id: 0, year: yearsBusiness });
     else
       for (let i = 0; i < yearsCurrent - yearsBusiness; i++) {
@@ -47,6 +54,15 @@ const CashRegisterFilter = ({ data, onSubmit, open }) => {
 
     return years;
   }, []);
+
+  const days = useMemo(() => {
+    const days = [];
+    const length = new Date(selectedYear?.year, selectedMonth?.id, 0).getDate();
+    for (let i = 1; i <= length; i++) {
+      days.push({ id: i });
+    }
+    return days;
+  }, [selectedMonth?.id > 0]);
 
   return (
     <Menu as="div">
@@ -61,18 +77,18 @@ const CashRegisterFilter = ({ data, onSubmit, open }) => {
           leaveTo="transform -translate-y-5 opacity-0"
         >
           <Menu.Items>
-            {console.log(user)}
             <Formik initialValues={initialValues} onSubmit={onSubmit}>
               <Form className="flex items-center justify-end w-full space-x-4">
                 <div className="w-96">
                   <FormikAsyncAutocompleteField
                     id="day"
                     name="day"
-                    placheholder={t('day')}
-                    options={users ? users?.rows : []}
+                    placheholder="ale"
+                    options={days ? days : []}
                     className="autocomplete-field"
-                    optionLabels={['user.firstName', 'user.lastName']}
-                    keysToMatch={['user.firstName', 'user.lastName', 'status']}
+                    optionLabels={['id']}
+                    keysToMatch={['id']}
+                    disabled={!selectedMonth}
                     baseEndpoint={API_USERS_URL}
                     loader={
                       <Lottie options={lottieOptions('simple')} style={{ width: 64, height: 64 }} />
@@ -87,29 +103,22 @@ const CashRegisterFilter = ({ data, onSubmit, open }) => {
                     placheholder={t('month')}
                     options={months ? months : []}
                     className="autocomplete-field"
-                    optionLabels={[t('id')]}
-                    keysToMatch={['id']}
-                    loader={
-                      <Lottie options={lottieOptions('simple')} style={{ width: 64, height: 64 }} />
-                    }
-                    emptyOptionsLabel={t('month', { count: 0 })}
+                    optionLabels={['name']}
+                    keysToMatch={['name']}
+                    onSelectionChange={setSelectedMonth}
+                    disabled={!selectedYear}
                   />
                 </div>
                 <div className="w-96">
                   <FormikAsyncAutocompleteField
-                    id="years"
-                    name="years"
+                    id="year"
+                    name="year"
                     placheholder={t('day')}
                     options={years ? years : []}
                     className="autocomplete-field"
                     optionLabels={['year']}
                     keysToMatch={['year']}
-                    // baseEndpoint={API_USERS_URL}
-                    // requestParams={regulationsParams}
-                    loader={
-                      <Lottie options={lottieOptions('simple')} style={{ width: 64, height: 64 }} />
-                    }
-                    emptyOptionsLabel={t('day', { count: 0 })}
+                    onSelectionChange={setSelectedYear}
                   />
                 </div>
                 <div className="w-96">
