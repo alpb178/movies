@@ -2,14 +2,15 @@
 /* eslint-disable react/react-in-jsx-scope */
 import Loading from '@/components/common/Loader';
 import useRecipes from '@/hooks/recipe/useRecipes';
-import { formatPrice, locales } from '@/lib/utils';
+import { formatNumber, formatPrice, locales } from '@/lib/utils';
 import { format } from 'date-fns';
 import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const RecipeDetails = ({ recipeId }) => {
   const { t, lang } = useTranslation('common');
+  const [shipmentPrice, setShipmentPrice] = useState(0);
   const locale = {
     ...locales[lang]
   };
@@ -26,7 +27,7 @@ const RecipeDetails = ({ recipeId }) => {
     let total = 0;
     if (recipe?.recipeProducts?.length > 0) {
       recipe?.recipeProducts.map((option) => {
-        total += option?.amount * option?.recipe?.price;
+        total += option?.amount * option?.recipe?.menuItem?.price;
       });
       return total;
     }
@@ -43,6 +44,23 @@ const RecipeDetails = ({ recipeId }) => {
 
     return 0;
   }, [profit]);
+
+  const calculateShipmentPrice = () => {
+    let total = 0;
+    if (recipe?.ingredients?.length > 0) {
+      recipe?.ingredients?.map((option) => {
+        console.log(option);
+        total += option?.amount * option?.product?.cost || 0;
+      });
+      setShipmentPrice(total);
+    }
+  };
+
+  useEffect(() => {
+    if (recipe?.ingredients?.length > 0) {
+      calculateShipmentPrice();
+    }
+  }, [recipe]);
 
   return isLoading ? (
     <Loading />
@@ -76,7 +94,9 @@ const RecipeDetails = ({ recipeId }) => {
                   <p className="text-sm font-medium text-gray-500">
                     {t('recipe-groups', { count: 1 })}
                   </p>
-                  <dd className="mt-1 text-sm text-gray-900">{recipe?.recipeGroup?.name || '-'}</dd>
+                  <dd className="mt-1 text-sm text-gray-900">
+                    {recipe?.menuItem?.recipeGroup?.name || '-'}
+                  </dd>
                 </div>
 
                 <div className="sm:col-span-1">
@@ -108,25 +128,35 @@ const RecipeDetails = ({ recipeId }) => {
                 <p className="text-sm font-medium text-gray-500">{t('form.common.label.amount')}</p>
 
                 <div className="grid grid-cols-2 gap-2 mt-2 text-base gap-x-8">
-                  <p>{t('form.common.label.sales-price')}</p>
-                  <span className="font-medium text-right text-gray-700">
-                    {formatPrice(recipe?.price || 0)}
-                  </span>
-                  <p>{t('form.common.label.cost')}</p>
-                  <span className="font-medium text-right text-gray-700">
-                    {formatPrice(recipe?.cost || 0)}
-                  </span>
-                  <p>{t('form.common.label.sales-profit')}</p>
-                  <span className="font-medium text-right text-gray-700">
-                    {formatPrice(recipe?.salesProfit || 0)}
-                  </span>
+                  {recipe?.menuItem ? (
+                    <>
+                      {' '}
+                      <p>{t('form.common.label.sales-price')}</p>
+                      <span className="font-medium text-right text-gray-700">
+                        {formatPrice(recipe?.menuItem?.price || 0)}
+                      </span>
+                      <p>{t('form.common.label.cost')}</p>
+                      <span className="font-medium text-right text-gray-700">
+                        {formatNumber(
+                          ((shipmentPrice + recipe.miscCost) * 100) / recipe?.menuItem?.price || 0
+                        )}{' '}
+                        %
+                      </span>
+                      <p>{t('form.common.label.sales-profit')}</p>
+                      <span className="font-medium text-right text-gray-700">
+                        {formatPrice(recipe?.menuItem?.price - (shipmentPrice + recipe.miscCost)) ||
+                          0}
+                      </span>
+                    </>
+                  ) : null}
+
                   <p>{t('form.common.label.misc-cost')}</p>
                   <span className="font-medium text-right text-gray-700">
                     {formatPrice(recipe.miscCost || 0)}
                   </span>
                   <p className="font-semibold">{t('form.common.label.total-cost')}</p>
                   <span className="font-semibold text-right text-emerald-600">
-                    {formatPrice(recipe.miscCost + recipe.price || 0)}
+                    {formatPrice(shipmentPrice + recipe.miscCost)}
                   </span>
                 </div>
               </div>

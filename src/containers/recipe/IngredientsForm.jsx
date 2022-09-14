@@ -40,7 +40,6 @@ const IngredientsForm = ({ onShipmentItemsChange, errors, touched, recipe }) => 
     if (item) {
       const selectedItem = item;
       selectedItem.amount = 1;
-      // selectedItem.measureUnit = selectedItem.measureUnit?.id;
       var index = products.findIndex((e) => e.id === item.id);
       products.splice(index, 1);
       if (!selectedOptions.includes(selectedItem)) {
@@ -109,7 +108,7 @@ const IngredientsForm = ({ onShipmentItemsChange, errors, touched, recipe }) => 
         id="ingredient"
         name="ingredient"
         placeholder={`${t('select')} ${t('ingredients', { count: 1 }).toLowerCase()}`}
-        options={products ? products?.rows : []}
+        options={products ? products : []}
         className="bg-gray-100 border-transparent autocomplete-field"
         optionLabels={['name']}
         keysToMatch={['name']}

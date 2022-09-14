@@ -140,7 +140,9 @@ const RecipeForm = ({ recipesId }) => {
 
   useEffect(() => {
     setMenuItem(recipes?.menuItem?.isAvailable || false);
+    setMiscCost(recipes?.miscCost || 0);
     setSalesPrice(recipes?.menuItem?.price || 0);
+    setSalesProfit(recipes?.menuItem?.price - totalCost || 0);
   }, [recipes]);
 
   useMemo(async () => {
