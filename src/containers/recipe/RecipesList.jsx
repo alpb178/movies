@@ -16,7 +16,6 @@ import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -97,15 +96,13 @@ const RecipesList = () => {
   };
 
   const formatPriceValue = (value) => (
-    <div className="text-center w-28"> {value?.price ? formatPrice(value.price) : '-'}</div>
+    <div className="text-right w-28"> {value?.price ? formatPrice(value.price) : '-'}</div>
   );
   const formatMiscCostValue = (value) => (
-    <div className="text-center w-28">{formatPrice(value) || 0}</div>
+    <div className="text-right w-28">{formatPrice(value) || 0}</div>
   );
   const formatRecipeGroup = (value) => (
-    <div className="text-center w-28">
-      {value ? (value.includes('uncategorized') ? '-' : value) : '-'}
-    </div>
+    <div className="text-left">{value ? (value.includes('uncategorized') ? '-' : value) : '-'}</div>
   );
 
   const columns = React.useMemo(() => [
@@ -114,12 +111,12 @@ const RecipesList = () => {
       accessor: 'name'
     },
     {
-      Header: t('form.common.label.price'),
+      Header: () => <div className="text-right w-28">{t('form.common.label.price')}</div>,
       accessor: 'menuItem',
       Cell: ({ value }) => formatPriceValue(value)
     },
     {
-      Header: t('form.common.label.misc-cost'),
+      Header: () => <div className="text-right w-28">{t('form.common.label.misc-cost')}</div>,
       accessor: 'miscCost',
       Cell: ({ value }) => formatMiscCostValue(value)
     },
@@ -129,8 +126,11 @@ const RecipesList = () => {
       Cell: ({ value }) => formatRecipeGroup(value)
     },
     {
-      Header: t('form.common.label.count-ingredients'),
-      accessor: 'ingredientsCount'
+      Header: () => (
+        <div className="text-right w-44">{t('form.common.label.count-ingredients')}</div>
+      ),
+      accessor: 'ingredientsCount',
+      Cell: ({ value }) => <div className="text-right w-44">{value}</div>
     },
     {
       id: 'optionsRecipes',
@@ -254,15 +254,6 @@ const RecipesList = () => {
       />
     </>
   );
-};
-
-RecipesList.propTypes = {
-  row: PropTypes.object,
-  data: PropTypes.object,
-  loading: PropTypes.bool,
-  onGetRecipes: PropTypes.func,
-  onSelectPayment: PropTypes.func,
-  onDeletePayment: PropTypes.func
 };
 
 export default RecipesList;

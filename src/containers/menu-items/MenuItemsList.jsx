@@ -138,10 +138,8 @@ const MenuItemsList = () => {
     }
   };
 
-  const formatPriceValue = (value) => <div className="text-center w-28">{formatPrice(value)}</div>;
-  const formatRecipeGroup = (value) => (
-    <div className="text-center w-28">{value.includes('uncategorized') ? '-' : value}</div>
-  );
+  const formatPriceValue = (value) => <div className="text-right w-28">{formatPrice(value)}</div>;
+  const formatRecipeGroup = (value) => <div>{value.includes('uncategorized') ? '-' : value}</div>;
 
   const columns = useMemo(() => [
     {
@@ -149,7 +147,7 @@ const MenuItemsList = () => {
       Cell: ({ row }) => row?.original?.product?.name || row?.original?.recipe?.name
     },
     {
-      Header: t('form.common.label.price'),
+      Header: () => <div className="text-right w-28">{t('form.common.label.price')}</div>,
       accessor: 'price',
       Cell: ({ value }) => formatPriceValue(value)
     },

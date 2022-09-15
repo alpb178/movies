@@ -9,7 +9,6 @@ import { API_PRODUCTS_CATALOG_URL, DEFAULT_PAGE_SIZE, DELETE } from '@/lib/const
 import { formatPrice } from '@/lib/utils';
 import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -104,10 +103,10 @@ const ProductsList = ({ productId }) => {
   };
 
   const formatPriceValue = (value) => (
-    <div className="text-left w-28"> {value?.price ? formatPrice(value.price) : '-'} </div>
+    <div className="text-right w-28"> {value?.price ? formatPrice(value.price) : '-'} </div>
   );
   const formatCostValue = (value) => (
-    <div className="text-left w-28">{formatPrice(value) || 0}</div>
+    <div className="text-right w-28">{formatPrice(value) || 0}</div>
   );
   const formatRecipeGroup = (value) => (
     <div className="text-center w-28">
@@ -121,12 +120,12 @@ const ProductsList = ({ productId }) => {
       accessor: 'name'
     },
     {
-      Header: t('form.common.label.cost'),
+      Header: () => <div className="text-right w-28">{t('form.common.label.cost')}</div>,
       accessor: 'cost',
       Cell: ({ value }) => formatCostValue(value)
     },
     {
-      Header: t('form.common.label.price'),
+      Header: () => <div className="text-right w-28">{t('form.common.label.price')}</div>,
       accessor: 'menuItem',
       Cell: ({ value }) => formatPriceValue(value)
     },
@@ -251,15 +250,6 @@ const ProductsList = ({ productId }) => {
       />
     </>
   );
-};
-
-ProductsList.propTypes = {
-  row: PropTypes.object,
-  data: PropTypes.object,
-  loading: PropTypes.bool,
-  onGetProducts: PropTypes.func,
-  onSelectPayment: PropTypes.func,
-  onDeletePayment: PropTypes.func
 };
 
 export default ProductsList;
