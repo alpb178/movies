@@ -12,7 +12,6 @@ import useTranslation from 'next-translate/useTranslation';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
-import CashRegisterFilter from './CashRegisterBoxFilter';
 
 const CashRegisterBoxList = () => {
   const { t, lang } = useTranslation('common');
@@ -168,13 +167,13 @@ const CashRegisterBoxList = () => {
     <>
       {(loading || isLoading) && <Loading />}
 
-      <div className={`w-full mt-5 px-6 ${openFilters && 'flex flex-col'}`}>
+      {/* <div className={`w-full mt-5 px-6 ${openFilters && 'flex flex-col'}`}>
         <CashRegisterFilter open={openFilters} onSubmit={handleFilters} />
 
         <div className="flex">
           <FilterCriteria />
         </div>
-      </div>
+      </div> */}
 
       {products && products.rows?.length > 0 ? (
         <DataTable {...options} />

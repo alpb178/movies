@@ -6,7 +6,6 @@ import {
   CubeIcon,
   CurrencyDollarIcon,
   LocationMarkerIcon,
-  ScaleIcon,
   TicketIcon,
   UserGroupIcon
 } from '@heroicons/react/outline';
@@ -14,7 +13,6 @@ import {
   AREA_PAGE,
   CASH_REGISTER_BOX_PAGE,
   DASHBOARD_PAGE,
-  MEASURE_UNITS_PAGE,
   MENU_ITEMS_PAGE,
   ORDERS_PAGE,
   PRODUCTS_PAGE,
@@ -34,12 +32,12 @@ export default [
   },
 
   { name: 'areas', link: AREA_PAGE, icon: LocationMarkerIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
-  {
-    name: 'measure-units',
-    link: MEASURE_UNITS_PAGE,
-    icon: ScaleIcon,
-    roles: [ROLE_ADMIN, ROLE_OWNER]
-  },
+  // {
+  //   name: 'measure-units',
+  //   link: MEASURE_UNITS_PAGE,
+  //   icon: ScaleIcon,
+  //   roles: [ROLE_ADMIN, ROLE_OWNER]
+  // },
   { name: 'products', link: PRODUCTS_PAGE(), icon: CubeIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   { name: 'recipes', link: RECIPES_PAGE, icon: ClipboardListIcon, roles: [ROLE_ADMIN, ROLE_OWNER] },
   {
