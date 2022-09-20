@@ -1,16 +1,12 @@
-import { AppContextProvider } from '@/components/context/AppContext';
 import { APP_NAME } from '@/lib/constants';
 import '@/styles/calendar.scss';
-import { SessionProvider } from 'next-auth/react';
 import useTranslation from 'next-translate/useTranslation';
 import Head from 'next/head';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { CookiesProvider } from 'react-cookie';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'styles/globals.scss';
 import 'styles/nprogress.scss';
@@ -23,7 +19,7 @@ NProgress.configure({ showSpinner: false });
 
 const queryClient = new QueryClient();
 
-const App = ({ Component, pageProps: { session, ...pageProps } }) => {
+const App = ({ Component, pageProps: { ...pageProps } }) => {
   const { lang } = useTranslation();
   const Layout = Component.layout || (({ children }) => <>{children}</>);
 
@@ -40,26 +36,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
         <title>{APP_NAME}</title>
       </Head>
       <QueryClientProvider client={queryClient}>
-        <SessionProvider session={session}>
-          <AppContextProvider>
-            <CookiesProvider>
-              <Layout roles={Component?.roles}>
-                <Component {...pageProps} />
-                <ToastContainer
-                  position="top-right"
-                  autoClose={5000}
-                  hideProgressBar
-                  newestOnTop={false}
-                  draggable={false}
-                  pauseOnVisibilityChange
-                  closeOnClick
-                  pauseOnHover
-                  theme="colored"
-                />
-              </Layout>
-            </CookiesProvider>
-          </AppContextProvider>
-        </SessionProvider>
+        <Layout roles={Component?.roles}>
+          <Component {...pageProps} />
+        </Layout>
       </QueryClientProvider>
     </>
   );

@@ -25,24 +25,6 @@ function Pagination({ tableInstance, pageSizes, onPageSizeChange }) {
   return (
     <div className="flex items-center justify-end px-2 m-4 space-x-8">
       <div className="flex items-center space-x-2">
-        <p>{t('form.table.rows-per-page')}</p>
-        <select
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-            onPageSizeChange(Number(e.target.value));
-          }}
-          className="bg-gray-100 border-0 rounded-md"
-        >
-          {pageSizes.map((pSize) => (
-            <option key={pSize} value={pSize}>
-              {pSize}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex items-center space-x-2">
         <button
           className={`${
             !canPreviousPage ? 'hover:cursor-not-allowed' : ''

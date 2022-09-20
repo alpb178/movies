@@ -1,4 +1,3 @@
-import AuthWrapper from '@/components/auth/AuthWrapper';
 import Navbar from '@/components/navbars/Navbar';
 import useMediaContext from 'hooks/useMediaContext';
 import dynamic from 'next/dynamic';
@@ -17,19 +16,17 @@ const Admin = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <AuthWrapper>
-      <div className="flex h-screen overflow-hidden bg-gray-100">
-        {isSmall ? <MobileSidebar open={sidebarOpen} onOpen={setSidebarOpen} /> : <Sidebar />}
+    <div className="flex h-screen overflow-hidden bg-gray-100">
+      {isSmall ? <MobileSidebar open={sidebarOpen} onOpen={setSidebarOpen} /> : <Sidebar />}
 
-        <div className="flex flex-col flex-1 w-0 overflow-hidden">
-          <Navbar onSidebarOpen={setSidebarOpen} />
+      <div className="flex flex-col flex-1 w-0 overflow-hidden">
+        <Navbar onSidebarOpen={setSidebarOpen} />
 
-          <main className="relative flex-1 overflow-y-auto bg-white focus:outline-none">
-            <div className="h-full mx-auto">{children}</div>
-          </main>
-        </div>
+        <main className="relative flex-1 overflow-y-auto bg-white focus:outline-none">
+          <div className="h-full mx-auto">{children}</div>
+        </main>
       </div>
-    </AuthWrapper>
+    </div>
   );
 };
 

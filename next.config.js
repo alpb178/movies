@@ -16,7 +16,12 @@ module.exports = nextTranslate(
       ignoreDuringBuilds: true
     },
     images: {
-      domains: ['lh3.googleusercontent.com', 'platform-lookaside.fbsbx.com', 'images.unsplash.com']
+      domains: [
+        'lh3.googleusercontent.com',
+        'image.tmdb.org',
+        'platform-lookaside.fbsbx.com',
+        'images.unsplash.com'
+      ]
     },
     publicRuntimeConfig: {
       version
