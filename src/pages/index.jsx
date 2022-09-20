@@ -1,4 +1,4 @@
-import List from '@/containers/popularMovies/List';
+import List from '@/containers/moviesBillboard/List';
 import dynamic from 'next/dynamic';
 
 const Admin = dynamic(() => import('layouts/Admin'), {

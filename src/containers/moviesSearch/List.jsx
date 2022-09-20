@@ -5,7 +5,6 @@ import DataTable from '@/components/table';
 import Deatils from '@/containers/moviesBillboard/Details';
 import usesearchMovies from '@/hooks/searchMovies/useSearchMovies';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
-import { XCircleIcon } from '@heroicons/react/outline';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -64,38 +63,8 @@ const List = () => {
     setOpenForm(true);
   };
 
-  const FilterCriteria = () => {};
-  Object.keys(filterValues).map(
-    (e) =>
-      filterValues[e] !== '' && (
-        <div className="flex items-center px-4 py-1 mr-4 text-sm font-medium bg-gray-100 rounded-full w-max">
-          <span key={filterValues[e]} className="font-medium">
-            {`${t(e)}: `}
-            <span className="font-normal">{filterValues[e]}</span>
-          </span>
-          <button type="button" id={filterValues[e]} onClick={(event) => handleClick(event, e)}>
-            <XCircleIcon className="w-6 h-6 ml-2 float-center" />
-          </button>
-        </div>
-      )
-  );
-
   const handleFilters = (values) => {
     setFilterValues(values);
-  };
-
-  const handleClick = (event, value) => {
-    const updatedFilters = Object.keys(filterValues)
-      .filter((key) => value != key)
-      .reduce(
-        (obj, key) => ({
-          ...obj,
-          [key]: filterValues[key]
-        }),
-        {}
-      );
-
-    setFilterValues(updatedFilters);
   };
 
   const formatImage = (value) => (
@@ -137,14 +106,9 @@ const List = () => {
   return (
     <>
       {(loading || isLoading) && <Loading />}
-      {console.log(data?.results?.length)}
-
       <div className={`w-full px-6 py-4 ${openFilters && 'flex flex-col'}`}>
         <div className="mb-4">
           <Filter open={openFilters} onSubmit={handleFilters} />
-        </div>
-        <div className="flex">
-          <FilterCriteria />
         </div>
       </div>
 
